@@ -1,9 +1,24 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Core HR',
-    'version': '16.0.2.0.0',
+    'version': '16.0.2.1.0',
     'category': 'Human Resources',
     'summary': 'Core HR Management for UAE Manpower Companies',
+    'description': """
+Tazweed Core HR Module
+======================
+A comprehensive HR management solution designed for UAE manpower companies.
+
+Features:
+---------
+* Modern OWL Dashboard with real-time KPIs
+* Employee management with UAE-specific fields
+* Document management with expiry tracking
+* Bank account management
+* Sponsor/Company management with visa quota
+* Contract extensions with allowances
+* Beautiful, responsive UI/UX design
+    """,
     'author': 'Tazweed',
     'website': 'https://www.tazweed.com',
     'license': 'LGPL-3',
@@ -32,9 +47,15 @@
     ],
     'assets': {
         'web.assets_backend': [
+            # External libraries
+            ('include', 'web._assets_helpers'),
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+            # Styles
+            'tazweed_core/static/src/scss/dashboard.scss',
             'tazweed_core/static/src/css/tazweed_core.css',
-            'tazweed_core/static/src/js/dashboard.js',
-            'tazweed_core/static/src/xml/dashboard_templates.xml',
+            # OWL Components
+            'tazweed_core/static/src/js/tazweed_dashboard.js',
+            'tazweed_core/static/src/xml/dashboard_template.xml',
         ],
     },
     'installable': True,

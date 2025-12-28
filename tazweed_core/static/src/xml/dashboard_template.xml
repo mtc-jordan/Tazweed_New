@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tazweed_core.Dashboard" owl="1">
+        <div class="tazweed-dashboard">
+            <!-- Loading Overlay -->
+            <div t-if="state.isLoading" class="dashboard-loading">
+                <div class="loading-spinner">
+                    <i class="fa fa-spinner fa-spin fa-3x"></i>
+                    <p>Loading Dashboard...</p>
+                </div>
+            </div>
+
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="header-content">
+                    <div class="header-title">
+                        <h1>
+                            <i class="fa fa-tachometer-alt"></i>
+                            Tazweed HR Dashboard
+                        </h1>
+                        <p class="header-subtitle">Real-time workforce analytics and insights</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-refresh" t-on-click="refreshDashboard">
+                            <i class="fa fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                        <div class="header-date">
+                            <i class="fa fa-calendar-alt"></i>
+                            <span t-esc="new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            <div t-if="state.alerts.length > 0" class="alerts-section">
+                <t t-foreach="state.alerts" t-as="alert" t-key="alert_index">
+                    <div t-attf-class="alert-card alert-{{ alert.type }}" t-on-click="() => this.handleAlertAction(alert.action)">
+                        <div class="alert-icon">
+                            <i t-attf-class="fa {{ alert.icon }}"></i>
+                        </div>
+                        <div class="alert-content">
+                            <h4 t-esc="alert.title"/>
+                            <p t-esc="alert.message"/>
+                        </div>
+                        <div class="alert-action">
+                            <i class="fa fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Main KPI Cards -->
+            <div class="kpi-section">
+                <div class="kpi-card kpi-primary" t-on-click="viewEmployees">
+                    <div class="kpi-icon">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value" t-esc="state.totalEmployees"/>
+                        <span class="kpi-label">Total Employees</span>
+                    </div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fa fa-arrow-up"></i>
+                        <span>Active</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card kpi-success" t-on-click="viewUAENationals">
+                    <div class="kpi-icon">
+                        <i class="fa fa-flag"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value"><t t-esc="state.uaeNationalPercent"/>%</span>
+                        <span class="kpi-label">UAE Nationals</span>
+                    </div>
+                    <div class="kpi-sub">
+                        <span t-esc="state.uaeNationals"/> employees
+                    </div>
+                </div>
+
+                <div class="kpi-card kpi-warning" t-on-click="viewDocumentsAttention">
+                    <div class="kpi-icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value" t-esc="state.documentsAttention"/>
+                        <span class="kpi-label">Documents Attention</span>
+                    </div>
+                    <div class="kpi-sub">
+                        Expiring or expired
+                    </div>
+                </div>
+
+                <div class="kpi-card kpi-info" t-on-click="viewAvailableEmployees">
+                    <div class="kpi-icon">
+                        <i class="fa fa-user-check"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value" t-esc="state.availableForPlacement"/>
+                        <span class="kpi-label">Available for Placement</span>
+                    </div>
+                    <div class="kpi-sub">
+                        Ready to deploy
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Stats -->
+            <div class="stats-section">
+                <div class="stat-card" t-on-click="viewContracts">
+                    <div class="stat-icon stat-contracts">
+                        <i class="fa fa-file-contract"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" t-esc="state.activeContracts"/>
+                        <span class="stat-label">Active Contracts</span>
+                        <span t-if="state.expiringContracts > 0" class="stat-badge badge-warning">
+                            <t t-esc="state.expiringContracts"/> expiring
+                        </span>
+                    </div>
+                </div>
+
+                <div class="stat-card" t-on-click="viewSponsors">
+                    <div class="stat-icon stat-sponsors">
+                        <i class="fa fa-building"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" t-esc="state.activeSponsors"/>
+                        <span class="stat-label">Active Sponsors</span>
+                    </div>
+                </div>
+
+                <div class="stat-card" t-on-click="viewDocuments">
+                    <div class="stat-icon stat-documents">
+                        <i class="fa fa-folder-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" t-esc="state.totalDocuments"/>
+                        <span class="stat-label">Total Documents</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon stat-placed">
+                        <i class="fa fa-briefcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" t-esc="state.placedEmployees"/>
+                        <span class="stat-label">Placed Employees</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <!-- Row 1: Main Charts -->
+                <div class="chart-row">
+                    <div class="chart-card chart-large">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-chart-line"></i> Employee Trend</h3>
+                            <span class="chart-period">Last 6 Months</span>
+                        </div>
+                        <div class="chart-body">
+                            <canvas t-ref="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-id-card"></i> Visa Status</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas t-ref="visaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Secondary Charts -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-tags"></i> By Category</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas t-ref="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-sitemap"></i> By Department</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas t-ref="departmentChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-user-tie"></i> Placement Status</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas t-ref="placementChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Document Status -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-file-alt"></i> Document Status</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas t-ref="documentChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Documents Requiring Attention List -->
+                    <div class="chart-card chart-large">
+                        <div class="chart-header">
+                            <h3><i class="fa fa-bell"></i> Documents Requiring Attention</h3>
+                            <button class="btn-view-all" t-on-click="viewDocumentsAttention">
+                                View All <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="chart-body documents-list">
+                            <t t-if="state.expiringDocuments.length === 0">
+                                <div class="empty-state">
+                                    <i class="fa fa-check-circle"></i>
+                                    <p>All documents are up to date!</p>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <table class="documents-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee</th>
+                                            <th>Document</th>
+                                            <th>Days Left</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.expiringDocuments" t-as="doc" t-key="doc.id">
+                                            <tr>
+                                                <td t-esc="doc.employee_id[1]"/>
+                                                <td t-esc="doc.document_type_id ? doc.document_type_id[1] : doc.name"/>
+                                                <td>
+                                                    <span t-attf-class="days-badge {{ doc.days_to_expiry &lt; 0 ? 'expired' : doc.days_to_expiry &lt; 30 ? 'critical' : 'warning' }}">
+                                                        <t t-esc="doc.days_to_expiry"/> days
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span t-attf-class="status-badge status-{{ doc.state }}">
+                                                        <t t-esc="doc.state"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="actions-section">
+                <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
+                <div class="actions-grid">
+                    <button class="action-btn action-primary" t-on-click="addEmployee">
+                        <i class="fa fa-user-plus"></i>
+                        <span>Add Employee</span>
+                    </button>
+                    <button class="action-btn action-success" t-on-click="addDocument">
+                        <i class="fa fa-file-upload"></i>
+                        <span>Upload Document</span>
+                    </button>
+                    <button class="action-btn action-info" t-on-click="addSponsor">
+                        <i class="fa fa-building"></i>
+                        <span>Add Sponsor</span>
+                    </button>
+                    <button class="action-btn action-secondary" t-on-click="viewContracts">
+                        <i class="fa fa-file-contract"></i>
+                        <span>Manage Contracts</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="dashboard-footer">
+                <p>Tazweed HR Management System v2.0 | Powered by Odoo 16</p>
+            </div>
+        </div>
+    </t>
+
+</templates>
