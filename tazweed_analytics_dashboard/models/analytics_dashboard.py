@@ -99,6 +99,11 @@ class AnalyticsDashboard(models.Model):
         else:
             return today.replace(day=1), today
 
+    def get_chart_data(self):
+        """Get chart data for the dashboard (alias for get_dashboard_data)."""
+        data = self.get_dashboard_data()
+        return data.get('charts', [])
+
     def get_dashboard_data(self):
         """Get all data for the dashboard."""
         self.ensure_one()
@@ -108,22 +113,24 @@ class AnalyticsDashboard(models.Model):
         data = {
             'dashboard': {
                 'id': self.id,
-                'name': self.name,
-                'type': self.dashboard_type,
-                'layout': self.layout,
-                'columns': self.columns,
-                'date_from': str(date_from),
-                'date_to': str(date_to),
+                'name': self.name or '',
+                'type': self.dashboard_type or '',
+                'layout': self.layout or 'grid',
+                'columns': self.columns or 3,
+                'date_from': str(date_from) if date_from else '',
+                'date_to': str(date_to) if date_to else '',
             },
             'kpis': [],
             'charts': [],
-            'summary': self._get_summary_data(date_from, date_to),
-            'alerts': self._get_alerts(),
+            'summary': self._get_summary_data(date_from, date_to) or {},
+            'alerts': self._get_alerts() or [],
         }
         
         # Get KPI data
         for kpi in self.kpi_ids:
-            data['kpis'].append(kpi.get_kpi_data())
+            kpi_data = kpi.get_kpi_data()
+            if kpi_data:
+                data['kpis'].append(kpi_data)
         
         # Get chart data based on dashboard type
         chart_methods = {
@@ -139,7 +146,8 @@ class AnalyticsDashboard(models.Model):
         }
         
         if self.dashboard_type in chart_methods:
-            data['charts'] = chart_methods[self.dashboard_type](date_from, date_to)
+            charts = chart_methods[self.dashboard_type](date_from, date_to)
+            data['charts'] = charts if charts else []
         
         return data
 

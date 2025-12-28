@@ -88,6 +88,10 @@ class AnalyticsKPI(models.Model):
         ('danger', 'Critical'),
     ], string='Status', compute='_compute_values')
 
+    def _compute_current_value(self):
+        """Alias for _compute_values for external calls."""
+        self._compute_values()
+
     @api.depends('code', 'model_id', 'domain', 'field_name')
     def _compute_values(self):
         for kpi in self:
@@ -168,17 +172,17 @@ class AnalyticsKPI(models.Model):
         
         return {
             'id': self.id,
-            'name': self.name,
-            'code': self.code,
-            'category': self.category,
-            'value': self.current_value,
-            'previous_value': self.previous_value,
-            'trend': self.trend_value,
-            'status': self.status,
-            'target': self.target_value if self.has_target else None,
-            'display': self._format_value(self.current_value),
-            'icon': self.icon,
-            'color': self.color,
+            'name': self.name or '',
+            'code': self.code or '',
+            'category': self.category or '',
+            'value': self.current_value or 0,
+            'previous_value': self.previous_value or 0,
+            'trend': self.trend_value or 0,
+            'status': self.status or 'success',
+            'target': self.target_value if self.has_target else 0,
+            'display': self._format_value(self.current_value or 0),
+            'icon': self.icon or 'fa-chart-line',
+            'color': self.color or '#2196F3',
         }
 
     def _format_value(self, value):
