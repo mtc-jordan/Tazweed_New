@@ -43,6 +43,7 @@ class TazweedQATest:
             ('tazweed_pro_services', self.test_tazweed_pro_services),
             ('tazweed_automated_workflows', self.test_tazweed_automated_workflows),
             ('tazweed_esignature', self.test_tazweed_esignature),
+            ('tazweed_employee_portal', self.test_tazweed_employee_portal),
         ]
         
         for module_name, test_func in modules_to_test:
@@ -425,6 +426,69 @@ class TazweedQATest:
                 self.check(request.access_token is not None, "Access token generated", module)
             except Exception as e:
                 self.check(False, f"Workflow test: {str(e)[:50]}", module)
+    
+    def test_tazweed_employee_portal(self):
+        """Test tazweed_employee_portal module."""
+        module = 'tazweed_employee_portal'
+        print("\n" + "-" * 80)
+        print("14. TAZWEED EMPLOYEE PORTAL")
+        print("-" * 80)
+        
+        print("   14.1 Installation")
+        if not self.check(self.is_installed(module), "Module installed", module):
+            return
+        
+        print("   14.2 Models")
+        models = ['tazweed.portal.announcement']
+        for model in models:
+            self.check(self.model_exists(model), f"Model {model}", module)
+        
+        print("   14.3 HR Employee Extension")
+        try:
+            if 'portal_access' in self.env['hr.employee']._fields:
+                self.check(True, "portal_access field", module)
+            else:
+                self.check(False, "portal_access field", module)
+            
+            if 'portal_last_login' in self.env['hr.employee']._fields:
+                self.check(True, "portal_last_login field", module)
+            else:
+                self.check(False, "portal_last_login field", module)
+        except Exception as e:
+            self.check(False, f"HR Employee extension: {str(e)[:30]}", module)
+        
+        print("   14.4 Controllers")
+        import importlib.util
+        controllers = ['portal_main', 'portal_leave', 'portal_attendance', 'portal_payslip']
+        for ctrl in controllers:
+            try:
+                spec = importlib.util.find_spec(f'odoo.addons.tazweed_employee_portal.controllers.{ctrl}')
+                self.check(spec is not None, f"Controller {ctrl}", module)
+            except:
+                self.check(False, f"Controller {ctrl}", module)
+        
+        print("   14.5 Announcement Model Test")
+        try:
+            announcement = self.env['tazweed.portal.announcement'].create({
+                'name': 'QA Test Announcement',
+                'content': 'This is a test announcement',
+                'target_type': 'all',
+            })
+            self.check(announcement.id > 0, f"Announcement created: {announcement.id}", module)
+            self.check(announcement.state == 'draft', "Default state is draft", module)
+        except Exception as e:
+            self.check(False, f"Announcement creation: {str(e)[:30]}", module)
+        
+        print("   14.6 Dashboard Data Method")
+        try:
+            employee = self.env['hr.employee'].search([], limit=1)
+            if employee:
+                data = employee.get_portal_dashboard_data()
+                self.check('leave_balance' in data and 'announcements' in data, "get_portal_dashboard_data method", module)
+            else:
+                self.check(True, "Dashboard data (no employees to test)", module)
+        except Exception as e:
+            self.check(False, f"Dashboard data: {str(e)[:30]}", module)
     
     def print_summary(self):
         """Print test summary."""
