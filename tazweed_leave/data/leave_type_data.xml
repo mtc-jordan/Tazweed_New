@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Annual Leave (UAE: 30 days after 1 year) -->
+        <record id="leave_type_annual" model="hr.leave.type">
+            <field name="name">Annual Leave</field>
+            <field name="uae_leave_type">annual</field>
+            <field name="is_uae_statutory">True</field>
+            <field name="min_service_months">12</field>
+            <field name="max_days_per_year">30</field>
+            <field name="allow_carry_forward">True</field>
+            <field name="max_carry_forward_days">15</field>
+            <field name="carry_forward_expiry_months">6</field>
+            <field name="allow_encashment">True</field>
+            <field name="encashment_rate">1.0</field>
+            <field name="is_accrual">True</field>
+            <field name="accrual_rate">2.5</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="exclude_public_holidays">True</field>
+            <field name="exclude_weekends">True</field>
+            <field name="advance_notice_days">14</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Sick Leave (UAE: 15 full pay + 30 half pay + 45 no pay) -->
+        <record id="leave_type_sick" model="hr.leave.type">
+            <field name="name">Sick Leave</field>
+            <field name="uae_leave_type">sick</field>
+            <field name="is_uae_statutory">True</field>
+            <field name="min_service_months">3</field>
+            <field name="max_days_per_year">90</field>
+            <field name="requires_document">True</field>
+            <field name="document_required_after_days">2</field>
+            <field name="salary_impact">custom</field>
+            <field name="sick_leave_full_pay_days">15</field>
+            <field name="sick_leave_half_pay_days">30</field>
+            <field name="sick_leave_no_pay_days">45</field>
+            <field name="allowed_during_probation">True</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Maternity Leave (UAE: 60 days) -->
+        <record id="leave_type_maternity" model="hr.leave.type">
+            <field name="name">Maternity Leave</field>
+            <field name="uae_leave_type">maternity</field>
+            <field name="is_uae_statutory">True</field>
+            <field name="max_days_per_year">60</field>
+            <field name="max_consecutive_days">60</field>
+            <field name="gender_restriction">female</field>
+            <field name="requires_document">True</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Paternity Leave (UAE: 5 days) -->
+        <record id="leave_type_paternity" model="hr.leave.type">
+            <field name="name">Paternity Leave</field>
+            <field name="uae_leave_type">paternity</field>
+            <field name="is_uae_statutory">True</field>
+            <field name="max_days_per_year">5</field>
+            <field name="max_consecutive_days">5</field>
+            <field name="gender_restriction">male</field>
+            <field name="requires_document">True</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Hajj Leave (UAE: 30 days once) -->
+        <record id="leave_type_hajj" model="hr.leave.type">
+            <field name="name">Hajj Leave</field>
+            <field name="uae_leave_type">hajj</field>
+            <field name="is_uae_statutory">True</field>
+            <field name="min_service_months">12</field>
+            <field name="max_days_per_year">30</field>
+            <field name="salary_impact">no_pay</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Bereavement Leave -->
+        <record id="leave_type_bereavement" model="hr.leave.type">
+            <field name="name">Bereavement Leave</field>
+            <field name="uae_leave_type">bereavement</field>
+            <field name="is_uae_statutory">True</field>
+            <field name="max_days_per_year">5</field>
+            <field name="max_consecutive_days">5</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="allowed_during_probation">True</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Study Leave -->
+        <record id="leave_type_study" model="hr.leave.type">
+            <field name="name">Study Leave</field>
+            <field name="uae_leave_type">study</field>
+            <field name="max_days_per_year">10</field>
+            <field name="requires_document">True</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="advance_notice_days">30</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Unpaid Leave -->
+        <record id="leave_type_unpaid" model="hr.leave.type">
+            <field name="name">Unpaid Leave</field>
+            <field name="uae_leave_type">unpaid</field>
+            <field name="salary_impact">no_pay</field>
+            <field name="advance_notice_days">30</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Compassionate Leave -->
+        <record id="leave_type_compassionate" model="hr.leave.type">
+            <field name="name">Compassionate Leave</field>
+            <field name="uae_leave_type">compassionate</field>
+            <field name="max_days_per_year">3</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="allowed_during_probation">True</field>
+            <field name="request_unit">day</field>
+        </record>
+
+        <!-- Emergency Leave -->
+        <record id="leave_type_emergency" model="hr.leave.type">
+            <field name="name">Emergency Leave</field>
+            <field name="uae_leave_type">emergency</field>
+            <field name="max_days_per_year">5</field>
+            <field name="salary_impact">full_pay</field>
+            <field name="allowed_during_probation">True</field>
+            <field name="request_unit">day</field>
+        </record>
+    </data>
+</odoo>

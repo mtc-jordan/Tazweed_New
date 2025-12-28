@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_portal_announcement_user,tazweed.portal.announcement.user,model_tazweed_portal_announcement,base.group_user,1,0,0,0
+access_portal_announcement_hr,tazweed.portal.announcement.hr,model_tazweed_portal_announcement,hr.group_hr_user,1,1,1,0
+access_portal_announcement_manager,tazweed.portal.announcement.manager,model_tazweed_portal_announcement,hr.group_hr_manager,1,1,1,1
+access_portal_announcement_portal,tazweed.portal.announcement.portal,model_tazweed_portal_announcement,base.group_portal,1,0,0,0

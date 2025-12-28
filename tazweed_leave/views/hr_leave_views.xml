@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Leave Request Form View Extension -->
+    <record id="view_hr_leave_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit.tazweed</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                        <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="reference" readonly="1"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Leave Details" name="leave_details">
+                        <group>
+                            <group string="Balance">
+                                <field name="leave_balance_before"/>
+                                <field name="leave_balance_after"/>
+                            </group>
+                            <group string="Salary Impact">
+                                <field name="salary_impact"/>
+                                <field name="salary_percentage"/>
+                                <field name="salary_deduction"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Calendar">
+                                <field name="working_days"/>
+                                <field name="weekends_count"/>
+                                <field name="public_holidays_count"/>
+                            </group>
+                            <group string="Dates">
+                                <field name="return_date"/>
+                                <field name="actual_return_date"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Contact and Handover" name="contact">
+                        <group>
+                            <group string="Contact During Leave">
+                                <field name="contact_address"/>
+                                <field name="contact_phone"/>
+                            </group>
+                            <group string="Handover">
+                                <field name="handover_to_id"/>
+                                <field name="handover_notes"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Documents" name="documents">
+                        <group>
+                            <field name="document_required"/>
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </group>
+                    </page>
+                    <page string="Approval History" name="approval">
+                        <group>
+                            <group string="First Approval">
+                                <field name="first_approver_id"/>
+                                <field name="first_approval_date"/>
+                            </group>
+                            <group string="Second Approval">
+                                <field name="second_approver_id"/>
+                                <field name="second_approval_date"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('cancellation_date', '=', False)]}">
+                            <group string="Cancellation">
+                                <field name="cancelled_by_id"/>
+                                <field name="cancellation_date"/>
+                                <field name="cancellation_reason"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Leave Request Tree View Extension -->
+    <record id="view_hr_leave_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.tree.inherit.tazweed</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='holiday_status_id']" position="before">
+                <field name="reference" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='duration_display']" position="after">
+                <field name="working_days" optional="show"/>
+                <field name="salary_impact" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Leave Request Search View Extension -->
+    <record id="view_hr_leave_search_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.search.inherit.tazweed</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.view_hr_holidays_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_leaves']" position="after">
+                <filter name="emergency" string="Emergency" domain="[('is_emergency', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Configuration Parameters -->
+        <record id="param_analytics_auto_refresh" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.auto_refresh</field>
+            <field name="value">True</field>
+        </record>
+        
+        <record id="param_analytics_refresh_interval" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.refresh_interval</field>
+            <field name="value">300</field>
+        </record>
+        
+        <record id="param_analytics_export_format" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.export_format</field>
+            <field name="value">pdf</field>
+        </record>
+        
+        <record id="param_analytics_include_charts" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.include_charts</field>
+            <field name="value">True</field>
+        </record>
+        
+        <record id="param_analytics_include_summary" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.include_summary</field>
+            <field name="value">True</field>
+        </record>
+        
+        <record id="param_analytics_include_details" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.include_details</field>
+            <field name="value">True</field>
+        </record>
+        
+        <!-- Chart Colors -->
+        <record id="param_chart_color_primary" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.chart_color_primary</field>
+            <field name="value">#3498db</field>
+        </record>
+        
+        <record id="param_chart_color_success" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.chart_color_success</field>
+            <field name="value">#2ecc71</field>
+        </record>
+        
+        <record id="param_chart_color_danger" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.chart_color_danger</field>
+            <field name="value">#e74c3c</field>
+        </record>
+        
+        <record id="param_chart_color_warning" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.chart_color_warning</field>
+            <field name="value">#f39c12</field>
+        </record>
+        
+        <record id="param_chart_color_info" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.chart_color_info</field>
+            <field name="value">#9b59b6</field>
+        </record>
+        
+        <!-- Dashboard Settings -->
+        <record id="param_dashboard_theme" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.dashboard_theme</field>
+            <field name="value">modern</field>
+        </record>
+        
+        <record id="param_dashboard_layout" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.dashboard_layout</field>
+            <field name="value">grid</field>
+        </record>
+        
+        <!-- Report Settings -->
+        <record id="param_report_logo_url" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.report_logo_url</field>
+            <field name="value">https://tazweedjobs.ae/logo.png</field>
+        </record>
+        
+        <record id="param_report_footer_text" model="ir.config_parameter">
+            <field name="key">tazweed_advanced_analytics.report_footer_text</field>
+            <field name="value">Tazweed HR and Payroll Management System</field>
+        </record>
+    </data>
+</odoo>

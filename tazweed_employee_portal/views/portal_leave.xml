@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Leaves List -->
+    <template id="portal_leaves" name="Portal Leaves">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>My Leaves</h3>
+                    <a href="/my/leaves/new" class="btn btn-primary">
+                        <i class="fa fa-plus me-2"/>Request Leave
+                    </a>
+                </div>
+
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Sort By</label>
+                                <select class="form-select" onchange="window.location.href=this.value">
+                                    <t t-foreach="searchbar_sortings.items()" t-as="option">
+                                        <option t-att-value="'/my/leaves?sortby=%s&amp;filterby=%s' % (option[0], filterby)"
+                                                t-att-selected="sortby == option[0]"
+                                                t-esc="option[1]['label']"/>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Filter</label>
+                                <select class="form-select" onchange="window.location.href=this.value">
+                                    <t t-foreach="searchbar_filters.items()" t-as="option">
+                                        <option t-att-value="'/my/leaves?sortby=%s&amp;filterby=%s' % (sortby, option[0])"
+                                                t-att-selected="filterby == option[0]"
+                                                t-esc="option[1]['label']"/>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaves List -->
+                <t t-if="leaves">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Leave Type</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Days</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="leaves" t-as="leave">
+                                    <tr>
+                                        <td>
+                                            <a t-att-href="'/my/leaves/%s' % leave.id" t-esc="leave.holiday_status_id.name"/>
+                                        </td>
+                                        <td t-esc="leave.date_from.strftime('%d %b %Y')"/>
+                                        <td t-esc="leave.date_to.strftime('%d %b %Y')"/>
+                                        <td t-esc="leave.number_of_days"/>
+                                        <td>
+                                            <span t-att-class="'badge bg-%s' % ('secondary' if leave.state == 'draft' else 'warning' if leave.state == 'confirm' else 'success' if leave.state == 'validate' else 'danger')"
+                                                  t-esc="leave.state"/>
+                                        </td>
+                                        <td>
+                                            <a t-att-href="'/my/leaves/%s' % leave.id" class="btn btn-sm btn-outline-primary">View</a>
+                                            <t t-if="leave.state in ['draft', 'confirm']">
+                                                <a t-att-href="'/my/leaves/%s/cancel' % leave.id" class="btn btn-sm btn-outline-danger"
+                                                   onclick="return confirm('Are you sure you want to cancel this leave request?')">Cancel</a>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <t t-call="portal.pager"/>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">
+                        No leave requests found. <a href="/my/leaves/new">Request a leave</a>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Leave Detail -->
+    <template id="portal_leave_detail" name="Portal Leave Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Leave Request Details</h4>
+                        <span t-att-class="'badge bg-%s' % ('secondary' if leave.state == 'draft' else 'warning' if leave.state == 'confirm' else 'success' if leave.state == 'validate' else 'danger')"
+                              t-esc="leave.state"/>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Leave Type:</th>
+                                        <td t-esc="leave.holiday_status_id.name"/>
+                                    </tr>
+                                    <tr>
+                                        <th>From:</th>
+                                        <td t-esc="leave.date_from"/>
+                                    </tr>
+                                    <tr>
+                                        <th>To:</th>
+                                        <td t-esc="leave.date_to"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Duration:</th>
+                                        <td><t t-esc="leave.number_of_days"/> days</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Requested On:</th>
+                                        <td t-esc="leave.create_date.strftime('%d %b %Y') if leave.create_date else '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Reason:</th>
+                                        <td t-esc="leave.name or '-'"/>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/my/leaves" class="btn btn-secondary">Back to Leaves</a>
+                        <t t-if="leave.state in ['draft', 'confirm']">
+                            <a t-att-href="'/my/leaves/%s/cancel' % leave.id" class="btn btn-danger"
+                               onclick="return confirm('Are you sure you want to cancel this leave request?')">Cancel Request</a>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Leave New -->
+    <template id="portal_leave_new" name="Portal Leave New">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Request Leave</h4>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="error">
+                            <div class="alert alert-danger" t-esc="error"/>
+                        </t>
+                        <form method="post" action="/my/leaves/new">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Leave Type *</label>
+                                        <select name="leave_type" class="form-select" required="required">
+                                            <option value="">Select Leave Type</option>
+                                            <t t-foreach="leave_types" t-as="lt">
+                                                <option t-att-value="lt.id" t-esc="lt.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">From Date *</label>
+                                        <input type="datetime-local" name="date_from" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">To Date *</label>
+                                        <input type="datetime-local" name="date_to" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Reason</label>
+                                <textarea name="reason" class="form-control" rows="3" placeholder="Enter reason for leave..."></textarea>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" name="save" class="btn btn-secondary">Save as Draft</button>
+                                <button type="submit" name="submit" value="1" class="btn btn-primary">Submit for Approval</button>
+                                <a href="/my/leaves" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Leave Balance -->
+    <template id="portal_leave_balance" name="Portal Leave Balance">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <h3 class="mb-4">Leave Balance</h3>
+                
+                <div class="row">
+                    <t t-foreach="balance_data" t-as="balance">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0" t-esc="balance['leave_type'].name"/>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <h2 class="text-primary mb-0" t-esc="balance['remaining']"/>
+                                        <small class="text-muted">days remaining</small>
+                                    </div>
+                                    <div class="progress mb-3" style="height: 10px;">
+                                        <t t-set="pct" t-value="(balance['remaining'] / balance['allocated'] * 100) if balance['allocated'] else 0"/>
+                                        <div class="progress-bar" role="progressbar" 
+                                             t-att-style="'width: %s%%' % pct"
+                                             t-att-class="'bg-success' if pct > 50 else 'bg-warning' if pct > 25 else 'bg-danger'"/>
+                                    </div>
+                                    <div class="d-flex justify-content-between small">
+                                        <span>Allocated: <strong t-esc="balance['allocated']"/></span>
+                                        <span>Used: <strong t-esc="balance['used']"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Approvals -->
+    <template id="portal_approvals" name="Portal Approvals">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <h3 class="mb-4">Pending Approvals</h3>
+                
+                <t t-if="approvals">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Leave Type</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Days</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="approvals" t-as="leave">
+                                    <tr>
+                                        <td t-esc="leave.employee_id.name"/>
+                                        <td t-esc="leave.holiday_status_id.name"/>
+                                        <td t-esc="leave.date_from.strftime('%d %b %Y')"/>
+                                        <td t-esc="leave.date_to.strftime('%d %b %Y')"/>
+                                        <td t-esc="leave.number_of_days"/>
+                                        <td>
+                                            <a t-att-href="'/my/approvals/%s/approve' % leave.id" class="btn btn-sm btn-success"
+                                               onclick="return confirm('Approve this leave request?')">Approve</a>
+                                            <a t-att-href="'/my/approvals/%s/refuse' % leave.id" class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Refuse this leave request?')">Refuse</a>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <t t-call="portal.pager"/>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">No pending approvals.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,380 @@
+/* ============================================
+   Tazweed Employee Portal - Main Styles
+   ============================================ */
+
+/* Variables */
+:root {
+    --tazweed-primary: #3498db;
+    --tazweed-secondary: #2c3e50;
+    --tazweed-success: #27ae60;
+    --tazweed-warning: #f39c12;
+    --tazweed-danger: #e74c3c;
+    --tazweed-info: #9b59b6;
+    --tazweed-light: #ecf0f1;
+    --tazweed-dark: #2c3e50;
+}
+
+/* General Styles */
+.tazweed-dashboard {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Welcome Header */
+.welcome-header {
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Stat Cards */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.stat-icon.bg-primary { background: linear-gradient(135deg, #3498db, #2980b9); }
+.stat-icon.bg-success { background: linear-gradient(135deg, #27ae60, #1e8449); }
+.stat-icon.bg-warning { background: linear-gradient(135deg, #f39c12, #d68910); }
+.stat-icon.bg-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.stat-icon.bg-info { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+.stat-icon.bg-secondary { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+.stat-icon.bg-dark { background: linear-gradient(135deg, #2c3e50, #1a252f); }
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid #eee;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1rem 1.25rem;
+}
+
+.card-footer {
+    background: white;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 12px 12px !important;
+}
+
+/* Quick Action Buttons */
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--tazweed-secondary);
+    padding: 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.quick-action-btn:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-3px);
+    text-decoration: none;
+    color: var(--tazweed-primary);
+}
+
+.quick-action-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.quick-action-btn:hover .quick-action-icon {
+    transform: scale(1.1);
+}
+
+/* Progress Bars */
+.progress {
+    border-radius: 10px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--tazweed-secondary);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f6dad);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #1e8449);
+    border: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border: none;
+}
+
+.btn-outline-primary {
+    border-color: var(--tazweed-primary);
+    color: var(--tazweed-primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--tazweed-primary);
+    border-color: var(--tazweed-primary);
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0.6rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--tazweed-primary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* Alerts */
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.alert-info {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--tazweed-primary);
+}
+
+.alert-success {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: var(--tazweed-success);
+}
+
+.alert-danger {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--tazweed-danger);
+}
+
+.alert-warning {
+    background-color: rgba(243, 156, 18, 0.1);
+    color: var(--tazweed-warning);
+}
+
+/* List Groups */
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item-action:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* Payslip Card */
+.payslip-card {
+    transition: all 0.3s ease;
+}
+
+.payslip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.payslip-card .card-header {
+    border-radius: 12px 12px 0 0;
+}
+
+/* Status Indicator */
+.status-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .welcome-header {
+        text-align: center;
+    }
+    
+    .welcome-header .row {
+        flex-direction: column;
+    }
+    
+    .welcome-header .col-auto {
+        margin-bottom: 1rem;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .quick-action-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .btn, .quick-action-btn, .card-footer {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--tazweed-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Tooltip */
+[data-tooltip] {
+    position: relative;
+    cursor: pointer;
+}
+
+[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tazweed-dark);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+}

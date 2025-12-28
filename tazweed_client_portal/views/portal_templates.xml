@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal My Home Extension -->
+    <template id="portal_my_home_tazweed" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <!-- Tazweed Portal Cards -->
+            <t t-if="client">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Dashboard</t>
+                    <t t-set="url" t-value="'/my/dashboard'"/>
+                    <t t-set="placeholder_count" t-value="'dashboard'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Job Orders</t>
+                    <t t-set="url" t-value="'/my/job-orders'"/>
+                    <t t-set="count" t-value="job_order_count"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Candidates</t>
+                    <t t-set="url" t-value="'/my/candidates'"/>
+                    <t t-set="count" t-value="candidate_count"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Placements</t>
+                    <t t-set="url" t-value="'/my/placements'"/>
+                    <t t-set="count" t-value="placement_count"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Invoices</t>
+                    <t t-set="url" t-value="'/my/invoices'"/>
+                    <t t-set="count" t-value="invoice_count"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Documents</t>
+                    <t t-set="url" t-value="'/my/documents'"/>
+                    <t t-set="count" t-value="document_count"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Messages</t>
+                    <t t-set="url" t-value="'/my/messages'"/>
+                    <t t-set="count" t-value="message_count"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Base Portal Page Template -->
+    <template id="portal_page_base" name="Portal Page Base">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <div class="portal-header">
+                    <h2><t t-esc="page_title"/></h2>
+                    <div class="portal-actions">
+                        <t t-raw="header_actions"/>
+                    </div>
+                </div>
+                <div class="portal-content">
+                    <t t-raw="0"/>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Empty State Template -->
+    <template id="portal_empty_state" name="Portal Empty State">
+        <div class="portal-empty-state text-center py-5">
+            <i t-att-class="'fa ' + (icon or 'fa-inbox') + ' fa-4x text-muted mb-3'"></i>
+            <h4 class="text-muted"><t t-esc="title or 'No items found'"/></h4>
+            <p class="text-muted"><t t-esc="message or 'There are no items to display.'"/></p>
+            <t t-if="action_url">
+                <a t-att-href="action_url" class="btn btn-primary mt-3">
+                    <t t-esc="action_label or 'Get Started'"/>
+                </a>
+            </t>
+        </div>
+    </template>
+</odoo>

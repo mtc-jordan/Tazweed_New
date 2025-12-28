@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- ============================================== -->
+        <!-- EMPLOYMENT VISA - NEW - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_emp_visa_passport" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Valid passport with minimum 6 months validity</field>
+        </record>
+        
+        <record id="doc_req_emp_visa_photo" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="document_type_id" ref="doc_type_passport_photo"/>
+            <field name="is_required">True</field>
+            <field name="notes">Recent passport-size photo with white background</field>
+        </record>
+        
+        <record id="doc_req_emp_visa_edu" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="document_type_id" ref="doc_type_degree"/>
+            <field name="is_required">False</field>
+            <field name="notes">Attested educational certificates (for skilled positions)</field>
+        </record>
+        
+        <record id="doc_req_emp_visa_contract" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="document_type_id" ref="doc_type_labor_contract"/>
+            <field name="is_required">True</field>
+            <field name="notes">Signed employment contract</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- EMPLOYMENT VISA - RENEWAL - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_emp_ren_passport" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Original passport with current visa</field>
+        </record>
+        
+        <record id="doc_req_emp_ren_eid" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="document_type_id" ref="doc_type_emirates_id"/>
+            <field name="is_required">True</field>
+            <field name="notes">Current Emirates ID card</field>
+        </record>
+        
+        <record id="doc_req_emp_ren_visa" model="pro.service.document">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="document_type_id" ref="doc_type_visa"/>
+            <field name="is_required">True</field>
+            <field name="notes">Copy of current residence visa</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- FAMILY VISA - NEW - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_fam_sponsor_passport" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Sponsor's passport copy</field>
+        </record>
+        
+        <record id="doc_req_fam_sponsor_visa" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_visa"/>
+            <field name="is_required">True</field>
+            <field name="notes">Sponsor's residence visa copy</field>
+        </record>
+        
+        <record id="doc_req_fam_sponsor_eid" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_emirates_id"/>
+            <field name="is_required">True</field>
+            <field name="notes">Sponsor's Emirates ID copy</field>
+        </record>
+        
+        <record id="doc_req_fam_salary" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_salary_certificate"/>
+            <field name="is_required">True</field>
+            <field name="notes">Salary certificate (minimum AED 4,000 for spouse)</field>
+        </record>
+        
+        <record id="doc_req_fam_tenancy" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_tenancy_contract"/>
+            <field name="is_required">True</field>
+            <field name="notes">Ejari registered tenancy contract</field>
+        </record>
+        
+        <record id="doc_req_fam_marriage" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_marriage_cert"/>
+            <field name="is_required">True</field>
+            <field name="notes">Attested marriage certificate (for spouse)</field>
+        </record>
+        
+        <record id="doc_req_fam_dep_passport" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Dependent's passport with 6 months validity</field>
+        </record>
+        
+        <record id="doc_req_fam_photo" model="pro.service.document">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="document_type_id" ref="doc_type_passport_photo"/>
+            <field name="is_required">True</field>
+            <field name="notes">Dependent's passport-size photos</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- GOLDEN VISA - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_golden_passport" model="pro.service.document">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Valid passport with minimum 6 months validity</field>
+        </record>
+        
+        <record id="doc_req_golden_photo" model="pro.service.document">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="document_type_id" ref="doc_type_passport_photo"/>
+            <field name="is_required">True</field>
+            <field name="notes">Recent passport-size photo</field>
+        </record>
+        
+        <record id="doc_req_golden_edu" model="pro.service.document">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="document_type_id" ref="doc_type_degree"/>
+            <field name="is_required">True</field>
+            <field name="notes">Attested educational certificates</field>
+        </record>
+        
+        <record id="doc_req_golden_bank" model="pro.service.document">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="document_type_id" ref="doc_type_bank_statement"/>
+            <field name="is_required">True</field>
+            <field name="notes">Bank statements (for investors)</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- EMIRATES ID - NEW - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_eid_passport" model="pro.service.document">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Original passport</field>
+        </record>
+        
+        <record id="doc_req_eid_visa" model="pro.service.document">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="document_type_id" ref="doc_type_visa"/>
+            <field name="is_required">True</field>
+            <field name="notes">Entry permit or residence visa copy</field>
+        </record>
+        
+        <record id="doc_req_eid_photo" model="pro.service.document">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="document_type_id" ref="doc_type_passport_photo"/>
+            <field name="is_required">True</field>
+            <field name="notes">Passport-size photo</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- WORK PERMIT - NEW - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_wp_passport" model="pro.service.document">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Passport copy</field>
+        </record>
+        
+        <record id="doc_req_wp_photo" model="pro.service.document">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="document_type_id" ref="doc_type_passport_photo"/>
+            <field name="is_required">True</field>
+            <field name="notes">Passport-size photo</field>
+        </record>
+        
+        <record id="doc_req_wp_edu" model="pro.service.document">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="document_type_id" ref="doc_type_degree"/>
+            <field name="is_required">False</field>
+            <field name="notes">Educational certificates (for skilled positions)</field>
+        </record>
+        
+        <record id="doc_req_wp_contract" model="pro.service.document">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="document_type_id" ref="doc_type_labor_contract"/>
+            <field name="is_required">True</field>
+            <field name="notes">Signed employment contract</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- LABOR CARD - NEW - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_lc_passport" model="pro.service.document">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Passport copy</field>
+        </record>
+        
+        <record id="doc_req_lc_visa" model="pro.service.document">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="document_type_id" ref="doc_type_visa"/>
+            <field name="is_required">True</field>
+            <field name="notes">Residence visa copy</field>
+        </record>
+        
+        <record id="doc_req_lc_eid" model="pro.service.document">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="document_type_id" ref="doc_type_emirates_id"/>
+            <field name="is_required">True</field>
+            <field name="notes">Emirates ID copy</field>
+        </record>
+        
+        <record id="doc_req_lc_wp" model="pro.service.document">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="document_type_id" ref="doc_type_labor_card"/>
+            <field name="is_required">True</field>
+            <field name="notes">Approved work permit</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- TRADE LICENSE RENEWAL - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_tl_license" model="pro.service.document">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="document_type_id" ref="doc_type_trade_license"/>
+            <field name="is_required">True</field>
+            <field name="notes">Current trade license copy</field>
+        </record>
+        
+        <record id="doc_req_tl_tenancy" model="pro.service.document">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="document_type_id" ref="doc_type_tenancy_contract"/>
+            <field name="is_required">True</field>
+            <field name="notes">Valid Ejari tenancy contract</field>
+        </record>
+        
+        <record id="doc_req_tl_moa" model="pro.service.document">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="document_type_id" ref="doc_type_moa"/>
+            <field name="is_required">True</field>
+            <field name="notes">Memorandum of Association</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- MEDICAL FITNESS - REQUIRED DOCUMENTS -->
+        <!-- ============================================== -->
+        
+        <record id="doc_req_med_passport" model="pro.service.document">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="document_type_id" ref="doc_type_passport"/>
+            <field name="is_required">True</field>
+            <field name="notes">Original passport</field>
+        </record>
+        
+        <record id="doc_req_med_visa" model="pro.service.document">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="document_type_id" ref="doc_type_visa"/>
+            <field name="is_required">True</field>
+            <field name="notes">Entry permit or visa copy</field>
+        </record>
+        
+        <record id="doc_req_med_photo" model="pro.service.document">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="document_type_id" ref="doc_type_passport_photo"/>
+            <field name="is_required">True</field>
+            <field name="notes">Passport-size photo</field>
+        </record>
+        
+    </data>
+</odoo>

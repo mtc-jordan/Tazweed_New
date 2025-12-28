@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_sponsor_tree" model="ir.ui.view">
+        <field name="name">tazweed.employee.sponsor.tree</field>
+        <field name="model">tazweed.employee.sponsor</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="sponsor_type"/>
+                <field name="trade_license_number"/>
+                <field name="employee_count"/>
+                <field name="visa_quota"/>
+                <field name="available_quota"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_sponsor_form" model="ir.ui.view">
+        <field name="name">tazweed.employee.sponsor.form</field>
+        <field name="model">tazweed.employee.sponsor</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_employees" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="employee_count" widget="statinfo" string="Employees"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Sponsor Name"/></h1>
+                        <field name="code" readonly="1"/>
+                    </div>
+                    <group>
+                        <group string="General Information">
+                            <field name="sponsor_type"/>
+                            <field name="partner_id"/>
+                            <field name="trade_license_number"/>
+                            <field name="trade_license_expiry"/>
+                        </group>
+                        <group string="Government IDs">
+                            <field name="establishment_id"/>
+                            <field name="mol_number"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Contact">
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="website"/>
+                        </group>
+                        <group string="Quota">
+                            <field name="visa_quota"/>
+                            <field name="used_quota"/>
+                            <field name="available_quota"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Address">
+                            <field name="street"/>
+                            <field name="city"/>
+                            <field name="state_id"/>
+                            <field name="country_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_sponsors" model="ir.actions.act_window">
+        <field name="name">Sponsors</field>
+        <field name="res_model">tazweed.employee.sponsor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

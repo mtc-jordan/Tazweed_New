@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Request Wizard Form View -->
+    <record id="view_pro_request_wizard_form" model="ir.ui.view">
+        <field name="name">pro.request.wizard.form</field>
+        <field name="model">pro.request.wizard</field>
+        <field name="arch" type="xml">
+            <form string="New Service Request">
+                <group>
+                    <group>
+                        <field name="request_type"/>
+                        <field name="employee_id" 
+                               attrs="{'invisible': [('request_type', '!=', 'internal')], 'required': [('request_type', '=', 'internal')]}"/>
+                        <field name="customer_id" 
+                               attrs="{'invisible': [('request_type', '!=', 'external')], 'required': [('request_type', '=', 'external')]}"/>
+                    </group>
+                    <group>
+                        <field name="category_id"/>
+                        <field name="service_id"/>
+                        <field name="is_urgent" attrs="{'invisible': [('urgent_available', '=', False)]}"/>
+                        <field name="urgent_available" invisible="1"/>
+                    </group>
+                </group>
+                <group string="Service Information">
+                    <group>
+                        <field name="processing_days"/>
+                        <field name="urgent_days" attrs="{'invisible': [('urgent_available', '=', False)]}"/>
+                    </group>
+                    <group>
+                        <field name="government_fee"/>
+                        <field name="service_fee"/>
+                        <field name="urgent_fee" attrs="{'invisible': [('urgent_available', '=', False)]}"/>
+                        <field name="total_fee"/>
+                    </group>
+                </group>
+                <group string="Required Documents">
+                    <field name="required_document_ids" widget="many2many_tags" readonly="1" nolabel="1"/>
+                </group>
+                <group>
+                    <field name="description" placeholder="Additional notes or instructions..."/>
+                </group>
+                <footer>
+                    <button name="action_create_request" type="object" string="Create Request" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Service Request Wizard Action -->
+    <record id="action_pro_request_wizard" model="ir.actions.act_window">
+        <field name="name">New Service Request</field>
+        <field name="res_model">pro.request.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Payment Wizard Form View -->
+    <record id="view_pro_payment_wizard_form" model="ir.ui.view">
+        <field name="name">pro.payment.wizard.form</field>
+        <field name="model">pro.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register Payment">
+                <group>
+                    <field name="billing_id" readonly="1"/>
+                    <field name="amount"/>
+                    <field name="payment_date"/>
+                    <field name="payment_method"/>
+                    <field name="payment_reference"/>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_register_payment" type="object" string="Register Payment" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

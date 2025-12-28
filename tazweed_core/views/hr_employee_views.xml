@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Employee Form View Extension -->
+    <record id="view_employee_form_tazweed" model="ir.ui.view">
+        <field name="name">hr.employee.form.tazweed</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <!-- Add stat buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                    <field name="document_count" widget="statinfo" string="Documents"/>
+                </button>
+                <button name="action_view_bank_accounts" type="object" class="oe_stat_button" icon="fa-university">
+                    <field name="bank_account_count" widget="statinfo" string="Bank Accounts"/>
+                </button>
+            </xpath>
+            
+            <!-- Add UAE fields after identification_id -->
+            <xpath expr="//field[@name='identification_id']" position="after">
+                <field name="emirates_id"/>
+                <field name="emirates_id_expiry"/>
+            </xpath>
+            
+            <!-- Add new page for UAE Information -->
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="UAE Information" name="uae_info">
+                    <group>
+                        <group string="Passport Information">
+                            <field name="passport_id"/>
+                            <field name="passport_expiry"/>
+                            <field name="passport_issue_place"/>
+                        </group>
+                        <group string="Visa Information">
+                            <field name="visa_type"/>
+                            <field name="visa_number"/>
+                            <field name="visa_status"/>
+                            <field name="visa_expiry"/>
+                            <field name="visa_uid"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Labor Card">
+                            <field name="labor_card_number"/>
+                            <field name="labor_card_expiry"/>
+                            <field name="mol_id"/>
+                        </group>
+                        <group string="Sponsor">
+                            <field name="sponsor_id"/>
+                            <field name="sponsor_type"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Placement" name="placement">
+                    <group>
+                        <group string="Placement Status">
+                            <field name="placement_status"/>
+                            <field name="is_available"/>
+                            <field name="placement_date"/>
+                            <field name="client_id"/>
+                        </group>
+                        <group string="Categories">
+                            <field name="employee_category_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Employee Kanban View Extension -->
+    <record id="hr_kanban_view_employees_tazweed" model="ir.ui.view">
+        <field name="name">hr.employee.kanban.tazweed</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="inside">
+                <field name="placement_status"/>
+                <field name="is_available"/>
+                <field name="is_new_employee"/>
+                <field name="employee_category_ids"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_kanban_global_click')]" position="inside">
+                <div class="ribbon ribbon-top-right" t-if="record.is_new_employee.raw_value">
+                    <span class="bg-info">New</span>
+                </div>
+                <div class="mt-2">
+                    <span t-if="record.is_available.raw_value" class="badge bg-success">Available</span>
+                    <span t-if="!record.is_available.raw_value" class="badge bg-warning">Placed</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Employee Tree View Extension -->
+    <record id="view_employee_tree_tazweed" model="ir.ui.view">
+        <field name="name">hr.employee.tree.tazweed</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="placement_status" optional="show"/>
+                <field name="visa_status" optional="show"/>
+                <field name="sponsor_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

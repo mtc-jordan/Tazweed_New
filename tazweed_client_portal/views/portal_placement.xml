@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Placements List Template -->
+    <template id="portal_placements" name="My Placements">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <div class="portal-header mb-4">
+                    <h2>Active Placements</h2>
+                    <p class="text-muted">View and track all employees placed at your organization</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <t t-foreach="searchbar_filters.items()" t-as="filter_item">
+                                <a t-attf-href="/my/placements?filterby=#{filter_item[0]}"
+                                   t-attf-class="btn btn-outline-secondary #{filterby == filter_item[0] and 'active' or ''}">
+                                    <t t-esc="filter_item[1]['label']"/>
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placements Table -->
+                <t t-if="placements">
+                    <table class="portal-table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Position</th>
+                                <th>Start Date</th>
+                                <th>Contract Type</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="placements" t-as="placement">
+                                <tr>
+                                    <td>
+                                        <strong><t t-esc="placement.employee_id.name"/></strong>
+                                        <br/>
+                                        <small class="text-muted"><t t-esc="placement.employee_id.work_email or ''"/></small>
+                                    </td>
+                                    <td><t t-esc="placement.job_title or placement.job_order_id.job_title or '-'"/></td>
+                                    <td><t t-esc="placement.start_date"/></td>
+                                    <td><t t-esc="placement.contract_type or 'Fixed'"/></td>
+                                    <td>
+                                        <span t-attf-class="portal-badge #{placement.state}">
+                                            <t t-esc="placement.state"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a t-attf-href="/my/placements/#{placement.id}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        <t t-call="portal.pager"/>
+                    </div>
+                </t>
+                <t t-else="">
+                    <t t-call="tazweed_client_portal.portal_empty_state">
+                        <t t-set="icon">fa-user-plus</t>
+                        <t t-set="title">No Placements</t>
+                        <t t-set="message">You don't have any active placements yet.</t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

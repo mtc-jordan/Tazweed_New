@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Performance Dashboard Client Action -->
+    <record id="action_performance_dashboard" model="ir.actions.client">
+        <field name="name">Performance Dashboard</field>
+        <field name="tag">performance_dashboard</field>
+        <field name="target">main</field>
+    </record>
+</odoo>

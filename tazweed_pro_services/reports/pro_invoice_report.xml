@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_pro_invoice" model="ir.actions.report">
+        <field name="name">PRO Services Invoice</field>
+        <field name="model">pro.billing</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tazweed_pro_services.report_pro_invoice</field>
+        <field name="report_file">tazweed_pro_services.report_pro_invoice</field>
+        <field name="print_report_name">'PRO_Invoice_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_pro_billing"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Invoice Report Template -->
+    <template id="report_pro_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="tazweed_pro_services.report_pro_invoice_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Main Invoice Document -->
+    <template id="report_pro_invoice_document">
+        <t t-call="web.external_layout">
+            <t t-set="doc" t-value="doc"/>
+            
+            <div class="page" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                
+                <!-- Invoice Header with Gradient -->
+                <div style="background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%); color: white; padding: 30px; margin: -20px -20px 30px -20px; border-radius: 0 0 20px 20px;">
+                    <div class="row">
+                        <div class="col-6">
+                            <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 5px; letter-spacing: 2px;">INVOICE</h1>
+                            <p style="font-size: 14px; opacity: 0.9; margin: 0;">PRO Services</p>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div style="background: rgba(255,255,255,0.15); padding: 15px 20px; border-radius: 10px; display: inline-block;">
+                                <p style="margin: 0; font-size: 12px; opacity: 0.8;">Invoice Number</p>
+                                <p style="margin: 0; font-size: 20px; font-weight: 700;"><t t-esc="doc.name"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company and Customer Info -->
+                <div class="row" style="margin-bottom: 30px;">
+                    <!-- Company Info -->
+                    <div class="col-6">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #1a5276;">
+                            <h4 style="color: #1a5276; font-weight: 600; margin-bottom: 15px; font-size: 14px; text-transform: uppercase;">From</h4>
+                            <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px; color: #2c3e50;">
+                                <t t-esc="doc.env.company.name"/>
+                            </p>
+                            <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 3px;">
+                                <t t-if="doc.env.company.street"><t t-esc="doc.env.company.street"/><br/></t>
+                                <t t-if="doc.env.company.city"><t t-esc="doc.env.company.city"/>, </t>
+                                <t t-if="doc.env.company.state_id"><t t-esc="doc.env.company.state_id.name"/><br/></t>
+                                <t t-if="doc.env.company.country_id"><t t-esc="doc.env.company.country_id.name"/></t>
+                            </p>
+                            <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 0;">
+                                <t t-if="doc.env.company.phone">Tel: <t t-esc="doc.env.company.phone"/><br/></t>
+                                <t t-if="doc.env.company.email">Email: <t t-esc="doc.env.company.email"/></t>
+                            </p>
+                            <t t-if="doc.env.company.vat">
+                                <p style="font-size: 12px; color: #1a5276; margin-top: 10px; font-weight: 600;">
+                                    TRN: <t t-esc="doc.env.company.vat"/>
+                                </p>
+                            </t>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Info -->
+                    <div class="col-6">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #27ae60;">
+                            <h4 style="color: #27ae60; font-weight: 600; margin-bottom: 15px; font-size: 14px; text-transform: uppercase;">Bill To</h4>
+                            <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px; color: #2c3e50;">
+                                <t t-esc="doc.customer_name or doc.billing_party"/>
+                            </p>
+                            <t t-if="doc.customer_address">
+                                <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 3px;">
+                                    <t t-esc="doc.customer_address"/>
+                                </p>
+                            </t>
+                            <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 0;">
+                                <t t-if="doc.customer_phone">Tel: <t t-esc="doc.customer_phone"/><br/></t>
+                                <t t-if="doc.customer_email">Email: <t t-esc="doc.customer_email"/></t>
+                            </p>
+                            <t t-if="doc.customer_trn">
+                                <p style="font-size: 12px; color: #27ae60; margin-top: 10px; font-weight: 600;">
+                                    TRN: <t t-esc="doc.customer_trn"/>
+                                </p>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Details Bar -->
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-12">
+                        <div style="background: linear-gradient(90deg, #ecf0f1 0%, #bdc3c7 100%); padding: 15px 25px; border-radius: 10px;">
+                            <div class="row">
+                                <div class="col-3 text-center" style="border-right: 1px solid #95a5a6;">
+                                    <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 3px; text-transform: uppercase;">Invoice Date</p>
+                                    <p style="font-size: 14px; font-weight: 600; color: #2c3e50; margin: 0;">
+                                        <t t-esc="doc.billing_date" t-options="{'widget': 'date'}"/>
+                                    </p>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #95a5a6;">
+                                    <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 3px; text-transform: uppercase;">Due Date</p>
+                                    <p style="font-size: 14px; font-weight: 600; color: #2c3e50; margin: 0;">
+                                        <t t-esc="doc.due_date or doc.billing_date" t-options="{'widget': 'date'}"/>
+                                    </p>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #95a5a6;">
+                                    <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 3px; text-transform: uppercase;">Service Request</p>
+                                    <p style="font-size: 14px; font-weight: 600; color: #2c3e50; margin: 0;">
+                                        <t t-esc="doc.request_id.name"/>
+                                    </p>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 3px; text-transform: uppercase;">Status</p>
+                                    <p style="font-size: 14px; font-weight: 600; margin: 0;">
+                                        <t t-if="doc.payment_status == 'paid'">
+                                            <span style="color: #27ae60;">✓ PAID</span>
+                                        </t>
+                                        <t t-elif="doc.payment_status == 'partial'">
+                                            <span style="color: #f39c12;">PARTIAL</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="color: #e74c3c;">PENDING</span>
+                                        </t>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beneficiary Info (if different from customer) -->
+                <t t-if="doc.beneficiary_name">
+                    <div style="background: #fff3cd; padding: 15px 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #ffc107;">
+                        <h5 style="color: #856404; font-weight: 600; margin-bottom: 10px; font-size: 13px;">
+                            <span style="margin-right: 8px;">👤</span> SERVICE BENEFICIARY DETAILS
+                        </h5>
+                        <div class="row">
+                            <div class="col-3">
+                                <p style="font-size: 11px; color: #856404; margin-bottom: 2px;">Name</p>
+                                <p style="font-size: 13px; font-weight: 600; color: #2c3e50; margin: 0;"><t t-esc="doc.beneficiary_name"/></p>
+                            </div>
+                            <t t-if="doc.beneficiary_passport">
+                                <div class="col-3">
+                                    <p style="font-size: 11px; color: #856404; margin-bottom: 2px;">Passport No.</p>
+                                    <p style="font-size: 13px; font-weight: 600; color: #2c3e50; margin: 0;"><t t-esc="doc.beneficiary_passport"/></p>
+                                </div>
+                            </t>
+                            <t t-if="doc.beneficiary_emirates_id">
+                                <div class="col-3">
+                                    <p style="font-size: 11px; color: #856404; margin-bottom: 2px;">Emirates ID</p>
+                                    <p style="font-size: 13px; font-weight: 600; color: #2c3e50; margin: 0;"><t t-esc="doc.beneficiary_emirates_id"/></p>
+                                </div>
+                            </t>
+                            <t t-if="doc.beneficiary_nationality">
+                                <div class="col-3">
+                                    <p style="font-size: 11px; color: #856404; margin-bottom: 2px;">Nationality</p>
+                                    <p style="font-size: 13px; font-weight: 600; color: #2c3e50; margin: 0;"><t t-esc="doc.beneficiary_nationality"/></p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Service Info Box -->
+                <div style="background: linear-gradient(135deg, #e8f4f8 0%, #d4edda 100%); padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                    <h5 style="color: #1a5276; font-weight: 600; margin-bottom: 15px; font-size: 14px;">
+                        <span style="margin-right: 8px;">📋</span> SERVICE DETAILS
+                    </h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 2px;">Service Type</p>
+                            <p style="font-size: 15px; font-weight: 600; color: #2c3e50; margin: 0;">
+                                <t t-esc="doc.service_id.name"/>
+                            </p>
+                        </div>
+                        <div class="col-3">
+                            <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 2px;">Category</p>
+                            <p style="font-size: 13px; font-weight: 500; color: #2c3e50; margin: 0;">
+                                <t t-esc="doc.service_id.category_id.name"/>
+                            </p>
+                        </div>
+                        <div class="col-3">
+                            <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 2px;">Authority</p>
+                            <p style="font-size: 13px; font-weight: 500; color: #2c3e50; margin: 0;">
+                                <t t-esc="doc.service_id.government_authority_id.name"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Table -->
+                <h5 style="color: #1a5276; font-weight: 600; margin-bottom: 15px; font-size: 14px; text-transform: uppercase;">
+                    <span style="margin-right: 8px;">💰</span> Invoice Items
+                </h5>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+                    <thead>
+                        <tr style="background: linear-gradient(90deg, #1a5276 0%, #2980b9 100%);">
+                            <th style="padding: 12px 15px; color: white; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; border-radius: 8px 0 0 0;">#</th>
+                            <th style="padding: 12px 15px; color: white; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase;">Description</th>
+                            <th style="padding: 12px 15px; color: white; text-align: center; font-size: 12px; font-weight: 600; text-transform: uppercase;">Type</th>
+                            <th style="padding: 12px 15px; color: white; text-align: center; font-size: 12px; font-weight: 600; text-transform: uppercase;">Qty</th>
+                            <th style="padding: 12px 15px; color: white; text-align: right; font-size: 12px; font-weight: 600; text-transform: uppercase;">Unit Price</th>
+                            <th style="padding: 12px 15px; color: white; text-align: right; font-size: 12px; font-weight: 600; text-transform: uppercase; border-radius: 0 8px 0 0;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="line_num" t-value="1"/>
+                        <t t-foreach="doc.line_ids" t-as="line">
+                            <tr style="border-bottom: 1px solid #ecf0f1;">
+                                <td style="padding: 12px 15px; font-size: 13px; color: #7f8c8d;"><t t-esc="line_num"/></td>
+                                <td style="padding: 12px 15px;">
+                                    <p style="font-size: 13px; font-weight: 500; color: #2c3e50; margin: 0;"><t t-esc="line.description"/></p>
+                                    <t t-if="line.authority_name">
+                                        <p style="font-size: 11px; color: #7f8c8d; margin: 3px 0 0 0;">
+                                            <t t-esc="line.authority_name"/>
+                                            <t t-if="line.reference_number"> - Ref: <t t-esc="line.reference_number"/></t>
+                                        </p>
+                                    </t>
+                                </td>
+                                <td style="padding: 12px 15px; text-align: center;">
+                                    <span t-attf-style="background: #{line.fee_type == 'government' and '#e8f4f8' or line.fee_type == 'service' and '#d4edda' or line.fee_type == 'urgent' and '#fff3cd' or '#f8f9fa'}; padding: 4px 10px; border-radius: 15px; font-size: 11px; font-weight: 500; color: #{line.fee_type == 'government' and '#1a5276' or line.fee_type == 'service' and '#27ae60' or line.fee_type == 'urgent' and '#f39c12' or '#7f8c8d'};">
+                                        <t t-if="line.fee_type == 'government'">Gov. Fee</t>
+                                        <t t-elif="line.fee_type == 'service'">Service</t>
+                                        <t t-elif="line.fee_type == 'urgent'">Urgent</t>
+                                        <t t-elif="line.fee_type == 'third_party'">3rd Party</t>
+                                        <t t-elif="line.fee_type == 'discount'">Discount</t>
+                                        <t t-else="">Other</t>
+                                    </span>
+                                </td>
+                                <td style="padding: 12px 15px; text-align: center; font-size: 13px; color: #2c3e50;"><t t-esc="line.quantity"/></td>
+                                <td style="padding: 12px 15px; text-align: right; font-size: 13px; color: #2c3e50;">
+                                    <t t-esc="line.unit_price" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                </td>
+                                <td style="padding: 12px 15px; text-align: right; font-size: 13px; font-weight: 600; color: #2c3e50;">
+                                    <t t-esc="line.amount" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                </td>
+                            </tr>
+                            <t t-set="line_num" t-value="line_num + 1"/>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- Totals Section -->
+                <div class="row">
+                    <div class="col-6">
+                        <!-- Payment Info -->
+                        <t t-if="doc.payment_method or doc.payment_reference">
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                                <h6 style="color: #1a5276; font-weight: 600; margin-bottom: 10px; font-size: 12px;">PAYMENT INFORMATION</h6>
+                                <t t-if="doc.payment_method">
+                                    <p style="font-size: 12px; margin-bottom: 5px;">
+                                        <strong>Method:</strong> 
+                                        <t t-if="doc.payment_method == 'cash'">Cash</t>
+                                        <t t-elif="doc.payment_method == 'card'">Card</t>
+                                        <t t-elif="doc.payment_method == 'bank_transfer'">Bank Transfer</t>
+                                        <t t-elif="doc.payment_method == 'cheque'">Cheque</t>
+                                        <t t-else="">Online Payment</t>
+                                    </p>
+                                </t>
+                                <t t-if="doc.payment_reference">
+                                    <p style="font-size: 12px; margin-bottom: 0;"><strong>Reference:</strong> <t t-esc="doc.payment_reference"/></p>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="col-6">
+                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #ecf0f1 100%); padding: 20px; border-radius: 10px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="padding: 8px 0; font-size: 13px; color: #7f8c8d;">Subtotal</td>
+                                    <td style="padding: 8px 0; font-size: 13px; text-align: right; color: #2c3e50;">
+                                        <t t-esc="doc.subtotal" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                    </td>
+                                </tr>
+                                <t t-if="doc.discount > 0">
+                                    <tr>
+                                        <td style="padding: 8px 0; font-size: 13px; color: #27ae60;">Discount</td>
+                                        <td style="padding: 8px 0; font-size: 13px; text-align: right; color: #27ae60;">
+                                            -<t t-esc="doc.discount" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td style="padding: 8px 0; font-size: 13px; color: #7f8c8d;">VAT (<t t-esc="doc.vat_rate"/>%)</td>
+                                    <td style="padding: 8px 0; font-size: 13px; text-align: right; color: #2c3e50;">
+                                        <t t-esc="doc.vat_amount" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                    </td>
+                                </tr>
+                                <tr style="border-top: 2px solid #1a5276;">
+                                    <td style="padding: 15px 0 8px 0; font-size: 16px; font-weight: 700; color: #1a5276;">TOTAL</td>
+                                    <td style="padding: 15px 0 8px 0; font-size: 18px; font-weight: 700; text-align: right; color: #1a5276;">
+                                        <t t-esc="doc.total_amount" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                    </td>
+                                </tr>
+                                <t t-if="doc.amount_paid > 0">
+                                    <tr>
+                                        <td style="padding: 5px 0; font-size: 12px; color: #27ae60;">Amount Paid</td>
+                                        <td style="padding: 5px 0; font-size: 12px; text-align: right; color: #27ae60;">
+                                            -<t t-esc="doc.amount_paid" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-size: 14px; font-weight: 600; color: #e74c3c;">Balance Due</td>
+                                        <td style="padding: 5px 0; font-size: 14px; font-weight: 600; text-align: right; color: #e74c3c;">
+                                            <t t-esc="doc.amount_due" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Government Receipts Section -->
+                <t t-if="doc.receipt_ids">
+                    <div style="margin-top: 30px; page-break-inside: avoid;">
+                        <h5 style="color: #1a5276; font-weight: 600; margin-bottom: 15px; font-size: 14px; text-transform: uppercase;">
+                            <span style="margin-right: 8px;">🧾</span> Government &amp; Third-Party Receipts
+                        </h5>
+                        <p style="font-size: 11px; color: #7f8c8d; margin-bottom: 15px;">
+                            The following receipts are attached as proof of payment to government authorities and third-party service providers.
+                        </p>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <thead>
+                                <tr style="background: #ecf0f1;">
+                                    <th style="padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: #2c3e50; text-transform: uppercase; border-radius: 5px 0 0 0;">#</th>
+                                    <th style="padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: #2c3e50; text-transform: uppercase;">Receipt Type</th>
+                                    <th style="padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: #2c3e50; text-transform: uppercase;">Authority/Provider</th>
+                                    <th style="padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: #2c3e50; text-transform: uppercase;">Reference No.</th>
+                                    <th style="padding: 10px 12px; text-align: center; font-size: 11px; font-weight: 600; color: #2c3e50; text-transform: uppercase;">Date</th>
+                                    <th style="padding: 10px 12px; text-align: right; font-size: 11px; font-weight: 600; color: #2c3e50; text-transform: uppercase; border-radius: 0 5px 0 0;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="receipt_num" t-value="1"/>
+                                <t t-set="total_receipts" t-value="0"/>
+                                <t t-foreach="doc.receipt_ids" t-as="receipt">
+                                    <tr style="border-bottom: 1px solid #ecf0f1;">
+                                        <td style="padding: 10px 12px; font-size: 12px; color: #7f8c8d;"><t t-esc="receipt_num"/></td>
+                                        <td style="padding: 10px 12px;">
+                                            <span t-attf-style="background: #{receipt.receipt_type == 'government' and '#e8f4f8' or receipt.receipt_type == 'medical' and '#d4edda' or receipt.receipt_type == 'typing_center' and '#fff3cd' or '#f8f9fa'}; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 500;">
+                                                <t t-if="receipt.receipt_type == 'government'">Government</t>
+                                                <t t-elif="receipt.receipt_type == 'typing_center'">Typing Center</t>
+                                                <t t-elif="receipt.receipt_type == 'medical'">Medical</t>
+                                                <t t-elif="receipt.receipt_type == 'translation'">Translation</t>
+                                                <t t-elif="receipt.receipt_type == 'attestation'">Attestation</t>
+                                                <t t-elif="receipt.receipt_type == 'third_party'">Third Party</t>
+                                                <t t-else="">Other</t>
+                                            </span>
+                                        </td>
+                                        <td style="padding: 10px 12px; font-size: 12px; color: #2c3e50;"><t t-esc="receipt.authority_name or '-'"/></td>
+                                        <td style="padding: 10px 12px; font-size: 12px; color: #2c3e50;"><t t-esc="receipt.reference_number or '-'"/></td>
+                                        <td style="padding: 10px 12px; font-size: 12px; color: #2c3e50; text-align: center;">
+                                            <t t-esc="receipt.date" t-options="{'widget': 'date'}"/>
+                                        </td>
+                                        <td style="padding: 10px 12px; font-size: 12px; font-weight: 600; color: #2c3e50; text-align: right;">
+                                            <t t-esc="receipt.amount" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                        </td>
+                                    </tr>
+                                    <t t-set="receipt_num" t-value="receipt_num + 1"/>
+                                    <t t-set="total_receipts" t-value="total_receipts + receipt.amount"/>
+                                </t>
+                                <tr style="background: #f8f9fa;">
+                                    <td colspan="5" style="padding: 10px 12px; font-size: 12px; font-weight: 600; color: #1a5276; text-align: right;">
+                                        Total Government/Third-Party Fees:
+                                    </td>
+                                    <td style="padding: 10px 12px; font-size: 13px; font-weight: 700; color: #1a5276; text-align: right;">
+                                        <t t-esc="total_receipts" t-options="{'widget': 'float', 'precision': 2}"/> AED
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size: 10px; color: #7f8c8d; font-style: italic;">
+                            * Original receipts are attached to this invoice for your reference and records.
+                        </p>
+                    </div>
+                </t>
+
+                <!-- Notes Section -->
+                <t t-if="doc.notes">
+                    <div style="margin-top: 25px; background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                        <h6 style="color: #1a5276; font-weight: 600; margin-bottom: 10px; font-size: 12px;">NOTES</h6>
+                        <p style="font-size: 12px; color: #2c3e50; margin: 0; white-space: pre-line;"><t t-esc="doc.notes"/></p>
+                    </div>
+                </t>
+
+                <!-- Terms and Conditions -->
+                <div style="margin-top: 25px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
+                    <h6 style="color: #1a5276; font-weight: 600; margin-bottom: 10px; font-size: 12px;">TERMS &amp; CONDITIONS</h6>
+                    <p style="font-size: 10px; color: #7f8c8d; margin: 0; white-space: pre-line;"><t t-esc="doc.terms_conditions"/></p>
+                </div>
+
+                <!-- Footer -->
+                <div style="margin-top: 30px; text-align: center; border-top: 2px solid #1a5276; padding-top: 20px;">
+                    <p style="font-size: 14px; font-weight: 600; color: #1a5276; margin-bottom: 5px;">Thank you for your business!</p>
+                    <p style="font-size: 11px; color: #7f8c8d; margin: 0;">
+                        For any queries regarding this invoice, please contact our PRO department.
+                    </p>
+                </div>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

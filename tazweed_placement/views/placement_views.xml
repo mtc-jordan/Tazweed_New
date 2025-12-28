@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Placement Form View -->
+    <record id="view_placement_form" model="ir.ui.view">
+        <field name="name">tazweed.placement.form</field>
+        <field name="model">tazweed.placement</field>
+        <field name="arch" type="xml">
+            <form string="Placement">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" states="pending"/>
+                    <button name="action_activate" string="Activate" type="object" class="btn-success" states="approved"/>
+                    <button name="action_complete" string="Complete" type="object" states="active"/>
+                    <button name="action_terminate" string="Terminate" type="object" class="btn-danger" states="active"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,pending"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_create_employee" string="Create Employee" type="object" class="oe_stat_button" icon="fa-user-plus" attrs="{'invisible': ['|', ('employee_id', '!=', False), ('state', 'not in', ('approved', 'active'))]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="client_id"/>
+                            <field name="candidate_id"/>
+                            <field name="job_order_id" domain="[('client_id', '=', client_id)]"/>
+                            <field name="employee_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="job_title"/>
+                            <field name="department"/>
+                            <field name="work_location"/>
+                            <field name="contract_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="contract_duration"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Compensation" name="compensation">
+                            <group>
+                                <group string="Salary">
+                                    <field name="basic_salary"/>
+                                    <field name="housing_allowance"/>
+                                    <field name="transport_allowance"/>
+                                    <field name="food_allowance"/>
+                                    <field name="other_allowances"/>
+                                    <field name="total_salary"/>
+                                </group>
+                                <group string="Billing">
+                                    <field name="bill_rate"/>
+                                    <field name="markup_pct"/>
+                                    <field name="total_billing"/>
+                                    <field name="commission_pct"/>
+                                    <field name="commission_amount"/>
+                                    <field name="currency_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Deployments" name="deployments">
+                            <field name="current_deployment_id" readonly="1"/>
+                            <field name="deployment_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="site_name"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Termination" name="termination" attrs="{'invisible': [('state', 'not in', ('terminated', 'completed'))]}">
+                            <group>
+                                <field name="termination_reason"/>
+                                <field name="termination_date"/>
+                            </group>
+                            <field name="termination_notes" placeholder="Termination notes..."/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Placement Tree View -->
+    <record id="view_placement_tree" model="ir.ui.view">
+        <field name="name">tazweed.placement.tree</field>
+        <field name="model">tazweed.placement</field>
+        <field name="arch" type="xml">
+            <tree string="Placements" decoration-success="state == 'active'" decoration-muted="state in ('completed', 'terminated', 'cancelled')">
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="candidate_id"/>
+                <field name="job_title"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="total_salary"/>
+                <field name="total_billing"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Placement Search View -->
+    <record id="view_placement_search" model="ir.ui.view">
+        <field name="name">tazweed.placement.search</field>
+        <field name="model">tazweed.placement</field>
+        <field name="arch" type="xml">
+            <search string="Search Placements">
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="candidate_id"/>
+                <field name="job_title"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_client" string="Client" context="{'group_by': 'client_id'}"/>
+                    <filter name="group_type" string="Contract Type" context="{'group_by': 'contract_type'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Placement Action -->
+    <record id="action_placement" model="ir.actions.act_window">
+        <field name="name">Placements</field>
+        <field name="res_model">tazweed.placement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_placement_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first placement
+            </p>
+        </field>
+    </record>
+
+    <!-- Deployment Form View -->
+    <record id="view_deployment_form" model="ir.ui.view">
+        <field name="name">tazweed.deployment.form</field>
+        <field name="model">tazweed.deployment</field>
+        <field name="arch" type="xml">
+            <form string="Deployment">
+                <header>
+                    <button name="action_activate" string="Activate" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_complete" string="Complete" type="object" states="active"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="placement_id"/>
+                            <field name="client_id"/>
+                            <field name="candidate_id"/>
+                        </group>
+                        <group>
+                            <field name="site_name"/>
+                            <field name="site_location"/>
+                            <field name="site_supervisor"/>
+                            <field name="site_contact"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="work_schedule"/>
+                            <field name="shift_pattern"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Deployment Tree View -->
+    <record id="view_deployment_tree" model="ir.ui.view">
+        <field name="name">tazweed.deployment.tree</field>
+        <field name="model">tazweed.deployment</field>
+        <field name="arch" type="xml">
+            <tree string="Deployments">
+                <field name="name"/>
+                <field name="placement_id"/>
+                <field name="client_id"/>
+                <field name="site_name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Deployment Action -->
+    <record id="action_deployment" model="ir.actions.act_window">
+        <field name="name">Deployments</field>
+        <field name="res_model">tazweed.deployment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first deployment
+            </p>
+        </field>
+    </record>
+</odoo>

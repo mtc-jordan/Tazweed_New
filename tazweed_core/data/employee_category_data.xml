@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="category_employee" model="tazweed.employee.category">
+            <field name="name">Employee</field>
+            <field name="code">EMP</field>
+            <field name="color">1</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="category_consultant" model="tazweed.employee.category">
+            <field name="name">Consultant</field>
+            <field name="code">CON</field>
+            <field name="color">2</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="category_contractor" model="tazweed.employee.category">
+            <field name="name">Contractor</field>
+            <field name="code">CTR</field>
+            <field name="color">3</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="category_trainee" model="tazweed.employee.category">
+            <field name="name">Trainee</field>
+            <field name="code">TRN</field>
+            <field name="color">4</field>
+            <field name="sequence">4</field>
+        </record>
+    </data>
+</odoo>

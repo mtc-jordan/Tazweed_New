@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client Dashboard Template -->
+    <template id="portal_dashboard" name="Client Dashboard">
+        <t t-call="portal.portal_layout">
+            <div class="portal-dashboard">
+                <!-- Welcome Header -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h2>Welcome, <t t-esc="client.name"/></h2>
+                                <p class="text-muted mb-0">Here's an overview of your staffing activities</p>
+                            </div>
+                            <div>
+                                <a href="/my/job-orders/new" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> New Job Order
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Cards Row -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="portal-kpi-card">
+                            <div class="kpi-icon"><i class="fa fa-briefcase"></i></div>
+                            <div class="kpi-value" data-kpi="open_job_orders">
+                                <t t-esc="dashboard.get('summary', {}).get('open_job_orders', 0)"/>
+                            </div>
+                            <div class="kpi-label">Open Job Orders</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="portal-kpi-card">
+                            <div class="kpi-icon" style="color: #FF9800;"><i class="fa fa-user-clock"></i></div>
+                            <div class="kpi-value" data-kpi="pending_candidates">
+                                <t t-esc="dashboard.get('summary', {}).get('pending_candidates', 0)"/>
+                            </div>
+                            <div class="kpi-label">Pending Review</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="portal-kpi-card">
+                            <div class="kpi-icon" style="color: #4CAF50;"><i class="fa fa-user-check"></i></div>
+                            <div class="kpi-value" data-kpi="active_placements">
+                                <t t-esc="dashboard.get('summary', {}).get('active_placements', 0)"/>
+                            </div>
+                            <div class="kpi-label">Active Placements</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="portal-kpi-card">
+                            <div class="kpi-icon" style="color: #F44336;"><i class="fa fa-file-invoice-dollar"></i></div>
+                            <div class="kpi-value" data-kpi="pending_invoices">
+                                <t t-esc="dashboard.get('summary', {}).get('pending_invoices', 0)"/>
+                            </div>
+                            <div class="kpi-label">Pending Invoices</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="portal-chart-container">
+                            <h4>Placement Trends</h4>
+                            <canvas id="placementChart" height="250"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="portal-chart-container">
+                            <h4>Placement Status</h4>
+                            <canvas id="statusChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity and Quick Actions Row -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="portal-activity-feed">
+                            <h4>Recent Activity</h4>
+                            <t t-foreach="dashboard.get('recent_activity', [])" t-as="activity">
+                                <div class="portal-activity-item">
+                                    <div t-attf-class="portal-activity-icon #{activity.get('type', 'primary')}">
+                                        <i t-attf-class="fa #{activity.get('icon', 'fa-circle')}"></i>
+                                    </div>
+                                    <div class="portal-activity-content">
+                                        <div class="portal-activity-message">
+                                            <t t-esc="activity.get('message', '')"/>
+                                        </div>
+                                        <div class="portal-activity-time">
+                                            <t t-esc="activity.get('time', '')"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-if="not dashboard.get('recent_activity')">
+                                <p class="text-muted text-center py-4">No recent activity</p>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="portal-chart-container">
+                            <h4>Quick Actions</h4>
+                            <div class="list-group">
+                                <a href="/my/job-orders/new" class="list-group-item list-group-item-action">
+                                    <i class="fa fa-plus-circle text-primary mr-2"></i>
+                                    Create New Job Order
+                                </a>
+                                <a href="/my/candidates?filterby=pending" class="list-group-item list-group-item-action">
+                                    <i class="fa fa-user-clock text-warning mr-2"></i>
+                                    Review Pending Candidates
+                                </a>
+                                <a href="/my/documents" class="list-group-item list-group-item-action">
+                                    <i class="fa fa-folder text-info mr-2"></i>
+                                    View Documents
+                                </a>
+                                <a href="/my/messages" class="list-group-item list-group-item-action">
+                                    <i class="fa fa-envelope text-secondary mr-2"></i>
+                                    Send Message
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Charts Script -->
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Placement Trends Chart
+                    var placementCtx = document.getElementById('placementChart');
+                    if (placementCtx) {
+                        new Chart(placementCtx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: <t t-raw="json.dumps(dashboard.get('chart_data', {}).get('labels', []))"/>,
+                                datasets: [{
+                                    label: 'New Placements',
+                                    data: <t t-raw="json.dumps(dashboard.get('chart_data', {}).get('placements', []))"/>,
+                                    borderColor: '#2196F3',
+                                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                                    fill: true,
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false }
+                                },
+                                scales: {
+                                    y: { beginAtZero: true }
+                                }
+                            }
+                        });
+                    }
+
+                    // Status Doughnut Chart
+                    var statusCtx = document.getElementById('statusChart');
+                    if (statusCtx) {
+                        new Chart(statusCtx.getContext('2d'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Active', 'Completed', 'On Hold'],
+                                datasets: [{
+                                    data: <t t-raw="json.dumps(dashboard.get('status_data', [0, 0, 0]))"/>,
+                                    backgroundColor: ['#4CAF50', '#9C27B0', '#FF9800']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { position: 'bottom' }
+                                }
+                            }
+                        });
+                    }
+                });
+            </script>
+        </t>
+    </template>
+</odoo>

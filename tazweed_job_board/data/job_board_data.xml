@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences -->
+        <record id="seq_job_posting" model="ir.sequence">
+            <field name="name">Job Posting Sequence</field>
+            <field name="code">job.posting</field>
+            <field name="prefix">JP-%(year)s-</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_candidate_source" model="ir.sequence">
+            <field name="name">Candidate Source Sequence</field>
+            <field name="code">candidate.source</field>
+            <field name="prefix">CAND-%(year)s-</field>
+            <field name="padding">5</field>
+        </record>
+
+        <!-- Predefined Job Boards - Global -->
+        <record id="job_board_linkedin" model="job.board">
+            <field name="name">LinkedIn</field>
+            <field name="code">linkedin</field>
+            <field name="board_type">global</field>
+            <field name="website_url">https://www.linkedin.com/jobs</field>
+            <field name="api_endpoint">https://api.linkedin.com/v2</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">0</field>
+            <field name="color">#0077B5</field>
+            <field name="sequence">1</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_indeed" model="job.board">
+            <field name="name">Indeed</field>
+            <field name="code">indeed</field>
+            <field name="board_type">global</field>
+            <field name="website_url">https://www.indeed.com</field>
+            <field name="api_endpoint">https://api.indeed.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">0</field>
+            <field name="color">#2164F3</field>
+            <field name="sequence">2</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_glassdoor" model="job.board">
+            <field name="name">Glassdoor</field>
+            <field name="code">glassdoor</field>
+            <field name="board_type">global</field>
+            <field name="website_url">https://www.glassdoor.com</field>
+            <field name="api_endpoint">https://api.glassdoor.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">False</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">0</field>
+            <field name="color">#0CAA41</field>
+            <field name="sequence">3</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_monster" model="job.board">
+            <field name="name">Monster</field>
+            <field name="code">monster</field>
+            <field name="board_type">global</field>
+            <field name="website_url">https://www.monster.com</field>
+            <field name="api_endpoint">https://api.monster.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">0</field>
+            <field name="color">#6E45A5</field>
+            <field name="sequence">4</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Predefined Job Boards - GCC/UAE Regional -->
+        <record id="job_board_bayt" model="job.board">
+            <field name="name">Bayt.com</field>
+            <field name="code">bayt</field>
+            <field name="board_type">regional</field>
+            <field name="website_url">https://www.bayt.com</field>
+            <field name="api_endpoint">https://api.bayt.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">500</field>
+            <field name="color">#00A651</field>
+            <field name="sequence">1</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_gulftalent" model="job.board">
+            <field name="name">GulfTalent</field>
+            <field name="code">gulftalent</field>
+            <field name="board_type">regional</field>
+            <field name="website_url">https://www.gulftalent.com</field>
+            <field name="api_endpoint">https://api.gulftalent.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">750</field>
+            <field name="color">#003366</field>
+            <field name="sequence">2</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_naukrigulf" model="job.board">
+            <field name="name">Naukri Gulf</field>
+            <field name="code">naukrigulf</field>
+            <field name="board_type">regional</field>
+            <field name="website_url">https://www.naukrigulf.com</field>
+            <field name="api_endpoint">https://api.naukrigulf.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">400</field>
+            <field name="color">#4A90D9</field>
+            <field name="sequence">3</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_dubizzle" model="job.board">
+            <field name="name">Dubizzle Jobs</field>
+            <field name="code">dubizzle</field>
+            <field name="board_type">local</field>
+            <field name="website_url">https://dubai.dubizzle.com/jobs</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">False</field>
+            <field name="supports_analytics">False</field>
+            <field name="cost_per_post">100</field>
+            <field name="color">#E53935</field>
+            <field name="sequence">4</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_akhtaboot" model="job.board">
+            <field name="name">Akhtaboot</field>
+            <field name="code">akhtaboot</field>
+            <field name="board_type">regional</field>
+            <field name="website_url">https://www.akhtaboot.com</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">True</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">300</field>
+            <field name="color">#FF6600</field>
+            <field name="sequence">5</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Niche Job Boards -->
+        <record id="job_board_stackoverflow" model="job.board">
+            <field name="name">Stack Overflow Jobs</field>
+            <field name="code">stackoverflow</field>
+            <field name="board_type">niche</field>
+            <field name="website_url">https://stackoverflow.com/jobs</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">False</field>
+            <field name="supports_analytics">True</field>
+            <field name="cost_per_post">0</field>
+            <field name="color">#F48024</field>
+            <field name="sequence">1</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_board_dribbble" model="job.board">
+            <field name="name">Dribbble</field>
+            <field name="code">dribbble</field>
+            <field name="board_type">niche</field>
+            <field name="website_url">https://dribbble.com/jobs</field>
+            <field name="supports_posting">True</field>
+            <field name="supports_sourcing">False</field>
+            <field name="supports_analytics">False</field>
+            <field name="cost_per_post">0</field>
+            <field name="color">#EA4C89</field>
+            <field name="sequence">2</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Default Job Templates -->
+        <record id="job_template_standard" model="job.template">
+            <field name="name">Standard Job Posting</field>
+            <field name="category">general</field>
+            <field name="title_template">{position} - {company}</field>
+            <field name="description_template"><![CDATA[
+<h3>About the Role</h3>
+<p>We are looking for a talented {position} to join our team in {location}.</p>
+
+<h3>What You'll Do</h3>
+<ul>
+<li>Key responsibility 1</li>
+<li>Key responsibility 2</li>
+<li>Key responsibility 3</li>
+</ul>
+
+<h3>About Us</h3>
+<p>{company} is a leading company in {industry}. We offer a dynamic work environment with opportunities for growth and development.</p>
+            ]]></field>
+            <field name="requirements_template"><![CDATA[
+<h3>Requirements</h3>
+<ul>
+<li>Minimum {experience} years of relevant experience</li>
+<li>Bachelor's degree in relevant field</li>
+<li>Strong communication skills</li>
+<li>Ability to work in a team environment</li>
+</ul>
+            ]]></field>
+            <field name="benefits_template"><![CDATA[
+<h3>What We Offer</h3>
+<ul>
+<li>Competitive salary package</li>
+<li>Health insurance</li>
+<li>Annual leave as per UAE labor law</li>
+<li>Professional development opportunities</li>
+<li>Friendly work environment</li>
+</ul>
+            ]]></field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_template_tech" model="job.template">
+            <field name="name">Technology Role Template</field>
+            <field name="category">it</field>
+            <field name="title_template">{position} | {company} | {location}</field>
+            <field name="description_template"><![CDATA[
+<h3>🚀 About the Opportunity</h3>
+<p>Join our engineering team as a {position}! You'll work on cutting-edge technology and help build products that impact millions of users.</p>
+
+<h3>💻 Tech Stack</h3>
+<ul>
+<li>Languages: [Add languages]</li>
+<li>Frameworks: [Add frameworks]</li>
+<li>Tools: [Add tools]</li>
+</ul>
+
+<h3>🎯 What You'll Do</h3>
+<ul>
+<li>Design and develop scalable solutions</li>
+<li>Collaborate with cross-functional teams</li>
+<li>Participate in code reviews and technical discussions</li>
+<li>Mentor junior team members</li>
+</ul>
+            ]]></field>
+            <field name="requirements_template"><![CDATA[
+<h3>📋 Requirements</h3>
+<ul>
+<li>{experience}+ years of software development experience</li>
+<li>Strong problem-solving skills</li>
+<li>Experience with agile methodologies</li>
+<li>Excellent communication skills</li>
+</ul>
+
+<h3>✨ Nice to Have</h3>
+<ul>
+<li>Open source contributions</li>
+<li>Cloud platform experience (AWS/GCP/Azure)</li>
+<li>Experience with microservices architecture</li>
+</ul>
+            ]]></field>
+            <field name="benefits_template"><![CDATA[
+<h3>🎁 Perks &amp; Benefits</h3>
+<ul>
+<li>💰 Competitive salary + equity</li>
+<li>🏥 Premium health insurance</li>
+<li>🏖️ Generous PTO policy</li>
+<li>📚 Learning &amp; development budget</li>
+<li>🏠 Flexible work arrangements</li>
+<li>🎉 Team events and activities</li>
+</ul>
+            ]]></field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="job_template_executive" model="job.template">
+            <field name="name">Executive Role Template</field>
+            <field name="category">general</field>
+            <field name="title_template">{position} - {company}</field>
+            <field name="description_template"><![CDATA[
+<h3>Executive Opportunity</h3>
+<p>{company} is seeking an experienced {position} to lead our {department} function and drive strategic initiatives.</p>
+
+<h3>The Role</h3>
+<p>As {position}, you will be responsible for:</p>
+<ul>
+<li>Setting strategic direction for the {department}</li>
+<li>Building and leading high-performing teams</li>
+<li>Driving business growth and operational excellence</li>
+<li>Reporting to the Board/CEO on key metrics and initiatives</li>
+</ul>
+
+<h3>About {company}</h3>
+<p>[Company description - industry leadership, market position, growth trajectory]</p>
+            ]]></field>
+            <field name="requirements_template"><![CDATA[
+<h3>Ideal Candidate Profile</h3>
+<ul>
+<li>{experience}+ years of progressive leadership experience</li>
+<li>Proven track record of driving business results</li>
+<li>MBA or advanced degree preferred</li>
+<li>Experience in [industry] sector</li>
+<li>Strong executive presence and communication skills</li>
+</ul>
+            ]]></field>
+            <field name="benefits_template"><![CDATA[
+<h3>Compensation Package</h3>
+<ul>
+<li>Competitive executive compensation</li>
+<li>Performance-based bonus</li>
+<li>Long-term incentive plan</li>
+<li>Comprehensive benefits package</li>
+<li>Executive perks</li>
+</ul>
+            ]]></field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

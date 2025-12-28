@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Analytics Root Menu -->
+    <menuitem id="menu_analytics_root"
+              name="Analytics"
+              web_icon="tazweed_analytics_dashboard,static/description/icon.png"
+              sequence="90"/>
+
+    <!-- Dashboards Menu -->
+    <menuitem id="menu_analytics_dashboards"
+              name="Dashboards"
+              parent="menu_analytics_root"
+              action="action_analytics_dashboard"
+              sequence="10"/>
+
+    <!-- Reports Menu -->
+    <menuitem id="menu_analytics_reports"
+              name="Reports"
+              parent="menu_analytics_root"
+              action="action_analytics_report"
+              sequence="20"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_analytics_config"
+              name="Configuration"
+              parent="menu_analytics_root"
+              sequence="100"/>
+
+    <!-- KPIs Configuration -->
+    <menuitem id="menu_analytics_kpis"
+              name="KPIs"
+              parent="menu_analytics_config"
+              action="action_analytics_kpi"
+              sequence="10"/>
+</odoo>

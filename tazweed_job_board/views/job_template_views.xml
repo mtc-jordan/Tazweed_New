@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Template Form View -->
+    <record id="view_job_template_form" model="ir.ui.view">
+        <field name="name">job.template.form</field>
+        <field name="model">job.template</field>
+        <field name="arch" type="xml">
+            <form string="Job Template">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        
+                    </div>
+                    <widget name="web_ribbon" title="Default" bg_color="bg-success" 
+                        />
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Template Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Template Settings">
+                            <field name="category"/>
+                            
+                            <field name="active"/>
+                        </group>
+                        <group string="Default Values">
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Job Description" name="description">
+                            <label for="description_template"/>
+                            <field name="description_template" widget="html" placeholder="Write the job description template..."/>
+                        </page>
+                        <page string="Requirements" name="requirements">
+                            <label for="requirements_template"/>
+                            <field name="requirements_template" widget="html" placeholder="Write the requirements template..."/>
+                        </page>
+                        <page string="Benefits" name="benefits">
+                            <label for="benefits_template"/>
+                            <field name="benefits_template" widget="html" placeholder="Write the benefits template..."/>
+                        </page>
+                        <page string="Variables" name="variables">
+                            <group>
+                                <p class="text-muted">
+                                    Use these variables in your templates. They will be replaced with actual values when creating job postings.
+                                </p>
+                            </group>
+                            <group>
+                                <div class="alert alert-info">
+                                    <h4>Available Variables:</h4>
+                                    <ul>
+                                        <li><code>{{job_title}}</code> - Job position title</li>
+                                        <li><code>{{department}}</code> - Department name</li>
+                                        <li><code>{{company}}</code> - Company name</li>
+                                        <li><code>{{location}}</code> - Job location</li>
+                                        <li><code>{{experience_years}}</code> - Required experience</li>
+                                        <li><code>{{salary_range}}</code> - Salary range</li>
+                                        <li><code>{{employment_type}}</code> - Full-time, Part-time, etc.</li>
+                                    </ul>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Job Template Tree View -->
+    <record id="view_job_template_tree" model="ir.ui.view">
+        <field name="name">job.template.tree</field>
+        <field name="model">job.template</field>
+        <field name="arch" type="xml">
+            <tree string="Job Templates" decoration-muted="active == False">
+                <field name="name"/>
+                <field name="category"/>
+
+                <field name="active" widget="boolean"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Job Template Search View -->
+    <record id="view_job_template_search" model="ir.ui.view">
+        <field name="name">job.template.search</field>
+        <field name="model">job.template</field>
+        <field name="arch" type="xml">
+            <search string="Search Templates">
+                <field name="name"/>
+                <field name="category"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Job Template Action -->
+    <record id="action_job_template" model="ir.actions.act_window">
+        <field name="name">Job Templates</field>
+        <field name="res_model">job.template</field>
+        <field name="view_mode">tree,form</field>
+        
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first job template
+            </p>
+            <p>
+                Job templates help you create consistent job postings quickly.
+                Define standard descriptions, requirements, and benefits.
+            </p>
+        </field>
+    </record>
+</odoo>

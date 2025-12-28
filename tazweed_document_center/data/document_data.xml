@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequences -->
+    <record id="seq_document_alert" model="ir.sequence">
+        <field name="name">Document Alert</field>
+        <field name="code">document.alert</field>
+        <field name="prefix">ALERT/</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_document_renewal" model="ir.sequence">
+        <field name="name">Document Renewal Request</field>
+        <field name="code">document.renewal.request</field>
+        <field name="prefix">REN/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+
+    <!-- Default Dashboard -->
+    <record id="default_document_dashboard" model="document.dashboard">
+        <field name="name">Main Document Dashboard</field>
+    </record>
+
+    <!-- Alert Level Configuration -->
+    <record id="config_alert_90_days" model="ir.config_parameter">
+        <field name="key">document_center.alert_90_days</field>
+        <field name="value">True</field>
+    </record>
+
+    <record id="config_alert_60_days" model="ir.config_parameter">
+        <field name="key">document_center.alert_60_days</field>
+        <field name="value">True</field>
+    </record>
+
+    <record id="config_alert_30_days" model="ir.config_parameter">
+        <field name="key">document_center.alert_30_days</field>
+        <field name="value">True</field>
+    </record>
+
+    <record id="config_alert_15_days" model="ir.config_parameter">
+        <field name="key">document_center.alert_15_days</field>
+        <field name="value">True</field>
+    </record>
+
+    <record id="config_alert_7_days" model="ir.config_parameter">
+        <field name="key">document_center.alert_7_days</field>
+        <field name="value">True</field>
+    </record>
+
+    <record id="config_alert_1_day" model="ir.config_parameter">
+        <field name="key">document_center.alert_1_day</field>
+        <field name="value">True</field>
+    </record>
+</odoo>

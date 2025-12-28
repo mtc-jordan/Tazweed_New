@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Gratuity Form View -->
+    <record id="view_gratuity_form" model="ir.ui.view">
+        <field name="name">tazweed.employee.gratuity.form</field>
+        <field name="model">tazweed.employee.gratuity</field>
+        <field name="arch" type="xml">
+            <form string="Employee Gratuity">
+                <header>
+                    <button name="action_calculate" string="Calculate" type="object" 
+                            states="draft" class="btn-primary"/>
+                    <button name="action_approve" string="Approve" type="object" 
+                            states="calculated" class="btn-success" groups="tazweed_payroll.group_payroll_manager"/>
+                    <button name="action_pay" string="Mark as Paid" type="object" 
+                            states="approved" class="btn-success" groups="tazweed_payroll.group_payroll_manager"/>
+                    <button name="action_cancel" string="Cancel" type="object" 
+                            states="draft,calculated" class="btn-danger"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" 
+                            states="cancelled" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,calculated,approved,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Employee">
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                            <field name="contract_id"/>
+                        </group>
+                        <group string="Service Period">
+                            <field name="join_date"/>
+                            <field name="termination_date"/>
+                            <field name="service_years"/>
+                            <field name="service_months"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Termination">
+                            <field name="termination_type"/>
+                            <field name="contract_type"/>
+                        </group>
+                        <group string="Salary">
+                            <field name="basic_salary"/>
+                            <field name="housing_allowance"/>
+                            <field name="transport_allowance"/>
+                            <field name="total_salary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Gratuity Calculation" name="calculation">
+                            <group>
+                                <group string="Gratuity">
+                                    <field name="gratuity_type"/>
+                                    <field name="first_5_years_amount"/>
+                                    <field name="after_5_years_amount"/>
+                                    <field name="gross_gratuity"/>
+                                </group>
+                                <group string="Deductions">
+                                    <field name="deduction_percentage"/>
+                                    <field name="deduction_amount"/>
+                                    <field name="net_gratuity" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                            <field name="calculation_details" readonly="1"/>
+                        </page>
+                        <page string="Settlement" name="settlement">
+                            <group>
+                                <group string="Other Dues">
+                                    <field name="leave_balance_days"/>
+                                    <field name="leave_encashment"/>
+                                    <field name="other_dues"/>
+                                </group>
+                                <group string="Deductions">
+                                    <field name="other_deductions"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="total_settlement" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Approval" name="approval" 
+                              attrs="{'invisible': [('state', 'in', ['draft', 'calculated'])]}">
+                            <group>
+                                <group>
+                                    <field name="approved_by_id"/>
+                                    <field name="approval_date"/>
+                                </group>
+                                <group>
+                                    <field name="payment_method"/>
+                                    <field name="payment_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Gratuity Tree View -->
+    <record id="view_gratuity_tree" model="ir.ui.view">
+        <field name="name">tazweed.employee.gratuity.tree</field>
+        <field name="model">tazweed.employee.gratuity</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Gratuity" decoration-info="state == 'draft'" 
+                  decoration-success="state == 'paid'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="termination_date"/>
+                <field name="service_years"/>
+                <field name="termination_type"/>
+                <field name="gross_gratuity" sum="Total Gross"/>
+                <field name="net_gratuity" sum="Total Net"/>
+                <field name="total_settlement" sum="Total Settlement"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Gratuity Search View -->
+    <record id="view_gratuity_search" model="ir.ui.view">
+        <field name="name">tazweed.employee.gratuity.search</field>
+        <field name="model">tazweed.employee.gratuity</field>
+        <field name="arch" type="xml">
+            <search string="Employee Gratuity">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="calculated" string="Calculated" domain="[('state', '=', 'calculated')]"/>
+                <filter name="approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <filter name="resignation" string="Resignation" domain="[('termination_type', '=', 'resignation')]"/>
+                <filter name="termination" string="Termination" domain="[('termination_type', '=', 'termination')]"/>
+                <filter name="end_contract" string="End of Contract" domain="[('termination_type', '=', 'end_contract')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_type" string="Termination Type" context="{'group_by': 'termination_type'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Gratuity Action -->
+    <record id="action_gratuity" model="ir.actions.act_window">
+        <field name="name">Employee Gratuity</field>
+        <field name="res_model">tazweed.employee.gratuity</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new gratuity calculation
+            </p>
+            <p>
+                Calculate end of service benefits (gratuity) according to UAE Labour Law.
+            </p>
+        </field>
+    </record>
+</odoo>

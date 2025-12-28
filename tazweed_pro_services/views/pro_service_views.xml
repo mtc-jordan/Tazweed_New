@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Tree View -->
+    <record id="view_pro_service_tree" model="ir.ui.view">
+        <field name="name">pro.service.tree</field>
+        <field name="model">pro.service</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="service_type"/>
+                <field name="government_authority_id"/>
+                <field name="total_fee" sum="Total"/>
+                <field name="processing_days"/>
+                <field name="request_count"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Service Form View -->
+    <record id="view_pro_service_form" model="ir.ui.view">
+        <field name="name">pro.service.form</field>
+        <field name="model">pro.service</field>
+        <field name="arch" type="xml">
+            <form string="PRO Service">
+                <header>
+                    <button name="action_view_requests" type="object" string="View Requests" class="oe_highlight" icon="fa-list"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_requests" type="object" class="oe_stat_button" icon="fa-tasks">
+                            <field name="request_count" widget="statinfo" string="Requests"/>
+                        </button>
+                        <button name="action_view_steps" type="object" class="oe_stat_button" icon="fa-list-ol">
+                            <field name="step_count" widget="statinfo" string="Steps"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Service Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="category_id"/>
+                            <field name="service_type"/>
+                            <field name="government_authority_id"/>
+                            <field name="applicable_to"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="processing_days"/>
+                            <field name="urgent_available"/>
+                            <field name="urgent_days" attrs="{'invisible': [('urgent_available', '=', False)]}"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Fees" name="fees">
+                            <group>
+                                <group>
+                                    <field name="currency_id"/>
+                                    <field name="government_fee"/>
+                                    <field name="service_fee"/>
+                                    <field name="total_fee"/>
+                                </group>
+                                <group>
+                                    <field name="urgent_fee" attrs="{'invisible': [('urgent_available', '=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Steps" name="steps">
+                            <field name="step_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="step_type"/>
+                                    <field name="location"/>
+                                    <field name="government_authority_id"/>
+                                    <field name="estimated_duration"/>
+                                    <field name="waiting_days"/>
+                                    <field name="requires_customer_presence"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Required Documents" name="documents">
+                            <field name="required_document_ids" widget="many2many_tags"/>
+                            <separator string="Output Documents"/>
+                            <field name="output_document_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Prerequisites" name="prerequisites">
+                            <field name="prerequisite_service_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <group>
+                                <field name="customer_notes" placeholder="Instructions for customers..."/>
+                            </group>
+                            <group>
+                                <field name="internal_notes" placeholder="Internal notes for PRO staff..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Service Search View -->
+    <record id="view_pro_service_search" model="ir.ui.view">
+        <field name="name">pro.service.search</field>
+        <field name="model">pro.service</field>
+        <field name="arch" type="xml">
+            <search string="PRO Services">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="service_type"/>
+                <field name="government_authority_id"/>
+                <filter string="Visa Services" name="visa" domain="[('service_type', '=', 'visa')]"/>
+                <filter string="Labor Services" name="labor" domain="[('service_type', '=', 'labor')]"/>
+                <filter string="Trade License" name="trade" domain="[('service_type', '=', 'trade_license')]"/>
+                <filter string="Urgent Available" name="urgent" domain="[('urgent_available', '=', True)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Service Type" name="group_type" context="{'group_by': 'service_type'}"/>
+                    <filter string="Authority" name="group_authority" context="{'group_by': 'government_authority_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Service Kanban View -->
+    <record id="view_pro_service_kanban" model="ir.ui.view">
+        <field name="name">pro.service.kanban</field>
+        <field name="model">pro.service</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="service_type"/>
+                <field name="total_fee"/>
+                <field name="processing_days"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="category_id"/>
+                                    <br/>
+                                    <span>Fee: <field name="total_fee"/> AED</span>
+                                    <br/>
+                                    <span>Days: <field name="processing_days"/></span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Service Action -->
+    <record id="action_pro_service" model="ir.actions.act_window">
+        <field name="name">Services</field>
+        <field name="res_model">pro.service</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PRO service
+            </p>
+            <p>
+                Define services with steps, required documents, and fees.
+            </p>
+        </field>
+    </record>
+</odoo>

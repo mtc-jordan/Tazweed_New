@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payslip Form View -->
+    <record id="view_hr_payslip_form" model="ir.ui.view">
+        <field name="name">hr.payslip.form.tazweed</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <form string="Payslip">
+                <header>
+                    <button name="action_payslip_draft" string="Set to Draft" type="object" 
+                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <button name="compute_sheet" string="Compute Sheet" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'draft')]}" class="btn-primary"/>
+                    <button name="action_payslip_verify" string="Submit for Review" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'draft')]}" class="btn-primary"/>
+                    <button name="action_payslip_done" string="Confirm" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'verify')]}" class="btn-primary"/>
+                    <button name="action_payslip_paid" string="Mark as Paid" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'done')]}" class="btn-success"/>
+                    <button name="action_payslip_cancel" string="Cancel" type="object" 
+                            attrs="{'invisible': [('state', 'in', ['cancel', 'paid'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,verify,done,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_accounting_entry" type="object" 
+                                class="oe_stat_button" icon="fa-book"
+                                attrs="{'invisible': [('move_id', '=', False)]}">
+                            <field name="move_id" widget="statinfo" string="Journal Entry"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Payslip Name"/></h1>
+                    </div>
+                    <group>
+                        <group name="employee_details">
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                            <field name="contract_id" domain="[('employee_id', '=', employee_id)]"/>
+                            <field name="struct_id"/>
+                        </group>
+                        <group name="payslip_details">
+                            <field name="number"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="journal_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="uae_details" string="UAE Details">
+                            <field name="wps_status"/>
+                            <field name="wps_file_id"/>
+                            <field name="bank_account_id"/>
+                            <field name="payment_method"/>
+                            <field name="payment_date"/>
+                        </group>
+                        <group name="salary_summary" string="Salary Summary">
+                            <field name="basic_wage"/>
+                            <field name="gross_wage"/>
+                            <field name="total_deductions"/>
+                            <field name="net_wage"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Worked Days &amp; Inputs" name="worked_days_inputs">
+                            <separator string="Worked Days"/>
+                            <field name="worked_days_line_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="number_of_days"/>
+                                    <field name="number_of_hours"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+                            <separator string="Other Inputs"/>
+                            <field name="input_line_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Salary Computation" name="salary_computation">
+                            <field name="line_ids">
+                                <tree>
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="category_id"/>
+                                    <field name="quantity"/>
+                                    <field name="rate"/>
+                                    <field name="amount"/>
+                                    <field name="total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Details" name="details">
+                            <group>
+                                <group>
+                                    <field name="credit_note"/>
+                                    <field name="payslip_run_id"/>
+                                </group>
+                                <group>
+                                    <field name="paid"/>
+                                    <field name="note"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payslip Tree View -->
+    <record id="view_hr_payslip_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.tree.tazweed</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <tree string="Payslips" decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'verify'" 
+                  decoration-success="state == 'done'"
+                  decoration-muted="state == 'cancel'">
+                <field name="number"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="basic_wage" sum="Total Basic"/>
+                <field name="gross_wage" sum="Total Gross"/>
+                <field name="net_wage" sum="Total Net"/>
+                <field name="wps_status"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Payslip Search View -->
+    <record id="view_hr_payslip_search" model="ir.ui.view">
+        <field name="name">hr.payslip.search.tazweed</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <search string="Payslips">
+                <field name="name"/>
+                <field name="number"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="verify" string="Waiting Review" domain="[('state', '=', 'verify')]"/>
+                <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <filter name="current_month" string="Current Month" 
+                        domain="[('date_from', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                 ('date_to', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="wps_pending" string="WPS Pending" domain="[('wps_status', '=', 'pending')]"/>
+                <filter name="wps_submitted" string="WPS Submitted" domain="[('wps_status', '=', 'submitted')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_month" string="Month" context="{'group_by': 'date_from:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Payslip Action -->
+    <record id="action_hr_payslip" model="ir.actions.act_window">
+        <field name="name">Payslips</field>
+        <field name="res_model">hr.payslip</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_payslip_search"/>
+        <field name="context">{'search_default_current_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first payslip
+            </p>
+            <p>
+                Payslips are used to calculate employee salaries based on their contracts and work entries.
+            </p>
+        </field>
+    </record>
+
+    <!-- Payslip Line Views -->
+    <record id="view_hr_payslip_line_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.line.tree</field>
+        <field name="model">hr.payslip.line</field>
+        <field name="arch" type="xml">
+            <tree string="Payslip Lines">
+                <field name="slip_id"/>
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="quantity"/>
+                <field name="rate"/>
+                <field name="amount"/>
+                <field name="total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_payslip_line" model="ir.actions.act_window">
+        <field name="name">Payslip Lines</field>
+        <field name="res_model">hr.payslip.line</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>

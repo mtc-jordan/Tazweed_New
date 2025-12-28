@@ -1,0 +1,35 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_workflow_definition_user,Workflow Definition User,model_tazweed_workflow_definition,base.group_user,1,0,0,0
+access_workflow_definition_manager,Workflow Definition Manager,model_tazweed_workflow_definition,hr.group_hr_manager,1,1,1,1
+access_workflow_instance_user,Workflow Instance User,model_tazweed_workflow_instance,base.group_user,1,1,1,0
+access_workflow_instance_manager,Workflow Instance Manager,model_tazweed_workflow_instance,hr.group_hr_manager,1,1,1,1
+access_automation_rule_user,Automation Rule User,model_tazweed_automation_rule,base.group_user,1,0,0,0
+access_automation_rule_manager,Automation Rule Manager,model_tazweed_automation_rule,hr.group_hr_manager,1,1,1,1
+access_scheduled_task_user,Scheduled Task User,model_tazweed_scheduled_task,base.group_user,1,0,0,0
+access_scheduled_task_manager,Scheduled Task Manager,model_tazweed_scheduled_task,hr.group_hr_manager,1,1,1,1
+access_approval_workflow_user,Approval Workflow User,model_tazweed_approval_workflow,base.group_user,1,0,0,0
+access_approval_workflow_manager,Approval Workflow Manager,model_tazweed_approval_workflow,hr.group_hr_manager,1,1,1,1
+access_approval_request_user,Approval Request User,model_tazweed_approval_request,base.group_user,1,1,1,0
+access_approval_request_manager,Approval Request Manager,model_tazweed_approval_request,hr.group_hr_manager,1,1,1,1
+access_notification_template_user,Notification Template User,model_tazweed_notification_template,base.group_user,1,0,0,0
+access_notification_template_manager,Notification Template Manager,model_tazweed_notification_template,hr.group_hr_manager,1,1,1,1
+access_workflow_trigger_user,Workflow Trigger User,model_tazweed_workflow_trigger,base.group_user,1,0,0,0
+access_workflow_trigger_manager,Workflow Trigger Manager,model_tazweed_workflow_trigger,hr.group_hr_manager,1,1,1,1
+access_workflow_execution_log_user,Workflow Execution Log User,model_tazweed_workflow_execution_log,base.group_user,1,0,0,0
+access_workflow_execution_log_manager,Workflow Execution Log Manager,model_tazweed_workflow_execution_log,hr.group_hr_manager,1,1,0,0
+access_automation_execution_log_user,Automation Execution Log User,model_tazweed_automation_execution_log,base.group_user,1,0,0,0
+access_automation_execution_log_manager,Automation Execution Log Manager,model_tazweed_automation_execution_log,hr.group_hr_manager,1,1,0,0
+access_task_execution_log_user,Task Execution Log User,model_tazweed_task_execution_log,base.group_user,1,0,0,0
+access_task_execution_log_manager,Task Execution Log Manager,model_tazweed_task_execution_log,hr.group_hr_manager,1,1,0,0
+access_notification_log_user,Notification Log User,model_tazweed_notification_log,base.group_user,1,0,0,0
+access_notification_log_manager,Notification Log Manager,model_tazweed_notification_log,hr.group_hr_manager,1,1,0,0
+access_workflow_step_user,Workflow Step User,model_tazweed_workflow_step,base.group_user,1,0,0,0
+access_workflow_step_manager,Workflow Step Manager,model_tazweed_workflow_step,hr.group_hr_manager,1,1,1,1
+access_workflow_transition_user,Workflow Transition User,model_tazweed_workflow_transition,base.group_user,1,0,0,0
+access_workflow_transition_manager,Workflow Transition Manager,model_tazweed_workflow_transition,hr.group_hr_manager,1,1,1,1
+access_approval_level_user,Approval Level User,model_tazweed_approval_level,base.group_user,1,0,0,0
+access_approval_level_manager,Approval Level Manager,model_tazweed_approval_level,hr.group_hr_manager,1,1,1,1
+access_approval_line_user,Approval Line User,model_tazweed_approval_line,base.group_user,1,1,0,0
+access_approval_line_manager,Approval Line Manager,model_tazweed_approval_line,hr.group_hr_manager,1,1,1,1
+access_workflow_approval_user,Workflow Approval User,model_tazweed_workflow_approval,base.group_user,1,1,0,0
+access_workflow_approval_manager,Workflow Approval Manager,model_tazweed_workflow_approval,hr.group_hr_manager,1,1,1,1

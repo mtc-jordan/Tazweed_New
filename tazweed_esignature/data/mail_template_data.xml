@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_signature_request" model="mail.template">
+            <field name="name">E-Signature: Request to Sign</field>
+            <field name="model_id" ref="model_signature_signer"/>
+            <field name="subject">Please sign: {{ object.request_id.document_name }}</field>
+            <field name="email_from">{{ (object.request_id.company_id.email or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 14px;">
+    <p>Dear {{ object.name }},</p>
+    <p>You have been requested to sign the following document:</p>
+    <p><strong>{{ object.request_id.document_name }}</strong></p>
+    <p>Please click the button below to review and sign the document:</p>
+    <p style="margin: 20px 0;">
+        <a href="{{ object.get_signing_url() }}" style="background-color: #875A7B; padding: 10px 20px; text-decoration: none; color: #fff; border-radius: 5px;">
+            Sign Document
+        </a>
+    </p>
+    <p>This link will expire on {{ object.request_id.expiry_date }}.</p>
+    <p>Best regards,<br/>{{ object.request_id.company_id.name }}</p>
+</div>
+            </field>
+        </record>
+        <record id="email_signature_reminder" model="mail.template">
+            <field name="name">E-Signature: Reminder to Sign</field>
+            <field name="model_id" ref="model_signature_signer"/>
+            <field name="subject">Reminder: Please sign {{ object.request_id.document_name }}</field>
+            <field name="email_from">{{ (object.request_id.company_id.email or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 14px;">
+    <p>Dear {{ object.name }},</p>
+    <p>This is a friendly reminder that you have a document waiting for your signature:</p>
+    <p><strong>{{ object.request_id.document_name }}</strong></p>
+    <p style="margin: 20px 0;">
+        <a href="{{ object.get_signing_url() }}" style="background-color: #875A7B; padding: 10px 20px; text-decoration: none; color: #fff; border-radius: 5px;">
+            Sign Document
+        </a>
+    </p>
+    <p>Best regards,<br/>{{ object.request_id.company_id.name }}</p>
+</div>
+            </field>
+        </record>
+        <record id="email_signature_completed" model="mail.template">
+            <field name="name">E-Signature: Document Completed</field>
+            <field name="model_id" ref="model_signature_request"/>
+            <field name="subject">Document Signed: {{ object.document_name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.create_uid.email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 14px;">
+    <p>Good news!</p>
+    <p>All signatures have been collected for:</p>
+    <p><strong>{{ object.document_name }}</strong></p>
+    <p>The signed document is now available in the system.</p>
+    <p>Best regards,<br/>{{ object.company_id.name }}</p>
+</div>
+            </field>
+        </record>
+    </data>
+</odoo>

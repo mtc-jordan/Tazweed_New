@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_public_holiday_user,tazweed.public.holiday.user,model_tazweed_public_holiday,group_leave_user,1,0,0,0
+access_public_holiday_officer,tazweed.public.holiday.officer,model_tazweed_public_holiday,group_leave_officer,1,1,1,0
+access_public_holiday_manager,tazweed.public.holiday.manager,model_tazweed_public_holiday,group_leave_manager,1,1,1,1
+access_public_holiday_year_user,tazweed.public.holiday.year.user,model_tazweed_public_holiday_year,group_leave_user,1,0,0,0
+access_public_holiday_year_manager,tazweed.public.holiday.year.manager,model_tazweed_public_holiday_year,group_leave_manager,1,1,1,1
+access_attendance_summary_user,hr.attendance.summary.user,model_hr_attendance_summary,group_leave_user,1,0,0,0
+access_attendance_summary_officer,hr.attendance.summary.officer,model_hr_attendance_summary,group_leave_officer,1,1,1,0
+access_attendance_summary_manager,hr.attendance.summary.manager,model_hr_attendance_summary,group_leave_manager,1,1,1,1
+access_leave_allocation_accrual_user,hr.leave.allocation.accrual.user,model_hr_leave_allocation_accrual,group_leave_user,1,0,0,0
+access_leave_allocation_accrual_manager,hr.leave.allocation.accrual.manager,model_hr_leave_allocation_accrual,group_leave_manager,1,1,1,1
+access_leave_encashment_wizard,tazweed.leave.encashment.wizard,model_tazweed_leave_encashment_wizard,group_leave_officer,1,1,1,1
+access_leave_allocation_wizard,tazweed.leave.allocation.wizard,model_tazweed_leave_allocation_wizard,group_leave_manager,1,1,1,1
+access_attendance_summary_wizard,tazweed.attendance.summary.wizard,model_tazweed_attendance_summary_wizard,group_leave_manager,1,1,1,1

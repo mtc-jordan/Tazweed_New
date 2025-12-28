@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- ============================================== -->
+        <!-- VISA SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Employment Visa - New -->
+        <record id="service_employment_visa_new" model="pro.service">
+            <field name="name">Employment Visa - New Application</field>
+            <field name="code">VISA-EMP-NEW</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">Complete employment visa processing for new employees including entry permit, status change, and residence visa stamping.</field>
+            <field name="government_fee">700.00</field>
+            <field name="service_fee">1500.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Employment Visa - Renewal -->
+        <record id="service_employment_visa_renewal" model="pro.service">
+            <field name="name">Employment Visa - Renewal</field>
+            <field name="code">VISA-EMP-REN</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Renewal of employment visa for existing employees before expiry date.</field>
+            <field name="government_fee">600.00</field>
+            <field name="service_fee">1000.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Employment Visa - Cancellation -->
+        <record id="service_employment_visa_cancel" model="pro.service">
+            <field name="name">Employment Visa - Cancellation</field>
+            <field name="code">VISA-EMP-CAN</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">cancellation</field>
+            <field name="description">Cancellation of employment visa for employees leaving the company.</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">500.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Family Visa - New -->
+        <record id="service_family_visa_new" model="pro.service">
+            <field name="name">Family/Dependent Visa - New</field>
+            <field name="code">VISA-FAM-NEW</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">Sponsorship visa for spouse, children, and parents of UAE residents.</field>
+            <field name="government_fee">500.00</field>
+            <field name="service_fee">1200.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Family Visa - Renewal -->
+        <record id="service_family_visa_renewal" model="pro.service">
+            <field name="name">Family/Dependent Visa - Renewal</field>
+            <field name="code">VISA-FAM-REN</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Renewal of family/dependent visa before expiry.</field>
+            <field name="government_fee">500.00</field>
+            <field name="service_fee">800.00</field>
+            <field name="sequence">50</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Golden Visa -->
+        <record id="service_golden_visa" model="pro.service">
+            <field name="name">Golden Visa - 10 Year</field>
+            <field name="code">VISA-GOLD-10</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">10-year Golden Visa for investors, entrepreneurs, specialized talents, researchers, and outstanding students.</field>
+            <field name="government_fee">1150.00</field>
+            <field name="service_fee">2000.00</field>
+            <field name="sequence">60</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Green Visa -->
+        <record id="service_green_visa" model="pro.service">
+            <field name="name">Green Visa - 5 Year</field>
+            <field name="code">VISA-GREEN-5</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">5-year self-sponsored Green Visa for skilled employees, freelancers, and investors.</field>
+            <field name="government_fee">800.00</field>
+            <field name="service_fee">1500.00</field>
+            <field name="sequence">70</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Visit Visa -->
+        <record id="service_visit_visa_30" model="pro.service">
+            <field name="name">Visit Visa - 30 Days</field>
+            <field name="code">VISA-VISIT-30</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">30-day visit visa for relatives and friends.</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">300.00</field>
+            <field name="sequence">80</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="service_visit_visa_90" model="pro.service">
+            <field name="name">Visit Visa - 90 Days</field>
+            <field name="code">VISA-VISIT-90</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">90-day visit visa for relatives and friends.</field>
+            <field name="government_fee">400.00</field>
+            <field name="service_fee">400.00</field>
+            <field name="sequence">90</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Tourist Visa -->
+        <record id="service_tourist_visa" model="pro.service">
+            <field name="name">Tourist Visa - 30 Days</field>
+            <field name="code">VISA-TOUR-30</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">30-day tourist visa for visitors.</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">250.00</field>
+            <field name="sequence">100</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Visa Status Change -->
+        <record id="service_visa_status_change" model="pro.service">
+            <field name="name">Visa Status Change (Inside Country)</field>
+            <field name="code">VISA-STATUS</field>
+            <field name="category_id" ref="category_visa"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">amendment</field>
+            <field name="description">Change visa status from visit/tourist to employment without leaving UAE.</field>
+            <field name="government_fee">570.00</field>
+            <field name="service_fee">800.00</field>
+            <field name="sequence">110</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- RESIDENCE PERMIT SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Residence Permit - New -->
+        <record id="service_residence_new" model="pro.service">
+            <field name="name">Residence Permit - New Stamping</field>
+            <field name="code">RES-NEW</field>
+            <field name="category_id" ref="category_residence"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">New residence permit stamping in passport after entry permit approval.</field>
+            <field name="government_fee">570.00</field>
+            <field name="service_fee">600.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Residence Permit - Renewal -->
+        <record id="service_residence_renewal" model="pro.service">
+            <field name="name">Residence Permit - Renewal</field>
+            <field name="code">RES-REN</field>
+            <field name="category_id" ref="category_residence"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Renewal of residence permit before expiry date.</field>
+            <field name="government_fee">570.00</field>
+            <field name="service_fee">500.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Residence Permit - Cancellation -->
+        <record id="service_residence_cancel" model="pro.service">
+            <field name="name">Residence Permit - Cancellation</field>
+            <field name="code">RES-CAN</field>
+            <field name="category_id" ref="category_residence"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">cancellation</field>
+            <field name="description">Cancellation of residence permit when leaving UAE permanently.</field>
+            <field name="government_fee">100.00</field>
+            <field name="service_fee">300.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Residence Data Amendment -->
+        <record id="service_residence_amendment" model="pro.service">
+            <field name="name">Residence Permit - Data Amendment</field>
+            <field name="code">RES-AMD</field>
+            <field name="category_id" ref="category_residence"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">amendment</field>
+            <field name="description">Amendment of residence permit data (name, profession, etc.).</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">400.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- EMIRATES ID SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Emirates ID - New -->
+        <record id="service_eid_new" model="pro.service">
+            <field name="name">Emirates ID - New Application</field>
+            <field name="code">EID-NEW</field>
+            <field name="category_id" ref="category_emirates_id"/>
+            <field name="government_authority_id" ref="authority_icp"/>
+            <field name="service_type">new</field>
+            <field name="description">New Emirates ID application for residents (2-year validity).</field>
+            <field name="government_fee">270.00</field>
+            <field name="service_fee">200.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Emirates ID - Renewal -->
+        <record id="service_eid_renewal" model="pro.service">
+            <field name="name">Emirates ID - Renewal</field>
+            <field name="code">EID-REN</field>
+            <field name="category_id" ref="category_emirates_id"/>
+            <field name="government_authority_id" ref="authority_icp"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Renewal of Emirates ID before expiry.</field>
+            <field name="government_fee">270.00</field>
+            <field name="service_fee">150.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Emirates ID - Replacement -->
+        <record id="service_eid_replacement" model="pro.service">
+            <field name="name">Emirates ID - Replacement (Lost/Damaged)</field>
+            <field name="code">EID-REP</field>
+            <field name="category_id" ref="category_emirates_id"/>
+            <field name="government_authority_id" ref="authority_icp"/>
+            <field name="service_type">replacement</field>
+            <field name="description">Replacement of lost or damaged Emirates ID card.</field>
+            <field name="government_fee">370.00</field>
+            <field name="service_fee">200.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Emirates ID - Data Update -->
+        <record id="service_eid_update" model="pro.service">
+            <field name="name">Emirates ID - Data Update</field>
+            <field name="code">EID-UPD</field>
+            <field name="category_id" ref="category_emirates_id"/>
+            <field name="government_authority_id" ref="authority_icp"/>
+            <field name="service_type">amendment</field>
+            <field name="description">Update Emirates ID data (photo, signature, etc.).</field>
+            <field name="government_fee">150.00</field>
+            <field name="service_fee">150.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- LABOR/WORK PERMIT SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Work Permit - New -->
+        <record id="service_work_permit_new" model="pro.service">
+            <field name="name">Work Permit - New Issuance</field>
+            <field name="code">LABOR-WP-NEW</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">New work permit issuance for employees (Category 1-3 based on company classification).</field>
+            <field name="government_fee">300.00</field>
+            <field name="service_fee">500.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Work Permit - Renewal -->
+        <record id="service_work_permit_renewal" model="pro.service">
+            <field name="name">Work Permit - Renewal</field>
+            <field name="code">LABOR-WP-REN</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Renewal of work permit before expiry.</field>
+            <field name="government_fee">300.00</field>
+            <field name="service_fee">400.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Work Permit - Cancellation -->
+        <record id="service_work_permit_cancel" model="pro.service">
+            <field name="name">Work Permit - Cancellation</field>
+            <field name="code">LABOR-WP-CAN</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">cancellation</field>
+            <field name="description">Cancellation of work permit when employee leaves.</field>
+            <field name="government_fee">100.00</field>
+            <field name="service_fee">200.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Labor Card - New -->
+        <record id="service_labor_card_new" model="pro.service">
+            <field name="name">Labor Card - New Issuance</field>
+            <field name="code">LABOR-LC-NEW</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">New labor card issuance for employees.</field>
+            <field name="government_fee">250.00</field>
+            <field name="service_fee">400.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Labor Card - Renewal -->
+        <record id="service_labor_card_renewal" model="pro.service">
+            <field name="name">Labor Card - Renewal</field>
+            <field name="code">LABOR-LC-REN</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Renewal of labor card before expiry.</field>
+            <field name="government_fee">250.00</field>
+            <field name="service_fee">300.00</field>
+            <field name="sequence">50</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Labor Contract -->
+        <record id="service_labor_contract" model="pro.service">
+            <field name="name">Labor Contract - Registration</field>
+            <field name="code">LABOR-CON</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">Registration of labor contract with MOHRE.</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">300.00</field>
+            <field name="sequence">60</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Job Offer -->
+        <record id="service_job_offer" model="pro.service">
+            <field name="name">Job Offer - New Application</field>
+            <field name="code">LABOR-JO</field>
+            <field name="category_id" ref="category_labor"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">Job offer application for new employees.</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">250.00</field>
+            <field name="sequence">70</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- TRADE LICENSE SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Trade License - New -->
+        <record id="service_trade_license_new" model="pro.service">
+            <field name="name">Trade License - New Application</field>
+            <field name="code">TL-NEW</field>
+            <field name="category_id" ref="category_trade_license"/>
+            <field name="government_authority_id" ref="authority_ded_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">New trade license application for business setup.</field>
+            <field name="government_fee">10000.00</field>
+            <field name="service_fee">3000.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Trade License - Renewal -->
+        <record id="service_trade_license_renewal" model="pro.service">
+            <field name="name">Trade License - Renewal</field>
+            <field name="code">TL-REN</field>
+            <field name="category_id" ref="category_trade_license"/>
+            <field name="government_authority_id" ref="authority_ded_dubai"/>
+            <field name="service_type">renewal</field>
+            <field name="description">Annual renewal of trade license.</field>
+            <field name="government_fee">600.00</field>
+            <field name="service_fee">1500.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Trade License - Amendment -->
+        <record id="service_trade_license_amendment" model="pro.service">
+            <field name="name">Trade License - Amendment</field>
+            <field name="code">TL-AMD</field>
+            <field name="category_id" ref="category_trade_license"/>
+            <field name="government_authority_id" ref="authority_ded_dubai"/>
+            <field name="service_type">amendment</field>
+            <field name="description">Amendment of trade license (activity, name, partners).</field>
+            <field name="government_fee">500.00</field>
+            <field name="service_fee">1000.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Establishment Card -->
+        <record id="service_establishment_card" model="pro.service">
+            <field name="name">Establishment Card - New/Renewal</field>
+            <field name="code">TL-EC</field>
+            <field name="category_id" ref="category_trade_license"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">Establishment card for company registration with MOHRE.</field>
+            <field name="government_fee">2000.00</field>
+            <field name="service_fee">800.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Immigration Card -->
+        <record id="service_immigration_card" model="pro.service">
+            <field name="name">Immigration Card - New/Renewal</field>
+            <field name="code">TL-IC</field>
+            <field name="category_id" ref="category_trade_license"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">Immigration card for company to sponsor employees.</field>
+            <field name="government_fee">3020.00</field>
+            <field name="service_fee">1000.00</field>
+            <field name="sequence">50</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- DOCUMENT SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Document Attestation - MOFA -->
+        <record id="service_attestation_mofa" model="pro.service">
+            <field name="name">Document Attestation - MOFA</field>
+            <field name="code">DOC-ATT-MOFA</field>
+            <field name="category_id" ref="category_documents"/>
+            <field name="government_authority_id" ref="authority_mofa"/>
+            <field name="service_type">new</field>
+            <field name="description">Ministry of Foreign Affairs attestation for documents.</field>
+            <field name="government_fee">150.00</field>
+            <field name="service_fee">200.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Document Translation -->
+        <record id="service_translation" model="pro.service">
+            <field name="name">Document Translation - Legal</field>
+            <field name="code">DOC-TRANS</field>
+            <field name="category_id" ref="category_documents"/>
+            <field name="government_authority_id" ref="authority_mofa"/>
+            <field name="service_type">new</field>
+            <field name="description">Legal translation of documents (per page).</field>
+            <field name="government_fee">0.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Notary Public -->
+        <record id="service_notary" model="pro.service">
+            <field name="name">Notary Public Services</field>
+            <field name="code">DOC-NOTARY</field>
+            <field name="category_id" ref="category_documents"/>
+            <field name="government_authority_id" ref="authority_mofa"/>
+            <field name="service_type">new</field>
+            <field name="description">Notarization of legal documents.</field>
+            <field name="government_fee">100.00</field>
+            <field name="service_fee">150.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Police Clearance -->
+        <record id="service_police_clearance" model="pro.service">
+            <field name="name">Police Clearance Certificate</field>
+            <field name="code">DOC-PCC</field>
+            <field name="category_id" ref="category_documents"/>
+            <field name="government_authority_id" ref="authority_gdrfa_dubai"/>
+            <field name="service_type">new</field>
+            <field name="description">Good conduct certificate from UAE police.</field>
+            <field name="government_fee">200.00</field>
+            <field name="service_fee">300.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- MEDICAL SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Medical Fitness Test -->
+        <record id="service_medical_fitness" model="pro.service">
+            <field name="name">Medical Fitness Test - Standard</field>
+            <field name="code">MED-FIT-STD</field>
+            <field name="category_id" ref="category_medical"/>
+            <field name="government_authority_id" ref="authority_dha"/>
+            <field name="service_type">new</field>
+            <field name="description">Standard medical fitness test for visa/residence (24-hour results).</field>
+            <field name="government_fee">270.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Medical Fitness - Express -->
+        <record id="service_medical_fitness_express" model="pro.service">
+            <field name="name">Medical Fitness Test - Express</field>
+            <field name="code">MED-FIT-EXP</field>
+            <field name="category_id" ref="category_medical"/>
+            <field name="government_authority_id" ref="authority_dha"/>
+            <field name="service_type">new</field>
+            <field name="description">Express medical fitness test (same-day results).</field>
+            <field name="government_fee">500.00</field>
+            <field name="service_fee">150.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Health Card -->
+        <record id="service_health_card" model="pro.service">
+            <field name="name">Health Card - New/Renewal</field>
+            <field name="code">MED-HC</field>
+            <field name="category_id" ref="category_medical"/>
+            <field name="government_authority_id" ref="authority_dha"/>
+            <field name="service_type">new</field>
+            <field name="description">Health card for food handlers and healthcare workers.</field>
+            <field name="government_fee">150.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- GOVERNMENT APPROVAL SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- NOC - Employer -->
+        <record id="service_noc_employer" model="pro.service">
+            <field name="name">NOC - Employer Letter</field>
+            <field name="code">GOV-NOC-EMP</field>
+            <field name="category_id" ref="category_approvals"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">No Objection Certificate from employer for various purposes.</field>
+            <field name="government_fee">0.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Salary Certificate -->
+        <record id="service_salary_certificate" model="pro.service">
+            <field name="name">Salary Certificate</field>
+            <field name="code">GOV-SAL-CERT</field>
+            <field name="category_id" ref="category_approvals"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">Official salary certificate for bank/visa purposes.</field>
+            <field name="government_fee">0.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Employment Certificate -->
+        <record id="service_employment_certificate" model="pro.service">
+            <field name="name">Employment Certificate</field>
+            <field name="code">GOV-EMP-CERT</field>
+            <field name="category_id" ref="category_approvals"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">Official employment certificate with job details.</field>
+            <field name="government_fee">0.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Bank Letter -->
+        <record id="service_bank_letter" model="pro.service">
+            <field name="name">Bank Account Opening Letter</field>
+            <field name="code">GOV-BANK</field>
+            <field name="category_id" ref="category_approvals"/>
+            <field name="government_authority_id" ref="authority_mohre"/>
+            <field name="service_type">new</field>
+            <field name="description">Letter for opening bank account.</field>
+            <field name="government_fee">0.00</field>
+            <field name="service_fee">100.00</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+        </record>
+        
+    </data>
+</odoo>

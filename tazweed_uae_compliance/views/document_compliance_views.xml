@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Compliance Form View -->
+    <record id="view_document_compliance_form" model="ir.ui.view">
+        <field name="name">tazweed.document.compliance.form</field>
+        <field name="model">tazweed.document.compliance</field>
+        <field name="arch" type="xml">
+            <form string="Document Compliance">
+                <header>
+                    <button name="action_send_alert" string="Send Alert" type="object" class="btn-warning" attrs="{'invisible': ['|', ('is_alert_sent', '=', True), ('expiry_status', '=', 'valid')]}"/>
+                    <button name="action_start_renewal" string="Start Renewal" type="object" class="btn-primary" attrs="{'invisible': [('renewal_status', 'not in', ('not_required', 'pending'))]}"/>
+                    <button name="action_complete_renewal" string="Complete Renewal" type="object" class="btn-success" attrs="{'invisible': [('renewal_status', '!=', 'in_progress')]}"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Expired" bg_color="bg-danger" attrs="{'invisible': [('expiry_status', '!=', 'expired')]}"/>
+                    <widget name="web_ribbon" title="Expiring Soon" bg_color="bg-warning" attrs="{'invisible': [('expiry_status', '!=', 'expiring_soon')]}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Document Details">
+                            <field name="employee_id"/>
+                            <field name="document_type"/>
+                            <field name="document_number"/>
+                        </group>
+                        <group string="Validity">
+                            <field name="issue_date"/>
+                            <field name="expiry_date"/>
+                            <field name="days_to_expiry"/>
+                            <field name="expiry_status"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Alerts">
+                            <field name="alert_days"/>
+                            <field name="is_alert_sent"/>
+                            <field name="alert_date"/>
+                        </group>
+                        <group string="Renewal">
+                            <field name="renewal_status"/>
+                            <field name="renewal_date"/>
+                            <field name="renewal_cost"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="document" filename="document_name"/>
+                        <field name="document_name" invisible="1"/>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Compliance Tree View -->
+    <record id="view_document_compliance_tree" model="ir.ui.view">
+        <field name="name">tazweed.document.compliance.tree</field>
+        <field name="model">tazweed.document.compliance</field>
+        <field name="arch" type="xml">
+            <tree string="Document Compliance" decoration-danger="expiry_status == 'expired'" decoration-warning="expiry_status == 'expiring_soon'">
+                <field name="employee_id"/>
+                <field name="document_type"/>
+                <field name="document_number"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="expiry_status"/>
+                <field name="renewal_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Compliance Search View -->
+    <record id="view_document_compliance_search" model="ir.ui.view">
+        <field name="name">tazweed.document.compliance.search</field>
+        <field name="model">tazweed.document.compliance</field>
+        <field name="arch" type="xml">
+            <search string="Search Documents">
+                <field name="employee_id"/>
+                <field name="document_type"/>
+                <field name="document_number"/>
+                <separator/>
+                <filter name="expired" string="Expired" domain="[('expiry_status', '=', 'expired')]"/>
+                <filter name="expiring" string="Expiring Soon" domain="[('expiry_status', '=', 'expiring_soon')]"/>
+                <filter name="valid" string="Valid" domain="[('expiry_status', '=', 'valid')]"/>
+                <separator/>
+                <filter name="passport" string="Passport" domain="[('document_type', '=', 'passport')]"/>
+                <filter name="emirates_id" string="Emirates ID" domain="[('document_type', '=', 'emirates_id')]"/>
+                <filter name="visa" string="Visa" domain="[('document_type', '=', 'visa')]"/>
+                <filter name="labour_card" string="Labour Card" domain="[('document_type', '=', 'labour_card')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_type" string="Document Type" context="{'group_by': 'document_type'}"/>
+                    <filter name="group_status" string="Expiry Status" context="{'group_by': 'expiry_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Document Compliance Action -->
+    <record id="action_document_compliance" model="ir.actions.act_window">
+        <field name="name">Document Compliance</field>
+        <field name="res_model">tazweed.document.compliance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_document_compliance_search"/>
+        <field name="context">{'search_default_expiring': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Track employee document compliance
+            </p>
+        </field>
+    </record>
+
+    <!-- Expiring Documents Action -->
+    <record id="action_expiring_documents" model="ir.actions.act_window">
+        <field name="name">Expiring Documents</field>
+        <field name="res_model">tazweed.document.compliance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('expiry_status', 'in', ('expiring_soon', 'expired'))]</field>
+    </record>
+</odoo>

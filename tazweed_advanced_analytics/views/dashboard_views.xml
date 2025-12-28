@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Dashboard Analytics Form View -->
+        <record id="view_dashboard_analytics_form" model="ir.ui.view">
+            <field name="name">Dashboard Analytics Form</field>
+            <field name="model">tazweed.dashboard.analytics</field>
+            <field name="arch" type="xml">
+                <form string="Dashboard Analytics">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="dashboard_name" placeholder="Dashboard Name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="dashboard_type"/>
+                                <field name="period_start"/>
+                            </group>
+                            <group>
+                                <field name="auto_refresh"/>
+                                <field name="period_end"/>
+                                <field name="refresh_interval" attrs="{'invisible': [('auto_refresh', '=', False)]}"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="last_updated" readonly="1"/>
+                        </group>
+                        
+                        <!-- Executive Dashboard -->
+                        <group attrs="{'invisible': [('dashboard_type', '!=', 'executive')]}">
+                            <separator string="Executive Dashboard Metrics" class="oe_inline"/>
+                            <group>
+                                <group>
+                                    <field name="exec_total_employees" readonly="1" widget="statinfo"/>
+                                    <field name="exec_total_payroll" readonly="1" widget="statinfo"/>
+                                </group>
+                                <group>
+                                    <field name="exec_compliance_score" readonly="1" widget="gauge"/>
+                                    <field name="exec_performance_rating" readonly="1" widget="gauge"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="exec_turnover_rate" readonly="1" widget="gauge"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Payroll Dashboard -->
+                        <group attrs="{'invisible': [('dashboard_type', '!=', 'payroll')]}">
+                            <separator string="Payroll Dashboard Metrics" class="oe_inline"/>
+                            <group>
+                                <group>
+                                    <field name="payroll_total" readonly="1" widget="statinfo"/>
+                                    <field name="payroll_average_salary" readonly="1" widget="statinfo"/>
+                                </group>
+                                <group>
+                                    <field name="payroll_total_deductions" readonly="1" widget="statinfo"/>
+                                    <field name="payroll_total_bonuses" readonly="1" widget="statinfo"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="payroll_transfer_success_rate" readonly="1" widget="gauge"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Compliance Dashboard -->
+                        <group attrs="{'invisible': [('dashboard_type', '!=', 'compliance')]}">
+                            <separator string="Compliance Dashboard Metrics" class="oe_inline"/>
+                            <group>
+                                <group>
+                                    <field name="compliance_emiratization" readonly="1" widget="gauge"/>
+                                    <field name="compliance_wps_rate" readonly="1" widget="gauge"/>
+                                </group>
+                                <group>
+                                    <field name="compliance_mohre_rate" readonly="1" widget="gauge"/>
+                                    <field name="compliance_overall_score" readonly="1" widget="gauge"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="compliance_high_risks" readonly="1" widget="statinfo"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Performance Dashboard -->
+                        <group attrs="{'invisible': [('dashboard_type', '!=', 'performance')]}">
+                            <separator string="Performance Dashboard Metrics" class="oe_inline"/>
+                            <group>
+                                <group>
+                                    <field name="performance_avg_rating" readonly="1" widget="gauge"/>
+                                    <field name="performance_goal_achievement" readonly="1" widget="gauge"/>
+                                </group>
+                                <group>
+                                    <field name="performance_kpi_achievement" readonly="1" widget="gauge"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="performance_excellent_count" readonly="1" widget="statinfo"/>
+                                </group>
+                                <group>
+                                    <field name="performance_poor_count" readonly="1" widget="statinfo"/>
+                                </group>
+                            </group>
+                        </group>
+                        
+                        <!-- Employee Dashboard -->
+                        <group attrs="{'invisible': [('dashboard_type', '!=', 'employee')]}">
+                            <separator string="Employee Dashboard Metrics" class="oe_inline"/>
+                            <group>
+                                <group>
+                                    <field name="employee_headcount" readonly="1" widget="statinfo"/>
+                                    <field name="employee_avg_tenure" readonly="1" widget="statinfo"/>
+                                </group>
+                                <group>
+                                    <field name="employee_avg_attendance" readonly="1" widget="gauge"/>
+                                    <field name="employee_avg_leave_balance" readonly="1" widget="statinfo"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="employee_new_hires" readonly="1" widget="statinfo"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Dashboard Analytics Tree View -->
+        <record id="view_dashboard_analytics_tree" model="ir.ui.view">
+            <field name="name">Dashboard Analytics Tree</field>
+            <field name="model">tazweed.dashboard.analytics</field>
+            <field name="arch" type="xml">
+                <tree string="Dashboard Analytics">
+                    <field name="dashboard_name"/>
+                    <field name="dashboard_type"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="auto_refresh"/>
+                    <field name="last_updated"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Dashboard Analytics Search View -->
+        <record id="view_dashboard_analytics_search" model="ir.ui.view">
+            <field name="name">Dashboard Analytics Search</field>
+            <field name="model">tazweed.dashboard.analytics</field>
+            <field name="arch" type="xml">
+                <search string="Dashboard Analytics">
+                    <field name="dashboard_name"/>
+                    <field name="dashboard_type"/>
+                    <separator/>
+                    <filter name="filter_executive" string="Executive" domain="[('dashboard_type', '=', 'executive')]"/>
+                    <filter name="filter_payroll" string="Payroll" domain="[('dashboard_type', '=', 'payroll')]"/>
+                    <filter name="filter_compliance" string="Compliance" domain="[('dashboard_type', '=', 'compliance')]"/>
+                    <filter name="filter_performance" string="Performance" domain="[('dashboard_type', '=', 'performance')]"/>
+                    <filter name="filter_employee" string="Employee" domain="[('dashboard_type', '=', 'employee')]"/>
+                    <filter name="filter_auto_refresh" string="Auto Refresh" domain="[('auto_refresh', '=', True)]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Dashboard Analytics Action -->
+        <record id="action_dashboard_analytics" model="ir.actions.act_window">
+            <field name="name">Dashboards</field>
+            <field name="res_model">tazweed.dashboard.analytics</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Dashboard
+                </p>
+            </field>
+        </record>
+        
+        <!-- Analytics Report Form View -->
+        <record id="view_analytics_report_form" model="ir.ui.view">
+            <field name="name">Analytics Report Form</field>
+            <field name="model">tazweed.analytics.report</field>
+            <field name="arch" type="xml">
+                <form string="Analytics Report">
+                    <header>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_export_report" string="Export Report" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="report_name" placeholder="Report Name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="report_type"/>
+                                <field name="period_start"/>
+                            </group>
+                            <group>
+                                <field name="export_format"/>
+                                <field name="period_end"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="include_charts"/>
+                                <field name="include_summary"/>
+                            </group>
+                            <group>
+                                <field name="include_details"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="department_ids" widget="many2many_tags"/>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                        </group>
+                        
+                        <group>
+                            <field name="created_by" readonly="1"/>
+                            <field name="created_date" readonly="1"/>
+                            <field name="generated_date" readonly="1"/>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <separator string="Report Data" class="oe_inline"/>
+                            <field name="report_data" readonly="1" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Analytics Report Tree View -->
+        <record id="view_analytics_report_tree" model="ir.ui.view">
+            <field name="name">Analytics Report Tree</field>
+            <field name="model">tazweed.analytics.report</field>
+            <field name="arch" type="xml">
+                <tree string="Analytics Reports">
+                    <field name="report_name"/>
+                    <field name="report_type"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="export_format"/>
+                    <field name="state"/>
+                    <field name="created_date"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Analytics Report Search View -->
+        <record id="view_analytics_report_search" model="ir.ui.view">
+            <field name="name">Analytics Report Search</field>
+            <field name="model">tazweed.analytics.report</field>
+            <field name="arch" type="xml">
+                <search string="Analytics Reports">
+                    <field name="report_name"/>
+                    <field name="report_type"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <separator/>
+                    <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_generated" string="Generated" domain="[('state', '=', 'generated')]"/>
+                    <filter name="filter_exported" string="Exported" domain="[('state', '=', 'exported')]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Analytics Report Action -->
+        <record id="action_analytics_report" model="ir.actions.act_window">
+            <field name="name">Analytics Reports</field>
+            <field name="res_model">tazweed.analytics.report</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Analytics Report
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

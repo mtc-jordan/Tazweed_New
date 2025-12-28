@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main PRO Services Menu -->
+    <menuitem id="menu_pro_services_root"
+              name="PRO Services"
+              web_icon="tazweed_pro_services,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- Dashboard - First Item -->
+    <menuitem id="menu_pro_dashboard"
+              name="📊 Dashboard"
+              parent="menu_pro_services_root"
+              action="action_pro_dashboard"
+              sequence="1"/>
+
+    <!-- Service Requests -->
+    <menuitem id="menu_pro_requests"
+              name="📋 Service Requests"
+              parent="menu_pro_services_root"
+              sequence="10"/>
+
+    <menuitem id="menu_pro_all_requests"
+              name="All Requests"
+              parent="menu_pro_requests"
+              action="action_pro_service_request"
+              sequence="10"/>
+
+    <menuitem id="menu_pro_my_requests"
+              name="My Requests"
+              parent="menu_pro_requests"
+              action="action_pro_my_requests"
+              sequence="20"/>
+
+    <menuitem id="menu_pro_new_request"
+              name="➕ New Request"
+              parent="menu_pro_requests"
+              action="action_pro_request_wizard"
+              sequence="30"/>
+
+    <!-- Tasks -->
+    <menuitem id="menu_pro_tasks"
+              name="✅ Tasks"
+              parent="menu_pro_services_root"
+              sequence="20"/>
+
+    <menuitem id="menu_pro_all_tasks"
+              name="All Tasks"
+              parent="menu_pro_tasks"
+              action="action_pro_task"
+              sequence="10"/>
+
+    <menuitem id="menu_pro_my_tasks"
+              name="My Tasks"
+              parent="menu_pro_tasks"
+              action="action_pro_my_tasks"
+              sequence="20"/>
+
+    <!-- Customers -->
+    <menuitem id="menu_pro_customers"
+              name="👥 Customers"
+              parent="menu_pro_services_root"
+              action="action_pro_customer"
+              sequence="30"/>
+
+    <!-- Billing -->
+    <menuitem id="menu_pro_billing"
+              name="💰 Billing"
+              parent="menu_pro_services_root"
+              action="action_pro_billing"
+              sequence="40"/>
+
+    <!-- Reporting -->
+    <menuitem id="menu_pro_reporting"
+              name="📈 Reporting"
+              parent="menu_pro_services_root"
+              sequence="50"/>
+
+    <menuitem id="menu_pro_requests_analysis"
+              name="Requests Analysis"
+              parent="menu_pro_reporting"
+              action="action_pro_service_request"
+              sequence="10"/>
+
+    <menuitem id="menu_pro_billing_analysis"
+              name="Billing Analysis"
+              parent="menu_pro_reporting"
+              action="action_pro_billing"
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_pro_configuration"
+              name="⚙️ Configuration"
+              parent="menu_pro_services_root"
+              groups="tazweed_pro_services.group_pro_manager"
+              sequence="100"/>
+
+    <!-- Services Configuration -->
+    <menuitem id="menu_pro_services_config"
+              name="Services"
+              parent="menu_pro_configuration"
+              sequence="10"/>
+
+    <menuitem id="menu_pro_service_categories"
+              name="Service Categories"
+              parent="menu_pro_services_config"
+              action="action_pro_service_category"
+              sequence="10"/>
+
+    <menuitem id="menu_pro_services"
+              name="Services"
+              parent="menu_pro_services_config"
+              action="action_pro_service"
+              sequence="20"/>
+
+    <menuitem id="menu_pro_service_steps"
+              name="Service Steps"
+              parent="menu_pro_services_config"
+              action="action_pro_service_step"
+              sequence="30"/>
+
+    <!-- Documents Configuration -->
+    <menuitem id="menu_pro_documents_config"
+              name="Documents"
+              parent="menu_pro_configuration"
+              sequence="20"/>
+
+    <menuitem id="menu_pro_document_types"
+              name="Document Types"
+              parent="menu_pro_documents_config"
+              action="action_pro_document_type"
+              sequence="10"/>
+
+    <!-- Government Configuration -->
+    <menuitem id="menu_pro_government_config"
+              name="Government"
+              parent="menu_pro_configuration"
+              sequence="30"/>
+
+    <menuitem id="menu_pro_government_authorities"
+              name="Government Authorities"
+              parent="menu_pro_government_config"
+              action="action_pro_government_authority"
+              sequence="10"/>
+</odoo>

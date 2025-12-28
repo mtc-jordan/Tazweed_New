@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Settings Form View -->
+    <record id="view_client_portal_settings_form" model="ir.ui.view">
+        <field name="name">client.portal.settings.form</field>
+        <field name="model">client.portal.settings</field>
+        <field name="arch" type="xml">
+            <form string="Portal Settings">
+                <sheet>
+                    <group>
+                        <group string="General Settings">
+                            <field name="client_id"/>
+                            <field name="portal_title"/>
+                        </group>
+                        <group string="Branding">
+                            <field name="logo" widget="image"/>
+                            <field name="primary_color" widget="color"/>
+                            <field name="secondary_color" widget="color"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Features">
+                            <group>
+                                <group string="Modules">
+                                    <field name="enable_job_orders"/>
+                                    <field name="enable_candidate_review"/>
+                                    <field name="enable_placements"/>
+                                    <field name="enable_invoices"/>
+                                    <field name="enable_documents"/>
+                                    <field name="enable_messaging"/>
+                                    <field name="enable_analytics"/>
+                                </group>
+                                <group string="Permissions">
+                                    <field name="allow_create_job_orders"/>
+                                    <field name="allow_approve_candidates"/>
+                                    <field name="allow_download_documents"/>
+                                    <field name="allow_upload_documents"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notifications">
+                            <group>
+                                <field name="notify_new_candidate"/>
+                                <field name="notify_placement_update"/>
+                                <field name="notify_invoice_created"/>
+                                <field name="notify_document_shared"/>
+                                <field name="enable_notifications"/>
+                            </group>
+                        </page>
+                        <page string="Welcome Message">
+                            <field name="welcome_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Portal Settings Tree View -->
+    <record id="view_client_portal_settings_tree" model="ir.ui.view">
+        <field name="name">client.portal.settings.tree</field>
+        <field name="model">client.portal.settings</field>
+        <field name="arch" type="xml">
+            <tree string="Portal Settings">
+                <field name="client_id"/>
+                <field name="portal_title"/>
+                <field name="enable_job_orders"/>
+                <field name="enable_documents"/>
+                <field name="enable_invoices"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Portal Settings Action -->
+    <record id="action_client_portal_settings" model="ir.actions.act_window">
+        <field name="name">Portal Settings</field>
+        <field name="res_model">client.portal.settings</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

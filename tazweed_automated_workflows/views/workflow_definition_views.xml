@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Workflow Definition Form View -->
+        <record id="view_workflow_definition_form" model="ir.ui.view">
+            <field name="name">Workflow Definition Form</field>
+            <field name="model">tazweed.workflow.definition</field>
+            <field name="arch" type="xml">
+                <form string="Workflow Definition">
+                    <header>
+                        <button name="action_activate" string="Activate" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_deactivate" string="Deactivate" type="object" attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                        <button name="action_duplicate" string="Duplicate" type="object"/>
+                        <button name="action_export_workflow" string="Export" type="object"/>
+                        <button name="action_view_instances" string="View Instances" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Workflow Name"/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Basic Information -->
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="workflow_type"/>
+                            </group>
+                            <group>
+                                <field name="is_active"/>
+                                <field name="version" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <field name="description" placeholder="Workflow Description"/>
+                        
+                        <!-- Workflow Configuration -->
+                        <separator string="Workflow Configuration" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="start_state"/>
+                                <field name="end_states"/>
+                            </group>
+                            <group>
+                                <field name="require_approval"/>
+                                <field name="approval_levels" attrs="{'invisible': [('require_approval', '=', False)]}"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="parallel_approval" attrs="{'invisible': [('require_approval', '=', False)]}"/>
+                                <field name="sequential_approval" attrs="{'invisible': [('require_approval', '=', False)]}"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Notifications -->
+                        <separator string="Notifications" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="notify_on_start"/>
+                                <field name="notify_on_approval"/>
+                            </group>
+                            <group>
+                                <field name="notify_on_rejection"/>
+                                <field name="notify_on_completion"/>
+                            </group>
+                        </group>
+                        
+                        <field name="notification_template_ids" widget="many2many_tags"/>
+                        
+                        <!-- Triggers & Conditions -->
+                        <separator string="Triggers and Conditions" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="auto_trigger"/>
+                                <field name="trigger_condition" attrs="{'invisible': [('auto_trigger', '=', False)]}" nolabel="1" placeholder="Trigger Condition"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Actions -->
+                        <separator string="Actions" class="oe_inline"/>
+                        <group>
+                            <field name="on_start_action" placeholder="Python code to execute on workflow start" nolabel="1"/>
+                        </group>
+                        
+                        <group>
+                            <field name="on_approval_action" placeholder="Python code to execute on approval" nolabel="1"/>
+                        </group>
+                        
+                        <group>
+                            <field name="on_rejection_action" placeholder="Python code to execute on rejection" nolabel="1"/>
+                        </group>
+                        
+                        <group>
+                            <field name="on_completion_action" placeholder="Python code to execute on completion" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Configuration -->
+                        <separator string="Configuration" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="timeout_days"/>
+                                <field name="auto_approve_after_days"/>
+                            </group>
+                            <group>
+                                <field name="allow_rejection"/>
+                                <field name="allow_cancellation"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Workflow Steps -->
+                        <separator string="Workflow Steps" class="oe_inline"/>
+                        <field name="workflow_steps" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="sequence"/>
+                                <field name="name"/>
+                                <field name="state"/>
+                                <field name="step_type"/>
+                                <field name="description"/>
+                            </tree>
+                        </field>
+                        
+                        <!-- Statistics -->
+                        <separator string="Statistics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_instances" readonly="1"/>
+                                <field name="active_instances" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="completed_instances" readonly="1"/>
+                                <field name="rejected_instances" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Workflow Definition Tree View -->
+        <record id="view_workflow_definition_tree" model="ir.ui.view">
+            <field name="name">Workflow Definition Tree</field>
+            <field name="model">tazweed.workflow.definition</field>
+            <field name="arch" type="xml">
+                <tree string="Workflow Definitions">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="workflow_type"/>
+                    <field name="state"/>
+                    <field name="is_active"/>
+                    <field name="total_instances"/>
+                    <field name="active_instances"/>
+                    <field name="created_date"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Workflow Definition Search View -->
+        <record id="view_workflow_definition_search" model="ir.ui.view">
+            <field name="name">Workflow Definition Search</field>
+            <field name="model">tazweed.workflow.definition</field>
+            <field name="arch" type="xml">
+                <search string="Workflow Definitions">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="workflow_type"/>
+                    <separator/>
+                    <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                    <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_inactive" string="Inactive" domain="[('state', '=', 'inactive')]"/>
+                    <separator/>
+                    <filter name="filter_leave" string="Leave Workflows" domain="[('workflow_type', '=', 'leave_request')]"/>
+                    <filter name="filter_payroll" string="Payroll Workflows" domain="[('workflow_type', '=', 'payroll')]"/>
+                    <filter name="filter_compliance" string="Compliance Workflows" domain="[('workflow_type', '=', 'compliance')]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Workflow Definition Action -->
+        <record id="action_workflow_definition" model="ir.actions.act_window">
+            <field name="name">Workflow Definitions</field>
+            <field name="res_model">tazweed.workflow.definition</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Workflow Definition
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

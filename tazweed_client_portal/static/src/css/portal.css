@@ -1,0 +1,372 @@
+/* Tazweed Client Portal Styles */
+
+:root {
+    --portal-primary: #2196F3;
+    --portal-secondary: #1976D2;
+    --portal-success: #4CAF50;
+    --portal-warning: #FF9800;
+    --portal-danger: #F44336;
+    --portal-info: #00BCD4;
+    --portal-dark: #333333;
+    --portal-light: #F5F5F5;
+    --portal-border: #E0E0E0;
+}
+
+/* Dashboard Cards */
+.portal-dashboard {
+    padding: 20px;
+}
+
+.portal-kpi-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.portal-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.portal-kpi-card .kpi-icon {
+    font-size: 2.5rem;
+    color: var(--portal-primary);
+    margin-bottom: 10px;
+}
+
+.portal-kpi-card .kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--portal-dark);
+}
+
+.portal-kpi-card .kpi-label {
+    font-size: 0.875rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.portal-kpi-card .kpi-trend {
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+.portal-kpi-card .kpi-trend.up {
+    color: var(--portal-success);
+}
+
+.portal-kpi-card .kpi-trend.down {
+    color: var(--portal-danger);
+}
+
+/* Chart Containers */
+.portal-chart-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.portal-chart-container h4 {
+    margin-bottom: 20px;
+    color: var(--portal-dark);
+    font-weight: 600;
+}
+
+/* Activity Feed */
+.portal-activity-feed {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.portal-activity-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--portal-border);
+}
+
+.portal-activity-item:last-child {
+    border-bottom: none;
+}
+
+.portal-activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 1rem;
+}
+
+.portal-activity-icon.success {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--portal-success);
+}
+
+.portal-activity-icon.primary {
+    background: rgba(33, 150, 243, 0.1);
+    color: var(--portal-primary);
+}
+
+.portal-activity-icon.warning {
+    background: rgba(255, 152, 0, 0.1);
+    color: var(--portal-warning);
+}
+
+.portal-activity-content {
+    flex: 1;
+}
+
+.portal-activity-message {
+    color: var(--portal-dark);
+    margin-bottom: 4px;
+}
+
+.portal-activity-time {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+/* Notifications */
+.portal-notifications {
+    position: relative;
+}
+
+.portal-notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--portal-danger);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portal-notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.portal-notification-item {
+    padding: 15px;
+    border-bottom: 1px solid var(--portal-border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.portal-notification-item:hover {
+    background: var(--portal-light);
+}
+
+.portal-notification-item.unread {
+    background: rgba(33, 150, 243, 0.05);
+}
+
+/* Tables */
+.portal-table {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.portal-table th {
+    background: var(--portal-light);
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--portal-dark);
+    border-bottom: 2px solid var(--portal-border);
+}
+
+.portal-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--portal-border);
+}
+
+.portal-table tr:hover {
+    background: rgba(33, 150, 243, 0.02);
+}
+
+/* Status Badges */
+.portal-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.portal-badge.open {
+    background: rgba(33, 150, 243, 0.1);
+    color: var(--portal-primary);
+}
+
+.portal-badge.active {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--portal-success);
+}
+
+.portal-badge.pending {
+    background: rgba(255, 152, 0, 0.1);
+    color: var(--portal-warning);
+}
+
+.portal-badge.completed {
+    background: rgba(156, 39, 176, 0.1);
+    color: #9C27B0;
+}
+
+.portal-badge.rejected {
+    background: rgba(244, 67, 54, 0.1);
+    color: var(--portal-danger);
+}
+
+/* Buttons */
+.portal-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.portal-btn-primary {
+    background: var(--portal-primary);
+    color: white;
+}
+
+.portal-btn-primary:hover {
+    background: var(--portal-secondary);
+    color: white;
+}
+
+.portal-btn-success {
+    background: var(--portal-success);
+    color: white;
+}
+
+.portal-btn-danger {
+    background: var(--portal-danger);
+    color: white;
+}
+
+.portal-btn-outline {
+    background: transparent;
+    border: 2px solid var(--portal-primary);
+    color: var(--portal-primary);
+}
+
+.portal-btn-outline:hover {
+    background: var(--portal-primary);
+    color: white;
+}
+
+/* Document Cards */
+.portal-document-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.portal-document-card:hover {
+    transform: translateY(-2px);
+}
+
+.portal-document-icon {
+    font-size: 3rem;
+    color: var(--portal-primary);
+    margin-bottom: 15px;
+}
+
+.portal-document-name {
+    font-weight: 600;
+    color: var(--portal-dark);
+    margin-bottom: 5px;
+}
+
+.portal-document-meta {
+    font-size: 0.875rem;
+    color: #999;
+}
+
+/* Messages */
+.portal-message {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.portal-message.incoming {
+    background: var(--portal-light);
+    margin-right: 50px;
+}
+
+.portal-message.outgoing {
+    background: rgba(33, 150, 243, 0.1);
+    margin-left: 50px;
+}
+
+.portal-message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.portal-message-sender {
+    font-weight: 600;
+    color: var(--portal-dark);
+}
+
+.portal-message-time {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .portal-kpi-card {
+        margin-bottom: 15px;
+    }
+    
+    .portal-notification-dropdown {
+        width: 100%;
+        right: -50%;
+    }
+    
+    .portal-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

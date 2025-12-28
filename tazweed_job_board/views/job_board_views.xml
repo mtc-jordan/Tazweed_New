@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Board Form View -->
+    <record id="view_job_board_form" model="ir.ui.view">
+        <field name="name">job.board.form</field>
+        <field name="model">job.board</field>
+        <field name="arch" type="xml">
+            <form string="Job Board">
+                <header>
+                    <button name="action_test_connection" type="object" string="Test Connection" 
+                        class="btn-primary" attrs="{'invisible': [('api_endpoint', '=', False)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_postings" type="object" class="oe_stat_button" icon="fa-bullhorn">
+                            <field name="total_postings" widget="statinfo" string="Postings"/>
+                        </button>
+                        <button name="action_view_candidates" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="total_applications" widget="statinfo" string="Candidates"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="logo" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Job Board Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="code"/>
+                            <field name="board_type"/>
+                            <field name="website_url" widget="url"/>
+                            <field name="color" widget="color"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Capabilities">
+                            <field name="supports_posting"/>
+                            <field name="supports_sourcing"/>
+                            <field name="supports_analytics"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pricing">
+                            <field name="cost_per_post"/>
+                            <field name="cost_per_click"/>
+                        </group>
+                        <group string="API Configuration">
+                            <field name="api_endpoint"/>
+                            <field name="api_key" password="True"/>
+                            <field name="api_secret" password="True"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                        </page>
+                        <page string="Field Mapping" name="mapping">
+                            <group string="Field Mappings">
+                                <p class="text-muted">Configure how Tazweed fields map to this job board's API fields.</p>
+                            </group>
+                        </page>
+                        <page string="Settings" name="settings">
+                            <group>
+                                <group string="Posting Settings">
+                                </group>
+                                <group string="Import Settings">
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Job Board Tree View -->
+    <record id="view_job_board_tree" model="ir.ui.view">
+        <field name="name">job.board.tree</field>
+        <field name="model">job.board</field>
+        <field name="arch" type="xml">
+            <tree string="Job Boards" decoration-muted="active == False">
+                <field name="sequence" widget="priority"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="board_type" widget="badge" 
+                    decoration-info="board_type == 'global'"
+                    decoration-success="board_type == 'regional'"
+                    decoration-warning="board_type == 'local'"
+                    decoration-primary="board_type == 'niche'"/>
+                <field name="supports_posting" widget="boolean"/>
+                <field name="supports_sourcing" widget="boolean"/>
+                <field name="cost_per_post"/>
+                <field name="total_postings"/>
+                <field name="total_applications"/>
+                <field name="active" widget="boolean"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Job Board Kanban View -->
+    <record id="view_job_board_kanban" model="ir.ui.view">
+        <field name="name">job.board.kanban</field>
+        <field name="model">job.board</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="logo"/>
+                <field name="color"/>
+                <field name="board_type"/>
+                <field name="total_postings"/>
+                <field name="total_applications"/>
+                <field name="supports_posting"/>
+                <field name="supports_sourcing"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <t t-if="record.logo.raw_value">
+                                    <img t-att-src="kanban_image('job.board', 'logo', record.id.raw_value)" alt="Logo"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="o_kanban_image_default" t-att-style="'background-color:' + record.color.value">
+                                        <span t-esc="record.name.value[0]"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <span class="badge badge-pill" t-att-style="'background-color:' + record.color.value">
+                                        <field name="board_type"/>
+                                    </span>
+                                </div>
+                                <ul>
+                                    <li><strong><field name="total_postings"/></strong> Postings</li>
+                                    <li><strong><field name="total_applications"/></strong> Candidates</li>
+                                </ul>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span t-if="record.supports_posting.raw_value" class="badge badge-success">Post</span>
+                                        <span t-if="record.supports_sourcing.raw_value" class="badge badge-info">Source</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Job Board Search View -->
+    <record id="view_job_board_search" model="ir.ui.view">
+        <field name="name">job.board.search</field>
+        <field name="model">job.board</field>
+        <field name="arch" type="xml">
+            <search string="Search Job Boards">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Supports Posting" name="posting" domain="[('supports_posting', '=', True)]"/>
+                <filter string="Supports Sourcing" name="sourcing" domain="[('supports_sourcing', '=', True)]"/>
+                <separator/>
+                <filter string="Global" name="global" domain="[('board_type', '=', 'global')]"/>
+                <filter string="Regional" name="regional" domain="[('board_type', '=', 'regional')]"/>
+                <filter string="Local" name="local" domain="[('board_type', '=', 'local')]"/>
+                <filter string="Niche" name="niche" domain="[('board_type', '=', 'niche')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'board_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Job Board Action -->
+    <record id="action_job_board" model="ir.actions.act_window">
+        <field name="name">Job Boards</field>
+        <field name="res_model">job.board</field>
+        <field name="view_mode">kanban,tree,form</field>
+        
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure your job boards
+            </p>
+            <p>
+                Add and configure job boards to post jobs and source candidates.
+                Popular boards like LinkedIn, Indeed, and Bayt are pre-configured.
+            </p>
+        </field>
+    </record>
+</odoo>

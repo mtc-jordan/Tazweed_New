@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Orders List Template -->
+    <template id="portal_job_orders" name="My Job Orders">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <div class="portal-header d-flex justify-content-between align-items-center mb-4">
+                    <h2>Job Orders</h2>
+                    <a href="/my/job-orders/new" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> New Job Order
+                    </a>
+                </div>
+
+                <!-- Filters -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <t t-foreach="searchbar_filters.items()" t-as="filter_item">
+                                <a t-attf-href="/my/job-orders?filterby=#{filter_item[0]}&amp;sortby=#{sortby}"
+                                   t-attf-class="btn btn-outline-secondary #{filterby == filter_item[0] and 'active' or ''}">
+                                    <t t-esc="filter_item[1]['label']"/>
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Sort: <t t-esc="searchbar_sortings[sortby]['label']"/>
+                            </button>
+                            <div class="dropdown-menu">
+                                <t t-foreach="searchbar_sortings.items()" t-as="sort_item">
+                                    <a t-attf-href="/my/job-orders?filterby=#{filterby}&amp;sortby=#{sort_item[0]}"
+                                       class="dropdown-item">
+                                        <t t-esc="sort_item[1]['label']"/>
+                                    </a>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Orders Table -->
+                <t t-if="job_orders">
+                    <table class="portal-table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Title</th>
+                                <th>Positions</th>
+                                <th>Candidates</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="job_orders" t-as="order">
+                                <tr>
+                                    <td>
+                                        <a t-attf-href="/my/job-orders/#{order.id}">
+                                            <t t-esc="order.name"/>
+                                        </a>
+                                    </td>
+                                    <td><t t-esc="order.job_title or '-'"/></td>
+                                    <td><t t-esc="order.positions_required or 1"/></td>
+                                    <td>
+                                        <span class="badge badge-info">
+                                            <t t-esc="order.candidate_count or 0"/> candidates
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span t-attf-class="portal-badge #{order.state}">
+                                            <t t-esc="order.state"/>
+                                        </span>
+                                    </td>
+                                    <td><t t-esc="order.create_date.strftime('%b %d, %Y')"/></td>
+                                    <td>
+                                        <a t-attf-href="/my/job-orders/#{order.id}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Pager -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <t t-call="portal.pager"/>
+                    </div>
+                </t>
+
+                <!-- Empty State -->
+                <t t-else="">
+                    <t t-call="tazweed_client_portal.portal_empty_state">
+                        <t t-set="icon">fa-briefcase</t>
+                        <t t-set="title">No Job Orders</t>
+                        <t t-set="message">You haven't created any job orders yet.</t>
+                        <t t-set="action_url">/my/job-orders/new</t>
+                        <t t-set="action_label">Create Job Order</t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Job Order Detail Template -->
+    <template id="portal_job_order_detail" name="Job Order Detail">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/my">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/my/job-orders">Job Orders</a></li>
+                        <li class="breadcrumb-item active"><t t-esc="job_order.name"/></li>
+                    </ol>
+                </nav>
+
+                <!-- Header -->
+                <div class="portal-header d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <h2><t t-esc="job_order.name"/></h2>
+                        <span t-attf-class="portal-badge #{job_order.state}">
+                            <t t-esc="job_order.state"/>
+                        </span>
+                    </div>
+                    <div>
+                        <a t-attf-href="/my/job-orders/#{job_order.id}/edit" class="btn btn-outline-primary">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Job Order Details -->
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Job Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Job Title:</strong> <t t-esc="job_order.job_title or '-'"/></p>
+                                        <p><strong>Department:</strong> <t t-esc="job_order.department or '-'"/></p>
+                                        <p><strong>Location:</strong> <t t-esc="job_order.location or '-'"/></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Positions Required:</strong> <t t-esc="job_order.positions_required or 1"/></p>
+                                        <p><strong>Contract Type:</strong> <t t-esc="job_order.contract_type or '-'"/></p>
+                                        <p><strong>Target Date:</strong> <t t-esc="job_order.target_date or '-'"/></p>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <h6>Description</h6>
+                                <p><t t-esc="job_order.description or 'No description provided.'"/></p>
+                                <t t-if="job_order.required_skills">
+                                    <h6>Required Skills</h6>
+                                    <p><t t-esc="job_order.required_skills"/></p>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Candidates Section -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Candidates (<t t-esc="len(candidates)"/>)</h5>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="candidates">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Experience</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="candidates" t-as="candidate">
+                                                    <tr>
+                                                        <td>
+                                                            <strong><t t-esc="candidate.name"/></strong>
+                                                            <br/>
+                                                            <small class="text-muted"><t t-esc="candidate.email or ''"/></small>
+                                                        </td>
+                                                        <td><t t-esc="candidate.experience_years or 0"/> years</td>
+                                                        <td>
+                                                            <span t-attf-class="portal-badge #{candidate.state}">
+                                                                <t t-esc="candidate.state"/>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <t t-if="candidate.state == 'pending_approval'">
+                                                                <a t-attf-href="/my/candidates/#{candidate.id}/approve" 
+                                                                   class="btn btn-sm btn-success">
+                                                                    <i class="fa fa-check"></i> Approve
+                                                                </a>
+                                                                <a t-attf-href="/my/candidates/#{candidate.id}/reject" 
+                                                                   class="btn btn-sm btn-danger">
+                                                                    <i class="fa fa-times"></i> Reject
+                                                                </a>
+                                                            </t>
+                                                            <a t-attf-href="/my/candidates/#{candidate.id}" 
+                                                               class="btn btn-sm btn-outline-primary">
+                                                                View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted text-center py-4">
+                                        No candidates have been submitted for this job order yet.
+                                    </p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Timeline</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        <small class="text-muted">Created</small><br/>
+                                        <t t-esc="job_order.create_date.strftime('%b %d, %Y at %H:%M')"/>
+                                    </li>
+                                    <t t-if="job_order.target_date">
+                                        <li class="mb-3">
+                                            <small class="text-muted">Target Date</small><br/>
+                                            <t t-esc="job_order.target_date"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Need Help?</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">Have questions about this job order?</p>
+                                <a href="/my/messages?job_order_id={job_order.id}" class="btn btn-outline-primary btn-block">
+                                    <i class="fa fa-envelope"></i> Send Message
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

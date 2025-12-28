@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Board Module Category -->
+    <record id="module_category_job_board" model="ir.module.category">
+        <field name="name">Job Board Integration</field>
+        <field name="description">Manage job board integrations and candidate sourcing</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <!-- User Groups -->
+    <record id="group_job_board_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_job_board"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can view job postings and candidates</field>
+    </record>
+
+    <record id="group_job_board_recruiter" model="res.groups">
+        <field name="name">Recruiter</field>
+        <field name="category_id" ref="module_category_job_board"/>
+        <field name="implied_ids" eval="[(4, ref('group_job_board_user'))]"/>
+        <field name="comment">Can create and manage job postings and candidates</field>
+    </record>
+
+    <record id="group_job_board_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_job_board"/>
+        <field name="implied_ids" eval="[(4, ref('group_job_board_recruiter'))]"/>
+        <field name="comment">Full access to job board settings and analytics</field>
+    </record>
+
+    <!-- Record Rules -->
+    
+    <!-- Job Board - All users can view active boards -->
+    <record id="rule_job_board_user" model="ir.rule">
+        <field name="name">Job Board: Users see active boards</field>
+        <field name="model_id" ref="model_job_board"/>
+        <field name="domain_force">[('active', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_job_board_manager" model="ir.rule">
+        <field name="name">Job Board: Managers full access</field>
+        <field name="model_id" ref="model_job_board"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_manager'))]"/>
+    </record>
+
+    <!-- Job Posting - Recruiters see own postings, managers see all -->
+    <record id="rule_job_posting_recruiter" model="ir.rule">
+        <field name="name">Job Posting: Recruiters see own postings</field>
+        <field name="model_id" ref="model_job_posting"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_recruiter'))]"/>
+    </record>
+
+    <record id="rule_job_posting_manager" model="ir.rule">
+        <field name="name">Job Posting: Managers full access</field>
+        <field name="model_id" ref="model_job_posting"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_manager'))]"/>
+    </record>
+
+    <!-- Candidate Source - Recruiters see assigned candidates -->
+    <record id="rule_candidate_source_recruiter" model="ir.rule">
+        <field name="name">Candidate Source: Recruiters see assigned</field>
+        <field name="model_id" ref="model_candidate_source"/>
+        <field name="domain_force">['|', ('recruiter_id', '=', user.id), ('recruiter_id', '=', False)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_recruiter'))]"/>
+    </record>
+
+    <record id="rule_candidate_source_manager" model="ir.rule">
+        <field name="name">Candidate Source: Managers full access</field>
+        <field name="model_id" ref="model_candidate_source"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_manager'))]"/>
+    </record>
+
+    <!-- Analytics - Managers only -->
+    <record id="rule_job_board_analytics_manager" model="ir.rule">
+        <field name="name">Job Board Analytics: Managers only</field>
+        <field name="model_id" ref="model_job_board_analytics"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_job_board_manager'))]"/>
+    </record>
+</odoo>

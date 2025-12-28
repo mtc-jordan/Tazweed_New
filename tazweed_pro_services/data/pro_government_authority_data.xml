@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Federal Authorities -->
+        
+        <record id="authority_mohre" model="pro.government.authority">
+            <field name="name">Ministry of Human Resources and Emiratisation (MOHRE)</field>
+            <field name="code">MOHRE</field>
+            <field name="sequence">10</field>
+            <field name="authority_type">federal</field>
+            <field name="emirate">federal</field>
+            <field name="website">https://www.mohre.gov.ae</field>
+            <field name="portal_url">https://eservices.mohre.gov.ae</field>
+            <field name="phone">600 590000</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">8:00 AM - 8:00 PM</field>
+            <field name="notes">Handles all labor-related services including work permits, labor cards, and employment contracts.</field>
+        </record>
+        
+        <record id="authority_icp" model="pro.government.authority">
+            <field name="name">Federal Authority for Identity, Citizenship, Customs and Port Security (ICP)</field>
+            <field name="code">ICP</field>
+            <field name="sequence">20</field>
+            <field name="authority_type">federal</field>
+            <field name="emirate">federal</field>
+            <field name="website">https://icp.gov.ae</field>
+            <field name="portal_url">https://smartservices.icp.gov.ae</field>
+            <field name="phone">600 522222</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 2:30 PM</field>
+            <field name="notes">Handles Emirates ID, residence visas, and entry permits.</field>
+        </record>
+        
+        <record id="authority_mofa" model="pro.government.authority">
+            <field name="name">Ministry of Foreign Affairs (MOFA)</field>
+            <field name="code">MOFA</field>
+            <field name="sequence">30</field>
+            <field name="authority_type">federal</field>
+            <field name="emirate">federal</field>
+            <field name="website">https://www.mofa.gov.ae</field>
+            <field name="portal_url">https://www.mofa.gov.ae/en/Services</field>
+            <field name="phone">+971 2 444 4444</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 2:30 PM</field>
+            <field name="notes">Handles document attestation for international use.</field>
+        </record>
+
+        <!-- Dubai Local Authorities -->
+        
+        <record id="authority_gdrfa_dubai" model="pro.government.authority">
+            <field name="name">General Directorate of Residency and Foreigners Affairs - Dubai (GDRFA)</field>
+            <field name="code">GDRFA_DXB</field>
+            <field name="sequence">40</field>
+            <field name="authority_type">local</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.gdrfad.gov.ae</field>
+            <field name="portal_url">https://smart.gdrfad.gov.ae</field>
+            <field name="phone">800 5111</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 2:30 PM</field>
+            <field name="notes">Handles residence visas and entry permits for Dubai.</field>
+        </record>
+        
+        <record id="authority_ded_dubai" model="pro.government.authority">
+            <field name="name">Department of Economic Development - Dubai (DED)</field>
+            <field name="code">DED_DXB</field>
+            <field name="sequence">50</field>
+            <field name="authority_type">local</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.dubaided.gov.ae</field>
+            <field name="portal_url">https://services.dubaided.gov.ae</field>
+            <field name="phone">600 545555</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 3:00 PM</field>
+            <field name="notes">Handles trade licenses and business registration in Dubai mainland.</field>
+        </record>
+        
+        <record id="authority_dha" model="pro.government.authority">
+            <field name="name">Dubai Health Authority (DHA)</field>
+            <field name="code">DHA</field>
+            <field name="sequence">60</field>
+            <field name="authority_type">local</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.dha.gov.ae</field>
+            <field name="portal_url">https://services.dha.gov.ae</field>
+            <field name="phone">800 342</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 3:00 PM</field>
+            <field name="notes">Handles medical fitness tests and health cards.</field>
+        </record>
+        
+        <record id="authority_dubai_courts" model="pro.government.authority">
+            <field name="name">Dubai Courts</field>
+            <field name="code">COURTS_DXB</field>
+            <field name="sequence">70</field>
+            <field name="authority_type">local</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.dc.gov.ae</field>
+            <field name="portal_url">https://www.dc.gov.ae/PublicServices</field>
+            <field name="phone">+971 4 334 7777</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 2:30 PM</field>
+            <field name="notes">Handles notary services and legal attestation.</field>
+        </record>
+        
+        <record id="authority_dubai_municipality" model="pro.government.authority">
+            <field name="name">Dubai Municipality</field>
+            <field name="code">DM</field>
+            <field name="sequence">80</field>
+            <field name="authority_type">local</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.dm.gov.ae</field>
+            <field name="portal_url">https://portal.dm.gov.ae</field>
+            <field name="phone">800 900</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">7:30 AM - 3:00 PM</field>
+            <field name="notes">Handles building permits and municipal approvals.</field>
+        </record>
+
+        <!-- Abu Dhabi Authorities -->
+        
+        <record id="authority_added" model="pro.government.authority">
+            <field name="name">Abu Dhabi Department of Economic Development (ADDED)</field>
+            <field name="code">ADDED</field>
+            <field name="sequence">90</field>
+            <field name="authority_type">local</field>
+            <field name="emirate">abu_dhabi</field>
+            <field name="website">https://www.added.gov.ae</field>
+            <field name="portal_url">https://www.tamm.abudhabi</field>
+            <field name="phone">800 555</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">8:00 AM - 3:00 PM</field>
+            <field name="notes">Handles trade licenses in Abu Dhabi.</field>
+        </record>
+
+        <!-- Free Zone Authorities -->
+        
+        <record id="authority_dmcc" model="pro.government.authority">
+            <field name="name">Dubai Multi Commodities Centre (DMCC)</field>
+            <field name="code">DMCC</field>
+            <field name="sequence">100</field>
+            <field name="authority_type">free_zone</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.dmcc.ae</field>
+            <field name="portal_url">https://portal.dmcc.ae</field>
+            <field name="phone">+971 4 424 9600</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">9:00 AM - 5:00 PM</field>
+            <field name="notes">DMCC Free Zone services.</field>
+        </record>
+        
+        <record id="authority_jafza" model="pro.government.authority">
+            <field name="name">Jebel Ali Free Zone (JAFZA)</field>
+            <field name="code">JAFZA</field>
+            <field name="sequence">110</field>
+            <field name="authority_type">free_zone</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.jafza.ae</field>
+            <field name="portal_url">https://portal.jafza.ae</field>
+            <field name="phone">800 52392</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">8:00 AM - 5:00 PM</field>
+            <field name="notes">JAFZA Free Zone services.</field>
+        </record>
+        
+        <record id="authority_difc" model="pro.government.authority">
+            <field name="name">Dubai International Financial Centre (DIFC)</field>
+            <field name="code">DIFC</field>
+            <field name="sequence">120</field>
+            <field name="authority_type">free_zone</field>
+            <field name="emirate">dubai</field>
+            <field name="website">https://www.difc.ae</field>
+            <field name="portal_url">https://portal.difc.ae</field>
+            <field name="phone">+971 4 362 2222</field>
+            <field name="working_days">Sunday - Thursday</field>
+            <field name="working_hours">9:00 AM - 5:00 PM</field>
+            <field name="notes">DIFC Free Zone services.</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_signature_template_user,signature.template.user,model_signature_template,group_esignature_user,1,0,0,0
+access_signature_template_manager,signature.template.manager,model_signature_template,group_esignature_manager,1,1,1,1
+access_signature_request_user,signature.request.user,model_signature_request,group_esignature_user,1,1,1,0
+access_signature_request_manager,signature.request.manager,model_signature_request,group_esignature_manager,1,1,1,1
+access_signature_signer_user,signature.signer.user,model_signature_signer,group_esignature_user,1,1,1,1
+access_signature_signer_manager,signature.signer.manager,model_signature_signer,group_esignature_manager,1,1,1,1
+access_signature_audit_log_user,signature.audit.log.user,model_signature_audit_log,group_esignature_user,1,0,0,0
+access_signature_audit_log_manager,signature.audit.log.manager,model_signature_audit_log,group_esignature_manager,1,1,1,1
+access_send_for_signature_wizard,send.for.signature.wizard,model_send_for_signature_wizard,group_esignature_user,1,1,1,1

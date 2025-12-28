@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Leave Request Sequence -->
+        <record id="seq_leave_request" model="ir.sequence">
+            <field name="name">Leave Request</field>
+            <field name="code">hr.leave</field>
+            <field name="prefix">LV/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Leave Allocation Sequence -->
+        <record id="seq_leave_allocation" model="ir.sequence">
+            <field name="name">Leave Allocation</field>
+            <field name="code">hr.leave.allocation</field>
+            <field name="prefix">LA/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Attendance Sequence -->
+        <record id="seq_attendance" model="ir.sequence">
+            <field name="name">Attendance</field>
+            <field name="code">hr.attendance</field>
+            <field name="prefix">ATT/%(year)s/</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

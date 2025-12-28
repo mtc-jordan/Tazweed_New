@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Salary Structure Type Form View -->
+    <record id="view_hr_payroll_structure_type_form" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.type.form</field>
+        <field name="model">hr.payroll.structure.type</field>
+        <field name="arch" type="xml">
+            <form string="Salary Structure Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="wage_type"/>
+                        </group>
+                        <group>
+                            <field name="is_uae_structure"/>
+                            <field name="include_gratuity"/>
+                            <field name="wps_enabled"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Structures" name="structures">
+                            <field name="struct_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="schedule_pay"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Salary Structure Type Tree View -->
+    <record id="view_hr_payroll_structure_type_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.type.tree</field>
+        <field name="model">hr.payroll.structure.type</field>
+        <field name="arch" type="xml">
+            <tree string="Salary Structure Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="wage_type"/>
+                <field name="is_uae_structure"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Salary Structure Type Action -->
+    <record id="action_hr_payroll_structure_type" model="ir.actions.act_window">
+        <field name="name">Structure Types</field>
+        <field name="res_model">hr.payroll.structure.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Salary Structure Form View -->
+    <record id="view_hr_payroll_structure_form" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.form</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="arch" type="xml">
+            <form string="Salary Structure">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Structure Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="type_id"/>
+                            <field name="parent_id"/>
+                            <field name="schedule_pay"/>
+                        </group>
+                        <group>
+                            <field name="is_uae_structure"/>
+                            <field name="include_housing"/>
+                            <field name="include_transport"/>
+                            <field name="include_overtime"/>
+                            <field name="include_gratuity"/>
+                            <field name="use_worked_day_lines"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salary Rules" name="rules">
+                            <field name="rule_ids">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="category_id"/>
+                                    <field name="amount_select"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Salary Structure Tree View -->
+    <record id="view_hr_payroll_structure_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.tree</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="arch" type="xml">
+            <tree string="Salary Structures">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="type_id"/>
+                <field name="schedule_pay"/>
+                <field name="is_uae_structure"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Salary Structure Action -->
+    <record id="action_hr_payroll_structure" model="ir.actions.act_window">
+        <field name="name">Salary Structures</field>
+        <field name="res_model">hr.payroll.structure</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new salary structure
+            </p>
+        </field>
+    </record>
+
+    <!-- Salary Rule Category Form View -->
+    <record id="view_hr_salary_rule_category_form" model="ir.ui.view">
+        <field name="name">hr.salary.rule.category.form</field>
+        <field name="model">hr.salary.rule.category</field>
+        <field name="arch" type="xml">
+            <form string="Salary Rule Category">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="parent_id"/>
+                        </group>
+                        <group>
+                            <field name="category_type"/>
+                            <field name="wps_category"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Salary Rule Category Tree View -->
+    <record id="view_hr_salary_rule_category_tree" model="ir.ui.view">
+        <field name="name">hr.salary.rule.category.tree</field>
+        <field name="model">hr.salary.rule.category</field>
+        <field name="arch" type="xml">
+            <tree string="Salary Rule Categories">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="parent_id"/>
+                <field name="category_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Salary Rule Category Action -->
+    <record id="action_hr_salary_rule_category" model="ir.actions.act_window">
+        <field name="name">Rule Categories</field>
+        <field name="res_model">hr.salary.rule.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Salary Rule Form View -->
+    <record id="view_hr_salary_rule_form" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="arch" type="xml">
+            <form string="Salary Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Rule Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="General">
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="category_id"/>
+                            <field name="struct_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="UAE Settings">
+                            <field name="wps_include"/>
+                            <field name="wps_category"/>
+                            <field name="gratuity_include"/>
+                            <field name="appears_on_payslip"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Conditions" name="conditions">
+                            <group>
+                                <field name="condition_select"/>
+                                <field name="condition_python" 
+                                       attrs="{'invisible': [('condition_select', '!=', 'python')]}"/>
+                                <field name="condition_range" 
+                                       attrs="{'invisible': [('condition_select', '!=', 'range')]}"/>
+                                <field name="condition_range_min" 
+                                       attrs="{'invisible': [('condition_select', '!=', 'range')]}"/>
+                                <field name="condition_range_max" 
+                                       attrs="{'invisible': [('condition_select', '!=', 'range')]}"/>
+                            </group>
+                        </page>
+                        <page string="Computation" name="computation">
+                            <group>
+                                <field name="amount_select"/>
+                                <field name="amount_fix" 
+                                       attrs="{'invisible': [('amount_select', '!=', 'fix')]}"/>
+                                <field name="amount_percentage" 
+                                       attrs="{'invisible': [('amount_select', '!=', 'percentage')]}"/>
+                                <field name="amount_percentage_base" 
+                                       attrs="{'invisible': [('amount_select', '!=', 'percentage')]}"/>
+                                <field name="amount_python_compute" 
+                                       attrs="{'invisible': [('amount_select', '!=', 'code')]}"/>
+                                <field name="quantity"/>
+                            </group>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="note" placeholder="Description..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Salary Rule Tree View -->
+    <record id="view_hr_salary_rule_tree" model="ir.ui.view">
+        <field name="name">hr.salary.rule.tree</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Salary Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="struct_id"/>
+                <field name="amount_select"/>
+                <field name="wps_include"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Salary Rule Action -->
+    <record id="action_hr_salary_rule" model="ir.actions.act_window">
+        <field name="name">Salary Rules</field>
+        <field name="res_model">hr.salary.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new salary rule
+            </p>
+        </field>
+    </record>
+</odoo>

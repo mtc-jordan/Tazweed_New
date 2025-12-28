@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Leave Request Workflow -->
+        <record id="workflow_leave_request" model="tazweed.workflow.definition">
+            <field name="name">Leave Request Workflow</field>
+            <field name="code">leave_request_workflow</field>
+            <field name="workflow_type">leave_request</field>
+            <field name="description">Standard leave request approval workflow</field>
+            <field name="start_state">draft</field>
+            <field name="end_states">approved,rejected</field>
+            <field name="require_approval">True</field>
+            <field name="approval_levels">2</field>
+            <field name="sequential_approval">True</field>
+            <field name="parallel_approval">False</field>
+            <field name="notify_on_start">True</field>
+            <field name="notify_on_approval">True</field>
+            <field name="notify_on_rejection">True</field>
+            <field name="notify_on_completion">True</field>
+            <field name="auto_trigger">True</field>
+            <field name="timeout_days">5</field>
+            <field name="allow_rejection">True</field>
+            <field name="allow_cancellation">True</field>
+            <field name="is_active">True</field>
+            <field name="state">active</field>
+        </record>
+        
+        <!-- Expense Claim Workflow -->
+        <record id="workflow_expense_claim" model="tazweed.workflow.definition">
+            <field name="name">Expense Claim Workflow</field>
+            <field name="code">expense_claim_workflow</field>
+            <field name="workflow_type">expense_claim</field>
+            <field name="description">Expense claim approval workflow</field>
+            <field name="start_state">draft</field>
+            <field name="end_states">approved,rejected</field>
+            <field name="require_approval">True</field>
+            <field name="approval_levels">2</field>
+            <field name="sequential_approval">True</field>
+            <field name="parallel_approval">False</field>
+            <field name="notify_on_start">True</field>
+            <field name="notify_on_approval">True</field>
+            <field name="notify_on_rejection">True</field>
+            <field name="notify_on_completion">True</field>
+            <field name="auto_trigger">True</field>
+            <field name="timeout_days">7</field>
+            <field name="allow_rejection">True</field>
+            <field name="allow_cancellation">True</field>
+            <field name="is_active">True</field>
+            <field name="state">active</field>
+        </record>
+        
+        <!-- Salary Adjustment Workflow -->
+        <record id="workflow_salary_adjustment" model="tazweed.workflow.definition">
+            <field name="name">Salary Adjustment Workflow</field>
+            <field name="code">salary_adjustment_workflow</field>
+            <field name="workflow_type">payroll</field>
+            <field name="description">Salary adjustment approval workflow</field>
+            <field name="start_state">draft</field>
+            <field name="end_states">approved,rejected</field>
+            <field name="require_approval">True</field>
+            <field name="approval_levels">3</field>
+            <field name="sequential_approval">True</field>
+            <field name="parallel_approval">False</field>
+            <field name="notify_on_start">True</field>
+            <field name="notify_on_approval">True</field>
+            <field name="notify_on_rejection">True</field>
+            <field name="notify_on_completion">True</field>
+            <field name="auto_trigger">False</field>
+            <field name="timeout_days">10</field>
+            <field name="allow_rejection">True</field>
+            <field name="allow_cancellation">True</field>
+            <field name="is_active">True</field>
+            <field name="state">active</field>
+        </record>
+        
+        <!-- Compliance Check Automation Rule -->
+        <record id="automation_compliance_check" model="tazweed.automation.rule">
+            <field name="name">Compliance Check - Emiratization</field>
+            <field name="code">compliance_emiratization_check</field>
+            <field name="rule_type">compliance_auto_check</field>
+            <field name="description">Automatically check Emiratization compliance</field>
+            <field name="trigger_model">tazweed.payroll.integration</field>
+            <field name="trigger_event">schedule</field>
+            <field name="action_type">execute_code</field>
+            <field name="execute_immediately">True</field>
+            <field name="max_executions">0</field>
+            <field name="state">active</field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Daily Payroll Processing Task -->
+        <record id="scheduled_task_daily_payroll" model="tazweed.scheduled.task">
+            <field name="name">Daily Payroll Processing</field>
+            <field name="code">daily_payroll_processing</field>
+            <field name="task_type">payroll_processing</field>
+            <field name="description">Process daily payroll calculations</field>
+            <field name="schedule_type">daily</field>
+            <field name="start_date" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="execution_time">2.0</field>
+            <field name="execution_minute">0</field>
+            <field name="max_retries">3</field>
+            <field name="retry_delay_minutes">5</field>
+            <field name="timeout_minutes">60</field>
+            <field name="state">active</field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Monthly Leave Accrual Task -->
+        <record id="scheduled_task_monthly_leave_accrual" model="tazweed.scheduled.task">
+            <field name="name">Monthly Leave Accrual</field>
+            <field name="code">monthly_leave_accrual</field>
+            <field name="task_type">leave_accrual</field>
+            <field name="description">Accrue monthly leave balance</field>
+            <field name="schedule_type">monthly</field>
+            <field name="start_date" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="day_of_month">1</field>
+            <field name="execution_time">0.0</field>
+            <field name="execution_minute">0</field>
+            <field name="max_retries">3</field>
+            <field name="retry_delay_minutes">5</field>
+            <field name="timeout_minutes">30</field>
+            <field name="state">active</field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Email Notification Template - Leave Approval -->
+        <record id="notification_leave_approval" model="tazweed.notification.template">
+            <field name="name">Leave Request Approved</field>
+            <field name="code">leave_request_approved</field>
+            <field name="trigger_event">workflow_approval</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Your Leave Request has been Approved</field>
+            <field name="email_body"><![CDATA[
+Dear ${employee_name},
+
+Your leave request for ${leave_dates} has been approved.
+
+Leave Type: ${leave_type}
+Duration: ${leave_duration} days
+Approved By: ${approver_name}
+
+Please ensure to hand over your work before the leave starts.
+
+Best regards,
+HR Team
+            ]]></field>
+            <field name="email_recipients">${employee_email}</field>
+            <field name="send_immediately">True</field>
+            <field name="state">active</field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Email Notification Template - Leave Rejection -->
+        <record id="notification_leave_rejection" model="tazweed.notification.template">
+            <field name="name">Leave Request Rejected</field>
+            <field name="code">leave_request_rejected</field>
+            <field name="trigger_event">workflow_rejection</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Your Leave Request has been Rejected</field>
+            <field name="email_body"><![CDATA[
+Dear ${employee_name},
+
+Your leave request for ${leave_dates} has been rejected.
+
+Reason: ${rejection_reason}
+
+Please contact HR for more information.
+
+Best regards,
+HR Team
+            ]]></field>
+            <field name="email_recipients">${employee_email}</field>
+            <field name="send_immediately">True</field>
+            <field name="state">active</field>
+            <field name="is_active">True</field>
+        </record>
+    </data>
+</odoo>

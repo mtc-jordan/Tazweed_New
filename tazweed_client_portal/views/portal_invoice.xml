@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Invoices List Template -->
+    <template id="portal_invoices" name="My Invoices">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <div class="portal-header mb-4">
+                    <h2>Invoices</h2>
+                    <p class="text-muted">View and download your invoices</p>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h3 class="text-primary">AED <t t-esc="'{:,.2f}'.format(total_pending or 0)"/></h3>
+                                <small class="text-muted">Pending Payment</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h3 class="text-success">AED <t t-esc="'{:,.2f}'.format(total_paid or 0)"/></h3>
+                                <small class="text-muted">Paid This Year</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h3 class="text-danger">AED <t t-esc="'{:,.2f}'.format(total_overdue or 0)"/></h3>
+                                <small class="text-muted">Overdue</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <t t-foreach="searchbar_filters.items()" t-as="filter_item">
+                                <a t-attf-href="/my/invoices?filterby=#{filter_item[0]}"
+                                   t-attf-class="btn btn-outline-secondary #{filterby == filter_item[0] and 'active' or ''}">
+                                    <t t-esc="filter_item[1]['label']"/>
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoices Table -->
+                <t t-if="invoices">
+                    <table class="portal-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Date</th>
+                                <th>Period</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="invoices" t-as="invoice">
+                                <tr>
+                                    <td>
+                                        <strong><t t-esc="invoice.name"/></strong>
+                                    </td>
+                                    <td><t t-esc="invoice.invoice_date"/></td>
+                                    <td>
+                                        <t t-esc="invoice.period_start"/> - <t t-esc="invoice.period_end"/>
+                                    </td>
+                                    <td>
+                                        <strong>AED <t t-esc="'{:,.2f}'.format(invoice.total_amount or 0)"/></strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="invoice.due_date"/>
+                                        <t t-if="invoice.is_overdue">
+                                            <span class="badge badge-danger ml-1">Overdue</span>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <span t-attf-class="portal-badge #{invoice.state}">
+                                            <t t-esc="invoice.state"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a t-attf-href="/my/invoices/#{invoice.id}/download" class="btn btn-sm btn-outline-primary">
+                                            <i class="fa fa-download"></i> Download
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        <t t-call="portal.pager"/>
+                    </div>
+                </t>
+                <t t-else="">
+                    <t t-call="tazweed_client_portal.portal_empty_state">
+                        <t t-set="icon">fa-file-invoice-dollar</t>
+                        <t t-set="title">No Invoices</t>
+                        <t t-set="message">You don't have any invoices yet.</t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

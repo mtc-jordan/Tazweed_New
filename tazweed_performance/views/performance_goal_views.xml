@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Performance Goal Form View -->
+    <record id="view_performance_goal_form" model="ir.ui.view">
+        <field name="name">tazweed.performance.goal.form</field>
+        <field name="model">tazweed.performance.goal</field>
+        <field name="arch" type="xml">
+            <form string="Performance Goal">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" states="pending"/>
+                    <button name="action_start" string="Start" type="object" states="approved"/>
+                    <button name="action_complete" string="Complete" type="object" class="btn-success" states="in_progress"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,pending"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Goal title..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="manager_id"/>
+                            <field name="department_id"/>
+                            <field name="review_id"/>
+                        </group>
+                        <group>
+                            <field name="category"/>
+                            <field name="priority"/>
+                            <field name="weight"/>
+                            <field name="smart_score"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Timeline">
+                            <field name="date_start"/>
+                            <field name="date_deadline"/>
+                            <field name="date_completed"/>
+                        </group>
+                        <group string="Progress">
+                            <field name="progress" widget="progressbar"/>
+                            <field name="self_score"/>
+                            <field name="manager_score"/>
+                            <field name="achievement_score"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Detailed goal description..."/>
+                        </page>
+                        <page string="SMART Criteria" name="smart">
+                            <group>
+                                <group>
+                                    <field name="is_specific" string="Specific"/>
+                                    <field name="is_measurable" string="Measurable"/>
+                                    <field name="is_achievable" string="Achievable"/>
+                                    <field name="is_relevant" string="Relevant"/>
+                                    <field name="is_time_bound" string="Time-bound"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Milestones" name="milestones">
+                            <field name="milestone_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="date_deadline"/>
+                                    <field name="weight"/>
+                                    <field name="is_completed"/>
+                                    <field name="date_completed"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Comments" name="comments">
+                            <group>
+                                <field name="employee_comments" placeholder="Employee comments..."/>
+                                <field name="manager_comments" placeholder="Manager comments..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Performance Goal Tree View -->
+    <record id="view_performance_goal_tree" model="ir.ui.view">
+        <field name="name">tazweed.performance.goal.tree</field>
+        <field name="model">tazweed.performance.goal</field>
+        <field name="arch" type="xml">
+            <tree string="Performance Goals" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'completed'" decoration-danger="date_deadline and date_deadline &lt; current_date and state not in ('completed', 'cancelled')">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="category"/>
+                <field name="date_deadline"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="weight"/>
+                <field name="priority"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Performance Goal Kanban View -->
+    <record id="view_performance_goal_kanban" model="ir.ui.view">
+        <field name="name">tazweed.performance.goal.kanban</field>
+        <field name="model">tazweed.performance.goal</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="progress"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="employee_id"/>
+                                    <div class="mt-2">
+                                        <field name="progress" widget="progressbar"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="date_deadline"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Performance Goal Search View -->
+    <record id="view_performance_goal_search" model="ir.ui.view">
+        <field name="name">tazweed.performance.goal.search</field>
+        <field name="model">tazweed.performance.goal</field>
+        <field name="arch" type="xml">
+            <search string="Search Goals">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <separator/>
+                <filter name="my_goals" string="My Goals" domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter name="team_goals" string="Team Goals" domain="[('manager_id.user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter name="overdue" string="Overdue" domain="[('date_deadline', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', 'not in', ('completed', 'cancelled'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_priority" string="Priority" context="{'group_by': 'priority'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Performance Goal Action -->
+    <record id="action_performance_goal" model="ir.actions.act_window">
+        <field name="name">Goals</field>
+        <field name="res_model">tazweed.performance.goal</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_performance_goal_search"/>
+        <field name="context">{'search_default_my_goals': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first performance goal
+            </p>
+        </field>
+    </record>
+</odoo>

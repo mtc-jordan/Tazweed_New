@@ -1,0 +1,546 @@
+/* ============================================================
+   Tazweed Advanced Analytics - Charts Styling
+   Beautiful Chart Components with Modern Design
+   ============================================================ */
+
+:root {
+    --primary-color: #3498db;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12;
+    --info-color: #9b59b6;
+    --dark-color: #2c3e50;
+    --light-color: #ecf0f1;
+}
+
+/* ============================================================
+   Chart Container
+   ============================================================ */
+
+.chart-wrapper {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.chart-wrapper:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.chart-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin: 0;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chart-control-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background: var(--light-color);
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.chart-control-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.chart-body {
+    position: relative;
+    height: 350px;
+    margin-bottom: 1rem;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ecf0f1;
+}
+
+.chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.chart-legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+/* ============================================================
+   Bar Chart
+   ============================================================ */
+
+.bar-chart {
+    position: relative;
+    height: 350px;
+}
+
+.bar-chart-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 100%;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.bar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bar {
+    width: 100%;
+    background: linear-gradient(180deg, var(--primary-color), var(--info-color));
+    border-radius: 6px 6px 0 0;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 4px;
+}
+
+.bar:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.bar-label {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    text-align: center;
+    font-weight: 600;
+}
+
+.bar-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* ============================================================
+   Line Chart
+   ============================================================ */
+
+.line-chart {
+    position: relative;
+    height: 350px;
+}
+
+.line-chart-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================================
+   Pie Chart
+   ============================================================ */
+
+.pie-chart {
+    position: relative;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pie-chart-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.pie-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.pie-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.pie-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+}
+
+.pie-legend-label {
+    flex: 1;
+    color: #7f8c8d;
+}
+
+.pie-legend-value {
+    font-weight: 700;
+    color: var(--dark-color);
+    min-width: 50px;
+    text-align: right;
+}
+
+/* ============================================================
+   Area Chart
+   ============================================================ */
+
+.area-chart {
+    position: relative;
+    height: 350px;
+}
+
+.area-chart-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================================
+   Gauge Chart
+   ============================================================ */
+
+.gauge-chart {
+    position: relative;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-canvas {
+    width: 200px;
+    height: 150px;
+}
+
+.gauge-value-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.gauge-label-display {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* ============================================================
+   Heatmap
+   ============================================================ */
+
+.heatmap {
+    position: relative;
+    height: 350px;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    gap: 4px;
+    padding: 1rem;
+    height: 100%;
+}
+
+.heatmap-cell {
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.heatmap-cell.cold {
+    background: #3498db;
+}
+
+.heatmap-cell.cool {
+    background: #2ecc71;
+}
+
+.heatmap-cell.warm {
+    background: #f39c12;
+}
+
+.heatmap-cell.hot {
+    background: #e74c3c;
+}
+
+/* ============================================================
+   Comparison Chart
+   ============================================================ */
+
+.comparison-chart {
+    position: relative;
+    height: 350px;
+}
+
+.comparison-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 100%;
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.comparison-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.comparison-bar-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    height: 250px;
+}
+
+.comparison-bar {
+    width: 30px;
+    background: linear-gradient(180deg, var(--primary-color), var(--info-color));
+    border-radius: 4px 4px 0 0;
+    transition: all 0.3s ease;
+}
+
+.comparison-bar.secondary {
+    background: linear-gradient(180deg, var(--success-color), #27ae60);
+}
+
+.comparison-bar:hover {
+    filter: brightness(1.1);
+}
+
+.comparison-label {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ============================================================
+   Trend Chart
+   ============================================================ */
+
+.trend-chart {
+    position: relative;
+    height: 350px;
+}
+
+.trend-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.trend-indicator-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.trend-indicator-badge.up {
+    background: #d4edda;
+    color: #155724;
+}
+
+.trend-indicator-badge.down {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.trend-indicator-badge.stable {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+/* ============================================================
+   Chart Animations
+   ============================================================ */
+
+@keyframes chartSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes chartFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.chart-animate {
+    animation: chartSlideIn 0.6s ease-out;
+}
+
+/* ============================================================
+   Loading State
+   ============================================================ */
+
+.chart-loading {
+    position: relative;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #ecf0f1;
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.chart-empty {
+    position: relative;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #95a5a6;
+}
+
+.chart-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.chart-empty-text {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* ============================================================
+   Responsive Charts
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .chart-wrapper {
+        padding: 1rem;
+    }
+    
+    .chart-body {
+        height: 250px;
+    }
+    
+    .chart-title {
+        font-size: 1rem;
+    }
+    
+    .pie-legend {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-wrapper {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .chart-body {
+        height: 200px;
+    }
+    
+    .chart-legend {
+        gap: 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .pie-legend {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   Print Styles
+   ============================================================ */
+
+@media print {
+    .chart-wrapper {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .chart-controls {
+        display: none;
+    }
+}

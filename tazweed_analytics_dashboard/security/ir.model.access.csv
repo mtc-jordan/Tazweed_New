@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_analytics_dashboard_user,analytics.dashboard.user,model_analytics_dashboard,group_analytics_user,1,0,0,0
+access_analytics_dashboard_manager,analytics.dashboard.manager,model_analytics_dashboard,group_analytics_manager,1,1,1,1
+access_analytics_kpi_user,analytics.kpi.user,model_analytics_kpi,group_analytics_user,1,0,0,0
+access_analytics_kpi_manager,analytics.kpi.manager,model_analytics_kpi,group_analytics_manager,1,1,1,1
+access_analytics_report_user,analytics.report.user,model_analytics_report,group_analytics_user,1,1,1,0
+access_analytics_report_manager,analytics.report.manager,model_analytics_report,group_analytics_manager,1,1,1,1

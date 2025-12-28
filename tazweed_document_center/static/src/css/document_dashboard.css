@@ -1,0 +1,230 @@
+/* Document Center Dashboard Styles */
+
+/* Dashboard Cards */
+.document-dashboard .card {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 15px;
+}
+
+.document-dashboard .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.document-dashboard .card-body {
+    padding: 20px;
+}
+
+.document-dashboard .card h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Status Colors */
+.bg-danger-light {
+    background-color: #f8d7da !important;
+}
+
+.bg-warning-light {
+    background-color: #fff3cd !important;
+}
+
+.bg-success-light {
+    background-color: #d4edda !important;
+}
+
+.bg-info-light {
+    background-color: #d1ecf1 !important;
+}
+
+/* Alert Badges */
+.document-alert-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.document-alert-badge.critical {
+    background-color: #dc3545;
+    color: white;
+}
+
+.document-alert-badge.high {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.document-alert-badge.normal {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.document-alert-badge.low {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Compliance Score */
+.compliance-score {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.compliance-score .score-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Document Status Indicators */
+.document-status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.document-status-indicator.expired {
+    background-color: #dc3545;
+}
+
+.document-status-indicator.expiring {
+    background-color: #ffc107;
+}
+
+.document-status-indicator.valid {
+    background-color: #28a745;
+}
+
+/* Timeline for Renewal Workflow */
+.renewal-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.renewal-timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.renewal-timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.renewal-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #007bff;
+    border: 2px solid white;
+}
+
+.renewal-timeline-item.completed::before {
+    background-color: #28a745;
+}
+
+.renewal-timeline-item.pending::before {
+    background-color: #ffc107;
+}
+
+.renewal-timeline-item.rejected::before {
+    background-color: #dc3545;
+}
+
+/* Quick Stats */
+.quick-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px 0;
+}
+
+.quick-stat-item {
+    text-align: center;
+    padding: 15px;
+    min-width: 100px;
+}
+
+.quick-stat-item .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.quick-stat-item .stat-label {
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+
+/* Kanban Card Styles */
+.o_kanban_record.document-kanban-card {
+    border-left: 4px solid #dee2e6;
+}
+
+.o_kanban_record.document-kanban-card.expired {
+    border-left-color: #dc3545;
+}
+
+.o_kanban_record.document-kanban-card.expiring {
+    border-left-color: #ffc107;
+}
+
+.o_kanban_record.document-kanban-card.valid {
+    border-left-color: #28a745;
+}
+
+/* Notification Bell Animation */
+@keyframes bell-shake {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(-15deg); }
+    75% { transform: rotate(10deg); }
+}
+
+.notification-bell.has-alerts {
+    animation: bell-shake 0.5s ease-in-out;
+}
+
+/* Progress Bar Styles */
+.compliance-progress {
+    height: 25px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.compliance-progress .progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .document-dashboard .card h2 {
+        font-size: 1.8rem;
+    }
+    
+    .quick-stat-item .stat-number {
+        font-size: 1.5rem;
+    }
+}

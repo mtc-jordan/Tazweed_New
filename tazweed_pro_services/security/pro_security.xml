@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PRO Services Module Category -->
+    <record id="module_category_pro_services" model="ir.module.category">
+        <field name="name">PRO Services</field>
+        <field name="description">PRO (Public Relations Officer) Services Management</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <!-- PRO User Group -->
+    <record id="group_pro_user" model="res.groups">
+        <field name="name">PRO User</field>
+        <field name="category_id" ref="module_category_pro_services"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can view and process PRO service requests</field>
+    </record>
+
+    <!-- PRO Officer Group -->
+    <record id="group_pro_officer" model="res.groups">
+        <field name="name">PRO Officer</field>
+        <field name="category_id" ref="module_category_pro_services"/>
+        <field name="implied_ids" eval="[(4, ref('group_pro_user'))]"/>
+        <field name="comment">Can manage PRO tasks and process government services</field>
+    </record>
+
+    <!-- PRO Manager Group -->
+    <record id="group_pro_manager" model="res.groups">
+        <field name="name">PRO Manager</field>
+        <field name="category_id" ref="module_category_pro_services"/>
+        <field name="implied_ids" eval="[(4, ref('group_pro_officer'))]"/>
+        <field name="comment">Full access to PRO services configuration and management</field>
+    </record>
+
+    <!-- Record Rules -->
+    
+    <!-- PRO Officers can see all requests assigned to them -->
+    <record id="pro_request_officer_rule" model="ir.rule">
+        <field name="name">PRO Request: Officer sees assigned</field>
+        <field name="model_id" ref="model_pro_service_request"/>
+        <field name="domain_force">[('assigned_to', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_pro_officer'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- PRO Managers can see all requests -->
+    <record id="pro_request_manager_rule" model="ir.rule">
+        <field name="name">PRO Request: Manager sees all</field>
+        <field name="model_id" ref="model_pro_service_request"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_pro_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- PRO Tasks: Officers see their tasks -->
+    <record id="pro_task_officer_rule" model="ir.rule">
+        <field name="name">PRO Task: Officer sees assigned</field>
+        <field name="model_id" ref="model_pro_task"/>
+        <field name="domain_force">[('assigned_to', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_pro_officer'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- PRO Tasks: Managers see all -->
+    <record id="pro_task_manager_rule" model="ir.rule">
+        <field name="name">PRO Task: Manager sees all</field>
+        <field name="model_id" ref="model_pro_task"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_pro_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+</odoo>

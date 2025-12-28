@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Backend Menu for Portal Administration -->
+    <menuitem id="menu_client_portal_root"
+              name="Client Portal"
+              web_icon="tazweed_client_portal,static/description/icon.png"
+              sequence="100"/>
+
+    <!-- Portal Users Menu -->
+    <record id="action_client_portal_users" model="ir.actions.act_window">
+        <field name="name">Portal Users</field>
+        <field name="res_model">client.portal.user</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_portal_users"
+              name="Portal Users"
+              parent="menu_client_portal_root"
+              action="action_client_portal_users"
+              sequence="10"/>
+
+    <!-- Portal Documents Menu -->
+    <record id="action_client_portal_documents" model="ir.actions.act_window">
+        <field name="name">Shared Documents</field>
+        <field name="res_model">client.portal.document</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_portal_documents"
+              name="Shared Documents"
+              parent="menu_client_portal_root"
+              action="action_client_portal_documents"
+              sequence="20"/>
+
+    <!-- Portal Messages Menu -->
+    <record id="action_client_portal_messages" model="ir.actions.act_window">
+        <field name="name">Portal Messages</field>
+        <field name="res_model">client.portal.message</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_portal_messages"
+              name="Messages"
+              parent="menu_client_portal_root"
+              action="action_client_portal_messages"
+              sequence="30"/>
+
+    <!-- Portal Notifications Menu -->
+    <record id="action_client_portal_notifications" model="ir.actions.act_window">
+        <field name="name">Notifications</field>
+        <field name="res_model">client.portal.notification</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_portal_notifications"
+              name="Notifications"
+              parent="menu_client_portal_root"
+              action="action_client_portal_notifications"
+              sequence="40"/>
+
+    <!-- Portal Settings Menu -->
+    <record id="action_client_portal_settings" model="ir.actions.act_window">
+        <field name="name">Portal Settings</field>
+        <field name="res_model">client.portal.settings</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_portal_settings"
+              name="Settings"
+              parent="menu_client_portal_root"
+              action="action_client_portal_settings"
+              sequence="100"/>
+</odoo>

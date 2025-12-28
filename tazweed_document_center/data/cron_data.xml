@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Daily Document Expiry Check -->
+    <record id="cron_document_expiry_check" model="ir.cron">
+        <field name="name">Document Center: Daily Expiry Check</field>
+        <field name="model_id" ref="model_document_alert"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_expiry_alerts()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
+    <!-- Reminder Notifications (Every 6 hours) -->
+    <record id="cron_document_reminder" model="ir.cron">
+        <field name="name">Document Center: Reminder Notifications</field>
+        <field name="model_id" ref="model_document_alert"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_reminder_notifications()</field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+
+    <!-- Weekly Compliance Report -->
+    <record id="cron_weekly_compliance_report" model="ir.cron">
+        <field name="name">Document Center: Weekly Compliance Report</field>
+        <field name="model_id" ref="model_document_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">model.action_send_alerts()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+</odoo>

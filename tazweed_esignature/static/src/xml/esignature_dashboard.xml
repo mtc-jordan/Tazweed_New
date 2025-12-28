@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_esignature.ESignatureDashboard" owl="1">
+        <div class="o_esignature_dashboard">
+            <div class="dashboard-header">
+                <div class="header-content">
+                    <div class="header-title">
+                        <i class="fa fa-pencil-square-o me-2"/>
+                        <h1>E-Signature Dashboard</h1>
+                    </div>
+                    <div class="header-actions">
+                        <select class="form-select date-range-select" t-on-change="onDateRangeChange">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected="selected">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">Last Year</option>
+                        </select>
+                        <button class="btn btn-outline-secondary" t-on-click="onRefresh">
+                            <i class="fa fa-refresh"/>
+                        </button>
+                        <button class="btn btn-primary" t-on-click="createNewRequest">
+                            <i class="fa fa-plus me-1"/> New Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div t-if="state.isLoading" class="dashboard-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Loading dashboard data...</p>
+            </div>
+            <div t-else="" class="dashboard-content">
+                <div class="kpi-cards">
+                    <div class="kpi-card kpi-total" t-on-click="openAllRequests">
+                        <div class="kpi-icon"><i class="fa fa-file-text-o"/></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" t-esc="state.data.total_requests"/>
+                            <span class="kpi-label">Total Requests</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-pending" t-on-click="openPendingRequests">
+                        <div class="kpi-icon"><i class="fa fa-clock-o"/></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" t-esc="state.data.pending_signatures"/>
+                            <span class="kpi-label">Pending Signatures</span>
+                        </div>
+                        <span t-if="state.data.pending_signatures > 0" class="kpi-badge">Needs Attention</span>
+                    </div>
+                    <div class="kpi-card kpi-completed" t-on-click="openCompletedRequests">
+                        <div class="kpi-icon"><i class="fa fa-check-circle"/></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" t-esc="state.data.completed_today"/>
+                            <span class="kpi-label">Completed Today</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-time">
+                        <div class="kpi-icon"><i class="fa fa-hourglass-half"/></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value"><t t-esc="state.data.avg_completion_time"/> hrs</span>
+                            <span class="kpi-label">Avg. Completion Time</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <button class="action-btn" t-on-click="openAllRequests"><i class="fa fa-list"/> All Requests</button>
+                    <button class="action-btn" t-on-click="openTemplates"><i class="fa fa-file-o"/> Templates</button>
+                    <button class="action-btn" t-on-click="openPendingRequests"><i class="fa fa-clock-o"/> Pending</button>
+                    <button class="action-btn" t-on-click="openCompletedRequests"><i class="fa fa-check"/> Completed</button>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header"><h3>Status Distribution</h3></div>
+                        <div class="chart-body">
+                            <canvas id="statusChart" width="200" height="200"/>
+                            <div class="chart-legend">
+                                <div class="legend-item"><span class="legend-color" style="background: #6c757d;"/><span>Draft (<t t-esc="state.data.status_counts.draft || 0"/>)</span></div>
+                                <div class="legend-item"><span class="legend-color" style="background: #17a2b8;"/><span>Sent (<t t-esc="state.data.status_counts.sent || 0"/>)</span></div>
+                                <div class="legend-item"><span class="legend-color" style="background: #ffc107;"/><span>Partial (<t t-esc="state.data.status_counts.partially_signed || 0"/>)</span></div>
+                                <div class="legend-item"><span class="legend-color" style="background: #28a745;"/><span>Signed (<t t-esc="state.data.status_counts.signed || 0"/>)</span></div>
+                                <div class="legend-item"><span class="legend-color" style="background: #dc3545;"/><span>Expired (<t t-esc="state.data.status_counts.expired || 0"/>)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card chart-wide">
+                        <div class="chart-header">
+                            <h3>Signature Trends</h3>
+                            <div class="chart-legend-inline">
+                                <span><i class="fa fa-circle" style="color: #17a2b8;"/> Sent</span>
+                                <span><i class="fa fa-circle" style="color: #28a745;"/> Completed</span>
+                            </div>
+                        </div>
+                        <div class="chart-body"><canvas id="trendChart" width="500" height="200"/></div>
+                    </div>
+                </div>
+                <div class="activity-section">
+                    <div class="section-header"><h3><i class="fa fa-history me-2"/> Recent Activity</h3></div>
+                    <div class="activity-list">
+                        <t t-if="state.data.recent_activity.length === 0">
+                            <div class="empty-state"><i class="fa fa-inbox"/><p>No recent activity</p></div>
+                        </t>
+                        <t t-else="">
+                            <t t-foreach="state.data.recent_activity" t-as="activity" t-key="activity.id">
+                                <div class="activity-item">
+                                    <div class="activity-icon"><i t-attf-class="fa #{getActionIcon(activity.action)}"/></div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">
+                                            <span t-attf-class="badge bg-#{getStatusColor(activity.action)}" t-esc="activity.action"/>
+                                            <span class="activity-request" t-esc="activity.request_name"/>
+                                        </div>
+                                        <div class="activity-description" t-esc="activity.description"/>
+                                    </div>
+                                    <div class="activity-time" t-esc="formatTime(activity.timestamp)"/>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Type Tree View -->
+    <record id="view_pro_document_type_tree" model="ir.ui.view">
+        <field name="name">pro.document.type.tree</field>
+        <field name="model">pro.document.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="requires_attestation"/>
+                <field name="requires_translation"/>
+                <field name="original_required"/>
+                <field name="copies_required"/>
+                <field name="employee_document_type_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Type Form View -->
+    <record id="view_pro_document_type_form" model="ir.ui.view">
+        <field name="name">pro.document.type.form</field>
+        <field name="model">pro.document.type</field>
+        <field name="arch" type="xml">
+            <form string="Document Type">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="validity_period"/>
+                            <field name="original_required"/>
+                            <field name="copies_required"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="requires_attestation"/>
+                            <field name="requires_translation"/>
+                        </group>
+                        <group>
+                            <field name="employee_document_type_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Type Search View -->
+    <record id="view_pro_document_type_search" model="ir.ui.view">
+        <field name="name">pro.document.type.search</field>
+        <field name="model">pro.document.type</field>
+        <field name="arch" type="xml">
+            <search string="Document Types">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Identity" name="identity" domain="[('category', '=', 'identity')]"/>
+                <filter string="Employment" name="employment" domain="[('category', '=', 'employment')]"/>
+                <filter string="Company" name="company" domain="[('category', '=', 'company')]"/>
+                <filter string="Requires Attestation" name="attestation" domain="[('requires_attestation', '=', True)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Document Type Action -->
+    <record id="action_pro_document_type" model="ir.actions.act_window">
+        <field name="name">Document Types</field>
+        <field name="res_model">pro.document.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first document type
+            </p>
+            <p>
+                Define document types required for PRO services.
+            </p>
+        </field>
+    </record>
+</odoo>

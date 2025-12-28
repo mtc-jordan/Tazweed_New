@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <t t-name="tazweed_job_board.Dashboard" owl="1">
+        <div class="o_job_board_dashboard">
+            <!-- Loading State -->
+            <div t-if="state.isLoading" class="o_loading">
+                <div class="o_loading_spinner"></div>
+                <span class="ms-3">Loading dashboard...</span>
+            </div>
+            
+            <div t-else="" class="o_dashboard_content">
+                <!-- Header -->
+                <div class="o_dashboard_header">
+                    <div class="o_header_left">
+                        <h2><i class="fa fa-briefcase me-2"/>Job Board Dashboard</h2>
+                        <p class="text-muted mb-0">Track job postings and candidate applications</p>
+                    </div>
+                    <div class="o_dashboard_filters d-flex gap-3 align-items-center">
+                        <select id="date_range" class="form-select" t-on-change="onDateRangeChange">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected="selected">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">Last Year</option>
+                        </select>
+                        <button class="btn btn-primary" t-on-click="createNewPosting">
+                            <i class="fa fa-plus me-1"/> New Posting
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- KPI Cards -->
+                <div class="row o_dashboard_kpis mb-4">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="o_kpi_card bg-primary text-white" t-on-click="openActivePostings" style="cursor: pointer;">
+                            <div class="o_kpi_icon">
+                                <i class="fa fa-bullhorn fa-2x"/>
+                            </div>
+                            <div class="o_kpi_content">
+                                <span class="o_kpi_value" t-esc="formatNumber(state.dashboardData.active_postings || 0)"/>
+                                <span class="o_kpi_label">Active Postings</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="o_kpi_card bg-info text-white" t-on-click="openAnalytics" style="cursor: pointer;">
+                            <div class="o_kpi_icon">
+                                <i class="fa fa-eye fa-2x"/>
+                            </div>
+                            <div class="o_kpi_content">
+                                <span class="o_kpi_value" t-esc="formatNumber(state.dashboardData.total_views || 0)"/>
+                                <span class="o_kpi_label">Total Views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="o_kpi_card bg-success text-white" t-on-click="openCandidates" style="cursor: pointer;">
+                            <div class="o_kpi_icon">
+                                <i class="fa fa-users fa-2x"/>
+                            </div>
+                            <div class="o_kpi_content">
+                                <span class="o_kpi_value" t-esc="formatNumber(state.dashboardData.total_applications || 0)"/>
+                                <span class="o_kpi_label">Applications</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="o_kpi_card bg-warning text-dark">
+                            <div class="o_kpi_icon">
+                                <i class="fa fa-trophy fa-2x"/>
+                            </div>
+                            <div class="o_kpi_content">
+                                <span class="o_kpi_value" t-esc="formatNumber(state.dashboardData.total_hires || 0)"/>
+                                <span class="o_kpi_label">Total Hires</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="o_quick_actions_card">
+                            <h5 class="mb-3"><i class="fa fa-bolt me-2"/>Quick Actions</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-outline-primary" t-on-click="openJobPostings">
+                                    <i class="fa fa-list me-1"/> All Postings
+                                </button>
+                                <button class="btn btn-outline-success" t-on-click="openCandidates">
+                                    <i class="fa fa-users me-1"/> Candidates
+                                </button>
+                                <button class="btn btn-outline-info" t-on-click="openAnalytics">
+                                    <i class="fa fa-chart-line me-1"/> Analytics
+                                </button>
+                                <button class="btn btn-outline-secondary" t-on-click="openJobBoards">
+                                    <i class="fa fa-globe me-1"/> Job Boards
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-8 mb-3">
+                        <div class="o_chart_card">
+                            <h4><i class="fa fa-line-chart me-2"/>Applications Over Time</h4>
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="applications_chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="o_chart_card">
+                            <h4><i class="fa fa-pie-chart me-2"/>Board Distribution</h4>
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="board_distribution_chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="o_chart_card">
+                            <h4><i class="fa fa-filter me-2"/>Recruitment Funnel</h4>
+                            <div class="chart-container" style="height: 280px;">
+                                <canvas id="funnel_chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="o_chart_card">
+                            <h4><i class="fa fa-money me-2"/>Cost per Hire by Board</h4>
+                            <div class="chart-container" style="height: 280px;">
+                                <canvas id="cost_chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tables Row -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="o_table_card">
+                            <h4><i class="fa fa-star me-2"/>Top Performing Postings</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Job Title</th>
+                                        <th>Board</th>
+                                        <th>Views</th>
+                                        <th>Apps</th>
+                                        <th>Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.dashboardData.top_postings || []" t-as="posting" t-key="posting_index">
+                                        <tr style="cursor: pointer;" t-on-click="() => this.openPosting(posting.id)">
+                                            <td><strong t-esc="posting.title"/></td>
+                                            <td><span class="badge bg-primary" t-esc="posting.board"/></td>
+                                            <td t-esc="posting.views"/>
+                                            <td t-esc="posting.applications"/>
+                                            <td>
+                                                <span class="text-success" t-esc="posting.views > 0 ? ((posting.applications / posting.views) * 100).toFixed(1) + '%' : '0%'"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="!state.dashboardData.top_postings || state.dashboardData.top_postings.length === 0">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">
+                                                <i class="fa fa-inbox fa-2x mb-2 d-block"/>
+                                                No posting data available
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="o_table_card">
+                            <h4><i class="fa fa-globe me-2"/>Board Performance</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Board</th>
+                                        <th>Posts</th>
+                                        <th>Apps</th>
+                                        <th>Hires</th>
+                                        <th>Cost/Hire</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.dashboardData.board_performance || []" t-as="board" t-key="board_index">
+                                        <tr>
+                                            <td><strong t-esc="board.name"/></td>
+                                            <td t-esc="board.postings"/>
+                                            <td t-esc="board.applications"/>
+                                            <td t-esc="board.hires"/>
+                                            <td>
+                                                <span t-if="board.hires > 0" t-esc="(board.spend / board.hires).toFixed(0) + ' AED'"/>
+                                                <span t-else="">-</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="!state.dashboardData.board_performance || state.dashboardData.board_performance.length === 0">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">
+                                                <i class="fa fa-inbox fa-2x mb-2 d-block"/>
+                                                No board data available
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alerts Section -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="o_alerts_card">
+                            <h4><i class="fa fa-bell me-2"/>Alerts &amp; Notifications</h4>
+                            <div id="alerts_container">
+                                <t t-foreach="state.dashboardData.alerts || []" t-as="alert" t-key="alert_index">
+                                    <div t-attf-class="o_alert_item #{alert.type === 'danger' ? 'alert-danger' : alert.type === 'info' ? 'alert-info' : ''}">
+                                        <i t-attf-class="fa #{alert.type === 'danger' ? 'fa-exclamation-circle' : alert.type === 'info' ? 'fa-info-circle' : 'fa-exclamation-triangle'}"/>
+                                        <span class="alert-text" t-esc="alert.message"/>
+                                        <a t-if="alert.action" t-att-href="alert.action_url" class="btn btn-sm btn-outline-primary alert-action" t-esc="alert.action"/>
+                                    </div>
+                                </t>
+                                <t t-if="!state.dashboardData.alerts || state.dashboardData.alerts.length === 0">
+                                    <p class="text-muted mb-0">
+                                        <i class="fa fa-check-circle text-success me-2"/>
+                                        No alerts at this time. All systems running smoothly!
+                                    </p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+</templates>

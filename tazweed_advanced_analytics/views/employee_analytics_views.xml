@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Employee Analytics Form View -->
+        <record id="view_employee_analytics_form" model="ir.ui.view">
+            <field name="name">Employee Analytics Form</field>
+            <field name="model">tazweed.employee.analytics</field>
+            <field name="arch" type="xml">
+                <form string="Employee Analytics">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="analytics_name" placeholder="Analytics Name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="period_start"/>
+                                <field name="period_end"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Headcount Metrics -->
+                        <separator string="Headcount Metrics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_headcount" readonly="1"/>
+                                <field name="new_hires" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="separations" readonly="1"/>
+                                <field name="turnover_rate" readonly="1" widget="gauge"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Department Distribution -->
+                        <separator string="Department Distribution" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="departments_count" readonly="1"/>
+                                <field name="largest_department" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="largest_department_size" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Tenure Analysis -->
+                        <separator string="Tenure Analysis" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="average_tenure_years" readonly="1"/>
+                                <field name="employees_less_1_year" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="employees_1_5_years" readonly="1"/>
+                                <field name="employees_5_10_years" readonly="1"/>
+                                <field name="employees_10_plus_years" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Leave Balance -->
+                        <separator string="Leave Balance" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_leave_balance" readonly="1"/>
+                                <field name="average_leave_balance" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="employees_zero_balance" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Attendance Metrics -->
+                        <separator string="Attendance Metrics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="average_attendance_rate" readonly="1" widget="gauge"/>
+                                <field name="total_absent_days" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="high_absenteeism_count" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Salary Analysis -->
+                        <separator string="Salary Analysis" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_salary_expense" readonly="1"/>
+                                <field name="average_salary" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="salary_min" readonly="1"/>
+                                <field name="salary_max" readonly="1"/>
+                                <field name="salary_range" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Employee Analytics Tree View -->
+        <record id="view_employee_analytics_tree" model="ir.ui.view">
+            <field name="name">Employee Analytics Tree</field>
+            <field name="model">tazweed.employee.analytics</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Analytics">
+                    <field name="analytics_name"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="total_headcount"/>
+                    <field name="new_hires"/>
+                    <field name="separations"/>
+                    <field name="turnover_rate"/>
+                    <field name="average_tenure_years"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Employee Analytics Search View -->
+        <record id="view_employee_analytics_search" model="ir.ui.view">
+            <field name="name">Employee Analytics Search</field>
+            <field name="model">tazweed.employee.analytics</field>
+            <field name="arch" type="xml">
+                <search string="Employee Analytics">
+                    <field name="analytics_name"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Employee Analytics Action -->
+        <record id="action_employee_analytics" model="ir.actions.act_window">
+            <field name="name">Employee Analytics</field>
+            <field name="res_model">tazweed.employee.analytics</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Employee Analytics record
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

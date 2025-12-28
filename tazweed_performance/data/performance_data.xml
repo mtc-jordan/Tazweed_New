@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Competencies -->
+        <record id="competency_communication" model="tazweed.competency">
+            <field name="name">Communication</field>
+            <field name="code">COMM</field>
+            <field name="category">core</field>
+            <field name="description">Ability to communicate effectively with colleagues, clients, and stakeholders.</field>
+            <field name="level_1_description">Basic verbal and written communication</field>
+            <field name="level_2_description">Clear communication in routine situations</field>
+            <field name="level_3_description">Effective communication across different audiences</field>
+            <field name="level_4_description">Persuasive communication and presentation skills</field>
+            <field name="level_5_description">Expert communicator, influences at all levels</field>
+        </record>
+
+        <record id="competency_teamwork" model="tazweed.competency">
+            <field name="name">Teamwork</field>
+            <field name="code">TEAM</field>
+            <field name="category">core</field>
+            <field name="description">Ability to work collaboratively with others to achieve common goals.</field>
+            <field name="level_1_description">Works with team when directed</field>
+            <field name="level_2_description">Contributes to team activities</field>
+            <field name="level_3_description">Active team participant, supports others</field>
+            <field name="level_4_description">Facilitates team collaboration</field>
+            <field name="level_5_description">Builds high-performing teams</field>
+        </record>
+
+        <record id="competency_problem_solving" model="tazweed.competency">
+            <field name="name">Problem Solving</field>
+            <field name="code">PROB</field>
+            <field name="category">core</field>
+            <field name="description">Ability to identify, analyze, and resolve problems effectively.</field>
+            <field name="level_1_description">Identifies obvious problems</field>
+            <field name="level_2_description">Solves routine problems</field>
+            <field name="level_3_description">Analyzes and solves complex problems</field>
+            <field name="level_4_description">Develops innovative solutions</field>
+            <field name="level_5_description">Strategic problem solver, prevents issues</field>
+        </record>
+
+        <record id="competency_leadership" model="tazweed.competency">
+            <field name="name">Leadership</field>
+            <field name="code">LEAD</field>
+            <field name="category">leadership</field>
+            <field name="description">Ability to guide, motivate, and develop others.</field>
+            <field name="level_1_description">Leads by example</field>
+            <field name="level_2_description">Provides direction to small groups</field>
+            <field name="level_3_description">Manages and develops team members</field>
+            <field name="level_4_description">Leads cross-functional initiatives</field>
+            <field name="level_5_description">Visionary leader, transforms organizations</field>
+        </record>
+
+        <record id="competency_customer_focus" model="tazweed.competency">
+            <field name="name">Customer Focus</field>
+            <field name="code">CUST</field>
+            <field name="category">behavioral</field>
+            <field name="description">Commitment to meeting customer needs and expectations.</field>
+            <field name="level_1_description">Responds to customer requests</field>
+            <field name="level_2_description">Understands customer needs</field>
+            <field name="level_3_description">Anticipates customer requirements</field>
+            <field name="level_4_description">Builds strong customer relationships</field>
+            <field name="level_5_description">Strategic customer partner</field>
+        </record>
+
+        <record id="competency_adaptability" model="tazweed.competency">
+            <field name="name">Adaptability</field>
+            <field name="code">ADPT</field>
+            <field name="category">behavioral</field>
+            <field name="description">Ability to adjust to changing circumstances and requirements.</field>
+            <field name="level_1_description">Accepts change when directed</field>
+            <field name="level_2_description">Adapts to routine changes</field>
+            <field name="level_3_description">Embraces change positively</field>
+            <field name="level_4_description">Leads change initiatives</field>
+            <field name="level_5_description">Change agent, drives transformation</field>
+        </record>
+
+        <!-- Default KPIs -->
+        <record id="kpi_productivity" model="tazweed.performance.kpi">
+            <field name="name">Productivity Rate</field>
+            <field name="code">PROD</field>
+            <field name="category">productivity</field>
+            <field name="measurement_type">percentage</field>
+            <field name="target_type">higher_better</field>
+            <field name="default_target">100</field>
+            <field name="measurement_frequency">monthly</field>
+        </record>
+
+        <record id="kpi_quality" model="tazweed.performance.kpi">
+            <field name="name">Quality Score</field>
+            <field name="code">QUAL</field>
+            <field name="category">quality</field>
+            <field name="measurement_type">percentage</field>
+            <field name="target_type">higher_better</field>
+            <field name="default_target">95</field>
+            <field name="measurement_frequency">monthly</field>
+        </record>
+
+        <record id="kpi_attendance" model="tazweed.performance.kpi">
+            <field name="name">Attendance Rate</field>
+            <field name="code">ATTN</field>
+            <field name="category">employee</field>
+            <field name="measurement_type">percentage</field>
+            <field name="target_type">higher_better</field>
+            <field name="default_target">98</field>
+            <field name="measurement_frequency">monthly</field>
+        </record>
+
+        <record id="kpi_customer_satisfaction" model="tazweed.performance.kpi">
+            <field name="name">Customer Satisfaction</field>
+            <field name="code">CSAT</field>
+            <field name="category">customer</field>
+            <field name="measurement_type">rating</field>
+            <field name="target_type">higher_better</field>
+            <field name="default_target">4.5</field>
+            <field name="measurement_frequency">quarterly</field>
+        </record>
+
+        <!-- Default Performance Template -->
+        <record id="template_annual_review" model="tazweed.performance.template">
+            <field name="name">Annual Performance Review</field>
+            <field name="template_type">annual</field>
+            <field name="goal_weight">40</field>
+            <field name="competency_weight">30</field>
+            <field name="kpi_weight">30</field>
+            <field name="include_self_assessment">True</field>
+            <field name="include_manager_assessment">True</field>
+            <field name="include_peer_feedback">False</field>
+        </record>
+
+        <record id="template_probation_review" model="tazweed.performance.template">
+            <field name="name">Probation Review</field>
+            <field name="template_type">probation</field>
+            <field name="goal_weight">50</field>
+            <field name="competency_weight">30</field>
+            <field name="kpi_weight">20</field>
+            <field name="include_self_assessment">True</field>
+            <field name="include_manager_assessment">True</field>
+            <field name="include_peer_feedback">False</field>
+        </record>
+
+        <!-- Feedback Tags -->
+        <record id="feedback_tag_teamwork" model="tazweed.feedback.tag">
+            <field name="name">Teamwork</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="feedback_tag_leadership" model="tazweed.feedback.tag">
+            <field name="name">Leadership</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="feedback_tag_innovation" model="tazweed.feedback.tag">
+            <field name="name">Innovation</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="feedback_tag_customer_service" model="tazweed.feedback.tag">
+            <field name="name">Customer Service</field>
+            <field name="color">4</field>
+        </record>
+
+        <record id="feedback_tag_communication" model="tazweed.feedback.tag">
+            <field name="name">Communication</field>
+            <field name="color">5</field>
+        </record>
+    </data>
+</odoo>

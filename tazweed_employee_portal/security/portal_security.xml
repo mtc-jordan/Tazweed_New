@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Security Groups -->
+    <record id="group_portal_employee" model="res.groups">
+        <field name="name">Portal Employee</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <!-- Record Rules for Portal Access -->
+    
+    <!-- Leave: Own records only -->
+    <record id="rule_portal_leave_own" model="ir.rule">
+        <field name="name">Portal: Own Leaves</field>
+        <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Attendance: Own records only -->
+    <record id="rule_portal_attendance_own" model="ir.rule">
+        <field name="name">Portal: Own Attendance</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Payslip: Own records only -->
+    <record id="rule_portal_payslip_own" model="ir.rule">
+        <field name="name">Portal: Own Payslips</field>
+        <field name="model_id" ref="tazweed_payroll.model_hr_payslip"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Documents: Own records only -->
+    <record id="rule_portal_document_own" model="ir.rule">
+        <field name="name">Portal: Own Documents</field>
+        <field name="model_id" ref="tazweed_core.model_tazweed_employee_document"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id), ('portal_visible', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Announcements: Published only -->
+    <record id="rule_portal_announcement" model="ir.rule">
+        <field name="name">Portal: Published Announcements</field>
+        <field name="model_id" ref="model_tazweed_portal_announcement"/>
+        <field name="domain_force">[('state', '=', 'published')]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_compliance_root"
+              name="UAE Compliance"
+              web_icon="tazweed_uae_compliance,static/description/icon.png"
+              sequence="26"/>
+
+    <!-- WPS Menu -->
+    <menuitem id="menu_compliance_wps"
+              name="WPS"
+              parent="menu_compliance_root"
+              sequence="10"/>
+
+    <menuitem id="menu_wps_files"
+              name="WPS Files"
+              parent="menu_compliance_wps"
+              action="action_wps_file"
+              sequence="10"/>
+
+    <menuitem id="menu_wps_compliance"
+              name="WPS Compliance"
+              parent="menu_compliance_wps"
+              action="action_wps_compliance"
+              sequence="20"/>
+
+    <!-- Emiratization Menu -->
+    <menuitem id="menu_compliance_emiratization"
+              name="Emiratization"
+              parent="menu_compliance_root"
+              sequence="20"/>
+
+    <menuitem id="menu_emiratization_quota"
+              name="Quotas"
+              parent="menu_compliance_emiratization"
+              action="action_emiratization_quota"
+              sequence="10"/>
+
+    <menuitem id="menu_emiratization_plan"
+              name="Hiring Plans"
+              parent="menu_compliance_emiratization"
+              action="action_emiratization_plan"
+              sequence="20"/>
+
+    <!-- MOHRE Menu -->
+    <menuitem id="menu_compliance_mohre"
+              name="MOHRE"
+              parent="menu_compliance_root"
+              sequence="30"/>
+
+    <menuitem id="menu_mohre_establishment"
+              name="Establishments"
+              parent="menu_compliance_mohre"
+              action="action_mohre_establishment"
+              sequence="10"/>
+
+    <menuitem id="menu_work_permits"
+              name="Work Permits"
+              parent="menu_compliance_mohre"
+              action="action_work_permit"
+              sequence="20"/>
+
+    <menuitem id="menu_labour_contracts"
+              name="Labour Contracts"
+              parent="menu_compliance_mohre"
+              action="action_labour_contract"
+              sequence="30"/>
+
+    <!-- Documents Menu -->
+    <menuitem id="menu_compliance_documents"
+              name="Documents"
+              parent="menu_compliance_root"
+              sequence="40"/>
+
+    <menuitem id="menu_document_compliance"
+              name="Document Tracking"
+              parent="menu_compliance_documents"
+              action="action_document_compliance"
+              sequence="10"/>
+
+    <menuitem id="menu_expiring_documents"
+              name="Expiring Documents"
+              parent="menu_compliance_documents"
+              action="action_expiring_documents"
+              sequence="20"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_compliance_config"
+              name="Configuration"
+              parent="menu_compliance_root"
+              groups="group_compliance_manager"
+              sequence="100"/>
+</odoo>

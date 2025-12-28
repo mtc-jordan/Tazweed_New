@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron Job: Expire Old Announcements -->
+        <record id="cron_expire_announcements" model="ir.cron">
+            <field name="name">Portal: Expire Old Announcements</field>
+            <field name="model_id" ref="model_tazweed_portal_announcement"/>
+            <field name="state">code</field>
+            <field name="code">model.check_expired_announcements()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Email Template: Leave Request Submitted -->
+        <record id="email_template_leave_submitted" model="mail.template">
+            <field name="name">Leave Request Submitted</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+            <field name="subject">Leave Request Submitted: {{ object.employee_id.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email) }}</field>
+            <field name="email_to">{{ object.employee_id.parent_id.work_email }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #3498db;">Leave Request Submitted</h2>
+    <p>Dear {{ object.employee_id.parent_id.name }},</p>
+    <p>A new leave request has been submitted for your approval:</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>Employee</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.employee_id.name }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>Leave Type</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.holiday_status_id.name }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>From</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.date_from }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>To</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.date_to }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>Days</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.number_of_days }}</td>
+        </tr>
+    </table>
+    <p>Please review and approve/reject this request.</p>
+    <p>
+        <a href="/my/approvals" style="display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px;">View Pending Approvals</a>
+    </p>
+    <p>Best regards,<br/>Tazweed HR System</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Email Template: Leave Request Approved -->
+        <record id="email_template_leave_approved" model="mail.template">
+            <field name="name">Leave Request Approved</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+            <field name="subject">Leave Request Approved: {{ object.holiday_status_id.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email) }}</field>
+            <field name="email_to">{{ object.employee_id.work_email }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #28a745;">Leave Request Approved</h2>
+    <p>Dear {{ object.employee_id.name }},</p>
+    <p>Your leave request has been approved:</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>Leave Type</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.holiday_status_id.name }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>From</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.date_from }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>To</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.date_to }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9;"><strong>Days</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.number_of_days }}</td>
+        </tr>
+    </table>
+    <p>Enjoy your time off!</p>
+    <p>Best regards,<br/>Tazweed HR System</p>
+</div>
+            ]]></field>
+        </record>
+    </data>
+</odoo>

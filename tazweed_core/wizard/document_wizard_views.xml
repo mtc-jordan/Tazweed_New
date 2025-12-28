@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_document_renew_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.document.renew.wizard.form</field>
+        <field name="model">tazweed.document.renew.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="document_id" readonly="1"/>
+                    <field name="new_document_number"/>
+                    <field name="new_issue_date"/>
+                    <field name="new_expiry_date"/>
+                    <field name="new_attachment" filename="new_attachment_name"/>
+                    <field name="new_attachment_name" invisible="1"/>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_renew" string="Renew" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

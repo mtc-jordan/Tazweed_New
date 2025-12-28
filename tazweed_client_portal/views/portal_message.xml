@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Messages List Template -->
+    <template id="portal_messages" name="My Messages">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <div class="portal-header d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2>Messages</h2>
+                        <p class="text-muted mb-0">Communicate with our team</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="TazweedPortal.showModal('newMessageModal')">
+                        <i class="fa fa-plus"></i> New Message
+                    </button>
+                </div>
+
+                <!-- Messages List -->
+                <t t-if="messages">
+                    <div class="card">
+                        <div class="list-group list-group-flush">
+                            <t t-foreach="messages" t-as="msg">
+                                <a t-attf-href="/my/messages/#{msg.id}" 
+                                   t-attf-class="list-group-item list-group-item-action #{not msg.is_read and msg.direction == 'outgoing' and 'bg-light' or ''}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <div>
+                                            <h6 class="mb-1">
+                                                <t t-if="not msg.is_read and msg.direction == 'outgoing'">
+                                                    <span class="badge badge-primary mr-2">New</span>
+                                                </t>
+                                                <t t-esc="msg.subject"/>
+                                            </h6>
+                                            <p class="mb-1 text-muted small">
+                                                <t t-esc="msg.body[:100]"/>
+                                                <t t-if="len(msg.body or '') > 100">...</t>
+                                            </p>
+                                        </div>
+                                        <div class="text-right">
+                                            <small class="text-muted">
+                                                <t t-esc="msg.create_date.strftime('%b %d, %Y')"/>
+                                            </small>
+                                            <br/>
+                                            <span t-attf-class="badge badge-#{msg.direction == 'incoming' and 'info' or 'secondary'}">
+                                                <t t-esc="msg.direction == 'incoming' and 'Sent' or 'Received'"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <t t-call="portal.pager"/>
+                    </div>
+                </t>
+                <t t-else="">
+                    <t t-call="tazweed_client_portal.portal_empty_state">
+                        <t t-set="icon">fa-envelope</t>
+                        <t t-set="title">No Messages</t>
+                        <t t-set="message">Start a conversation with our team.</t>
+                        <t t-set="action_url">#</t>
+                        <t t-set="action_label">Send Message</t>
+                    </t>
+                </t>
+            </div>
+
+            <!-- New Message Modal -->
+            <div id="newMessageModal" class="portal-modal">
+                <div class="portal-modal-backdrop"></div>
+                <div class="portal-modal-content">
+                    <div class="portal-modal-header">
+                        <h5>New Message</h5>
+                        <button type="button" class="close" onclick="TazweedPortal.hideModal('newMessageModal')">
+                            <span>&amp;times;</span>
+                        </button>
+                    </div>
+                    <div class="portal-modal-body">
+                        <form id="newMessageForm">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="msgCategory" class="form-control">
+                                    <option value="general">General Inquiry</option>
+                                    <option value="job_order">Job Order Related</option>
+                                    <option value="candidate">Candidate Related</option>
+                                    <option value="invoice">Invoice/Billing</option>
+                                    <option value="support">Support</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="text" id="msgSubject" class="form-control" required="required"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea id="msgBody" class="form-control" rows="5" required="required"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="portal-modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="TazweedPortal.hideModal('newMessageModal')">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="submitNewMessage()">
+                            <i class="fa fa-paper-plane"></i> Send Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                async function submitNewMessage() {
+                    const subject = document.getElementById('msgSubject').value;
+                    const body = document.getElementById('msgBody').value;
+                    const category = document.getElementById('msgCategory').value;
+                    
+                    if (!subject || !body) {
+                        TazweedPortal.showToast('Please fill in all required fields', 'warning');
+                        return;
+                    }
+                    
+                    const result = await TazweedPortal.sendMessage(subject, body, category);
+                    if (result) {
+                        TazweedPortal.hideModal('newMessageModal');
+                        document.getElementById('newMessageForm').reset();
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                }
+            </script>
+        </t>
+    </template>
+</odoo>

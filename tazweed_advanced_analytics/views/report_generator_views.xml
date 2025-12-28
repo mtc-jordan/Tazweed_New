@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report Generator Form View -->
+        <record id="view_report_generator_form" model="ir.ui.view">
+            <field name="name">Report Generator Form</field>
+            <field name="model">tazweed.report.generator</field>
+            <field name="arch" type="xml">
+                <form string="Report Generator">
+                    <header>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_export_report" string="Export Report" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                        <button name="action_send_email" string="Send via Email" type="object" attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                        <button name="action_schedule_report" string="Schedule Report" type="object" attrs="{'invisible': [('is_scheduled', '=', True)]}"/>
+                        <button name="action_archive_report" string="Archive" type="object" attrs="{'invisible': [('state', '=', 'archived')]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="report_name" placeholder="Report Name"/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Basic Information -->
+                        <group>
+                            <group>
+                                <field name="report_type"/>
+                                <field name="export_format"/>
+                            </group>
+                            <group>
+                                <field name="created_by" readonly="1"/>
+                                <field name="created_date" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <field name="description" placeholder="Report Description"/>
+                        
+                        <!-- Period & Scope -->
+                        <separator string="Period and Scope" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="period_start"/>
+                                <field name="period_end"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="department_ids" widget="many2many_tags"/>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                        </group>
+                        
+                        <!-- Report Content -->
+                        <separator string="Report Content" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="include_summary"/>
+                                <field name="include_details"/>
+                            </group>
+                            <group>
+                                <field name="include_charts"/>
+                                <field name="include_trends"/>
+                                <field name="include_recommendations"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Export Settings -->
+                        <separator string="Export Settings" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="include_watermark"/>
+                                <field name="include_page_numbers"/>
+                            </group>
+                            <group>
+                                <field name="include_company_logo"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Scheduling -->
+                        <separator string="Scheduling" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="is_scheduled"/>
+                                <field name="schedule_frequency" attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="schedule_day" attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                <field name="schedule_time" attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Email Distribution -->
+                        <separator string="Email Distribution" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="send_via_email"/>
+                                <field name="email_recipients" attrs="{'invisible': [('send_via_email', '=', False)]}"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('send_via_email', '=', False)]}">
+                            <field name="email_subject" placeholder="Email Subject"/>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('send_via_email', '=', False)]}">
+                            <field name="email_body" placeholder="Email Body" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Report Data -->
+                        <separator string="Report Data" class="oe_inline" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                        <group attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <group>
+                                <field name="last_generated" readonly="1"/>
+                                <field name="generated_by" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="generation_time" readonly="1" widget="float_time"/>
+                                <field name="file_size" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="report_filename" readonly="1"/>
+                        </group>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Report Generator Tree View -->
+        <record id="view_report_generator_tree" model="ir.ui.view">
+            <field name="name">Report Generator Tree</field>
+            <field name="model">tazweed.report.generator</field>
+            <field name="arch" type="xml">
+                <tree string="Report Generators">
+                    <field name="report_name"/>
+                    <field name="report_type"/>
+                    <field name="export_format"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="state"/>
+                    <field name="last_generated"/>
+                    <field name="created_date"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Report Generator Search View -->
+        <record id="view_report_generator_search" model="ir.ui.view">
+            <field name="name">Report Generator Search</field>
+            <field name="model">tazweed.report.generator</field>
+            <field name="arch" type="xml">
+                <search string="Report Generators">
+                    <field name="report_name"/>
+                    <field name="report_type"/>
+                    <field name="export_format"/>
+                    <separator/>
+                    <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_generated" string="Generated" domain="[('state', '=', 'generated')]"/>
+                    <filter name="filter_exported" string="Exported" domain="[('state', '=', 'exported')]"/>
+                    <filter name="filter_sent" string="Sent" domain="[('state', '=', 'sent')]"/>
+                    <filter name="filter_scheduled" string="Scheduled" domain="[('is_scheduled', '=', True)]"/>
+                    <separator/>
+                    <filter name="filter_payroll" string="Payroll Reports" domain="[('report_type', '=', 'payroll')]"/>
+                    <filter name="filter_compliance" string="Compliance Reports" domain="[('report_type', '=', 'compliance')]"/>
+                    <filter name="filter_performance" string="Performance Reports" domain="[('report_type', '=', 'performance')]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Report Generator Action -->
+        <record id="action_report_generator" model="ir.actions.act_window">
+            <field name="name">Report Generator</field>
+            <field name="res_model">tazweed.report.generator</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Report
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

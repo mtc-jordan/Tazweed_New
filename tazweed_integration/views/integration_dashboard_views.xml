@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Integration Dashboard Form View -->
+    <record id="view_integration_dashboard_form" model="ir.ui.view">
+        <field name="name">tazweed.integration.dashboard.form</field>
+        <field name="model">tazweed.integration.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Integration Dashboard">
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="dashboard_type"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="HR Metrics" name="hr">
+                            <group>
+                                <group>
+                                    <field name="total_employees"/>
+                                    <field name="new_hires"/>
+                                    <field name="terminations"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Leave Metrics" name="leave">
+                            <group>
+                                <group>
+                                    <field name="pending_leaves"/>
+                                    <field name="approved_leaves"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Payroll Metrics" name="payroll">
+                            <group>
+                                <group>
+                                    <field name="total_payroll"/>
+                                    <field name="pending_payslips"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Compliance Metrics" name="compliance">
+                            <group>
+                                <group>
+                                    <field name="wps_compliance"/>
+                                    <field name="emiratization_rate"/>
+                                    <field name="expiring_documents"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Placement Metrics" name="placement">
+                            <group>
+                                <group>
+                                    <field name="active_placements"/>
+                                    <field name="open_job_orders"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Integration Dashboard Tree View -->
+    <record id="view_integration_dashboard_tree" model="ir.ui.view">
+        <field name="name">tazweed.integration.dashboard.tree</field>
+        <field name="model">tazweed.integration.dashboard</field>
+        <field name="arch" type="xml">
+            <tree string="Integration Dashboards">
+                <field name="name"/>
+                <field name="dashboard_type"/>
+                <field name="total_employees"/>
+                <field name="total_payroll"/>
+                <field name="wps_compliance"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Integration Dashboard Action -->
+    <record id="action_integration_dashboard" model="ir.actions.act_window">
+        <field name="name">Integration Dashboard</field>
+        <field name="res_model">tazweed.integration.dashboard</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Integration Log Views -->
+    <record id="view_integration_log_tree" model="ir.ui.view">
+        <field name="name">tazweed.integration.log.tree</field>
+        <field name="model">tazweed.integration.log</field>
+        <field name="arch" type="xml">
+            <tree string="Integration Logs" decoration-success="state == 'success'" decoration-danger="state == 'failed'">
+                <field name="name"/>
+                <field name="integration_type"/>
+                <field name="source_model"/>
+                <field name="target_model"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_integration_log_form" model="ir.ui.view">
+        <field name="name">tazweed.integration.log.form</field>
+        <field name="model">tazweed.integration.log</field>
+        <field name="arch" type="xml">
+            <form string="Integration Log">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="integration_type"/>
+                        </group>
+                        <group>
+                            <field name="source_model"/>
+                            <field name="source_record_id"/>
+                            <field name="target_model"/>
+                            <field name="target_record_id"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('state', '!=', 'failed')]}">
+                        <field name="error_message"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_integration_log" model="ir.actions.act_window">
+        <field name="name">Integration Logs</field>
+        <field name="res_model">tazweed.integration.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Integration Config Views -->
+    <record id="view_integration_config_tree" model="ir.ui.view">
+        <field name="name">tazweed.integration.config.tree</field>
+        <field name="model">tazweed.integration.config</field>
+        <field name="arch" type="xml">
+            <tree string="Integration Configurations">
+                <field name="name"/>
+                <field name="config_type"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_integration_config_form" model="ir.ui.view">
+        <field name="name">tazweed.integration.config.form</field>
+        <field name="model">tazweed.integration.config</field>
+        <field name="arch" type="xml">
+            <form string="Integration Configuration">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="config_type"/>
+                            <field name="is_active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Payroll Settings" name="payroll" attrs="{'invisible': [('config_type', '!=', 'payroll')]}">
+                            <group>
+                                <field name="auto_leave_deduction"/>
+                                <field name="auto_attendance_calc"/>
+                                <field name="auto_performance_bonus"/>
+                                <field name="auto_loan_deduction"/>
+                            </group>
+                        </page>
+                        <page string="Compliance Settings" name="compliance" attrs="{'invisible': [('config_type', '!=', 'compliance')]}">
+                            <group>
+                                <field name="auto_wps_generation"/>
+                                <field name="auto_document_alerts"/>
+                            </group>
+                        </page>
+                        <page string="Placement Settings" name="placement" attrs="{'invisible': [('config_type', '!=', 'placement')]}">
+                            <group>
+                                <field name="auto_employee_creation"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_integration_config" model="ir.actions.act_window">
+        <field name="name">Integration Configuration</field>
+        <field name="res_model">tazweed.integration.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

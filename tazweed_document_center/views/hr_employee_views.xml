@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend HR Employee Form View -->
+    <record id="view_employee_form_document_center" model="ir.ui.view">
+        <field name="name">hr.employee.form.document.center</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add document compliance status to button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_document_dashboard" type="object" class="oe_stat_button" icon="fa-file-text">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="document_compliance_score" widget="statinfo" nolabel="1"/>%
+                        </span>
+                        <span class="o_stat_text">Compliance</span>
+                    </div>
+                </button>
+                <button name="action_view_document_alerts" type="object" class="oe_stat_button" icon="fa-bell"
+                        attrs="{'invisible': [('active_alerts_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value text-danger">
+                            <field name="active_alerts_count" nolabel="1"/>
+                        </span>
+                        <span class="o_stat_text">Alerts</span>
+                    </div>
+                </button>
+                <button name="action_view_renewal_requests" type="object" class="oe_stat_button" icon="fa-refresh"
+                        attrs="{'invisible': [('pending_renewals_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value text-warning">
+                            <field name="pending_renewals_count" nolabel="1"/>
+                        </span>
+                        <span class="o_stat_text">Renewals</span>
+                    </div>
+                </button>
+            </xpath>
+            
+            <!-- Add document compliance banner at top -->
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-danger" role="alert" 
+                     attrs="{'invisible': [('document_compliance_status', '!=', 'non_compliant')]}">
+                    <strong>⚠️ Non-Compliant:</strong> This employee has expired or missing mandatory documents.
+                    <button name="action_view_document_dashboard" type="object" class="btn btn-link">View Details</button>
+                </div>
+                <div class="alert alert-warning" role="alert" 
+                     attrs="{'invisible': [('document_compliance_status', '!=', 'warning')]}">
+                    <strong>⏰ Warning:</strong> Some documents are expiring soon.
+                    <button name="action_view_document_dashboard" type="object" class="btn btn-link">View Details</button>
+                </div>
+            </xpath>
+            
+            <!-- Add document actions to form -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Document Compliance" name="document_compliance">
+                    <group>
+                        <group string="Compliance Status">
+                            <field name="document_compliance_status" widget="badge" 
+                                   decoration-danger="document_compliance_status=='non_compliant'"
+                                   decoration-warning="document_compliance_status=='warning'"
+                                   decoration-success="document_compliance_status=='compliant'"/>
+                            <field name="document_compliance_score" widget="progressbar"/>
+                            <field name="critical_documents_count"/>
+                        </group>
+                        <group string="Actions">
+                            <button name="action_view_document_dashboard" type="object" 
+                                    string="View All Documents" class="btn-primary"/>
+                            <button name="action_create_bulk_renewal" type="object" 
+                                    string="Create Renewal Requests" class="btn-warning"/>
+                            <button name="action_send_document_reminder" type="object" 
+                                    string="Send Reminder" class="btn-info"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend HR Employee Tree View -->
+    <record id="view_employee_tree_document_center" model="ir.ui.view">
+        <field name="name">hr.employee.tree.document.center</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-danger">document_compliance_status == 'non_compliant'</attribute>
+                <attribute name="decoration-warning">document_compliance_status == 'warning'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="document_compliance_status" widget="badge" 
+                       decoration-danger="document_compliance_status=='non_compliant'"
+                       decoration-warning="document_compliance_status=='warning'"
+                       decoration-success="document_compliance_status=='compliant'" optional="show"/>
+                <field name="document_compliance_score" widget="progressbar" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend HR Employee Search View -->
+    <record id="view_employee_search_document_center" model="ir.ui.view">
+        <field name="name">hr.employee.search.document.center</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Compliant" name="doc_compliant" domain="[('document_compliance_status', '=', 'compliant')]"/>
+                <filter string="Warning" name="doc_warning" domain="[('document_compliance_status', '=', 'warning')]"/>
+                <filter string="Non-Compliant" name="doc_non_compliant" domain="[('document_compliance_status', '=', 'non_compliant')]"/>
+                <filter string="Has Critical Documents" name="has_critical" domain="[('critical_documents_count', '>', 0)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

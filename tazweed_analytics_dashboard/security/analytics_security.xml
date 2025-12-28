@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Analytics Category -->
+    <record id="module_category_analytics" model="ir.module.category">
+        <field name="name">Analytics</field>
+        <field name="description">HR Analytics and Business Intelligence</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Analytics User Group -->
+    <record id="group_analytics_user" model="res.groups">
+        <field name="name">Analytics User</field>
+        <field name="category_id" ref="module_category_analytics"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Analytics Manager Group -->
+    <record id="group_analytics_manager" model="res.groups">
+        <field name="name">Analytics Manager</field>
+        <field name="category_id" ref="module_category_analytics"/>
+        <field name="implied_ids" eval="[(4, ref('group_analytics_user'))]"/>
+    </record>
+
+    <!-- Dashboard Record Rules -->
+    <record id="analytics_dashboard_rule_user" model="ir.rule">
+        <field name="name">Analytics Dashboard: User Access</field>
+        <field name="model_id" ref="model_analytics_dashboard"/>
+        <field name="domain_force">[
+            '|', '|',
+            ('user_ids', '=', False),
+            ('user_ids', 'in', user.id),
+            ('group_ids', 'in', user.groups_id.ids)
+        ]</field>
+        <field name="groups" eval="[(4, ref('group_analytics_user'))]"/>
+    </record>
+
+    <!-- KPI Record Rules -->
+    <record id="analytics_kpi_rule_user" model="ir.rule">
+        <field name="name">Analytics KPI: User Read</field>
+        <field name="model_id" ref="model_analytics_kpi"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_analytics_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="analytics_kpi_rule_manager" model="ir.rule">
+        <field name="name">Analytics KPI: Manager Full Access</field>
+        <field name="model_id" ref="model_analytics_kpi"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_analytics_manager'))]"/>
+    </record>
+
+    <!-- Report Record Rules -->
+    <record id="analytics_report_rule_user" model="ir.rule">
+        <field name="name">Analytics Report: User Own Reports</field>
+        <field name="model_id" ref="model_analytics_report"/>
+        <field name="domain_force">[('create_uid', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_analytics_user'))]"/>
+    </record>
+
+    <record id="analytics_report_rule_manager" model="ir.rule">
+        <field name="name">Analytics Report: Manager Full Access</field>
+        <field name="model_id" ref="model_analytics_report"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_analytics_manager'))]"/>
+    </record>
+</odoo>

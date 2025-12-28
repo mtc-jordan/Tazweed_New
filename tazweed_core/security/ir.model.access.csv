@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_category_user,tazweed.employee.category.user,model_tazweed_employee_category,group_tazweed_user,1,0,0,0
+access_employee_category_manager,tazweed.employee.category.manager,model_tazweed_employee_category,group_tazweed_manager,1,1,1,1
+access_document_type_user,tazweed.document.type.user,model_tazweed_document_type,group_tazweed_user,1,0,0,0
+access_document_type_manager,tazweed.document.type.manager,model_tazweed_document_type,group_tazweed_manager,1,1,1,1
+access_employee_document_user,tazweed.employee.document.user,model_tazweed_employee_document,group_tazweed_user,1,1,1,0
+access_employee_document_manager,tazweed.employee.document.manager,model_tazweed_employee_document,group_tazweed_manager,1,1,1,1
+access_employee_bank_user,tazweed.employee.bank.user,model_tazweed_employee_bank,group_tazweed_user,1,1,1,0
+access_employee_bank_manager,tazweed.employee.bank.manager,model_tazweed_employee_bank,group_tazweed_manager,1,1,1,1
+access_employee_sponsor_user,tazweed.employee.sponsor.user,model_tazweed_employee_sponsor,group_tazweed_user,1,0,0,0
+access_employee_sponsor_manager,tazweed.employee.sponsor.manager,model_tazweed_employee_sponsor,group_tazweed_manager,1,1,1,1
+access_document_renew_wizard,tazweed.document.renew.wizard,model_tazweed_document_renew_wizard,group_tazweed_user,1,1,1,1

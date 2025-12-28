@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_pro_services.ProDashboard" owl="1">
+        <div class="pro-dashboard-container">
+            <!-- Loading State -->
+            <div t-if="state.loading" class="pro-dashboard-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Loading Dashboard...</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div t-else="" class="pro-dashboard">
+                <!-- Header -->
+                <div class="pro-dashboard-header">
+                    <div class="header-content">
+                        <h1><i class="fa fa-tachometer"/> PRO Services Dashboard</h1>
+                        <p class="subtitle">Real-time overview of your PRO operations</p>
+                    </div>
+                    <button class="btn btn-primary refresh-btn" t-on-click="refresh">
+                        <i class="fa fa-refresh"/> Refresh
+                    </button>
+                </div>
+
+                <!-- KPI Cards Row 1 -->
+                <div class="kpi-row">
+                    <div class="kpi-card gradient-blue" t-on-click="() => this.openRequests()">
+                        <div class="kpi-icon">
+                            <i class="fa fa-file-text-o"/>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-value"><t t-esc="state.data?.kpis?.total_requests || 0"/></span>
+                            <span class="kpi-label">Total Requests</span>
+                        </div>
+                        <div class="kpi-trend">
+                            <span class="badge bg-light text-dark">
+                                <t t-esc="state.data?.kpis?.active_requests || 0"/> Active
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card gradient-green" t-on-click="() => this.openRequests('completed')">
+                        <div class="kpi-icon">
+                            <i class="fa fa-check-circle"/>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-value"><t t-esc="state.data?.kpis?.completed_this_month || 0"/></span>
+                            <span class="kpi-label">Completed This Month</span>
+                        </div>
+                        <div class="kpi-trend">
+                            <span class="badge bg-light text-success">
+                                <i class="fa fa-arrow-up"/> <t t-esc="state.data?.kpis?.completion_rate || 0"/>% Rate
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card gradient-orange" t-on-click="() => this.openTasks('pending')">
+                        <div class="kpi-icon">
+                            <i class="fa fa-tasks"/>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-value"><t t-esc="state.data?.kpis?.pending_tasks || 0"/></span>
+                            <span class="kpi-label">Pending Tasks</span>
+                        </div>
+                        <div class="kpi-trend">
+                            <span class="badge bg-light text-warning">
+                                <t t-esc="state.data?.kpis?.in_progress_tasks || 0"/> In Progress
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card gradient-purple" t-on-click="() => this.openBilling('paid')">
+                        <div class="kpi-icon">
+                            <i class="fa fa-money"/>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-value"><t t-esc="formatCurrency(state.data?.kpis?.revenue_this_month || 0)"/></span>
+                            <span class="kpi-label">Revenue This Month</span>
+                        </div>
+                        <div class="kpi-trend">
+                            <span class="badge bg-light text-info">
+                                <t t-esc="formatCurrency(state.data?.kpis?.pending_payments || 0)"/> Pending
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Cards Row 2 -->
+                <div class="kpi-row secondary">
+                    <div class="kpi-card-small">
+                        <div class="kpi-icon-small bg-info">
+                            <i class="fa fa-clock-o"/>
+                        </div>
+                        <div class="kpi-content-small">
+                            <span class="kpi-value-small"><t t-esc="state.data?.kpis?.avg_processing_days || 0"/></span>
+                            <span class="kpi-label-small">Avg. Days to Complete</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-small">
+                        <div class="kpi-icon-small bg-success">
+                            <i class="fa fa-check"/>
+                        </div>
+                        <div class="kpi-content-small">
+                            <span class="kpi-value-small"><t t-esc="state.data?.kpis?.completed_tasks_today || 0"/></span>
+                            <span class="kpi-label-small">Tasks Completed Today</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-small">
+                        <div class="kpi-icon-small bg-warning">
+                            <i class="fa fa-spinner"/>
+                        </div>
+                        <div class="kpi-content-small">
+                            <span class="kpi-value-small"><t t-esc="state.data?.kpis?.in_progress_tasks || 0"/></span>
+                            <span class="kpi-label-small">Tasks In Progress</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-small">
+                        <div class="kpi-icon-small bg-primary">
+                            <i class="fa fa-building"/>
+                        </div>
+                        <div class="kpi-content-small">
+                            <span class="kpi-value-small"><t t-esc="formatCurrency(state.data?.revenue_stats?.government_fees || 0)"/></span>
+                            <span class="kpi-label-small">Total Govt. Fees</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-small">
+                        <div class="kpi-icon-small bg-secondary">
+                            <i class="fa fa-briefcase"/>
+                        </div>
+                        <div class="kpi-content-small">
+                            <span class="kpi-value-small"><t t-esc="formatCurrency(state.data?.revenue_stats?.service_fees || 0)"/></span>
+                            <span class="kpi-label-small">Total Service Fees</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Tables Row -->
+                <div class="dashboard-row">
+                    <!-- Request Status Chart -->
+                    <div class="dashboard-card chart-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-pie-chart"/> Request Status</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="status-bars">
+                                <t t-foreach="state.data?.request_stats || []" t-as="stat" t-key="stat.state">
+                                    <div class="status-bar-item" t-on-click="() => this.openRequests(stat.state)">
+                                        <div class="status-bar-header">
+                                            <span class="status-label"><t t-esc="stat.label"/></span>
+                                            <span class="status-count"><t t-esc="stat.count"/></span>
+                                        </div>
+                                        <div class="status-bar-track">
+                                            <div class="status-bar-fill" 
+                                                 t-attf-style="width: {{ Math.min(stat.count / (state.data?.kpis?.total_requests || 1) * 100, 100) }}%; background-color: {{ stat.color }};"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Breakdown -->
+                    <div class="dashboard-card chart-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-bar-chart"/> Services by Category</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="service-breakdown">
+                                <t t-foreach="state.data?.service_breakdown || []" t-as="service" t-key="service.category">
+                                    <div class="service-item">
+                                        <div class="service-color" t-attf-style="background-color: {{ service.color }};"/>
+                                        <div class="service-info">
+                                            <span class="service-name"><t t-esc="service.category"/></span>
+                                            <span class="service-stats">
+                                                <t t-esc="service.count"/> requests • <t t-esc="formatCurrency(service.revenue)"/>
+                                            </span>
+                                        </div>
+                                        <div class="service-count">
+                                            <span class="count-badge" t-attf-style="background-color: {{ service.color }};">
+                                                <t t-esc="service.count"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Tasks and Recent Completions -->
+                <div class="dashboard-row">
+                    <!-- Pending Tasks -->
+                    <div class="dashboard-card table-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-exclamation-circle text-warning"/> Pending Tasks</h3>
+                            <button class="btn btn-sm btn-outline-primary" t-on-click="() => this.openTasks('pending')">
+                                View All
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Task</th>
+                                        <th>Beneficiary</th>
+                                        <th>Assigned To</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.data?.pending_tasks || []" t-as="task" t-key="task.id">
+                                        <tr t-att-class="task.is_overdue ? 'overdue-row' : ''">
+                                            <td>
+                                                <span class="task-name"><t t-esc="task.name"/></span>
+                                                <span class="task-request text-muted"><t t-esc="task.request"/></span>
+                                            </td>
+                                            <td><t t-esc="task.beneficiary"/></td>
+                                            <td><t t-esc="task.assigned_to"/></td>
+                                            <td>
+                                                <span t-att-class="task.is_overdue ? 'text-danger fw-bold' : ''">
+                                                    <t t-esc="task.due_date"/>
+                                                    <i t-if="task.is_overdue" class="fa fa-exclamation-triangle text-danger ms-1"/>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span t-attf-class="badge {{ task.state === 'in_progress' ? 'bg-primary' : task.state === 'waiting' ? 'bg-warning' : 'bg-secondary' }}">
+                                                    <t t-esc="task.state"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="!state.data?.pending_tasks?.length">
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i class="fa fa-check-circle fa-2x text-success mb-2"/><br/>
+                                            No pending tasks!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Completions -->
+                    <div class="dashboard-card table-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-check-circle text-success"/> Recent Completions</h3>
+                            <button class="btn btn-sm btn-outline-success" t-on-click="() => this.openRequests('completed')">
+                                View All
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Request</th>
+                                        <th>Service</th>
+                                        <th>Beneficiary</th>
+                                        <th>Completed</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.data?.recent_completions || []" t-as="req" t-key="req.id">
+                                        <tr>
+                                            <td><t t-esc="req.name"/></td>
+                                            <td><t t-esc="req.service"/></td>
+                                            <td><t t-esc="req.beneficiary"/></td>
+                                            <td><t t-esc="req.completion_date"/></td>
+                                            <td class="text-success fw-bold"><t t-esc="formatCurrency(req.total_amount)"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="!state.data?.recent_completions?.length">
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            No recent completions
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Officer Performance -->
+                <div class="dashboard-row">
+                    <div class="dashboard-card full-width">
+                        <div class="card-header">
+                            <h3><i class="fa fa-users"/> PRO Officer Performance</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="officer-grid">
+                                <t t-foreach="state.data?.officer_performance || []" t-as="officer" t-key="officer.user_id">
+                                    <div class="officer-card">
+                                        <div class="officer-avatar">
+                                            <i class="fa fa-user-circle"/>
+                                        </div>
+                                        <div class="officer-info">
+                                            <span class="officer-name"><t t-esc="officer.officer_name"/></span>
+                                            <div class="officer-stats">
+                                                <span class="stat completed">
+                                                    <i class="fa fa-check"/> <t t-esc="officer.completed_tasks"/> Completed
+                                                </span>
+                                                <span class="stat active">
+                                                    <i class="fa fa-spinner"/> <t t-esc="officer.active_tasks"/> Active
+                                                </span>
+                                                <span class="stat time">
+                                                    <i class="fa fa-clock-o"/> <t t-esc="Math.round(officer.avg_hours * 10) / 10"/>h Avg
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="officer-progress">
+                                            <div class="progress-ring" t-attf-style="--progress: {{ officer.completed_tasks / (officer.completed_tasks + officer.active_tasks) * 100 || 0 }}%;">
+                                                <span class="progress-value"><t t-esc="officer.completed_tasks"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div t-if="!state.data?.officer_performance?.length" class="text-center text-muted py-4 w-100">
+                                    No officer data available
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Trends -->
+                <div class="dashboard-row">
+                    <div class="dashboard-card full-width">
+                        <div class="card-header">
+                            <h3><i class="fa fa-line-chart"/> Monthly Trends (Last 6 Months)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="trends-chart">
+                                <t t-foreach="state.data?.monthly_trends || []" t-as="month" t-key="month.month">
+                                    <div class="trend-column">
+                                        <div class="trend-bars">
+                                            <div class="trend-bar requests" 
+                                                 t-attf-style="height: {{ Math.min(month.requests * 5, 100) }}px;"
+                                                 t-att-title="month.requests + ' Requests'">
+                                                <span class="bar-value"><t t-esc="month.requests"/></span>
+                                            </div>
+                                            <div class="trend-bar completed" 
+                                                 t-attf-style="height: {{ Math.min(month.completed * 5, 100) }}px;"
+                                                 t-att-title="month.completed + ' Completed'">
+                                                <span class="bar-value"><t t-esc="month.completed"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="trend-label"><t t-esc="month.month"/></div>
+                                        <div class="trend-revenue"><t t-esc="formatCurrency(month.revenue)"/></div>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="trends-legend">
+                                <span class="legend-item"><span class="legend-color requests"/> Requests</span>
+                                <span class="legend-item"><span class="legend-color completed"/> Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

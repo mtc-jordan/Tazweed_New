@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Order Form View -->
+    <record id="view_job_order_form" model="ir.ui.view">
+        <field name="name">tazweed.job.order.form</field>
+        <field name="model">tazweed.job.order</field>
+        <field name="arch" type="xml">
+            <form string="Job Order">
+                <header>
+                    <button name="action_open" string="Open" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_fill" string="Mark Filled" type="object" class="btn-success" states="open,in_progress"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,open"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,in_progress,filled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-users" type="action" name="%(action_placement)d">
+                            <field name="placement_count" widget="statinfo" string="Placements"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="client_id"/>
+                            <field name="job_title"/>
+                            <field name="department"/>
+                        </group>
+                        <group>
+                            <field name="job_category"/>
+                            <field name="employment_type"/>
+                            <field name="positions_required"/>
+                            <field name="positions_filled"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_received"/>
+                            <field name="date_required"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="recruiter_id"/>
+                            <field name="education_level"/>
+                            <field name="experience_years"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="salary_min"/>
+                            <field name="salary_max"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="job_description" placeholder="Job description..."/>
+                        </page>
+                        <page string="Placements" name="placements">
+                            <field name="placement_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="candidate_id"/>
+                                    <field name="date_start"/>
+                                    <field name="total_salary"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Job Order Tree View -->
+    <record id="view_job_order_tree" model="ir.ui.view">
+        <field name="name">tazweed.job.order.tree</field>
+        <field name="model">tazweed.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Job Orders" decoration-danger="priority == 'urgent'" decoration-warning="priority == 'high'">
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="job_title"/>
+                <field name="job_category"/>
+                <field name="positions_required"/>
+                <field name="positions_filled"/>
+                <field name="date_required"/>
+                <field name="priority"/>
+                <field name="recruiter_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Job Order Search View -->
+    <record id="view_job_order_search" model="ir.ui.view">
+        <field name="name">tazweed.job.order.search</field>
+        <field name="model">tazweed.job.order</field>
+        <field name="arch" type="xml">
+            <search string="Search Job Orders">
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="job_title"/>
+                <field name="recruiter_id"/>
+                <separator/>
+                <filter name="open" string="Open" domain="[('state', '=', 'open')]"/>
+                <filter name="urgent" string="Urgent" domain="[('priority', '=', 'urgent')]"/>
+                <filter name="my_orders" string="My Orders" domain="[('recruiter_id', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_client" string="Client" context="{'group_by': 'client_id'}"/>
+                    <filter name="group_category" string="Category" context="{'group_by': 'job_category'}"/>
+                    <filter name="group_recruiter" string="Recruiter" context="{'group_by': 'recruiter_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Job Order Action -->
+    <record id="action_job_order" model="ir.actions.act_window">
+        <field name="name">Job Orders</field>
+        <field name="res_model">tazweed.job.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_job_order_search"/>
+        <field name="context">{'search_default_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first job order
+            </p>
+        </field>
+    </record>
+</odoo>

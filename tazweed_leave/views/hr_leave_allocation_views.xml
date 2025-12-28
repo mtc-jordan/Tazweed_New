@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Leave Allocation Form View Extension -->
+    <record id="view_hr_leave_allocation_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.inherit.tazweed</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="reference" readonly="1"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Allocation Details" name="details">
+                        <group>
+                            <group string="Type">
+                                <field name="allocation_type"/>
+                                <field name="is_accrual"/>
+                                <field name="accrual_rate" attrs="{'invisible': [('is_accrual', '=', False)]}"/>
+                            </group>
+                            <group string="Validity">
+                                <field name="validity_start"/>
+                                <field name="validity_end"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Balance">
+                                <field name="number_of_days"/>
+                                <field name="used_days"/>
+                                <field name="encashed_days"/>
+                                <field name="remaining_days"/>
+                            </group>
+                            <group string="Accrual" attrs="{'invisible': [('is_accrual', '=', False)]}">
+                                <field name="accrued_days"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Carry Forward" name="carry_forward" attrs="{'invisible': [('allocation_type', '!=', 'carry_forward')]}">
+                        <group>
+                            <group>
+                                <field name="carried_forward_from_id"/>
+                                <field name="carry_forward_expiry"/>
+                                <field name="is_expired"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Pro-rata" name="pro_rata">
+                        <group>
+                            <group>
+                                <field name="is_pro_rata"/>
+                                <field name="pro_rata_start_date" attrs="{'invisible': [('is_pro_rata', '=', False)]}"/>
+                                <field name="pro_rata_days" attrs="{'invisible': [('is_pro_rata', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Encashment" name="encashment">
+                        <group>
+                            <group>
+                                <field name="encashed_days"/>
+                                <field name="encashment_amount"/>
+                            </group>
+                        </group>
+                        <div>
+                            <button name="action_encash" string="Request Encashment" type="object" 
+                                    class="btn-primary" attrs="{'invisible': [('remaining_days', '&lt;=', 0)]}"/>
+                            <button name="action_carry_forward" string="Carry Forward" type="object" 
+                                    class="btn-secondary" attrs="{'invisible': [('remaining_days', '&lt;=', 0)]}"/>
+                        </div>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Leave Allocation Tree View Extension -->
+    <record id="view_hr_leave_allocation_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.tree.inherit.tazweed</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='holiday_status_id']" position="before">
+                <field name="reference" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='duration_display']" position="after">
+                <field name="used_days" optional="show"/>
+                <field name="remaining_days" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Leave Allocation Search View Extension -->
+    <record id="view_hr_leave_allocation_search_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.search.inherit.tazweed</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.view_hr_leave_allocation_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_leaves']" position="after">
+                <filter name="regular" string="Regular" domain="[('allocation_type', '=', 'regular')]"/>
+                <filter name="accrual" string="Accrual" domain="[('allocation_type', '=', 'accrual')]"/>
+                <filter name="carry_forward" string="Carry Forward" domain="[('allocation_type', '=', 'carry_forward')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

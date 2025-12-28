@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Identity Documents -->
+        
+        <record id="doc_type_passport" model="pro.document.type">
+            <field name="name">Passport</field>
+            <field name="code">PASSPORT</field>
+            <field name="sequence">10</field>
+            <field name="category">identity</field>
+            <field name="description">Valid passport with minimum 6 months validity</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">2</field>
+            <field name="notes">Must have at least 6 months validity from application date. Clear colored copy required.</field>
+        </record>
+        
+        <record id="doc_type_passport_photo" model="pro.document.type">
+            <field name="name">Passport Photo</field>
+            <field name="code">PHOTO</field>
+            <field name="sequence">20</field>
+            <field name="category">identity</field>
+            <field name="description">Recent passport-sized photo with white background</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">4</field>
+            <field name="notes">White background, recent (within 6 months), 4.3 x 5.5 cm size.</field>
+        </record>
+        
+        <record id="doc_type_emirates_id" model="pro.document.type">
+            <field name="name">Emirates ID</field>
+            <field name="code">EID</field>
+            <field name="sequence">30</field>
+            <field name="category">identity</field>
+            <field name="description">UAE Emirates ID card</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_visa" model="pro.document.type">
+            <field name="name">Current Visa</field>
+            <field name="code">VISA</field>
+            <field name="sequence">40</field>
+            <field name="category">identity</field>
+            <field name="description">Current UAE visa (if applicable)</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+
+        <!-- Employment Documents -->
+        
+        <record id="doc_type_labor_card" model="pro.document.type">
+            <field name="name">Labor Card</field>
+            <field name="code">LABOR_CARD</field>
+            <field name="sequence">50</field>
+            <field name="category">employment</field>
+            <field name="description">UAE Labor Card / Work Permit</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_offer_letter" model="pro.document.type">
+            <field name="name">Job Offer Letter</field>
+            <field name="code">OFFER_LETTER</field>
+            <field name="sequence">60</field>
+            <field name="category">employment</field>
+            <field name="description">Official job offer letter from employer</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_labor_contract" model="pro.document.type">
+            <field name="name">Labor Contract</field>
+            <field name="code">LABOR_CONTRACT</field>
+            <field name="sequence">70</field>
+            <field name="category">employment</field>
+            <field name="description">Signed labor contract</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">2</field>
+        </record>
+        
+        <record id="doc_type_salary_certificate" model="pro.document.type">
+            <field name="name">Salary Certificate</field>
+            <field name="code">SALARY_CERT</field>
+            <field name="sequence">80</field>
+            <field name="category">employment</field>
+            <field name="description">Salary certificate from employer</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_noc" model="pro.document.type">
+            <field name="name">No Objection Certificate (NOC)</field>
+            <field name="code">NOC</field>
+            <field name="sequence">90</field>
+            <field name="category">employment</field>
+            <field name="description">NOC from current employer</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+
+        <!-- Education Documents -->
+        
+        <record id="doc_type_degree" model="pro.document.type">
+            <field name="name">Educational Degree/Certificate</field>
+            <field name="code">DEGREE</field>
+            <field name="sequence">100</field>
+            <field name="category">education</field>
+            <field name="description">Educational qualification certificate</field>
+            <field name="requires_attestation">True</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">2</field>
+            <field name="notes">Must be attested by MOFA and UAE Embassy in country of origin.</field>
+        </record>
+
+        <!-- Medical Documents -->
+        
+        <record id="doc_type_medical_fitness" model="pro.document.type">
+            <field name="name">Medical Fitness Certificate</field>
+            <field name="code">MEDICAL_FIT</field>
+            <field name="sequence">110</field>
+            <field name="category">medical</field>
+            <field name="description">Medical fitness test result from approved center</field>
+            <field name="validity_period">30</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_health_card" model="pro.document.type">
+            <field name="name">Health Card</field>
+            <field name="code">HEALTH_CARD</field>
+            <field name="sequence">120</field>
+            <field name="category">medical</field>
+            <field name="description">DHA Health Card</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_health_insurance" model="pro.document.type">
+            <field name="name">Health Insurance Card</field>
+            <field name="code">HEALTH_INS</field>
+            <field name="sequence">130</field>
+            <field name="category">medical</field>
+            <field name="description">Valid health insurance card</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+
+        <!-- Company Documents -->
+        
+        <record id="doc_type_trade_license" model="pro.document.type">
+            <field name="name">Trade License</field>
+            <field name="code">TRADE_LICENSE</field>
+            <field name="sequence">140</field>
+            <field name="category">company</field>
+            <field name="description">Company trade license</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_establishment_card" model="pro.document.type">
+            <field name="name">Establishment Card</field>
+            <field name="code">EST_CARD</field>
+            <field name="sequence">150</field>
+            <field name="category">company</field>
+            <field name="description">MOHRE Establishment Card</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_moa" model="pro.document.type">
+            <field name="name">Memorandum of Association (MOA)</field>
+            <field name="code">MOA</field>
+            <field name="sequence">160</field>
+            <field name="category">company</field>
+            <field name="description">Company MOA</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_tenancy_contract" model="pro.document.type">
+            <field name="name">Tenancy Contract (Ejari)</field>
+            <field name="code">EJARI</field>
+            <field name="sequence">170</field>
+            <field name="category">company</field>
+            <field name="description">Registered tenancy contract</field>
+            <field name="original_required">False</field>
+            <field name="copies_required">1</field>
+        </record>
+
+        <!-- Legal Documents -->
+        
+        <record id="doc_type_poa" model="pro.document.type">
+            <field name="name">Power of Attorney</field>
+            <field name="code">POA</field>
+            <field name="sequence">180</field>
+            <field name="category">legal</field>
+            <field name="description">Notarized Power of Attorney</field>
+            <field name="requires_attestation">True</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_marriage_cert" model="pro.document.type">
+            <field name="name">Marriage Certificate</field>
+            <field name="code">MARRIAGE</field>
+            <field name="sequence">190</field>
+            <field name="category">legal</field>
+            <field name="description">Attested marriage certificate</field>
+            <field name="requires_attestation">True</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_birth_cert" model="pro.document.type">
+            <field name="name">Birth Certificate</field>
+            <field name="code">BIRTH</field>
+            <field name="sequence">200</field>
+            <field name="category">legal</field>
+            <field name="description">Attested birth certificate</field>
+            <field name="requires_attestation">True</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+        
+        <record id="doc_type_police_clearance" model="pro.document.type">
+            <field name="name">Police Clearance Certificate</field>
+            <field name="code">PCC</field>
+            <field name="sequence">210</field>
+            <field name="category">legal</field>
+            <field name="description">Police clearance from home country</field>
+            <field name="requires_attestation">True</field>
+            <field name="validity_period">90</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+
+        <!-- Financial Documents -->
+        
+        <record id="doc_type_bank_statement" model="pro.document.type">
+            <field name="name">Bank Statement</field>
+            <field name="code">BANK_STMT</field>
+            <field name="sequence">220</field>
+            <field name="category">financial</field>
+            <field name="description">Bank statement (last 3-6 months)</field>
+            <field name="original_required">True</field>
+            <field name="copies_required">1</field>
+        </record>
+    </data>
+</odoo>

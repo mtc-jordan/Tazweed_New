@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences -->
+        <record id="seq_integration_log" model="ir.sequence">
+            <field name="name">Integration Log Sequence</field>
+            <field name="code">tazweed.integration.log</field>
+            <field name="prefix">INT/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <!-- Default Integration Configurations -->
+        <record id="config_payroll" model="tazweed.integration.config">
+            <field name="name">Payroll Integration</field>
+            <field name="config_type">payroll</field>
+            <field name="is_active">True</field>
+            <field name="auto_leave_deduction">True</field>
+            <field name="auto_attendance_calc">True</field>
+            <field name="auto_performance_bonus">True</field>
+            <field name="auto_loan_deduction">True</field>
+        </record>
+
+        <record id="config_compliance" model="tazweed.integration.config">
+            <field name="name">Compliance Integration</field>
+            <field name="config_type">compliance</field>
+            <field name="is_active">True</field>
+            <field name="auto_wps_generation">False</field>
+            <field name="auto_document_alerts">True</field>
+        </record>
+
+        <record id="config_placement" model="tazweed.integration.config">
+            <field name="name">Placement Integration</field>
+            <field name="config_type">placement</field>
+            <field name="is_active">True</field>
+            <field name="auto_employee_creation">True</field>
+        </record>
+    </data>
+</odoo>

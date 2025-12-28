@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Expiry Alert Email -->
+    <record id="email_template_document_alert" model="mail.template">
+        <field name="name">Document Expiry Alert</field>
+        <field name="model_id" ref="model_document_alert"/>
+        <field name="subject">⚠️ Document Expiry Alert: {{ object.document_id.name }}</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ ctx.get('recipient_email', object.employee_id.work_email) }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #dc3545; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0;">⚠️ Document Expiry Alert</h1>
+    </div>
+    
+    <div style="padding: 20px; background-color: #f8f9fa;">
+        <p>Dear Team,</p>
+        
+        <p>This is an automated alert regarding a document that requires attention:</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background-color: #e9ecef;">
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Employee</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.employee_id.name }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Document Type</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.document_type_id.name }}</td>
+            </tr>
+            <tr style="background-color: #e9ecef;">
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Document Number</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.document_id.document_number or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Expiry Date</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.expiry_date }}</td>
+            </tr>
+            <tr style="background-color: {% if object.days_to_expiry <= 0 %}#f8d7da{% elif object.days_to_expiry <= 7 %}#fff3cd{% else %}#d4edda{% endif %};">
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Status</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">
+                    {% if object.days_to_expiry <= 0 %}
+                        <span style="color: #721c24;">EXPIRED</span>
+                    {% elif object.days_to_expiry <= 7 %}
+                        <span style="color: #856404;">Expires in {{ object.days_to_expiry }} days</span>
+                    {% else %}
+                        <span style="color: #155724;">Expires in {{ object.days_to_expiry }} days</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        
+        <p><strong>Action Required:</strong> Please initiate the renewal process immediately to avoid any compliance issues.</p>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <a href="{{ object.get_base_url() }}/web#id={{ object.id }}&model=document.alert&view_type=form" 
+               style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                View Alert Details
+            </a>
+        </div>
+        
+        <p style="color: #6c757d; font-size: 12px;">
+            This is an automated message from the Document Management Center.<br/>
+            Alert Reference: {{ object.name }}
+        </p>
+    </div>
+    
+    <div style="background-color: #343a40; color: white; padding: 10px; text-align: center; font-size: 12px;">
+        {{ object.company_id.name }} | Document Management Center
+    </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- Document Escalation Email -->
+    <record id="email_template_document_escalation" model="mail.template">
+        <field name="name">Document Escalation Alert</field>
+        <field name="model_id" ref="model_document_alert"/>
+        <field name="subject">🚨 ESCALATION: Document {{ object.document_id.name }} Requires Immediate Action</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #721c24; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0;">🚨 ESCALATION ALERT</h1>
+    </div>
+    
+    <div style="padding: 20px; background-color: #f8d7da; border: 2px solid #f5c6cb;">
+        <p><strong>This alert has been escalated due to non-resolution.</strong></p>
+        
+        <p>Document: <strong>{{ object.document_id.name }}</strong></p>
+        <p>Employee: <strong>{{ object.employee_id.name }}</strong></p>
+        <p>Expiry Date: <strong>{{ object.expiry_date }}</strong></p>
+        <p>Days Overdue/Remaining: <strong>{{ object.days_to_expiry }}</strong></p>
+        
+        <p>Previous notifications have not resulted in action. Please address this immediately.</p>
+    </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- Renewal Approval Request -->
+    <record id="email_template_renewal_approval" model="mail.template">
+        <field name="name">Renewal Approval Request</field>
+        <field name="model_id" ref="model_document_renewal_request"/>
+        <field name="subject">📋 Renewal Request Pending Approval: {{ object.document_id.name }}</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #17a2b8; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0;">📋 Renewal Request</h1>
+    </div>
+    
+    <div style="padding: 20px; background-color: #f8f9fa;">
+        <p>A new document renewal request requires your approval:</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Request #</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.name }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Employee</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.employee_id.name }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Document</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.document_id.name }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Current Expiry</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.current_expiry_date }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Priority</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.priority }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #dee2e6;"><strong>Reason</strong></td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ object.reason or 'N/A' }}</td>
+            </tr>
+        </table>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <a href="{{ object.get_base_url() }}/web#id={{ object.id }}&model=document.renewal.request&view_type=form" 
+               style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px;">
+                Review & Approve
+            </a>
+        </div>
+    </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- Renewal Approved -->
+    <record id="email_template_renewal_approved" model="mail.template">
+        <field name="name">Renewal Request Approved</field>
+        <field name="model_id" ref="model_document_renewal_request"/>
+        <field name="subject">✅ Renewal Request Approved: {{ object.document_id.name }}</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.requested_by.email }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #28a745; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0;">✅ Request Approved</h1>
+    </div>
+    
+    <div style="padding: 20px; background-color: #d4edda;">
+        <p>Your renewal request has been approved.</p>
+        <p><strong>Request #:</strong> {{ object.name }}</p>
+        <p><strong>Document:</strong> {{ object.document_id.name }}</p>
+        <p><strong>Approved By:</strong> {{ object.approved_by.name }}</p>
+        <p><strong>Approval Date:</strong> {{ object.approval_date }}</p>
+    </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- Renewal Rejected -->
+    <record id="email_template_renewal_rejected" model="mail.template">
+        <field name="name">Renewal Request Rejected</field>
+        <field name="model_id" ref="model_document_renewal_request"/>
+        <field name="subject">❌ Renewal Request Rejected: {{ object.document_id.name }}</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.requested_by.email }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #dc3545; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0;">❌ Request Rejected</h1>
+    </div>
+    
+    <div style="padding: 20px; background-color: #f8d7da;">
+        <p>Your renewal request has been rejected.</p>
+        <p><strong>Request #:</strong> {{ object.name }}</p>
+        <p><strong>Document:</strong> {{ object.document_id.name }}</p>
+        <p><strong>Rejection Reason:</strong> {{ object.rejection_reason }}</p>
+    </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- Employee Document Reminder -->
+    <record id="email_template_employee_document_reminder" model="mail.template">
+        <field name="name">Employee Document Reminder</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="subject">📄 Document Reminder: Action Required</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.work_email }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #ffc107; color: #212529; padding: 20px; text-align: center;">
+        <h1 style="margin: 0;">📄 Document Reminder</h1>
+    </div>
+    
+    <div style="padding: 20px; background-color: #fff3cd;">
+        <p>Dear {{ object.name }},</p>
+        
+        <p>This is a reminder that some of your documents require attention:</p>
+        
+        <ul>
+            <li><strong>Expired Documents:</strong> {{ object.document_ids.filtered(lambda d: d.expiry_date and d.expiry_date < today) | length }}</li>
+            <li><strong>Expiring Soon:</strong> {{ object.expiring_document_count }}</li>
+        </ul>
+        
+        <p>Please contact HR to initiate the renewal process.</p>
+        
+        <p>Best regards,<br/>HR Department</p>
+    </div>
+</div>
+        ]]></field>
+    </record>
+</odoo>

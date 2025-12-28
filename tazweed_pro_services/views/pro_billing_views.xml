@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Billing Tree View -->
+    <record id="view_pro_billing_tree" model="ir.ui.view">
+        <field name="name">pro.billing.tree</field>
+        <field name="model">pro.billing</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="payment_status == 'paid'"
+                  decoration-warning="payment_status == 'partial'"
+                  decoration-info="payment_status == 'pending'">
+                <field name="name"/>
+                <field name="billing_date"/>
+                <field name="request_id"/>
+                <field name="billing_party"/>
+                <field name="service_id"/>
+                <field name="subtotal"/>
+                <field name="vat_amount"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="amount_paid" sum="Paid"/>
+                <field name="amount_due" sum="Due"/>
+                <field name="receipt_count" string="Receipts"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-warning="payment_status == 'partial'"
+                       decoration-info="payment_status == 'pending'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Billing Form View -->
+    <record id="view_pro_billing_form" model="ir.ui.view">
+        <field name="name">pro.billing.form</field>
+        <field name="model">pro.billing</field>
+        <field name="arch" type="xml">
+            <form string="PRO Billing">
+                <header>
+                    <button name="action_print_invoice" type="object" string="Print Invoice" 
+                            class="oe_highlight" icon="fa-print"/>
+                    <button name="action_register_payment" type="object" string="Register Payment" 
+                            attrs="{'invisible': [('payment_status', '=', 'paid')]}"/>
+                    <button name="action_create_invoice" type="object" string="Create Odoo Invoice" 
+                            attrs="{'invisible': [('invoice_id', '!=', False)]}"/>
+                    <button name="action_view_invoice" type="object" string="View Odoo Invoice" 
+                            attrs="{'invisible': [('invoice_id', '=', False)]}"/>
+                    <button name="action_mark_paid" type="object" string="Mark as Paid" 
+                            attrs="{'invisible': [('payment_status', '=', 'paid')]}"/>
+                    <field name="payment_status" widget="statusbar" 
+                           statusbar_visible="pending,partial,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_receipts" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="receipt_count" widget="statinfo" string="Receipts"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Service Information">
+                            <field name="request_id"/>
+                            <field name="service_id"/>
+                            <field name="billing_date"/>
+                            <field name="due_date"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group string="Customer/Employee">
+                            <field name="customer_id" attrs="{'invisible': [('customer_id', '=', False)]}"/>
+                            <field name="employee_id" attrs="{'invisible': [('employee_id', '=', False)]}"/>
+                            <field name="invoice_id" attrs="{'invisible': [('invoice_id', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Invoice Details" name="invoice_details">
+                            <group>
+                                <group string="Customer Details">
+                                    <field name="customer_name"/>
+                                    <field name="customer_address"/>
+                                    <field name="customer_phone"/>
+                                    <field name="customer_email"/>
+                                    <field name="customer_trn"/>
+                                </group>
+                                <group string="Beneficiary Details">
+                                    <field name="beneficiary_name"/>
+                                    <field name="beneficiary_passport"/>
+                                    <field name="beneficiary_emirates_id"/>
+                                    <field name="beneficiary_nationality"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Fees" name="fees">
+                            <group>
+                                <group string="Fee Breakdown">
+                                    <field name="government_fee"/>
+                                    <field name="service_fee"/>
+                                    <field name="urgent_fee"/>
+                                    <field name="additional_fees"/>
+                                    <field name="discount"/>
+                                </group>
+                                <group string="Totals">
+                                    <field name="subtotal"/>
+                                    <field name="vat_rate"/>
+                                    <field name="vat_amount"/>
+                                    <field name="total_amount" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                            <separator string="Line Items"/>
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="description"/>
+                                    <field name="fee_type"/>
+                                    <field name="authority_name"/>
+                                    <field name="reference_number"/>
+                                    <field name="service_date"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="amount" sum="Total"/>
+                                </tree>
+                            </field>
+                            <separator string="Government Fee Breakdown"/>
+                            <field name="govt_fee_breakdown" placeholder="Enter detailed breakdown of government fees..."/>
+                        </page>
+                        <page string="Government Receipts" name="receipts">
+                            <field name="receipt_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="receipt_type"/>
+                                    <field name="authority_name"/>
+                                    <field name="reference_number"/>
+                                    <field name="date"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="is_reimbursable"/>
+                                    <field name="attachment" filename="attachment_filename"/>
+                                    <field name="attachment_filename" invisible="1"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="receipt_type"/>
+                                            <field name="authority_name"/>
+                                            <field name="reference_number"/>
+                                        </group>
+                                        <group>
+                                            <field name="date"/>
+                                            <field name="amount"/>
+                                            <field name="currency_id"/>
+                                            <field name="is_reimbursable"/>
+                                        </group>
+                                    </group>
+                                    <group string="Attachment">
+                                        <field name="attachment" filename="attachment_filename"/>
+                                        <field name="attachment_filename" invisible="1"/>
+                                    </group>
+                                    <group string="Description">
+                                        <field name="description" nolabel="1"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Payment" name="payment">
+                            <group>
+                                <group string="Payment Status">
+                                    <field name="amount_paid"/>
+                                    <field name="amount_due"/>
+                                </group>
+                                <group string="Payment Details">
+                                    <field name="payment_date"/>
+                                    <field name="payment_method"/>
+                                    <field name="payment_reference"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes &amp; Terms" name="notes">
+                            <group string="Notes">
+                                <field name="notes" nolabel="1" placeholder="Add any notes for this invoice..."/>
+                            </group>
+                            <group string="Terms &amp; Conditions">
+                                <field name="terms_conditions" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Billing Search View -->
+    <record id="view_pro_billing_search" model="ir.ui.view">
+        <field name="name">pro.billing.search</field>
+        <field name="model">pro.billing</field>
+        <field name="arch" type="xml">
+            <search string="PRO Billing">
+                <field name="name"/>
+                <field name="request_id"/>
+                <field name="billing_party"/>
+                <field name="customer_id"/>
+                <field name="employee_id"/>
+                <field name="customer_name"/>
+                <filter string="Pending" name="pending" domain="[('payment_status', '=', 'pending')]"/>
+                <filter string="Partial" name="partial" domain="[('payment_status', '=', 'partial')]"/>
+                <filter string="Paid" name="paid" domain="[('payment_status', '=', 'paid')]"/>
+                <separator/>
+                <filter string="This Month" name="this_month" domain="[('billing_date', '>=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <!-- Has Receipts filter removed - receipt_count is not searchable -->
+                <group expand="0" string="Group By">
+                    <filter string="Payment Status" name="group_status" context="{'group_by': 'payment_status'}"/>
+                    <filter string="Service" name="group_service" context="{'group_by': 'service_id'}"/>
+                    <filter string="Billing Date" name="group_date" context="{'group_by': 'billing_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Billing Action -->
+    <record id="action_pro_billing" model="ir.actions.act_window">
+        <field name="name">Billing</field>
+        <field name="res_model">pro.billing</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No billing records found
+            </p>
+            <p>
+                Billing records are automatically created when service requests are completed.
+            </p>
+        </field>
+    </record>
+
+    <!-- Receipt Tree View -->
+    <record id="view_pro_billing_receipt_tree" model="ir.ui.view">
+        <field name="name">pro.billing.receipt.tree</field>
+        <field name="model">pro.billing.receipt</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="billing_id"/>
+                <field name="name"/>
+                <field name="receipt_type"/>
+                <field name="authority_name"/>
+                <field name="reference_number"/>
+                <field name="date"/>
+                <field name="amount" sum="Total"/>
+                <field name="is_reimbursable"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Receipt Form View -->
+    <record id="view_pro_billing_receipt_form" model="ir.ui.view">
+        <field name="name">pro.billing.receipt.form</field>
+        <field name="model">pro.billing.receipt</field>
+        <field name="arch" type="xml">
+            <form string="Government Receipt">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="billing_id"/>
+                            <field name="name"/>
+                            <field name="receipt_type"/>
+                            <field name="authority_name"/>
+                            <field name="reference_number"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="currency_id"/>
+                            <field name="amount"/>
+                            <field name="is_reimbursable"/>
+                        </group>
+                    </group>
+                    <group string="Attachment">
+                        <field name="attachment" filename="attachment_filename"/>
+                        <field name="attachment_filename" invisible="1"/>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Receipt Action -->
+    <record id="action_pro_billing_receipt" model="ir.actions.act_window">
+        <field name="name">Government Receipts</field>
+        <field name="res_model">pro.billing.receipt</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No receipts found
+            </p>
+            <p>
+                Add government and third-party receipts to billing records.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_portal_settings_user,client.portal.settings.user,model_client_portal_settings,base.group_user,1,1,1,1
+access_portal_user_user,client.portal.user.user,model_client_portal_user,base.group_user,1,1,1,1
+access_portal_document_user,client.portal.document.user,model_client_portal_document,base.group_user,1,1,1,1
+access_portal_document_tag_user,client.portal.document.tag.user,model_client_portal_document_tag,base.group_user,1,1,1,1
+access_portal_document_access_user,client.portal.document.access.user,model_client_portal_document_access,base.group_user,1,1,1,0
+access_portal_message_user,client.portal.message.user,model_client_portal_message,base.group_user,1,1,1,1
+access_portal_message_thread_user,client.portal.message.thread.user,model_client_portal_message_thread,base.group_user,1,1,1,1
+access_portal_notification_user,client.portal.notification.user,model_client_portal_notification,base.group_user,1,1,1,1
+access_portal_settings_portal,client.portal.settings.portal,model_client_portal_settings,base.group_portal,1,0,0,0
+access_portal_user_portal,client.portal.user.portal,model_client_portal_user,base.group_portal,1,0,0,0
+access_portal_document_portal,client.portal.document.portal,model_client_portal_document,base.group_portal,1,0,0,0
+access_portal_document_tag_portal,client.portal.document.tag.portal,model_client_portal_document_tag,base.group_portal,1,0,0,0
+access_portal_document_access_portal,client.portal.document.access.portal,model_client_portal_document_access,base.group_portal,1,0,1,0
+access_portal_message_portal,client.portal.message.portal,model_client_portal_message,base.group_portal,1,1,1,0
+access_portal_message_thread_portal,client.portal.message.thread.portal,model_client_portal_message_thread,base.group_portal,1,0,0,0
+access_portal_notification_portal,client.portal.notification.portal,model_client_portal_notification,base.group_portal,1,1,0,0

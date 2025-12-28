@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Workflow Trigger Form View -->
+        <record id="view_workflow_trigger_form" model="ir.ui.view">
+            <field name="name">Workflow Trigger Form</field>
+            <field name="model">tazweed.workflow.trigger</field>
+            <field name="arch" type="xml">
+                <form string="Workflow Trigger">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Trigger Name"/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Basic Information -->
+                        <group>
+                            <group>
+                                <field name="workflow_id"/>
+                                <field name="trigger_type"/>
+                            </group>
+                            <group>
+                                <field name="is_active"/>
+                                <field name="auto_start"/>
+                            </group>
+                        </group>
+                        
+                        <field name="description" placeholder="Trigger Description"/>
+                        
+                        <!-- Trigger Configuration -->
+                        <separator string="Trigger Configuration" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="trigger_model"/>
+                                <field name="trigger_field"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="trigger_condition" placeholder="Python condition" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Options -->
+                        <separator string="Options" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="pass_context"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Workflow Trigger Tree View -->
+        <record id="view_workflow_trigger_tree" model="ir.ui.view">
+            <field name="name">Workflow Trigger Tree</field>
+            <field name="model">tazweed.workflow.trigger</field>
+            <field name="arch" type="xml">
+                <tree string="Workflow Triggers">
+                    <field name="name"/>
+                    <field name="workflow_id"/>
+                    <field name="trigger_type"/>
+                    <field name="trigger_model"/>
+                    <field name="is_active"/>
+                    <field name="auto_start"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Workflow Trigger Action -->
+        <record id="action_workflow_trigger" model="ir.actions.act_window">
+            <field name="name">Workflow Triggers</field>
+            <field name="res_model">tazweed.workflow.trigger</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Workflow Trigger
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

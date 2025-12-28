@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_document_type_tree" model="ir.ui.view">
+        <field name="name">tazweed.document.type.tree</field>
+        <field name="model">tazweed.document.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <field name="is_mandatory"/>
+                <field name="has_expiry"/>
+                <field name="alert_days"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_document_type_form" model="ir.ui.view">
+        <field name="name">tazweed.document.type.form</field>
+        <field name="model">tazweed.document.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="is_mandatory"/>
+                            <field name="has_expiry"/>
+                            <field name="alert_days"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_document_types" model="ir.actions.act_window">
+        <field name="name">Document Types</field>
+        <field name="res_model">tazweed.document.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_tazweed_root" name="Tazweed HR" sequence="5" web_icon="tazweed_core,static/description/icon.png"/>
+
+    <!-- Dashboard -->
+    <menuitem id="menu_tazweed_dashboard" name="Dashboard" parent="menu_tazweed_root" action="action_tazweed_dashboard" sequence="1"/>
+
+    <!-- Employees -->
+    <menuitem id="menu_tazweed_employees" name="Employees" parent="menu_tazweed_root" sequence="10"/>
+    <menuitem id="menu_tazweed_employees_list" name="Employees" parent="menu_tazweed_employees" action="hr.open_view_employee_list_my" sequence="1"/>
+    <menuitem id="menu_tazweed_documents" name="Documents" parent="menu_tazweed_employees" action="action_employee_documents" sequence="2"/>
+    <menuitem id="menu_tazweed_banks" name="Bank Accounts" parent="menu_tazweed_employees" action="action_employee_banks" sequence="3"/>
+
+    <!-- Sponsors -->
+    <menuitem id="menu_tazweed_sponsors" name="Sponsors" parent="menu_tazweed_root" action="action_employee_sponsors" sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_tazweed_config" name="Configuration" parent="menu_tazweed_root" sequence="100"/>
+    <menuitem id="menu_tazweed_categories" name="Employee Categories" parent="menu_tazweed_config" action="action_employee_categories" sequence="1"/>
+    <menuitem id="menu_tazweed_doc_types" name="Document Types" parent="menu_tazweed_config" action="action_document_types" sequence="2"/>
+</odoo>

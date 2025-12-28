@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_esignature.SignaturePadField" owl="1">
+        <div class="o_signature_pad_field">
+            <div class="signature-type-tabs">
+                <button t-attf-class="tab-btn #{state.signatureType === 'draw' ? 'active' : ''}" 
+                        t-on-click="() => this.setSignatureType('draw')">
+                    <i class="fa fa-pencil"/> Draw
+                </button>
+                <button t-attf-class="tab-btn #{state.signatureType === 'type' ? 'active' : ''}"
+                        t-on-click="() => this.setSignatureType('type')">
+                    <i class="fa fa-keyboard-o"/> Type
+                </button>
+            </div>
+            <div t-if="state.signatureType === 'type'" class="typed-signature-input">
+                <input type="text" class="form-control" placeholder="Type your signature..."
+                       t-att-value="state.typedSignature" t-on-input="onTypedSignatureChange"/>
+                <div class="font-selector">
+                    <button t-attf-class="font-btn #{state.selectedFont === 'dancing' ? 'active' : ''}"
+                            t-on-click="() => this.setFont('dancing')" style="font-family: 'Dancing Script', cursive;">Aa</button>
+                    <button t-attf-class="font-btn #{state.selectedFont === 'allura' ? 'active' : ''}"
+                            t-on-click="() => this.setFont('allura')" style="font-family: 'Allura', cursive;">Aa</button>
+                    <button t-attf-class="font-btn #{state.selectedFont === 'pacifico' ? 'active' : ''}"
+                            t-on-click="() => this.setFont('pacifico')" style="font-family: 'Pacifico', cursive;">Aa</button>
+                    <button t-attf-class="font-btn #{state.selectedFont === 'sacramento' ? 'active' : ''}"
+                            t-on-click="() => this.setFont('sacramento')" style="font-family: 'Sacramento', cursive;">Aa</button>
+                </div>
+            </div>
+            <div class="signature-canvas-container">
+                <canvas t-ref="signatureCanvas" width="400" height="150" class="signature-canvas"/>
+                <div class="signature-line"/>
+            </div>
+            <div class="signature-actions">
+                <button class="btn btn-outline-secondary btn-sm" t-on-click="clearSignature">
+                    <i class="fa fa-eraser"/> Clear
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

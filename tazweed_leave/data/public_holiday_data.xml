@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- UAE Public Holidays 2025 -->
+        <record id="holiday_new_year_2025" model="tazweed.public.holiday">
+            <field name="name">New Year's Day</field>
+            <field name="name_ar">رأس السنة الميلادية</field>
+            <field name="date">2025-01-01</field>
+            <field name="holiday_type">national</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_eid_fitr_2025_1" model="tazweed.public.holiday">
+            <field name="name">Eid Al Fitr</field>
+            <field name="name_ar">عيد الفطر</field>
+            <field name="date">2025-03-30</field>
+            <field name="date_to">2025-04-02</field>
+            <field name="holiday_type">religious</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_arafat_2025" model="tazweed.public.holiday">
+            <field name="name">Arafat Day</field>
+            <field name="name_ar">يوم عرفة</field>
+            <field name="date">2025-06-05</field>
+            <field name="holiday_type">religious</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_eid_adha_2025" model="tazweed.public.holiday">
+            <field name="name">Eid Al Adha</field>
+            <field name="name_ar">عيد الأضحى</field>
+            <field name="date">2025-06-06</field>
+            <field name="date_to">2025-06-09</field>
+            <field name="holiday_type">religious</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_hijri_new_year_2025" model="tazweed.public.holiday">
+            <field name="name">Islamic New Year</field>
+            <field name="name_ar">رأس السنة الهجرية</field>
+            <field name="date">2025-06-26</field>
+            <field name="holiday_type">religious</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_prophet_birthday_2025" model="tazweed.public.holiday">
+            <field name="name">Prophet's Birthday</field>
+            <field name="name_ar">المولد النبوي</field>
+            <field name="date">2025-09-04</field>
+            <field name="holiday_type">religious</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_commemoration_2025" model="tazweed.public.holiday">
+            <field name="name">Commemoration Day</field>
+            <field name="name_ar">يوم الشهيد</field>
+            <field name="date">2025-11-30</field>
+            <field name="holiday_type">commemorative</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_national_day_2025_1" model="tazweed.public.holiday">
+            <field name="name">National Day</field>
+            <field name="name_ar">اليوم الوطني</field>
+            <field name="date">2025-12-02</field>
+            <field name="holiday_type">national</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <record id="holiday_national_day_2025_2" model="tazweed.public.holiday">
+            <field name="name">National Day</field>
+            <field name="name_ar">اليوم الوطني</field>
+            <field name="date">2025-12-03</field>
+            <field name="holiday_type">national</field>
+            <field name="state">confirmed</field>
+        </record>
+    </data>
+</odoo>

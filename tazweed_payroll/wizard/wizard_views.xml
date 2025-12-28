@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payslip Generation Wizard Form View -->
+    <record id="view_payslip_generation_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.payslip.generation.wizard.form</field>
+        <field name="model">tazweed.payslip.generation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Payslips">
+                <group>
+                    <group string="Period">
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                    </group>
+                    <group string="Filters">
+                        <field name="department_id"/>
+                        <field name="struct_id"/>
+                    </group>
+                </group>
+                <group string="Batch Options">
+                    <field name="create_batch"/>
+                    <field name="batch_name" attrs="{'invisible': [('create_batch', '=', False)], 'required': [('create_batch', '=', True)]}"/>
+                    <field name="payslip_run_id" attrs="{'invisible': [('create_batch', '=', True)]}"/>
+                </group>
+                <group string="Options">
+                    <field name="skip_existing"/>
+                    <field name="auto_compute"/>
+                </group>
+                <group string="Employees">
+                    <field name="employee_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Generate Payslips" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payslip Generation Wizard Action -->
+    <record id="action_payslip_generation_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Payslips</field>
+        <field name="res_model">tazweed.payslip.generation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- WPS Generation Wizard Form View -->
+    <record id="view_wps_generation_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.wps.generation.wizard.form</field>
+        <field name="model">tazweed.wps.generation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate WPS File">
+                <group>
+                    <group string="Payroll Batch">
+                        <field name="payslip_run_id"/>
+                    </group>
+                    <group string="Period">
+                        <field name="salary_month"/>
+                        <field name="salary_year"/>
+                    </group>
+                </group>
+                <group string="Employer Details">
+                    <field name="employer_eid"/>
+                    <field name="employer_bank_code"/>
+                    <field name="employer_account"/>
+                </group>
+                <group string="Options">
+                    <field name="file_type"/>
+                    <field name="include_pending"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Generate WPS" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- WPS Generation Wizard Action -->
+    <record id="action_wps_generation_wizard" model="ir.actions.act_window">
+        <field name="name">Generate WPS File</field>
+        <field name="res_model">tazweed.wps.generation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

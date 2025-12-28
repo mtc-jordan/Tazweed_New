@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Task Form View - Enhanced with Fee Management -->
+    <record id="view_pro_task_form" model="ir.ui.view">
+        <field name="name">pro.task.form</field>
+        <field name="model">pro.task</field>
+        <field name="arch" type="xml">
+            <form string="PRO Task">
+                <header>
+                    <button name="action_start" string="▶️ Start Task" type="object" 
+                            class="btn-primary" states="pending"/>
+                    <button name="action_wait" string="⏸️ Put on Hold" type="object" 
+                            class="btn-warning" states="in_progress"/>
+                    <button name="action_resume" string="▶️ Resume" type="object" 
+                            class="btn-info" states="waiting"/>
+                    <button name="action_complete" string="✅ Complete Task" type="object" 
+                            class="btn-success" states="in_progress,waiting"/>
+                    <button name="action_cancel" string="Cancel" type="object" 
+                            class="btn-secondary" states="pending,in_progress,waiting"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="pending,in_progress,waiting,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_receipts" type="object" 
+                                class="oe_stat_button" icon="fa-file-text-o"
+                                attrs="{'invisible': [('receipt_count', '=', 0)]}">
+                            <field name="receipt_count" widget="statinfo" string="Receipts"/>
+                        </button>
+                    </div>
+                    
+                    <widget name="web_ribbon" title="Invoiced" bg_color="bg-success"
+                            attrs="{'invisible': [('is_invoiced', '=', False)]}"/>
+                    
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Task Name"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="📋 Task Information">
+                            <field name="request_id" readonly="1"/>
+                            <field name="service_id" readonly="1"/>
+                            <field name="step_id"/>
+                            <field name="step_type" readonly="1"/>
+                            <field name="beneficiary_name" readonly="1"/>
+                            <field name="employee_id" readonly="1"/>
+                        </group>
+                        <group string="👤 Assignment &amp; Priority">
+                            <field name="assigned_to"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="due_date"/>
+                            <field name="location" readonly="1"/>
+                            <field name="government_authority_id" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <!-- Fee Management Tab -->
+                        <page string="💰 Fee Management" name="fees">
+                            <group>
+                                <group string="Fee Configuration">
+                                    <field name="has_fees" widget="boolean_toggle"/>
+                                    <field name="fee_type" attrs="{'invisible': [('has_fees', '=', False)], 'required': [('has_fees', '=', True)]}"/>
+                                    <field name="fee_description" attrs="{'invisible': [('has_fees', '=', False)]}"/>
+                                    <field name="fee_currency_id" attrs="{'invisible': [('has_fees', '=', False)]}" groups="base.group_multi_currency"/>
+                                </group>
+                                <group string="Fee Amounts" attrs="{'invisible': [('has_fees', '=', False)]}">
+                                    <field name="expected_fee" widget="monetary" options="{'currency_field': 'fee_currency_id'}"/>
+                                    <field name="actual_fee_paid" widget="monetary" options="{'currency_field': 'fee_currency_id'}"/>
+                                    <field name="fee_paid_by"/>
+                                </group>
+                            </group>
+                            
+                            <group attrs="{'invisible': [('has_fees', '=', False)]}">
+                                <group string="📄 Invoice Options">
+                                    <field name="include_in_invoice" widget="boolean_toggle"/>
+                                    <field name="is_invoiced" readonly="1"/>
+                                    <field name="invoice_line_id" readonly="1" attrs="{'invisible': [('is_invoiced', '=', False)]}"/>
+                                </group>
+                                <group string="💳 Payment Details">
+                                    <field name="payment_date"/>
+                                    <field name="payment_method"/>
+                                    <field name="payment_reference"/>
+                                    <field name="transaction_id"/>
+                                    <field name="receipt_number"/>
+                                </group>
+                            </group>
+                            
+                            <!-- Employee Cost Integration -->
+                            <group string="👤 Employee Cost Integration" attrs="{'invisible': ['|', ('has_fees', '=', False), ('employee_id', '=', False)]}">
+                                <field name="cost_added_to_employee" readonly="1"/>
+                                <div class="alert alert-info" role="alert" colspan="2">
+                                    <strong>ℹ️ Auto Cost Tracking:</strong> When this task is completed, the fee will be automatically added to the employee's cost center if "Fee Paid By" is set to "Company".
+                                </div>
+                            </group>
+                        </page>
+                        
+                        <!-- Receipts Tab -->
+                        <page string="🧾 Receipts" name="receipts">
+                            <div class="mb-3">
+                                <button name="action_add_receipt" string="➕ Add Receipt" type="object" 
+                                        class="btn-primary"/>
+                            </div>
+                            <field name="receipt_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="receipt_type"/>
+                                    <field name="authority_name"/>
+                                    <field name="reference_number"/>
+                                    <field name="date"/>
+                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="attachment" filename="attachment_filename"/>
+                                    <field name="attachment_filename" invisible="1"/>
+                                    <field name="attach_to_invoice" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                            <group class="mt-3">
+                                <div class="alert alert-success" role="alert" colspan="2">
+                                    <strong>✅ Auto Invoice Attachment:</strong> Receipts marked "Attach to Invoice" will be automatically included in the customer invoice when this task is completed.
+                                </div>
+                            </group>
+                        </page>
+                        
+                        <!-- Documents Tab -->
+                        <page string="📄 Documents" name="documents">
+                            <group string="Required Documents">
+                                <field name="required_document_ids" widget="many2many_tags" readonly="1"/>
+                            </group>
+                            <group string="Output Documents">
+                                <button name="action_add_output_document" string="➕ Add Document" type="object" 
+                                        class="btn-secondary mb-2"/>
+                                <field name="output_document_ids" nolabel="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="document_type_id"/>
+                                        <field name="document_number"/>
+                                        <field name="issue_date"/>
+                                        <field name="expiry_date"/>
+                                        <field name="file" filename="file_name"/>
+                                        <field name="file_name" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Attachments">
+                                <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                            </group>
+                        </page>
+                        
+                        <!-- Time Tracking Tab -->
+                        <page string="⏱️ Time Tracking" name="time">
+                            <group>
+                                <group string="Estimated">
+                                    <field name="estimated_hours"/>
+                                </group>
+                                <group string="Actual">
+                                    <field name="start_date" readonly="1"/>
+                                    <field name="end_date" readonly="1"/>
+                                    <field name="actual_hours" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Instructions & Notes Tab -->
+                        <page string="📝 Instructions &amp; Notes" name="notes">
+                            <group string="Step Instructions">
+                                <field name="instructions" nolabel="1" readonly="1"/>
+                            </group>
+                            <group string="Notes">
+                                <field name="notes" nolabel="1" placeholder="Add notes here..."/>
+                            </group>
+                            <group string="Completion Notes">
+                                <field name="completion_notes" nolabel="1" placeholder="Notes upon completion..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Task Tree View - Enhanced -->
+    <record id="view_pro_task_tree" model="ir.ui.view">
+        <field name="name">pro.task.tree</field>
+        <field name="model">pro.task</field>
+        <field name="arch" type="xml">
+            <tree string="PRO Tasks" decoration-danger="state == 'pending' and due_date and due_date &lt; current_date"
+                  decoration-warning="state == 'waiting'"
+                  decoration-success="state == 'completed'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="request_id"/>
+                <field name="beneficiary_name"/>
+                <field name="step_type" widget="badge" 
+                       decoration-info="step_type == 'document'"
+                       decoration-warning="step_type == 'government'"
+                       decoration-success="step_type == 'internal'"/>
+                <field name="assigned_to" widget="many2one_avatar_user"/>
+                <field name="priority" widget="priority"/>
+                <field name="due_date"/>
+                <field name="has_fees" widget="boolean"/>
+                <field name="actual_fee_paid" sum="Total Fees" widget="monetary"/>
+                <field name="receipt_count"/>
+                <field name="is_invoiced" widget="boolean"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'in_progress'"
+                       decoration-warning="state == 'waiting'"
+                       decoration-success="state == 'completed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Task Kanban View - Enhanced -->
+    <record id="view_pro_task_kanban" model="ir.ui.view">
+        <field name="name">pro.task.kanban</field>
+        <field name="model">pro.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="request_id"/>
+                <field name="beneficiary_name"/>
+                <field name="assigned_to"/>
+                <field name="priority"/>
+                <field name="due_date"/>
+                <field name="has_fees"/>
+                <field name="actual_fee_paid"/>
+                <field name="state"/>
+                <field name="receipt_count"/>
+                <field name="fee_currency_id"/>
+                <progressbar field="state" colors='{"pending": "secondary", "in_progress": "primary", "waiting": "warning", "completed": "success", "cancelled": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="text-muted mb-1">
+                                    <i class="fa fa-file-text-o"/> <field name="request_id"/>
+                                </div>
+                                <div class="mb-1">
+                                    <i class="fa fa-user"/> <field name="beneficiary_name"/>
+                                </div>
+                                <div class="mb-2" t-if="record.has_fees.raw_value">
+                                    <span class="badge bg-success">
+                                        <i class="fa fa-money"/> <field name="actual_fee_paid" widget="monetary"/>
+                                    </span>
+                                    <span class="badge bg-info ms-1" t-if="record.receipt_count.raw_value > 0">
+                                        <i class="fa fa-file-text-o"/> <field name="receipt_count"/> Receipts
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="due_date" widget="remaining_days"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="assigned_to" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Task Search View - Enhanced -->
+    <record id="view_pro_task_search" model="ir.ui.view">
+        <field name="name">pro.task.search</field>
+        <field name="model">pro.task</field>
+        <field name="arch" type="xml">
+            <search string="Search Tasks">
+                <field name="name"/>
+                <field name="request_id"/>
+                <field name="beneficiary_name"/>
+                <field name="assigned_to"/>
+                <filter string="My Tasks" name="my_tasks" domain="[('assigned_to', '=', uid)]"/>
+                <separator/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Waiting" name="waiting" domain="[('state', '=', 'waiting')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter string="Has Fees" name="has_fees" domain="[('has_fees', '=', True)]"/>
+                <filter string="Not Invoiced" name="not_invoiced" domain="[('has_fees', '=', True), ('is_invoiced', '=', False)]"/>
+                <!-- Has Receipts filter removed - receipt_count is not searchable -->
+                <separator/>
+                <filter string="Overdue" name="overdue" domain="[('due_date', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', 'not in', ['completed', 'cancelled'])]"/>
+                <filter string="Due Today" name="due_today" domain="[('due_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="High Priority" name="high_priority" domain="[('priority', 'in', ['2', '3'])]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Assigned To" name="group_assigned" context="{'group_by': 'assigned_to'}"/>
+                    <filter string="Service" name="group_service" context="{'group_by': 'service_id'}"/>
+                    <filter string="Request" name="group_request" context="{'group_by': 'request_id'}"/>
+                    <filter string="Fee Type" name="group_fee_type" context="{'group_by': 'fee_type'}"/>
+                    <filter string="Due Date" name="group_due_date" context="{'group_by': 'due_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Task Action -->
+    <record id="action_pro_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">pro.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_pro_task_search"/>
+        <field name="context">{'search_default_my_tasks': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No tasks found
+            </p>
+            <p>
+                Tasks are automatically created from service requests.
+            </p>
+        </field>
+    </record>
+
+    <!-- My Tasks Action -->
+    <record id="action_pro_my_tasks" model="ir.actions.act_window">
+        <field name="name">My Tasks</field>
+        <field name="res_model">pro.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_my_tasks': 1, 'search_default_in_progress': 1}</field>
+    </record>
+
+    <!-- Task Receipt Form View -->
+    <record id="view_pro_task_receipt_form" model="ir.ui.view">
+        <field name="name">pro.task.receipt.form</field>
+        <field name="model">pro.task.receipt</field>
+        <field name="arch" type="xml">
+            <form string="Task Receipt">
+                <sheet>
+                    <group>
+                        <group string="Receipt Information">
+                            <field name="name"/>
+                            <field name="receipt_type"/>
+                            <field name="authority_name"/>
+                            <field name="reference_number"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Amount &amp; Attachment">
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="amount" widget="monetary"/>
+                            <field name="attachment" filename="attachment_filename"/>
+                            <field name="attachment_filename" invisible="1"/>
+                            <field name="attach_to_invoice" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" placeholder="Additional details about this receipt..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Task Receipt Tree View -->
+    <record id="view_pro_task_receipt_tree" model="ir.ui.view">
+        <field name="name">pro.task.receipt.tree</field>
+        <field name="model">pro.task.receipt</field>
+        <field name="arch" type="xml">
+            <tree string="Task Receipts">
+                <field name="name"/>
+                <field name="task_id"/>
+                <field name="receipt_type"/>
+                <field name="authority_name"/>
+                <field name="reference_number"/>
+                <field name="date"/>
+                <field name="amount" sum="Total"/>
+                <field name="attach_to_invoice" widget="boolean"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

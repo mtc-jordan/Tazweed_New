@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_payroll.PayrollDashboard" owl="1">
+        <div class="payroll-dashboard">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title">
+                        <i class="fa fa-money"></i>
+                        Payroll Dashboard
+                    </h1>
+                    <p class="dashboard-subtitle">Manage payroll, salaries, and compensation</p>
+                </div>
+                <div class="header-right">
+                    <select class="period-select" t-on-change="onPeriodChange">
+                        <option value="current" selected="selected">Current Month</option>
+                        <option value="previous">Previous Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    <button class="btn-primary" t-on-click="onGeneratePayslips">
+                        <i class="fa fa-plus"></i> Generate Payslips
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Loading payroll data...</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div t-else="" class="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-green">
+                        <div class="stat-icon">
+                            <i class="fa fa-money"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">AED <t t-esc="state.stats.totalPayroll.toLocaleString()"/></span>
+                            <span class="stat-label">Total Payroll</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-blue">
+                        <div class="stat-icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.employeesPaid"/>
+                            <span class="stat-label">Employees Paid</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-orange">
+                        <div class="stat-icon">
+                            <i class="fa fa-file-text-o"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.pendingPayslips"/>
+                            <span class="stat-label">Pending Payslips</span>
+                            <span class="stat-badge" t-if="state.stats.pendingPayslips > 0">Needs Action</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-purple">
+                        <div class="stat-icon">
+                            <i class="fa fa-calculator"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">AED <t t-esc="state.stats.avgSalary.toLocaleString()"/></span>
+                            <span class="stat-label">Avg. Salary</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-red">
+                        <div class="stat-icon">
+                            <i class="fa fa-minus-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">AED <t t-esc="state.stats.totalDeductions.toLocaleString()"/></span>
+                            <span class="stat-label">Total Deductions</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-teal">
+                        <div class="stat-icon">
+                            <i class="fa fa-plus-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">AED <t t-esc="state.stats.totalAllowances.toLocaleString()"/></span>
+                            <span class="stat-label">Total Allowances</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-indigo">
+                        <div class="stat-icon">
+                            <i class="fa fa-bank"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.wpsGenerated"/>
+                            <span class="stat-label">WPS Files Generated</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-yellow">
+                        <div class="stat-icon">
+                            <i class="fa fa-credit-card"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">AED <t t-esc="state.stats.loansOutstanding.toLocaleString()"/></span>
+                            <span class="stat-label">Loans Outstanding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn" t-on-click="onViewAllPayslips">
+                        <i class="fa fa-list"></i> All Payslips
+                    </button>
+                    <button class="action-btn" t-on-click="onViewLoans">
+                        <i class="fa fa-credit-card"></i> Loans
+                    </button>
+                    <button class="action-btn" t-on-click="onGenerateWPS">
+                        <i class="fa fa-bank"></i> Generate WPS
+                    </button>
+                    <button class="action-btn" t-on-click="onViewGratuity">
+                        <i class="fa fa-gift"></i> Gratuity
+                    </button>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Payroll by Department</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="departmentPayrollChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Salary Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="salaryDistributionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card chart-card-wide">
+                        <div class="chart-header">
+                            <h3>Payroll Trends</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="payrollTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="tables-row">
+                    <!-- Recent Payslips -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="fa fa-file-text"></i> Recent Payslips</h3>
+                            <a href="#" t-on-click.prevent="onViewAllPayslips" class="view-all-link">View All</a>
+                        </div>
+                        <div class="table-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Period</th>
+                                        <th>Net Salary</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.recentPayslips" t-as="payslip" t-key="payslip.id">
+                                        <tr>
+                                            <td>
+                                                <div class="employee-cell">
+                                                    <span class="employee-avatar" t-esc="payslip.employee_name ? payslip.employee_name[0] : '?'"/>
+                                                    <span t-esc="payslip.employee_name"/>
+                                                </div>
+                                            </td>
+                                            <td t-esc="payslip.period"/>
+                                            <td>AED <t t-esc="payslip.net_salary.toLocaleString()"/></td>
+                                            <td>
+                                                <span t-attf-class="status-badge #{getStatusClass(payslip.state)}" t-esc="getStatusLabel(payslip.state)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="state.recentPayslips.length === 0">
+                                        <td colspan="4" class="no-data">No recent payslips</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pending Loans -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="fa fa-credit-card"></i> Active Loans</h3>
+                            <a href="#" t-on-click.prevent="onViewLoans" class="view-all-link">View All</a>
+                        </div>
+                        <div class="table-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Amount</th>
+                                        <th>Balance</th>
+                                        <th>Monthly</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.pendingLoans" t-as="loan" t-key="loan.id">
+                                        <tr>
+                                            <td>
+                                                <div class="employee-cell">
+                                                    <span class="employee-avatar" t-esc="loan.employee_name ? loan.employee_name[0] : '?'"/>
+                                                    <span t-esc="loan.employee_name"/>
+                                                </div>
+                                            </td>
+                                            <td>AED <t t-esc="loan.amount.toLocaleString()"/></td>
+                                            <td>AED <t t-esc="loan.balance.toLocaleString()"/></td>
+                                            <td>AED <t t-esc="loan.monthly_deduction.toLocaleString()"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="state.pendingLoans.length === 0">
+                                        <td colspan="4" class="no-data">No active loans</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Section -->
+                <div t-if="state.alerts.length > 0" class="alerts-section">
+                    <h3><i class="fa fa-bell"></i> Alerts &amp; Notifications</h3>
+                    <div class="alerts-list">
+                        <t t-foreach="state.alerts" t-as="alert" t-key="alert_index">
+                            <div t-attf-class="alert-item alert-#{alert.type}">
+                                <i t-attf-class="fa #{alert.icon}"></i>
+                                <span t-esc="alert.message"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

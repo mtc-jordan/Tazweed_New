@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_document_center_root"
+              name="Document Center"
+              web_icon="tazweed_document_center,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_document_dashboard"
+              name="Dashboard"
+              parent="menu_document_center_root"
+              action="action_document_dashboard"
+              sequence="1"/>
+
+    <!-- Documents Menu -->
+    <menuitem id="menu_documents"
+              name="Documents"
+              parent="menu_document_center_root"
+              sequence="10"/>
+
+    <menuitem id="menu_all_documents"
+              name="All Documents"
+              parent="menu_documents"
+              action="action_all_documents"
+              sequence="1"/>
+
+    <menuitem id="menu_expired_documents"
+              name="Expired Documents"
+              parent="menu_documents"
+              action="action_expired_documents"
+              sequence="2"/>
+
+    <menuitem id="menu_expiring_documents"
+              name="Expiring Soon"
+              parent="menu_documents"
+              action="action_expiring_documents"
+              sequence="3"/>
+
+    <!-- Alerts Menu -->
+    <menuitem id="menu_alerts"
+              name="Alerts"
+              parent="menu_document_center_root"
+              sequence="20"/>
+
+    <menuitem id="menu_all_alerts"
+              name="All Alerts"
+              parent="menu_alerts"
+              action="action_document_alerts"
+              sequence="1"/>
+
+    <menuitem id="menu_active_alerts"
+              name="Active Alerts"
+              parent="menu_alerts"
+              action="action_active_alerts"
+              sequence="2"/>
+
+    <!-- Renewals Menu -->
+    <menuitem id="menu_renewals"
+              name="Renewals"
+              parent="menu_document_center_root"
+              sequence="30"/>
+
+    <menuitem id="menu_all_renewals"
+              name="All Requests"
+              parent="menu_renewals"
+              action="action_document_renewals"
+              sequence="1"/>
+
+    <menuitem id="menu_pending_approvals"
+              name="Pending Approvals"
+              parent="menu_renewals"
+              action="action_pending_approvals"
+              sequence="2"
+              groups="tazweed_document_center.group_document_manager"/>
+
+    <!-- Reports Menu -->
+    <menuitem id="menu_reports"
+              name="Reports"
+              parent="menu_document_center_root"
+              sequence="40"/>
+
+    <menuitem id="menu_compliance_report"
+              name="Compliance Report"
+              parent="menu_reports"
+              action="action_document_compliance"
+              sequence="1"/>
+
+    <menuitem id="menu_non_compliant"
+              name="Non-Compliant Employees"
+              parent="menu_reports"
+              action="action_non_compliant_employees"
+              sequence="2"/>
+
+    <!-- Actions Menu -->
+    <menuitem id="menu_actions"
+              name="Actions"
+              parent="menu_document_center_root"
+              sequence="50"
+              groups="tazweed_document_center.group_document_manager"/>
+
+    <menuitem id="menu_bulk_notification"
+              name="Send Bulk Notifications"
+              parent="menu_actions"
+              action="action_bulk_notification_wizard"
+              sequence="1"/>
+
+    <menuitem id="menu_bulk_renewal"
+              name="Create Bulk Renewals"
+              parent="menu_actions"
+              action="action_bulk_renewal_wizard"
+              sequence="2"/>
+
+    <menuitem id="menu_export_documents"
+              name="Export Documents"
+              parent="menu_actions"
+              action="action_document_export_wizard"
+              sequence="3"/>
+
+    <menuitem id="menu_compliance_wizard"
+              name="Generate Compliance Report"
+              parent="menu_actions"
+              action="action_compliance_report_wizard"
+              sequence="4"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_configuration"
+              name="Configuration"
+              parent="menu_document_center_root"
+              sequence="100"
+              groups="tazweed_document_center.group_document_admin"/>
+</odoo>

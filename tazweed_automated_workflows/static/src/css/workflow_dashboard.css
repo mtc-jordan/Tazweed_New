@@ -1,0 +1,518 @@
+/* Tazweed Automated Workflows - Dashboard Styling */
+
+:root {
+    --primary-color: #3498db;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12;
+    --info-color: #9b59b6;
+    --light-gray: #ecf0f1;
+    --dark-gray: #34495e;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* ============================================================
+   Dashboard Container
+   ============================================================ */
+
+.workflow-dashboard {
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.workflow-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-dashboard-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin: 0;
+}
+
+.workflow-dashboard-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.workflow-dashboard-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.workflow-dashboard-actions .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.workflow-dashboard-actions .btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* ============================================================
+   Workflow Cards
+   ============================================================ */
+
+.workflow-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.workflow-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    border-left: 4px solid var(--primary-color);
+}
+
+.workflow-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.workflow-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.workflow-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin: 0;
+}
+
+.workflow-card-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.workflow-card-status.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.workflow-card-status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.workflow-card-status.completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.workflow-card-status.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.workflow-card-content {
+    margin-bottom: 15px;
+}
+
+.workflow-card-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.workflow-card-item:last-child {
+    border-bottom: none;
+}
+
+.workflow-card-label {
+    font-weight: 600;
+    color: #7f8c8d;
+    font-size: 12px;
+}
+
+.workflow-card-value {
+    font-weight: 700;
+    color: var(--dark-gray);
+}
+
+.workflow-card-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.workflow-card-footer button {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--light-gray);
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    transition: var(--transition);
+}
+
+.workflow-card-footer button:hover {
+    background-color: var(--light-gray);
+    border-color: var(--primary-color);
+}
+
+/* ============================================================
+   Workflow Stats
+   ============================================================ */
+
+.workflow-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.stat-card-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.stat-card-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-bottom: 5px;
+}
+
+.stat-card-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.stat-card.active .stat-card-icon {
+    color: var(--success-color);
+}
+
+.stat-card.pending .stat-card-icon {
+    color: var(--warning-color);
+}
+
+.stat-card.completed .stat-card-icon {
+    color: var(--info-color);
+}
+
+.stat-card.rejected .stat-card-icon {
+    color: var(--danger-color);
+}
+
+/* ============================================================
+   Workflow Timeline
+   ============================================================ */
+
+.workflow-timeline {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-timeline-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 20px;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 40px;
+    width: 2px;
+    height: 20px;
+    background-color: var(--light-gray);
+}
+
+.timeline-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.timeline-dot.success {
+    background-color: var(--success-color);
+}
+
+.timeline-dot.warning {
+    background-color: var(--warning-color);
+}
+
+.timeline-dot.danger {
+    background-color: var(--danger-color);
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-content-title {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 5px;
+}
+
+.timeline-content-description {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.timeline-content-time {
+    font-size: 12px;
+    color: #95a5a6;
+}
+
+/* ============================================================
+   Workflow Progress
+   ============================================================ */
+
+.workflow-progress {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.workflow-progress-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 15px;
+}
+
+.progress-bar-container {
+    background-color: var(--light-gray);
+    border-radius: 10px;
+    height: 30px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    transition: width 0.5s ease;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+/* ============================================================
+   Workflow List
+   ============================================================ */
+
+.workflow-list {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.workflow-list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    padding: 15px 20px;
+    background-color: var(--light-gray);
+    font-weight: 600;
+    color: var(--dark-gray);
+    border-bottom: 2px solid #ddd;
+}
+
+.workflow-list-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--light-gray);
+    align-items: center;
+    transition: var(--transition);
+}
+
+.workflow-list-item:hover {
+    background-color: #f9f9f9;
+}
+
+.workflow-list-item-name {
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.workflow-list-item-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.workflow-list-item-status.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.workflow-list-item-status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.workflow-list-item-status.completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.workflow-list-item-status.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* ============================================================
+   Responsive Design
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .workflow-dashboard {
+        padding: 15px;
+    }
+    
+    .workflow-cards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .workflow-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .workflow-list-header,
+    .workflow-list-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .workflow-dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .workflow-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .workflow-dashboard-title {
+        font-size: 22px;
+    }
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.workflow-dashboard {
+    animation: slideDown 0.5s ease;
+}
+
+.workflow-card {
+    animation: fadeIn 0.5s ease;
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}

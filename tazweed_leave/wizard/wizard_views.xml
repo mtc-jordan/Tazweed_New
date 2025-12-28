@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Leave Encashment Wizard Form -->
+    <record id="view_leave_encashment_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.leave.encashment.wizard.form</field>
+        <field name="model">tazweed.leave.encashment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Leave Encashment">
+                <group>
+                    <group string="Allocation">
+                        <field name="allocation_id" readonly="1"/>
+                        <field name="employee_id" readonly="1"/>
+                        <field name="available_days" readonly="1"/>
+                    </group>
+                    <group string="Encashment">
+                        <field name="encash_days"/>
+                        <field name="daily_rate" readonly="1"/>
+                        <field name="encashment_rate" readonly="1"/>
+                        <field name="total_amount" readonly="1"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_encash" string="Encash" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Leave Encashment Wizard Action -->
+    <record id="action_leave_encashment_wizard" model="ir.actions.act_window">
+        <field name="name">Leave Encashment</field>
+        <field name="res_model">tazweed.leave.encashment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Leave Allocation Wizard Form -->
+    <record id="view_leave_allocation_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.leave.allocation.wizard.form</field>
+        <field name="model">tazweed.leave.allocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Leave Allocation">
+                <group>
+                    <group string="Leave Type">
+                        <field name="holiday_status_id"/>
+                        <field name="allocation_type"/>
+                        <field name="number_of_days"/>
+                    </group>
+                    <group string="Validity">
+                        <field name="validity_start"/>
+                        <field name="validity_end"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Filter">
+                        <field name="department_id"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_allocate" string="Create Allocations" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Leave Allocation Wizard Action -->
+    <record id="action_leave_allocation_wizard" model="ir.actions.act_window">
+        <field name="name">Bulk Leave Allocation</field>
+        <field name="res_model">tazweed.leave.allocation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Attendance Summary Wizard Form -->
+    <record id="view_attendance_summary_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.attendance.summary.wizard.form</field>
+        <field name="model">tazweed.attendance.summary.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Attendance Summary">
+                <group>
+                    <group string="Period">
+                        <field name="month"/>
+                        <field name="year"/>
+                    </group>
+                    <group string="Options">
+                        <field name="department_id"/>
+                        <field name="regenerate"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Wizard Action -->
+    <record id="action_attendance_summary_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Attendance Summary</field>
+        <field name="res_model">tazweed.attendance.summary.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

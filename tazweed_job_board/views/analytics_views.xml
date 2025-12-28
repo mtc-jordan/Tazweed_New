@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Board Analytics Form View -->
+    <record id="view_job_board_analytics_form" model="ir.ui.view">
+        <field name="name">job.board.analytics.form</field>
+        <field name="model">job.board.analytics</field>
+        <field name="arch" type="xml">
+            <form string="Job Board Analytics" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Reference">
+                            <field name="date"/>
+                            <field name="job_board_id"/>
+                            <field name="job_posting_id"/>
+                            <field name="hr_job_id"/>
+                        </group>
+                        <group string="Engagement">
+                            <field name="impressions"/>
+                            <field name="views"/>
+                            <field name="clicks"/>
+                            <field name="applications"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Conversions">
+                            <field name="interviews"/>
+                            <field name="offers"/>
+                            <field name="hires"/>
+                        </group>
+                        <group string="Cost">
+                            <field name="spend"/>
+                            <field name="cost_per_click"/>
+                            <field name="cost_per_application"/>
+                            <field name="cost_per_hire"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Rates">
+                            <field name="click_rate" widget="progressbar"/>
+                            <field name="application_rate" widget="progressbar"/>
+                            <field name="interview_rate" widget="progressbar"/>
+                            <field name="offer_rate" widget="progressbar"/>
+                            <field name="hire_rate" widget="progressbar"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Job Board Analytics Tree View -->
+    <record id="view_job_board_analytics_tree" model="ir.ui.view">
+        <field name="name">job.board.analytics.tree</field>
+        <field name="model">job.board.analytics</field>
+        <field name="arch" type="xml">
+            <tree string="Job Board Analytics" create="false" edit="false">
+                <field name="date"/>
+                <field name="job_board_id"/>
+                <field name="job_posting_id"/>
+                <field name="impressions" sum="Total Impressions"/>
+                <field name="views" sum="Total Views"/>
+                <field name="clicks" sum="Total Clicks"/>
+                <field name="applications" sum="Total Applications"/>
+                <field name="interviews" sum="Total Interviews"/>
+                <field name="hires" sum="Total Hires"/>
+                <field name="spend" sum="Total Spend"/>
+                <field name="click_rate" widget="progressbar"/>
+                <field name="application_rate" widget="progressbar"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Job Board Analytics Pivot View -->
+    <record id="view_job_board_analytics_pivot" model="ir.ui.view">
+        <field name="name">job.board.analytics.pivot</field>
+        <field name="model">job.board.analytics</field>
+        <field name="arch" type="xml">
+            <pivot string="Job Board Analytics">
+                <field name="job_board_id" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="views" type="measure"/>
+                <field name="applications" type="measure"/>
+                <field name="hires" type="measure"/>
+                <field name="spend" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Job Board Analytics Graph View -->
+    <record id="view_job_board_analytics_graph" model="ir.ui.view">
+        <field name="name">job.board.analytics.graph</field>
+        <field name="model">job.board.analytics</field>
+        <field name="arch" type="xml">
+            <graph string="Job Board Analytics" type="line">
+                <field name="date" type="row" interval="day"/>
+                <field name="views" type="measure"/>
+                <field name="applications" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Job Board Analytics Search View -->
+    <record id="view_job_board_analytics_search" model="ir.ui.view">
+        <field name="name">job.board.analytics.search</field>
+        <field name="model">job.board.analytics</field>
+        <field name="arch" type="xml">
+            <search string="Search Analytics">
+                <field name="job_board_id"/>
+                <field name="job_posting_id"/>
+                <field name="hr_job_id"/>
+                <filter string="Today" name="today" domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[('date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="this_month" domain="[('date', '>=', (context_today().replace(day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Quarter" name="this_quarter" domain="[('date', '>=', (context_today() - datetime.timedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Job Board" name="group_board" context="{'group_by': 'job_board_id'}"/>
+                    <filter string="Job Position" name="group_job" context="{'group_by': 'hr_job_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Job Board Analytics Action -->
+    <record id="action_job_board_analytics" model="ir.actions.act_window">
+        <field name="name">Analytics</field>
+        <field name="res_model">job.board.analytics</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+        <field name="search_view_id" ref="view_job_board_analytics_search"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No analytics data yet
+            </p>
+            <p>
+                Analytics data is collected automatically from your job postings.
+                Track views, applications, and conversions across all job boards.
+            </p>
+        </field>
+    </record>
+
+    <!-- Job Board Report Model -->
+    <record id="view_job_board_report_form" model="ir.ui.view">
+        <field name="name">job.board.report.form</field>
+        <field name="model">job.board.report</field>
+        <field name="arch" type="xml">
+            <form string="Scheduled Report">
+                <sheet>
+                    <group>
+                        <group string="Report Settings">
+                            <field name="name"/>
+                            <field name="report_type"/>
+                        </group>
+                        <group string="Filters">
+                            <field name="job_board_ids" widget="many2many_tags"/>
+                            <field name="date_range"/>
+                        </group>
+                    </group>
+                    <group string="Recipients">
+                        <field name="recipient_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Job Board Report Tree View -->
+    <record id="view_job_board_report_tree" model="ir.ui.view">
+        <field name="name">job.board.report.tree</field>
+        <field name="model">job.board.report</field>
+        <field name="arch" type="xml">
+            <tree string="Scheduled Reports">
+                <field name="name"/>
+                <field name="report_type"/>
+                <field name="last_sent"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Job Board Report Action -->
+    <record id="action_job_board_report" model="ir.actions.act_window">
+        <field name="name">Scheduled Reports</field>
+        <field name="res_model">job.board.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first scheduled report
+            </p>
+            <p>
+                Schedule automatic reports to be sent to stakeholders.
+                Track job board performance over time.
+            </p>
+        </field>
+    </record>
+</odoo>

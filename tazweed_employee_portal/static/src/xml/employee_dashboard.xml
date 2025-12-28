@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_employee_portal.EmployeeDashboard" owl="1">
+        <div class="employee-dashboard">
+            <!-- Loading State -->
+            <div t-if="state.loading" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Loading your dashboard...</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div t-else="" class="dashboard-content">
+                <!-- Welcome Header -->
+                <div class="welcome-header">
+                    <div class="welcome-info">
+                        <div class="employee-avatar-large">
+                            <t t-if="state.employee" t-esc="state.employee.name ? state.employee.name[0] : '?'"/>
+                        </div>
+                        <div class="welcome-text">
+                            <h1>Welcome back, <t t-if="state.employee" t-esc="state.employee.name.split(' ')[0]"/>!</h1>
+                            <p t-if="state.employee">
+                                <span t-esc="state.employee.job_title"/> 
+                                <t t-if="state.employee.department"> • <t t-esc="state.employee.department"/></t>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="welcome-actions">
+                        <button class="btn-primary" t-on-click="onRequestLeave">
+                            <i class="fa fa-calendar-plus-o"></i> Request Leave
+                        </button>
+                        <button class="btn-secondary" t-on-click="onViewProfile">
+                            <i class="fa fa-user"></i> My Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-blue">
+                        <div class="stat-icon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.leaveBalance"/>
+                            <span class="stat-label">Leave Balance (Days)</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-orange">
+                        <div class="stat-icon">
+                            <i class="fa fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.pendingRequests"/>
+                            <span class="stat-label">Pending Requests</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-green">
+                        <div class="stat-icon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value"><t t-esc="state.stats.attendanceRate"/>%</span>
+                            <span class="stat-label">Attendance Rate</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-purple">
+                        <div class="stat-icon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.performanceRating.toFixed(1)"/>
+                            <span class="stat-label">Performance Rating</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-teal">
+                        <div class="stat-icon">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.trainingHours"/>
+                            <span class="stat-label">Training Hours</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-red" t-if="state.stats.documentsExpiring > 0">
+                        <div class="stat-icon">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.documentsExpiring"/>
+                            <span class="stat-label">Documents Expiring</span>
+                            <span class="stat-badge">Action Required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-card" t-on-click="onRequestLeave">
+                            <div class="quick-action-icon icon-blue">
+                                <i class="fa fa-calendar-plus-o"></i>
+                            </div>
+                            <span>Request Leave</span>
+                        </button>
+                        <button class="quick-action-card" t-on-click="onViewPayslips">
+                            <div class="quick-action-icon icon-green">
+                                <i class="fa fa-money"></i>
+                            </div>
+                            <span>My Payslips</span>
+                        </button>
+                        <button class="quick-action-card" t-on-click="onViewAttendance">
+                            <div class="quick-action-icon icon-purple">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <span>Attendance</span>
+                        </button>
+                        <button class="quick-action-card" t-on-click="onViewDocuments">
+                            <div class="quick-action-icon icon-orange">
+                                <i class="fa fa-file-text-o"></i>
+                            </div>
+                            <span>Documents</span>
+                        </button>
+                        <button class="quick-action-card" t-on-click="onViewTeam">
+                            <div class="quick-action-icon icon-teal">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <span>My Team</span>
+                        </button>
+                        <button class="quick-action-card" t-on-click="onViewProfile">
+                            <div class="quick-action-icon icon-pink">
+                                <i class="fa fa-user-circle"></i>
+                            </div>
+                            <span>Profile</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="main-content-grid">
+                    <!-- Leave Balance Chart -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-calendar"></i> Leave Balance</h3>
+                        </div>
+                        <div class="card-body chart-container">
+                            <canvas id="leaveBalanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Chart -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-clock-o"></i> This Week's Attendance</h3>
+                        </div>
+                        <div class="card-body chart-container">
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-history"></i> Recent Activities</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="activities-list">
+                                <t t-foreach="state.recentActivities" t-as="activity" t-key="activity.id">
+                                    <div class="activity-item">
+                                        <div t-attf-class="activity-icon #{getActivityColor(activity.type)}">
+                                            <i t-attf-class="fa #{getActivityIcon(activity.type)}"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <span class="activity-title" t-esc="activity.title"/>
+                                            <span class="activity-date" t-esc="formatDate(activity.date)"/>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div t-if="state.recentActivities.length === 0" class="no-data">
+                                    No recent activities
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Events -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa fa-calendar-o"></i> Upcoming Events</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="events-list">
+                                <t t-foreach="state.upcomingEvents" t-as="event" t-key="event.id">
+                                    <div class="event-item">
+                                        <div class="event-date">
+                                            <span class="event-day" t-esc="event.day"/>
+                                            <span class="event-month" t-esc="event.month"/>
+                                        </div>
+                                        <div class="event-content">
+                                            <span class="event-title" t-esc="event.title"/>
+                                            <span class="event-type" t-esc="event.type"/>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div t-if="state.upcomingEvents.length === 0" class="no-data">
+                                    No upcoming events
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Announcements Section -->
+                <div t-if="state.announcements.length > 0" class="announcements-section">
+                    <h3><i class="fa fa-bullhorn"></i> Company Announcements</h3>
+                    <div class="announcements-list">
+                        <t t-foreach="state.announcements" t-as="announcement" t-key="announcement.id">
+                            <div class="announcement-card">
+                                <div class="announcement-header">
+                                    <span class="announcement-title" t-esc="announcement.title"/>
+                                    <span class="announcement-date" t-esc="formatDate(announcement.date)"/>
+                                </div>
+                                <p class="announcement-content" t-esc="announcement.content"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- Team Members -->
+                <div t-if="state.teamMembers.length > 0" class="team-section">
+                    <div class="section-header">
+                        <h3><i class="fa fa-users"></i> My Team</h3>
+                        <a href="#" t-on-click.prevent="onViewTeam" class="view-all-link">View All</a>
+                    </div>
+                    <div class="team-grid">
+                        <t t-foreach="state.teamMembers" t-as="member" t-key="member.id">
+                            <div class="team-card">
+                                <div class="team-avatar" t-esc="member.name ? member.name[0] : '?'"/>
+                                <div class="team-info">
+                                    <span class="team-name" t-esc="member.name"/>
+                                    <span class="team-job" t-esc="member.job_title"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

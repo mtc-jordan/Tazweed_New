@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Performance Review Sequence -->
+        <record id="seq_performance_review" model="ir.sequence">
+            <field name="name">Performance Review</field>
+            <field name="code">tazweed.performance.review</field>
+            <field name="prefix">PR/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Performance Goal Sequence -->
+        <record id="seq_performance_goal" model="ir.sequence">
+            <field name="name">Performance Goal</field>
+            <field name="code">tazweed.performance.goal</field>
+            <field name="prefix">GOAL/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Development Plan Sequence -->
+        <record id="seq_development_plan" model="ir.sequence">
+            <field name="name">Development Plan</field>
+            <field name="code">tazweed.development.plan</field>
+            <field name="prefix">IDP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Competency Assessment Sequence -->
+        <record id="seq_competency_assessment" model="ir.sequence">
+            <field name="name">Competency Assessment</field>
+            <field name="code">tazweed.competency.assessment</field>
+            <field name="prefix">CA/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Feedback Sequence -->
+        <record id="seq_performance_feedback" model="ir.sequence">
+            <field name="name">Performance Feedback</field>
+            <field name="code">tazweed.performance.feedback</field>
+            <field name="prefix">FB/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Feedback Request Sequence -->
+        <record id="seq_feedback_request" model="ir.sequence">
+            <field name="name">Feedback Request</field>
+            <field name="code">tazweed.feedback.request</field>
+            <field name="prefix">FBR/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

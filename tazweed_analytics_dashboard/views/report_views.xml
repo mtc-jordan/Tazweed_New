@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Tree View -->
+    <record id="analytics_report_view_tree" model="ir.ui.view">
+        <field name="name">analytics.report.tree</field>
+        <field name="model">analytics.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="report_type"/>
+                <field name="date_range"/>
+                <field name="output_format"/>
+                <field name="create_date"/>
+                <field name="report_filename"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Report Form View -->
+    <record id="analytics_report_view_form" model="ir.ui.view">
+        <field name="name">analytics.report.form</field>
+        <field name="model">analytics.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_report" string="Generate Report" 
+                            type="object" class="btn-primary"/>
+                    <button name="action_download_report" string="Download" 
+                            type="object" class="btn-secondary"
+                            attrs="{'invisible': [('report_file', '=', False)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Report Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Report Type">
+                            <field name="report_type"/>
+                            <field name="category"/>
+                            <field name="output_format"/>
+                        </group>
+                        <group string="Date Range">
+                            <field name="date_range"/>
+                            <field name="date_from" attrs="{'invisible': [('date_range', '!=', 'custom')]}"/>
+                            <field name="date_to" attrs="{'invisible': [('date_range', '!=', 'custom')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Filters">
+                            <field name="department_ids" widget="many2many_tags"/>
+                            <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Content">
+                            <field name="include_summary"/>
+                            <field name="include_charts"/>
+                            <field name="include_tables"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="KPIs" name="kpis">
+                            <field name="kpi_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="category"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Scheduling" name="schedule" 
+                              attrs="{'invisible': [('report_type', '!=', 'scheduled')]}">
+                            <group>
+                                <group>
+                                    <field name="is_scheduled"/>
+                                    <field name="schedule_frequency" 
+                                           attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                    <field name="schedule_day" 
+                                           attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                    <field name="schedule_time" widget="float_time"
+                                           attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                </group>
+                                <group>
+                                    <field name="recipient_ids" widget="many2many_tags"
+                                           attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                    <field name="next_run" readonly="1"
+                                           attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                    <field name="last_run" readonly="1"
+                                           attrs="{'invisible': [('is_scheduled', '=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Generated Report" name="output" 
+                              attrs="{'invisible': [('report_file', '=', False)]}">
+                            <group>
+                                <field name="report_file" filename="report_filename"/>
+                                <field name="report_filename"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group string="Description">
+                        <field name="description" nolabel="1" placeholder="Report description..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_analytics_report" model="ir.actions.act_window">
+        <field name="name">Reports</field>
+        <field name="res_model">analytics.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

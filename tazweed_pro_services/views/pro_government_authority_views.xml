@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Government Authority Tree View -->
+    <record id="view_pro_government_authority_tree" model="ir.ui.view">
+        <field name="name">pro.government.authority.tree</field>
+        <field name="model">pro.government.authority</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="authority_type"/>
+                <field name="emirate"/>
+                <field name="website" widget="url"/>
+                <field name="phone"/>
+                <field name="service_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Government Authority Form View -->
+    <record id="view_pro_government_authority_form" model="ir.ui.view">
+        <field name="name">pro.government.authority.form</field>
+        <field name="model">pro.government.authority</field>
+        <field name="arch" type="xml">
+            <form string="Government Authority">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(tazweed_pro_services.action_pro_service)d"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-list"
+                                context="{'search_default_government_authority_id': active_id}">
+                            <field name="service_count" widget="statinfo" string="Services"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Authority Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="authority_type"/>
+                            <field name="emirate"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="website" widget="url"/>
+                            <field name="portal_url" widget="url"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                        <group>
+                            <field name="working_days"/>
+                            <field name="working_hours"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="address"/>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Government Authority Search View -->
+    <record id="view_pro_government_authority_search" model="ir.ui.view">
+        <field name="name">pro.government.authority.search</field>
+        <field name="model">pro.government.authority</field>
+        <field name="arch" type="xml">
+            <search string="Government Authorities">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Federal" name="federal" domain="[('authority_type', '=', 'federal')]"/>
+                <filter string="Local" name="local" domain="[('authority_type', '=', 'local')]"/>
+                <filter string="Free Zone" name="free_zone" domain="[('authority_type', '=', 'free_zone')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'authority_type'}"/>
+                    <filter string="Emirate" name="group_emirate" context="{'group_by': 'emirate'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Government Authority Action -->
+    <record id="action_pro_government_authority" model="ir.actions.act_window">
+        <field name="name">Government Authorities</field>
+        <field name="res_model">pro.government.authority</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first government authority
+            </p>
+            <p>
+                Define government authorities that PRO services interact with.
+            </p>
+        </field>
+    </record>
+</odoo>

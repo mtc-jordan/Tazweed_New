@@ -1,0 +1,138 @@
+/* PRO Services Custom Styles */
+
+/* Kanban card styling */
+.o_pro_kanban .o_kanban_record {
+    border-left: 3px solid #875A7B;
+}
+
+.o_pro_kanban .o_kanban_record.o_kanban_record_has_image_fill {
+    min-height: 120px;
+}
+
+/* SLA Status badges */
+.o_pro_sla_on_track {
+    background-color: #28a745;
+    color: white;
+}
+
+.o_pro_sla_at_risk {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.o_pro_sla_overdue {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Task status colors */
+.o_pro_task_pending {
+    border-left-color: #6c757d;
+}
+
+.o_pro_task_in_progress {
+    border-left-color: #007bff;
+}
+
+.o_pro_task_waiting {
+    border-left-color: #ffc107;
+}
+
+.o_pro_task_completed {
+    border-left-color: #28a745;
+}
+
+/* Document status indicators */
+.o_pro_doc_valid {
+    color: #28a745;
+}
+
+.o_pro_doc_expiring {
+    color: #ffc107;
+}
+
+.o_pro_doc_expired {
+    color: #dc3545;
+}
+
+/* Request priority styling */
+.o_pro_priority_urgent {
+    background-color: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Form section styling */
+.o_pro_section_header {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-left: 4px solid #875A7B;
+}
+
+/* Dashboard cards */
+.o_pro_dashboard_card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.o_pro_dashboard_card .o_pro_card_title {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+.o_pro_dashboard_card .o_pro_card_value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #212529;
+}
+
+/* Timeline styling for tasks */
+.o_pro_timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.o_pro_timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.o_pro_timeline_item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.o_pro_timeline_item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #875A7B;
+    border: 2px solid white;
+}
+
+.o_pro_timeline_item.completed::before {
+    background-color: #28a745;
+}
+
+.o_pro_timeline_item.in_progress::before {
+    background-color: #007bff;
+}
+
+.o_pro_timeline_item.pending::before {
+    background-color: #6c757d;
+}

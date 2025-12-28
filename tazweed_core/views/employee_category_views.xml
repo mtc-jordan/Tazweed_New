@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_category_tree" model="ir.ui.view">
+        <field name="name">tazweed.employee.category.tree</field>
+        <field name="model">tazweed.employee.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="color" widget="color_picker"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_category_form" model="ir.ui.view">
+        <field name="name">tazweed.employee.category.form</field>
+        <field name="model">tazweed.employee.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_categories" model="ir.actions.act_window">
+        <field name="name">Employee Categories</field>
+        <field name="res_model">tazweed.employee.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Documents List -->
+    <template id="portal_documents" name="Portal Documents">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>My Documents</h3>
+                    <a href="/my/documents/upload" class="btn btn-primary">
+                        <i class="fa fa-upload me-2"/>Upload Document
+                    </a>
+                </div>
+
+                <!-- Expiring Documents Alert -->
+                <t t-if="expiring_documents">
+                    <div class="alert alert-warning">
+                        <i class="fa fa-exclamation-triangle me-2"/>
+                        <strong>Attention!</strong> You have <t t-esc="len(expiring_documents)"/> document(s) expiring soon.
+                    </div>
+                </t>
+
+                <!-- Documents Grid -->
+                <t t-if="documents">
+                    <div class="row">
+                        <t t-foreach="documents" t-as="doc">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 document-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span t-esc="doc.document_type_id.name or 'Document'"/>
+                                        <span t-att-class="'badge bg-%s' % ('success' if doc.state == 'valid' else 'danger' if doc.state == 'expired' else 'warning')"
+                                              t-esc="doc.state"/>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 t-esc="doc.name"/>
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <td class="text-muted">Number:</td>
+                                                <td t-esc="doc.document_number or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Issue Date:</td>
+                                                <td t-esc="doc.issue_date or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Expiry Date:</td>
+                                                <td t-esc="doc.expiry_date or '-'"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <t t-if="doc.attachment_ids">
+                                            <a t-att-href="'/my/documents/%s/download' % doc.id" class="btn btn-sm btn-outline-primary">
+                                                <i class="fa fa-download me-1"/>Download
+                                            </a>
+                                        </t>
+                                        <a t-att-href="'/my/documents/%s' % doc.id" class="btn btn-sm btn-outline-secondary">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <t t-call="portal.pager"/>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">No documents found.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Document Detail -->
+    <template id="portal_document_detail" name="Portal Document Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0" t-esc="document.name"/>
+                        <span t-att-class="'badge bg-%s' % ('success' if document.state == 'valid' else 'danger' if document.state == 'expired' else 'warning')"
+                              t-esc="document.state"/>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Document Type:</th>
+                                        <td t-esc="document.document_type_id.name or '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Document Number:</th>
+                                        <td t-esc="document.document_number or '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Issue Date:</th>
+                                        <td t-esc="document.issue_date or '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Expiry Date:</th>
+                                        <td t-esc="document.expiry_date or '-'"/>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Issuing Authority:</th>
+                                        <td t-esc="document.issuing_authority or '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Notes:</th>
+                                        <td t-esc="document.notes or '-'"/>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Attachments -->
+                        <t t-if="document.attachment_ids">
+                            <h6 class="text-muted mt-4 mb-3">Attachments</h6>
+                            <div class="list-group">
+                                <t t-foreach="document.attachment_ids" t-as="attachment">
+                                    <a t-att-href="'/web/content/%s?download=true' % attachment.id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <i class="fa fa-file me-2"/>
+                                            <t t-esc="attachment.name"/>
+                                        </span>
+                                        <span class="badge bg-secondary" t-esc="'%.2f KB' % (attachment.file_size / 1024)"/>
+                                    </a>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/my/documents" class="btn btn-secondary">Back to Documents</a>
+                        <t t-if="document.attachment_ids">
+                            <a t-att-href="'/my/documents/%s/download' % document.id" class="btn btn-primary">
+                                <i class="fa fa-download me-2"/>Download All
+                            </a>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Document Upload -->
+    <template id="portal_document_upload" name="Portal Document Upload">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Upload Document</h4>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="error">
+                            <div class="alert alert-danger" t-esc="error"/>
+                        </t>
+                        <form method="post" action="/my/documents/upload" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Document Type *</label>
+                                        <select name="document_type" class="form-select" required="required">
+                                            <option value="">Select Document Type</option>
+                                            <t t-foreach="document_types" t-as="dt">
+                                                <option t-att-value="dt.id" t-esc="dt.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Document Name *</label>
+                                        <input type="text" name="name" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Document Number</label>
+                                        <input type="text" name="document_number" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Issuing Authority</label>
+                                        <input type="text" name="issuing_authority" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Issue Date</label>
+                                        <input type="date" name="issue_date" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="date" name="expiry_date" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">File *</label>
+                                <input type="file" name="file" class="form-control" required="required" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"/>
+                                <small class="text-muted">Accepted formats: PDF, JPG, PNG, DOC, DOCX (Max 10MB)</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Notes</label>
+                                <textarea name="notes" class="form-control" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Upload Document</button>
+                                <a href="/my/documents" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Profile -->
+    <template id="portal_profile" name="Portal Profile">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <h3 class="mb-4">My Profile</h3>
+
+                <div class="row">
+                    <!-- Profile Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <img t-if="employee.image_128" 
+                                     t-att-src="image_data_uri(employee.image_128)" 
+                                     class="rounded-circle mb-3" 
+                                     style="width: 120px; height: 120px; object-fit: cover;"/>
+                                <div t-else="" class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                     style="width: 120px; height: 120px; font-size: 36px;">
+                                    <t t-esc="employee.name[:2].upper()"/>
+                                </div>
+                                <h4 t-esc="employee.name"/>
+                                <p class="text-muted" t-esc="employee.job_id.name or ''"/>
+                                <p class="text-muted" t-esc="employee.department_id.name or ''"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Details -->
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Personal Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th>Employee ID:</th>
+                                                <td t-esc="employee.employee_number or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Email:</th>
+                                                <td t-esc="employee.work_email or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone:</th>
+                                                <td t-esc="employee.mobile_phone or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Gender:</th>
+                                                <td t-esc="employee.gender or '-'"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th>Nationality:</th>
+                                                <td t-esc="employee.country_id.name or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Date of Birth:</th>
+                                                <td t-esc="employee.birthday or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Marital Status:</th>
+                                                <td t-esc="employee.marital or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Join Date:</th>
+                                                <td t-esc="employee.joining_date or '-'"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Work Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Work Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th>Department:</th>
+                                                <td t-esc="employee.department_id.name or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Job Position:</th>
+                                                <td t-esc="employee.job_id.name or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Manager:</th>
+                                                <td t-esc="employee.parent_id.name or '-'"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th>Work Location:</th>
+                                                <td t-esc="employee.work_location_id.name or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Contract Type:</th>
+                                                <td t-esc="employee.contract_id.contract_type or '-'"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Contact -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Emergency Contact</h5>
+                                <a href="/my/profile/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th>Contact Name:</th>
+                                                <td t-esc="employee.emergency_contact or '-'"/>
+                                            </tr>
+                                            <tr>
+                                                <th>Contact Phone:</th>
+                                                <td t-esc="employee.emergency_phone or '-'"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Team -->
+    <template id="portal_team" name="Portal Team">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <h3 class="mb-4">My Team</h3>
+
+                <t t-if="team_members">
+                    <div class="row">
+                        <t t-foreach="team_members" t-as="member">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <img t-if="member.image_128" 
+                                             t-att-src="image_data_uri(member.image_128)" 
+                                             class="rounded-circle mb-3" 
+                                             style="width: 80px; height: 80px; object-fit: cover;"/>
+                                        <div t-else="" class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                             style="width: 80px; height: 80px; font-size: 24px;">
+                                            <t t-esc="member.name[:2].upper()"/>
+                                        </div>
+                                        <h5 t-esc="member.name"/>
+                                        <p class="text-muted mb-1" t-esc="member.job_id.name or ''"/>
+                                        <p class="text-muted small" t-esc="member.work_email or ''"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">No team members found.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

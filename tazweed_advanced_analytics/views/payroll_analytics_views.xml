@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Payroll Analytics Form View -->
+        <record id="view_payroll_analytics_form" model="ir.ui.view">
+            <field name="name">Payroll Analytics Form</field>
+            <field name="model">tazweed.payroll.analytics</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Analytics">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="analytics_name" placeholder="Analytics Name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="period_start"/>
+                                <field name="period_end"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Payroll Metrics -->
+                        <separator string="Payroll Metrics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_employees" readonly="1"/>
+                                <field name="total_payroll" readonly="1"/>
+                                <field name="average_salary" readonly="1"/>
+                                <field name="total_deductions" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="total_net_salary" readonly="1"/>
+                                <field name="total_employer_contribution" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Salary Distribution -->
+                        <separator string="Salary Distribution" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="salary_min" readonly="1"/>
+                                <field name="salary_max" readonly="1"/>
+                                <field name="salary_median" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="salary_std_dev" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Deduction Analysis -->
+                        <separator string="Deduction Analysis" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="leave_deduction_total" readonly="1"/>
+                                <field name="overtime_total" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="performance_bonus_total" readonly="1"/>
+                                <field name="tax_deduction_total" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Cost Analysis -->
+                        <separator string="Cost Analysis" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="cost_per_employee" readonly="1"/>
+                                <field name="payroll_percentage_of_revenue" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Bank Transfer Analytics -->
+                        <separator string="Bank Transfer Analytics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_transfers" readonly="1"/>
+                                <field name="successful_transfers" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="failed_transfers" readonly="1"/>
+                                <field name="transfer_success_rate" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Trends -->
+                        <separator string="Trends" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="payroll_trend" readonly="1"/>
+                                <field name="salary_trend" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="deduction_trend" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Payroll Analytics Tree View -->
+        <record id="view_payroll_analytics_tree" model="ir.ui.view">
+            <field name="name">Payroll Analytics Tree</field>
+            <field name="model">tazweed.payroll.analytics</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Analytics">
+                    <field name="analytics_name"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="total_employees"/>
+                    <field name="total_payroll"/>
+                    <field name="average_salary"/>
+                    <field name="total_net_salary"/>
+                    <field name="transfer_success_rate"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Payroll Analytics Search View -->
+        <record id="view_payroll_analytics_search" model="ir.ui.view">
+            <field name="name">Payroll Analytics Search</field>
+            <field name="model">tazweed.payroll.analytics</field>
+            <field name="arch" type="xml">
+                <search string="Payroll Analytics">
+                    <field name="analytics_name"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_period" string="Period Start" context="{'group_by': 'period_start'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Payroll Analytics Action -->
+        <record id="action_payroll_analytics" model="ir.actions.act_window">
+            <field name="name">Payroll Analytics</field>
+            <field name="res_model">tazweed.payroll.analytics</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Payroll Analytics record
+                </p>
+            </field>
+        </record>
+        
+        <!-- Payroll Analytics Line Form View -->
+        <record id="view_payroll_analytics_line_form" model="ir.ui.view">
+            <field name="name">Payroll Analytics Line Form</field>
+            <field name="model">tazweed.payroll.analytics.line</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Analytics Line">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="analytics_id"/>
+                                <field name="department_id"/>
+                            </group>
+                            <group>
+                                <field name="employee_count"/>
+                                <field name="percentage_of_total"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="total_salary"/>
+                                <field name="average_salary"/>
+                            </group>
+                            <group>
+                                <field name="total_deductions"/>
+                                <field name="total_net"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Payroll Analytics Line Tree View -->
+        <record id="view_payroll_analytics_line_tree" model="ir.ui.view">
+            <field name="name">Payroll Analytics Line Tree</field>
+            <field name="model">tazweed.payroll.analytics.line</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Analytics Line">
+                    <field name="department_id"/>
+                    <field name="employee_count"/>
+                    <field name="total_salary"/>
+                    <field name="average_salary"/>
+                    <field name="total_deductions"/>
+                    <field name="total_net"/>
+                    <field name="percentage_of_total"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

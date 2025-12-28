@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Predefined KPIs -->
+        
+        <!-- Workforce KPIs -->
+        <record id="kpi_total_employees" model="analytics.kpi">
+            <field name="name">Total Employees</field>
+            <field name="code">total_employees</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-users</field>
+            <field name="color">#2196F3</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="kpi_turnover_rate" model="analytics.kpi">
+            <field name="name">Turnover Rate</field>
+            <field name="code">turnover_rate</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-exchange-alt</field>
+            <field name="color">#F44336</field>
+            <field name="has_target" eval="True"/>
+            <field name="target_value">5</field>
+            <field name="target_type">lower</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="kpi_avg_tenure" model="analytics.kpi">
+            <field name="name">Average Tenure</field>
+            <field name="code">avg_tenure</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">decimal</field>
+            <field name="decimal_places">1</field>
+            <field name="suffix"> years</field>
+            <field name="icon">fa-clock</field>
+            <field name="color">#4CAF50</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- Recruitment KPIs -->
+        <record id="kpi_open_positions" model="analytics.kpi">
+            <field name="name">Open Positions</field>
+            <field name="code">open_positions</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-briefcase</field>
+            <field name="color">#FF9800</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="kpi_time_to_hire" model="analytics.kpi">
+            <field name="name">Time to Hire</field>
+            <field name="code">time_to_hire</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="suffix"> days</field>
+            <field name="icon">fa-hourglass-half</field>
+            <field name="color">#9C27B0</field>
+            <field name="has_target" eval="True"/>
+            <field name="target_value">21</field>
+            <field name="target_type">lower</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="kpi_cost_per_hire" model="analytics.kpi">
+            <field name="name">Cost per Hire</field>
+            <field name="code">cost_per_hire</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">currency</field>
+            <field name="icon">fa-money-bill</field>
+            <field name="color">#00BCD4</field>
+            <field name="has_target" eval="True"/>
+            <field name="target_value">5000</field>
+            <field name="target_type">lower</field>
+            <field name="sequence">60</field>
+        </record>
+
+        <record id="kpi_placement_fill_rate" model="analytics.kpi">
+            <field name="name">Placement Fill Rate</field>
+            <field name="code">placement_fill_rate</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-check-circle</field>
+            <field name="color">#4CAF50</field>
+            <field name="has_target" eval="True"/>
+            <field name="target_value">85</field>
+            <field name="target_type">higher</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <!-- Payroll KPIs -->
+        <record id="kpi_payroll_cost" model="analytics.kpi">
+            <field name="name">Monthly Payroll Cost</field>
+            <field name="code">payroll_cost</field>
+            <field name="category">payroll</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">currency</field>
+            <field name="icon">fa-wallet</field>
+            <field name="color">#E91E63</field>
+            <field name="sequence">80</field>
+        </record>
+
+        <record id="kpi_revenue_per_employee" model="analytics.kpi">
+            <field name="name">Revenue per Employee</field>
+            <field name="code">revenue_per_employee</field>
+            <field name="category">financial</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">currency</field>
+            <field name="icon">fa-chart-line</field>
+            <field name="color">#4CAF50</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <!-- Compliance KPIs -->
+        <record id="kpi_emiratization_rate" model="analytics.kpi">
+            <field name="name">Emiratization Rate</field>
+            <field name="code">emiratization_rate</field>
+            <field name="category">compliance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-flag</field>
+            <field name="color">#009688</field>
+            <field name="has_target" eval="True"/>
+            <field name="target_value">10</field>
+            <field name="target_type">higher</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Performance KPIs -->
+        <record id="kpi_leave_utilization" model="analytics.kpi">
+            <field name="name">Leave Utilization</field>
+            <field name="code">leave_utilization</field>
+            <field name="category">performance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-calendar-check</field>
+            <field name="color">#FF5722</field>
+            <field name="sequence">110</field>
+        </record>
+
+        <record id="kpi_training_hours" model="analytics.kpi">
+            <field name="name">Training Hours/Employee</field>
+            <field name="code">training_hours</field>
+            <field name="category">performance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">decimal</field>
+            <field name="decimal_places">1</field>
+            <field name="suffix"> hrs</field>
+            <field name="icon">fa-graduation-cap</field>
+            <field name="color">#673AB7</field>
+            <field name="has_target" eval="True"/>
+            <field name="target_value">20</field>
+            <field name="target_type">higher</field>
+            <field name="sequence">120</field>
+        </record>
+
+        <!-- Predefined Dashboards -->
+        
+        <!-- Executive Dashboard -->
+        <record id="dashboard_executive" model="analytics.dashboard">
+            <field name="name">Executive Summary</field>
+            <field name="dashboard_type">executive</field>
+            <field name="description">High-level overview of key HR and business metrics</field>
+            <field name="layout">grid</field>
+            <field name="columns">4</field>
+            <field name="sequence">10</field>
+            <field name="kpi_ids" eval="[(6, 0, [
+                ref('kpi_total_employees'),
+                ref('kpi_turnover_rate'),
+                ref('kpi_payroll_cost'),
+                ref('kpi_revenue_per_employee'),
+                ref('kpi_placement_fill_rate'),
+                ref('kpi_emiratization_rate'),
+            ])]"/>
+        </record>
+
+        <!-- HR Operations Dashboard -->
+        <record id="dashboard_hr_operations" model="analytics.dashboard">
+            <field name="name">HR Operations</field>
+            <field name="dashboard_type">hr_operations</field>
+            <field name="description">Day-to-day HR operations metrics</field>
+            <field name="layout">grid</field>
+            <field name="columns">4</field>
+            <field name="sequence">20</field>
+            <field name="kpi_ids" eval="[(6, 0, [
+                ref('kpi_total_employees'),
+                ref('kpi_avg_tenure'),
+                ref('kpi_leave_utilization'),
+                ref('kpi_training_hours'),
+            ])]"/>
+        </record>
+
+        <!-- Payroll Dashboard -->
+        <record id="dashboard_payroll" model="analytics.dashboard">
+            <field name="name">Payroll &amp; Finance</field>
+            <field name="dashboard_type">payroll</field>
+            <field name="description">Payroll costs and financial metrics</field>
+            <field name="layout">grid</field>
+            <field name="columns">4</field>
+            <field name="sequence">30</field>
+            <field name="kpi_ids" eval="[(6, 0, [
+                ref('kpi_payroll_cost'),
+                ref('kpi_revenue_per_employee'),
+            ])]"/>
+        </record>
+
+        <!-- Recruitment Dashboard -->
+        <record id="dashboard_recruitment" model="analytics.dashboard">
+            <field name="name">Recruitment Pipeline</field>
+            <field name="dashboard_type">recruitment</field>
+            <field name="description">Recruitment and placement metrics</field>
+            <field name="layout">grid</field>
+            <field name="columns">4</field>
+            <field name="sequence">40</field>
+            <field name="kpi_ids" eval="[(6, 0, [
+                ref('kpi_open_positions'),
+                ref('kpi_time_to_hire'),
+                ref('kpi_cost_per_hire'),
+                ref('kpi_placement_fill_rate'),
+            ])]"/>
+        </record>
+
+        <!-- Client Dashboard -->
+        <record id="dashboard_client" model="analytics.dashboard">
+            <field name="name">Client Performance</field>
+            <field name="dashboard_type">client</field>
+            <field name="description">Client revenue and profitability</field>
+            <field name="layout">grid</field>
+            <field name="columns">4</field>
+            <field name="sequence">50</field>
+            <field name="kpi_ids" eval="[(6, 0, [
+                ref('kpi_revenue_per_employee'),
+                ref('kpi_placement_fill_rate'),
+            ])]"/>
+        </record>
+
+        <!-- Compliance Dashboard -->
+        <record id="dashboard_compliance" model="analytics.dashboard">
+            <field name="name">Compliance</field>
+            <field name="dashboard_type">compliance</field>
+            <field name="description">Regulatory compliance and Emiratization</field>
+            <field name="layout">grid</field>
+            <field name="columns">4</field>
+            <field name="sequence">60</field>
+            <field name="kpi_ids" eval="[(6, 0, [
+                ref('kpi_emiratization_rate'),
+            ])]"/>
+        </record>
+    </data>
+</odoo>

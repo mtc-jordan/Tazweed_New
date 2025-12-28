@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Action -->
+    <record id="action_pro_dashboard" model="ir.actions.client">
+        <field name="name">PRO Dashboard</field>
+        <field name="tag">pro_dashboard</field>
+    </record>
+
+    <!-- Dashboard Template -->
+    <template id="pro_dashboard_template" name="PRO Services Dashboard">
+        <div class="pro-dashboard">
+            <!-- Dashboard content will be rendered by JavaScript -->
+        </div>
+    </template>
+</odoo>

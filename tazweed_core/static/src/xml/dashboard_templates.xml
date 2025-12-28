@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_core.Dashboard" owl="1">
+        <div class="o_tazweed_dashboard">
+            <div class="o_dashboard_header mb-4">
+                <h1>Tazweed HR Dashboard</h1>
+                <p class="text-muted">Overview of your HR operations</p>
+            </div>
+            <t t-if="state.loading">
+                <div class="text-center py-5">
+                    <i class="fa fa-spinner fa-spin fa-3x"></i>
+                    <p class="mt-3">Loading dashboard...</p>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="o_kpi_card primary" t-on-click="openEmployees">
+                            <div class="o_kpi_value" t-esc="state.totalEmployees"/>
+                            <div class="o_kpi_label">Total Employees</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_kpi_card success">
+                            <div class="o_kpi_value"><t t-esc="uaePercentage"/>%</div>
+                            <div class="o_kpi_label">UAE Nationals</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_kpi_card warning" t-on-click="openDocuments">
+                            <div class="o_kpi_value" t-esc="state.expiringDocs"/>
+                            <div class="o_kpi_label">Documents Attention</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_kpi_card primary" t-on-click="openEmployees">
+                            <div class="o_kpi_value" t-esc="state.availableEmployees"/>
+                            <div class="o_kpi_label">Available for Placement</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="o_kpi_card">
+                            <div class="o_kpi_value" t-esc="state.activeContracts"/>
+                            <div class="o_kpi_label">Active Contracts</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="o_kpi_card" t-on-click="openSponsors">
+                            <div class="o_kpi_value" t-esc="state.activeSponsors"/>
+                            <div class="o_kpi_label">Active Sponsors</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="o_kpi_card" t-on-click="openDocuments">
+                            <div class="o_kpi_value" t-esc="state.expiringDocs"/>
+                            <div class="o_kpi_label">Documents</div>
+                        </div>
+                    </div>
+                </div>
+                <t t-if="state.expiringDocs > 0">
+                    <div class="o_alert_banner warning">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        <span><t t-esc="state.expiringDocs"/> document(s) require attention</span>
+                    </div>
+                </t>
+                <div class="row mt-4">
+                    <div class="col-12"><h5 class="mb-3">Quick Actions</h5></div>
+                    <div class="col-md-3">
+                        <div class="o_quick_action" t-on-click="addEmployee">
+                            <i class="fa fa-user-plus d-block"></i>
+                            <span>Add Employee</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_quick_action" t-on-click="addDocument">
+                            <i class="fa fa-file-text-o d-block"></i>
+                            <span>Upload Document</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_quick_action" t-on-click="openSponsors">
+                            <i class="fa fa-building d-block"></i>
+                            <span>Manage Sponsors</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_quick_action" t-on-click="openEmployees">
+                            <i class="fa fa-users d-block"></i>
+                            <span>View Employees</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

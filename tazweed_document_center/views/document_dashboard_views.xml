@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Dashboard Form View -->
+    <record id="view_document_dashboard_form" model="ir.ui.view">
+        <field name="name">document.dashboard.form</field>
+        <field name="model">document.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Document Dashboard">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_refresh" type="object" class="oe_stat_button" icon="fa-refresh">
+                            <span>Refresh</span>
+                        </button>
+                        <button name="action_send_alerts" type="object" class="oe_stat_button" icon="fa-bell">
+                            <span>Send Alerts</span>
+                        </button>
+                        <button name="action_generate_report" type="object" class="oe_stat_button" icon="fa-file-text">
+                            <span>Generate Report</span>
+                        </button>
+                    </div>
+                    
+                    <group>
+                        <group string="Filters">
+                            <field name="department_id"/>
+                            <field name="document_type_id"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="total_documents"/>
+                            <field name="total_employees"/>
+                            <field name="compliance_rate" widget="progressbar"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h3>Document Expiry Status</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Expired -->
+                        <div class="col-md-2">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body text-center">
+                                    <h2><field name="expired_count" readonly="1"/></h2>
+                                    <p>Expired</p>
+                                    <button name="action_view_expired" type="object" class="btn btn-light btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 7 Days -->
+                        <div class="col-md-2">
+                            <div class="card bg-warning">
+                                <div class="card-body text-center">
+                                    <h2><field name="expiring_7_days" readonly="1"/></h2>
+                                    <p>7 Days</p>
+                                    <button name="action_view_expiring_7" type="object" class="btn btn-light btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 15 Days -->
+                        <div class="col-md-2">
+                            <div class="card bg-warning">
+                                <div class="card-body text-center">
+                                    <h2><field name="expiring_15_days" readonly="1"/></h2>
+                                    <p>15 Days</p>
+                                    <button name="action_view_expiring_15" type="object" class="btn btn-light btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 30 Days -->
+                        <div class="col-md-2">
+                            <div class="card bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h2><field name="expiring_30_days" readonly="1"/></h2>
+                                    <p>30 Days</p>
+                                    <button name="action_view_expiring_30" type="object" class="btn btn-light btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 60 Days -->
+                        <div class="col-md-2">
+                            <div class="card bg-secondary text-white">
+                                <div class="card-body text-center">
+                                    <h2><field name="expiring_60_days" readonly="1"/></h2>
+                                    <p>60 Days</p>
+                                    <button name="action_view_expiring_60" type="object" class="btn btn-light btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Valid -->
+                        <div class="col-md-2">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h2><field name="valid_count" readonly="1"/></h2>
+                                    <p>Valid</p>
+                                    <button name="action_view_valid" type="object" class="btn btn-light btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Stats -->
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card border-danger">
+                                <div class="card-body text-center">
+                                    <h3><field name="missing_mandatory" readonly="1"/></h3>
+                                    <p>Missing Mandatory Documents</p>
+                                    <button name="action_view_missing_mandatory" type="object" class="btn btn-outline-danger btn-sm">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <h3><field name="pending_renewal" readonly="1"/></h3>
+                                    <p>Pending Renewal Requests</p>
+                                    <button name="action_view_pending_renewal" type="object" class="btn btn-outline-warning btn-sm">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <h3><field name="compliance_rate" readonly="1"/>%</h3>
+                                    <p>Overall Compliance Rate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_document_dashboard" model="ir.actions.act_window">
+        <field name="name">Document Dashboard</field>
+        <field name="res_model">document.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="res_id" ref="default_document_dashboard"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- All Documents Action -->
+    <record id="action_all_documents" model="ir.actions.act_window">
+        <field name="name">All Documents</field>
+        <field name="res_model">tazweed.employee.document</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'search_default_group_by_employee': 1}</field>
+    </record>
+
+    <!-- Expired Documents Action -->
+    <record id="action_expired_documents" model="ir.actions.act_window">
+        <field name="name">Expired Documents</field>
+        <field name="res_model">tazweed.employee.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('expiry_date', '&lt;', context_today().strftime('%Y-%m-%d'))]</field>
+        <field name="context">{'search_default_group_by_type': 1}</field>
+    </record>
+
+    <!-- Expiring Documents Action -->
+    <record id="action_expiring_documents" model="ir.actions.act_window">
+        <field name="name">Expiring Soon (30 Days)</field>
+        <field name="res_model">tazweed.employee.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('expiry_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+            ('expiry_date', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))
+        ]</field>
+    </record>
+    <!-- Active Alerts Action -->
+    <record id="action_active_alerts" model="ir.actions.act_window">
+        <field name="name">Active Alerts</field>
+        <field name="res_model">document.alert</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', 'not in', ['resolved', 'cancelled'])]</field>
+    </record>
+</odoo>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Scheduled Task Form View -->
+        <record id="view_scheduled_task_form" model="ir.ui.view">
+            <field name="name">Scheduled Task Form</field>
+            <field name="model">tazweed.scheduled.task</field>
+            <field name="arch" type="xml">
+                <form string="Scheduled Task">
+                    <header>
+                        <button name="action_activate" string="Activate" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_pause" string="Pause" type="object" attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                        <button name="action_execute_now" string="Execute Now" type="object"/>
+                        <button name="action_view_logs" string="View Logs" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Task Name"/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Basic Information -->
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="task_type"/>
+                            </group>
+                            <group>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+                        
+                        <field name="description" placeholder="Task Description"/>
+                        
+                        <!-- Schedule Configuration -->
+                        <separator string="Schedule Configuration" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="schedule_type"/>
+                                <field name="execution_date" attrs="{'invisible': [('schedule_type', '!=', 'once')]}"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('schedule_type', '=', 'once')]}">
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                            <group>
+                                <field name="execution_time"/>
+                                <field name="execution_minute"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('schedule_type', '!=', 'weekly')]}">
+                            <field name="day_of_week"/>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('schedule_type', '!=', 'monthly')]}">
+                            <field name="day_of_month"/>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('schedule_type', '!=', 'cron')]}">
+                            <field name="cron_expression" placeholder="Standard cron format" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Task Configuration -->
+                        <separator string="Task Configuration" class="oe_inline"/>
+                        <group>
+                            <field name="task_code" placeholder="Python code to execute" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Execution Configuration -->
+                        <separator string="Execution Configuration" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="max_retries"/>
+                                <field name="retry_delay_minutes"/>
+                            </group>
+                            <group>
+                                <field name="timeout_minutes"/>
+                                <field name="next_execution_date" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Execution History -->
+                        <separator string="Execution History" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="last_execution_date" readonly="1"/>
+                                <field name="last_execution_status" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="execution_count" readonly="1"/>
+                                <field name="success_count" readonly="1"/>
+                                <field name="error_count" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Scheduled Task Tree View -->
+        <record id="view_scheduled_task_tree" model="ir.ui.view">
+            <field name="name">Scheduled Task Tree</field>
+            <field name="model">tazweed.scheduled.task</field>
+            <field name="arch" type="xml">
+                <tree string="Scheduled Tasks">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="task_type"/>
+                    <field name="schedule_type"/>
+                    <field name="state"/>
+                    <field name="next_execution_date"/>
+                    <field name="last_execution_date"/>
+                    <field name="execution_count"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Scheduled Task Search View -->
+        <record id="view_scheduled_task_search" model="ir.ui.view">
+            <field name="name">Scheduled Task Search</field>
+            <field name="model">tazweed.scheduled.task</field>
+            <field name="arch" type="xml">
+                <search string="Scheduled Tasks">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="task_type"/>
+                    <separator/>
+                    <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                    <filter name="filter_paused" string="Paused" domain="[('state', '=', 'paused')]"/>
+                    <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Scheduled Task Action -->
+        <record id="action_scheduled_task" model="ir.actions.act_window">
+            <field name="name">Scheduled Tasks</field>
+            <field name="res_model">tazweed.scheduled.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Scheduled Task
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

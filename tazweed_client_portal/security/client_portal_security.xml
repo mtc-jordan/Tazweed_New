@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Security Groups -->
+    <record id="group_client_portal_user" model="res.groups">
+        <field name="name">Client Portal User</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <record id="group_client_portal_manager" model="res.groups">
+        <field name="name">Client Portal Manager</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('group_client_portal_user'))]"/>
+    </record>
+
+    <!-- Record Rules for Portal Users -->
+    
+    <!-- Portal Settings: Only internal users -->
+    <record id="rule_portal_settings_internal" model="ir.rule">
+        <field name="name">Portal Settings: Internal Users Only</field>
+        <field name="model_id" ref="model_client_portal_settings"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Portal Users: Internal can see all, portal users see own client -->
+    <record id="rule_portal_user_internal" model="ir.rule">
+        <field name="name">Portal Users: Internal Users</field>
+        <field name="model_id" ref="model_client_portal_user"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Documents: Portal users see client-visible documents -->
+    <record id="rule_portal_document_portal" model="ir.rule">
+        <field name="name">Portal Documents: Portal Users</field>
+        <field name="model_id" ref="model_client_portal_document"/>
+        <field name="domain_force">[
+            ('visibility', '=', 'client'),
+            ('client_id.partner_id', 'child_of', user.partner_id.commercial_partner_id.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <record id="rule_portal_document_internal" model="ir.rule">
+        <field name="name">Portal Documents: Internal Users</field>
+        <field name="model_id" ref="model_client_portal_document"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Messages: Portal users see own client messages -->
+    <record id="rule_portal_message_portal" model="ir.rule">
+        <field name="name">Portal Messages: Portal Users</field>
+        <field name="model_id" ref="model_client_portal_message"/>
+        <field name="domain_force">[
+            ('client_id.partner_id', 'child_of', user.partner_id.commercial_partner_id.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <record id="rule_portal_message_internal" model="ir.rule">
+        <field name="name">Portal Messages: Internal Users</field>
+        <field name="model_id" ref="model_client_portal_message"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Notifications: Portal users see own notifications -->
+    <record id="rule_portal_notification_portal" model="ir.rule">
+        <field name="name">Portal Notifications: Portal Users</field>
+        <field name="model_id" ref="model_client_portal_notification"/>
+        <field name="domain_force">[
+            ('client_id.partner_id', 'child_of', user.partner_id.commercial_partner_id.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <record id="rule_portal_notification_internal" model="ir.rule">
+        <field name="name">Portal Notifications: Internal Users</field>
+        <field name="model_id" ref="model_client_portal_notification"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Compliance Report Tree View -->
+    <record id="view_document_compliance_tree" model="ir.ui.view">
+        <field name="name">document.compliance.report.tree</field>
+        <field name="model">document.compliance.report</field>
+        <field name="arch" type="xml">
+            <tree string="Compliance Report" decoration-danger="compliance_status=='non_compliant'" 
+                  decoration-warning="compliance_status=='warning'"
+                  decoration-success="compliance_status=='compliant'">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="total_documents"/>
+                <field name="valid_documents"/>
+                <field name="expired_documents"/>
+                <field name="expiring_documents"/>
+                <field name="missing_count"/>
+                <field name="compliance_score" widget="progressbar"/>
+                <field name="compliance_status" widget="badge" 
+                       decoration-danger="compliance_status=='non_compliant'"
+                       decoration-warning="compliance_status=='warning'"
+                       decoration-success="compliance_status=='compliant'"/>
+                <button name="action_view_documents" type="object" string="View" icon="fa-eye"/>
+                <button name="action_create_renewal" type="object" string="Renew" icon="fa-refresh" 
+                        attrs="{'invisible': [('expired_documents', '=', 0), ('expiring_documents', '=', 0)]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Compliance Report Pivot View -->
+    <record id="view_document_compliance_pivot" model="ir.ui.view">
+        <field name="name">document.compliance.report.pivot</field>
+        <field name="model">document.compliance.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Compliance Analysis">
+                <field name="department_id" type="row"/>
+                <field name="compliance_status" type="col"/>
+                <field name="compliance_score" type="measure"/>
+                <field name="total_documents" type="measure"/>
+                <field name="expired_documents" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Document Compliance Report Graph View -->
+    <record id="view_document_compliance_graph" model="ir.ui.view">
+        <field name="name">document.compliance.report.graph</field>
+        <field name="model">document.compliance.report</field>
+        <field name="arch" type="xml">
+            <graph string="Compliance Overview" type="bar">
+                <field name="department_id"/>
+                <field name="compliance_score" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Document Compliance Report Search View -->
+    <record id="view_document_compliance_search" model="ir.ui.view">
+        <field name="name">document.compliance.report.search</field>
+        <field name="model">document.compliance.report</field>
+        <field name="arch" type="xml">
+            <search string="Compliance Report">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter string="Compliant" name="compliant" domain="[('compliance_status', '=', 'compliant')]"/>
+                <filter string="Warning" name="warning" domain="[('compliance_status', '=', 'warning')]"/>
+                <filter string="Non-Compliant" name="non_compliant" domain="[('compliance_status', '=', 'non_compliant')]"/>
+                <separator/>
+                <filter string="Has Expired" name="has_expired" domain="[('expired_documents', '>', 0)]"/>
+                <filter string="Has Expiring" name="has_expiring" domain="[('expiring_documents', '>', 0)]"/>
+                <filter string="Missing Mandatory" name="missing" domain="[('missing_count', '>', 0)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="group_by_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Job Position" name="group_by_job" context="{'group_by': 'job_id'}"/>
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'compliance_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Document Compliance Report Action -->
+    <record id="action_document_compliance" model="ir.actions.act_window">
+        <field name="name">Compliance Report</field>
+        <field name="res_model">document.compliance.report</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="context">{'search_default_group_by_department': 1}</field>
+    </record>
+
+    <!-- Non-Compliant Employees Action -->
+    <record id="action_non_compliant_employees" model="ir.actions.act_window">
+        <field name="name">Non-Compliant Employees</field>
+        <field name="res_model">document.compliance.report</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="domain">[('compliance_status', '=', 'non_compliant')]</field>
+    </record>
+
+    <!-- Compliance Report Wizard Form -->
+    <record id="view_compliance_report_wizard_form" model="ir.ui.view">
+        <field name="name">document.compliance.report.wizard.form</field>
+        <field name="model">document.compliance.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Compliance Report">
+                <group>
+                    <group>
+                        <field name="department_id"/>
+                        <field name="document_type_id"/>
+                    </group>
+                    <group>
+                        <field name="compliance_status"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="include_expired"/>
+                    <field name="include_expiring"/>
+                    <field name="include_missing"/>
+                </group>
+                <footer>
+                    <button name="action_generate_report" type="object" string="Generate Report" class="oe_highlight"/>
+                    <button name="action_export_excel" type="object" string="Export Excel"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Compliance Report Wizard Action -->
+    <record id="action_compliance_report_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Compliance Report</field>
+        <field name="res_model">document.compliance.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_automated_workflows" name="Automated Workflows" parent="hr.menu_hr_root" sequence="100"/>
+        
+        <!-- Workflow Management -->
+        <menuitem id="menu_workflow_management" name="Workflow Management" parent="menu_automated_workflows" sequence="10"/>
+        
+        <menuitem id="menu_workflow_definition" name="Workflow Definitions" parent="menu_workflow_management" action="action_workflow_definition" sequence="10"/>
+        
+        <menuitem id="menu_workflow_instance" name="Workflow Instances" parent="menu_workflow_management" action="action_workflow_instance" sequence="20"/>
+        
+        <menuitem id="menu_workflow_trigger" name="Workflow Triggers" parent="menu_workflow_management" action="action_workflow_trigger" sequence="30"/>
+        
+        <!-- Automation Management -->
+        <menuitem id="menu_automation_management" name="Automation Management" parent="menu_automated_workflows" sequence="20"/>
+        
+        <menuitem id="menu_automation_rule" name="Automation Rules" parent="menu_automation_management" action="action_automation_rule" sequence="10"/>
+        
+        <menuitem id="menu_scheduled_task" name="Scheduled Tasks" parent="menu_automation_management" action="action_scheduled_task" sequence="20"/>
+        
+        <!-- Approval Management -->
+        <menuitem id="menu_approval_management" name="Approval Management" parent="menu_automated_workflows" sequence="30"/>
+        
+        <menuitem id="menu_approval_workflow" name="Approval Workflows" parent="menu_approval_management" action="action_approval_workflow" sequence="10"/>
+        
+        <menuitem id="menu_approval_request" name="Approval Requests" parent="menu_approval_management" action="action_approval_request" sequence="20"/>
+        
+        <!-- Notifications -->
+        <menuitem id="menu_notifications" name="Notifications" parent="menu_automated_workflows" sequence="40"/>
+        
+        <menuitem id="menu_notification_template" name="Notification Templates" parent="menu_notifications" action="action_notification_template" sequence="10"/>
+    </data>
+</odoo>

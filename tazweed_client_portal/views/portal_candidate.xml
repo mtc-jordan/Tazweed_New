@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Candidates List Template -->
+    <template id="portal_candidates" name="My Candidates">
+        <t t-call="portal.portal_layout">
+            <div class="portal-page">
+                <div class="portal-header mb-4">
+                    <h2>Candidate Review</h2>
+                    <p class="text-muted">Review and approve candidates submitted for your job orders</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <t t-foreach="searchbar_filters.items()" t-as="filter_item">
+                                <a t-attf-href="/my/candidates?filterby=#{filter_item[0]}"
+                                   t-attf-class="btn btn-outline-secondary #{filterby == filter_item[0] and 'active' or ''}">
+                                    <t t-esc="filter_item[1]['label']"/>
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidates Grid -->
+                <t t-if="candidates">
+                    <div class="row">
+                        <t t-foreach="candidates" t-as="candidate">
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="card-title mb-1"><t t-esc="candidate.name"/></h5>
+                                                <small class="text-muted">
+                                                    <t t-esc="candidate.job_order_id.job_title or candidate.job_order_id.name"/>
+                                                </small>
+                                            </div>
+                                            <span t-attf-class="portal-badge #{candidate.state}">
+                                                <t t-esc="candidate.state"/>
+                                            </span>
+                                        </div>
+                                        <ul class="list-unstyled mb-3">
+                                            <li><i class="fa fa-briefcase text-muted mr-2"></i> <t t-esc="candidate.experience_years or 0"/> years experience</li>
+                                            <li><i class="fa fa-envelope text-muted mr-2"></i> <t t-esc="candidate.email or '-'"/></li>
+                                            <li><i class="fa fa-phone text-muted mr-2"></i> <t t-esc="candidate.phone or '-'"/></li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer bg-white">
+                                        <t t-if="candidate.state == 'pending_approval'">
+                                            <button onclick="TazweedPortal.approveCandidate({candidate.id})" 
+                                                    class="btn btn-success btn-sm">
+                                                <i class="fa fa-check"></i> Approve
+                                            </button>
+                                            <button onclick="TazweedPortal.rejectCandidate({candidate.id})" 
+                                                    class="btn btn-danger btn-sm">
+                                                <i class="fa fa-times"></i> Reject
+                                            </button>
+                                        </t>
+                                        <a t-attf-href="/my/candidates/#{candidate.id}" class="btn btn-outline-primary btn-sm float-right">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <t t-call="portal.pager"/>
+                    </div>
+                </t>
+                <t t-else="">
+                    <t t-call="tazweed_client_portal.portal_empty_state">
+                        <t t-set="icon">fa-users</t>
+                        <t t-set="title">No Candidates to Review</t>
+                        <t t-set="message">There are no candidates pending your review at this time.</t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

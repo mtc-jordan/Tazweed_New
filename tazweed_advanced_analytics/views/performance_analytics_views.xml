@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Performance Analytics Form View -->
+        <record id="view_performance_analytics_form" model="ir.ui.view">
+            <field name="name">Performance Analytics Form</field>
+            <field name="model">tazweed.performance.analytics</field>
+            <field name="arch" type="xml">
+                <form string="Performance Analytics">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="analytics_name" placeholder="Analytics Name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="period_start"/>
+                                <field name="period_end"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Employee Performance -->
+                        <separator string="Employee Performance" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_employees" readonly="1"/>
+                                <field name="average_rating" readonly="1" widget="gauge"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="excellent_count" readonly="1"/>
+                                <field name="good_count" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="average_count" readonly="1"/>
+                                <field name="poor_count" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Department Performance -->
+                        <separator string="Department Performance" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="top_department" readonly="1"/>
+                                <field name="top_department_rating" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="bottom_department" readonly="1"/>
+                                <field name="bottom_department_rating" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Goal Metrics -->
+                        <separator string="Goal Metrics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_goals" readonly="1"/>
+                                <field name="goals_achieved" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="goals_in_progress" readonly="1"/>
+                                <field name="goal_achievement_rate" readonly="1" widget="gauge"/>
+                            </group>
+                        </group>
+                        
+                        <!-- KPI Metrics -->
+                        <separator string="KPI Metrics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_kpis" readonly="1"/>
+                                <field name="kpis_on_track" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="kpis_at_risk" readonly="1"/>
+                                <field name="kpi_achievement_rate" readonly="1" widget="gauge"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Development Plans -->
+                        <separator string="Development Plans" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="development_plans_active" readonly="1"/>
+                                <field name="development_plans_completed" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Trends -->
+                        <separator string="Trends" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="performance_trend" readonly="1"/>
+                                <field name="goal_trend" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Performance Analytics Tree View -->
+        <record id="view_performance_analytics_tree" model="ir.ui.view">
+            <field name="name">Performance Analytics Tree</field>
+            <field name="model">tazweed.performance.analytics</field>
+            <field name="arch" type="xml">
+                <tree string="Performance Analytics">
+                    <field name="analytics_name"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="total_employees"/>
+                    <field name="average_rating"/>
+                    <field name="goal_achievement_rate"/>
+                    <field name="kpi_achievement_rate"/>
+                    <field name="performance_trend"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Performance Analytics Search View -->
+        <record id="view_performance_analytics_search" model="ir.ui.view">
+            <field name="name">Performance Analytics Search</field>
+            <field name="model">tazweed.performance.analytics</field>
+            <field name="arch" type="xml">
+                <search string="Performance Analytics">
+                    <field name="analytics_name"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <separator/>
+                    
+                    
+                    
+                </search>
+            </field>
+        </record>
+        
+        <!-- Performance Analytics Action -->
+        <record id="action_performance_analytics" model="ir.actions.act_window">
+            <field name="name">Performance Analytics</field>
+            <field name="res_model">tazweed.performance.analytics</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Performance Analytics record
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

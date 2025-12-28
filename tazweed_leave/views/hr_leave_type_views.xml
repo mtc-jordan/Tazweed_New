@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Leave Type Form View Extension -->
+    <record id="view_hr_leave_type_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.type.form.inherit.tazweed</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="UAE Configuration" name="uae_config">
+                        <group>
+                            <group string="UAE Leave Type">
+                                <field name="uae_leave_type"/>
+                                <field name="is_uae_statutory"/>
+                                <field name="gender_restriction"/>
+                            </group>
+                            <group string="Eligibility">
+                                <field name="min_service_months"/>
+                                <field name="max_days_per_year"/>
+                                <field name="max_consecutive_days"/>
+                                <field name="allowed_during_probation"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Salary Impact">
+                                <field name="salary_impact"/>
+                                <field name="salary_percentage" attrs="{'invisible': [('salary_impact', '!=', 'custom')]}"/>
+                            </group>
+                            <group string="Sick Leave Rules" attrs="{'invisible': [('uae_leave_type', '!=', 'sick')]}">
+                                <field name="sick_leave_full_pay_days"/>
+                                <field name="sick_leave_half_pay_days"/>
+                                <field name="sick_leave_no_pay_days"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Carry Forward and Encashment" name="carry_forward">
+                        <group>
+                            <group string="Carry Forward">
+                                <field name="allow_carry_forward"/>
+                                <field name="max_carry_forward_days" attrs="{'invisible': [('allow_carry_forward', '=', False)]}"/>
+                                <field name="carry_forward_expiry_months" attrs="{'invisible': [('allow_carry_forward', '=', False)]}"/>
+                            </group>
+                            <group string="Encashment">
+                                <field name="allow_encashment"/>
+                                <field name="encashment_rate" attrs="{'invisible': [('allow_encashment', '=', False)]}"/>
+                                <field name="min_balance_for_encashment" attrs="{'invisible': [('allow_encashment', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Accrual" name="accrual">
+                        <group>
+                            <group string="Accrual Settings">
+                                <field name="is_accrual"/>
+                                <field name="accrual_rate" attrs="{'invisible': [('is_accrual', '=', False)]}"/>
+                                <field name="accrual_start_after_months" attrs="{'invisible': [('is_accrual', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Approval and Documents" name="approval">
+                        <group>
+                            <group string="Documents">
+                                <field name="requires_document"/>
+                                <field name="document_required_after_days" attrs="{'invisible': [('requires_document', '=', True)]}"/>
+                            </group>
+                            <group string="Notifications">
+                                <field name="notify_manager"/>
+                                <field name="notify_hr"/>
+                                <field name="advance_notice_days"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Calendar" name="calendar">
+                        <group>
+                            <group string="Exclusions">
+                                <field name="exclude_public_holidays"/>
+                                <field name="exclude_weekends"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Leave Type Tree View Extension -->
+    <record id="view_hr_leave_type_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.type.tree.inherit.tazweed</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.view_holiday_status_normal_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="uae_leave_type" optional="show"/>
+                <field name="is_uae_statutory" optional="show"/>
+                <field name="max_days_per_year" optional="show"/>
+                <field name="salary_impact" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

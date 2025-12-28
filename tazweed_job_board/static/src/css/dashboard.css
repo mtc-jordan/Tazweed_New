@@ -1,0 +1,435 @@
+/* ============================================ */
+/* TAZWEED JOB BOARD - ENHANCED DASHBOARD CSS */
+/* ============================================ */
+
+/* Main Dashboard Container */
+.o_job_board_dashboard {
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    min-height: 100vh;
+}
+
+.o_dashboard_content {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.o_dashboard_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.o_header_left h2 {
+    margin: 0 0 4px 0;
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 1.75rem;
+}
+
+.o_header_left h2 i {
+    color: #667eea;
+}
+
+.o_dashboard_filters select {
+    min-width: 160px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+}
+
+.o_dashboard_filters .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.o_dashboard_filters .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* KPI Cards */
+.o_dashboard_kpis {
+    margin-bottom: 24px;
+}
+
+.o_kpi_card {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.o_kpi_card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.o_kpi_card.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.o_kpi_card.bg-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+}
+
+.o_kpi_card.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+}
+
+.o_kpi_card.bg-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+}
+
+.o_kpi_icon {
+    margin-right: 20px;
+    opacity: 0.9;
+}
+
+.o_kpi_content {
+    display: flex;
+    flex-direction: column;
+}
+
+.o_kpi_value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.o_kpi_label {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+/* Quick Actions Card */
+.o_quick_actions_card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.o_quick_actions_card h5 {
+    color: #495057;
+    font-weight: 600;
+}
+
+.o_quick_actions_card h5 i {
+    color: #ffc107;
+}
+
+.o_quick_actions_card .btn {
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.o_quick_actions_card .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Chart Cards */
+.o_chart_card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.o_chart_card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.o_chart_card h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.o_chart_card h4 i {
+    color: #667eea;
+}
+
+.chart-container {
+    position: relative;
+}
+
+/* Table Cards */
+.o_table_card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.o_table_card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.o_table_card h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.o_table_card h4 i {
+    color: #667eea;
+}
+
+.o_table_card table {
+    margin-bottom: 0;
+}
+
+.o_table_card table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.o_table_card table thead th {
+    border: none;
+    padding: 12px 16px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.o_table_card table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.o_table_card table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.o_table_card table td {
+    vertical-align: middle;
+    padding: 12px 16px;
+}
+
+/* Alerts Card */
+.o_alerts_card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-left: 4px solid #ffc107;
+}
+
+.o_alerts_card h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.o_alerts_card h4 i {
+    color: #ffc107;
+}
+
+.o_alert_item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background-color: #fff3cd;
+    border-radius: 8px;
+    border: 1px solid #ffeeba;
+    transition: all 0.2s ease;
+}
+
+.o_alert_item:hover {
+    transform: translateX(4px);
+}
+
+.o_alert_item.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.o_alert_item.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.o_alert_item i {
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+.o_alert_item .alert-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+.o_alert_item .alert-action {
+    margin-left: 12px;
+    border-radius: 6px;
+}
+
+/* Loading State */
+.o_loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    flex-direction: column;
+}
+
+.o_loading_spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Badges */
+.badge.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .o_dashboard_header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .o_dashboard_filters {
+        margin-top: 16px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .o_kpi_card {
+        margin-bottom: 16px;
+    }
+    
+    .o_kpi_value {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_job_board_dashboard {
+        padding: 16px;
+    }
+    
+    .o_header_left h2 {
+        font-size: 1.5rem;
+    }
+    
+    .o_kpi_card {
+        padding: 16px;
+    }
+    
+    .o_kpi_value {
+        font-size: 1.75rem;
+    }
+    
+    .o_chart_card, .o_table_card, .o_alerts_card {
+        padding: 16px;
+    }
+}
+
+/* Job Posting Cards (Kanban) */
+.o_job_posting_card {
+    border-radius: 12px !important;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.o_job_posting_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-color: #667eea;
+}
+
+.o_job_posting_card.border-success {
+    border-left: 4px solid #28a745 !important;
+}
+
+.o_job_posting_card.border-danger {
+    border-left: 4px solid #dc3545 !important;
+}
+
+.o_job_stat {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.o_job_stat:hover {
+    background-color: #e9ecef !important;
+}
+
+/* Kanban Column Headers */
+.o_job_board_kanban .o_kanban_group_header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+}
+
+/* Progress Bar */
+.o_kanban_record .progress {
+    height: 6px;
+    border-radius: 3px;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.o_kpi_card, .o_chart_card, .o_table_card, .o_alerts_card {
+    animation: fadeInUp 0.5s ease;
+}
+
+.o_kpi_card:nth-child(1) { animation-delay: 0.1s; }
+.o_kpi_card:nth-child(2) { animation-delay: 0.2s; }
+.o_kpi_card:nth-child(3) { animation-delay: 0.3s; }
+.o_kpi_card:nth-child(4) { animation-delay: 0.4s; }

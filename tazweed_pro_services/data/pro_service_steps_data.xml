@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- ============================================== -->
+        <!-- EMPLOYMENT VISA - NEW - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_emp_visa_new_1" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Collect Required Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect passport copy, photos, educational certificates, and employment contract from employee.</field>
+        </record>
+        
+        <record id="step_emp_visa_new_2" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Apply for Entry Permit</field>
+            <field name="sequence">20</field>
+            <field name="description">Submit entry permit application through GDRFA system.</field>
+            <field name="government_fee">200.00</field>
+        </record>
+        
+        <record id="step_emp_visa_new_3" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Entry Permit Approval</field>
+            <field name="sequence">30</field>
+            <field name="description">Wait for entry permit approval from GDRFA.</field>
+        </record>
+        
+        <record id="step_emp_visa_new_4" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Employee Entry to UAE</field>
+            <field name="sequence">40</field>
+            <field name="description">Employee enters UAE on entry permit (if outside country).</field>
+        </record>
+        
+        <record id="step_emp_visa_new_5" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Medical Fitness Test</field>
+            <field name="sequence">50</field>
+            <field name="description">Complete medical fitness test at approved center.</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_emp_visa_new_6" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Emirates ID Application</field>
+            <field name="sequence">60</field>
+            <field name="description">Apply for Emirates ID and complete biometrics.</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_emp_visa_new_7" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Visa Stamping</field>
+            <field name="sequence">70</field>
+            <field name="description">Submit passport for residence visa stamping.</field>
+            <field name="government_fee">570.00</field>
+        </record>
+        
+        <record id="step_emp_visa_new_8" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Collect Stamped Passport</field>
+            <field name="sequence">80</field>
+            <field name="description">Collect passport with residence visa stamp.</field>
+        </record>
+        
+        <record id="step_emp_visa_new_9" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_new"/>
+            <field name="name">Deliver Documents to Employee</field>
+            <field name="sequence">90</field>
+            <field name="description">Deliver stamped passport and Emirates ID to employee.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- EMPLOYMENT VISA - RENEWAL - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_emp_visa_ren_1" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="name">Collect Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect passport, Emirates ID, and current visa copy.</field>
+        </record>
+        
+        <record id="step_emp_visa_ren_2" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="name">Medical Fitness Test</field>
+            <field name="sequence">20</field>
+            <field name="description">Complete medical fitness test renewal.</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_emp_visa_ren_3" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="name">Submit Renewal Application</field>
+            <field name="sequence">30</field>
+            <field name="description">Submit visa renewal application through GDRFA.</field>
+            <field name="government_fee">570.00</field>
+        </record>
+        
+        <record id="step_emp_visa_ren_4" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="name">Visa Stamping</field>
+            <field name="sequence">40</field>
+            <field name="description">Submit passport for renewed visa stamping.</field>
+        </record>
+        
+        <record id="step_emp_visa_ren_5" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_renewal"/>
+            <field name="name">Collect and Deliver</field>
+            <field name="sequence">50</field>
+            <field name="description">Collect stamped passport and deliver to employee.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- EMPLOYMENT VISA - CANCELLATION - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_emp_visa_can_1" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_cancel"/>
+            <field name="name">Collect Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect passport, Emirates ID, and labor card from employee.</field>
+        </record>
+        
+        <record id="step_emp_visa_can_2" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_cancel"/>
+            <field name="name">Cancel Work Permit</field>
+            <field name="sequence">20</field>
+            <field name="description">Cancel work permit through MOHRE/Tasheel.</field>
+            <field name="government_fee">100.00</field>
+        </record>
+        
+        <record id="step_emp_visa_can_3" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_cancel"/>
+            <field name="name">Cancel Residence Visa</field>
+            <field name="sequence">30</field>
+            <field name="description">Submit visa cancellation through GDRFA.</field>
+            <field name="government_fee">100.00</field>
+        </record>
+        
+        <record id="step_emp_visa_can_4" model="pro.service.step">
+            <field name="service_id" ref="service_employment_visa_cancel"/>
+            <field name="name">Collect Cancelled Passport</field>
+            <field name="sequence">40</field>
+            <field name="description">Collect passport with cancellation stamp.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- FAMILY VISA - NEW - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_fam_visa_new_1" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Collect Sponsor Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect sponsor's passport, visa, Emirates ID, salary certificate, and tenancy contract.</field>
+        </record>
+        
+        <record id="step_fam_visa_new_2" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Collect Dependent Documents</field>
+            <field name="sequence">20</field>
+            <field name="description">Collect dependent's passport, photos, marriage/birth certificate (attested).</field>
+        </record>
+        
+        <record id="step_fam_visa_new_3" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Apply for Entry Permit</field>
+            <field name="sequence">30</field>
+            <field name="description">Submit family entry permit application.</field>
+            <field name="government_fee">200.00</field>
+        </record>
+        
+        <record id="step_fam_visa_new_4" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Dependent Entry to UAE</field>
+            <field name="sequence">40</field>
+            <field name="description">Dependent enters UAE on entry permit.</field>
+        </record>
+        
+        <record id="step_fam_visa_new_5" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Medical Test (if applicable)</field>
+            <field name="sequence">50</field>
+            <field name="description">Complete medical test for adults.</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_fam_visa_new_6" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Emirates ID Application</field>
+            <field name="sequence">60</field>
+            <field name="description">Apply for Emirates ID and biometrics.</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_fam_visa_new_7" model="pro.service.step">
+            <field name="service_id" ref="service_family_visa_new"/>
+            <field name="name">Visa Stamping</field>
+            <field name="sequence">70</field>
+            <field name="description">Submit passport for residence visa stamping.</field>
+            <field name="government_fee">500.00</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- GOLDEN VISA - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_golden_visa_1" model="pro.service.step">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="name">Eligibility Assessment</field>
+            <field name="sequence">10</field>
+            <field name="description">Verify eligibility criteria (investor, talent, researcher, student).</field>
+        </record>
+        
+        <record id="step_golden_visa_2" model="pro.service.step">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="name">Collect Supporting Documents</field>
+            <field name="sequence">20</field>
+            <field name="description">Collect proof of investment, qualifications, or achievements.</field>
+        </record>
+        
+        <record id="step_golden_visa_3" model="pro.service.step">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="name">Submit Golden Visa Application</field>
+            <field name="sequence">30</field>
+            <field name="description">Submit application through GDRFA Golden Visa portal.</field>
+            <field name="government_fee">100.00</field>
+        </record>
+        
+        <record id="step_golden_visa_4" model="pro.service.step">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="name">Application Review</field>
+            <field name="sequence">40</field>
+            <field name="description">Wait for application review and approval.</field>
+        </record>
+        
+        <record id="step_golden_visa_5" model="pro.service.step">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="name">Medical and Biometrics</field>
+            <field name="sequence">50</field>
+            <field name="description">Complete medical test and Emirates ID biometrics.</field>
+            <field name="government_fee">540.00</field>
+        </record>
+        
+        <record id="step_golden_visa_6" model="pro.service.step">
+            <field name="service_id" ref="service_golden_visa"/>
+            <field name="name">Golden Visa Stamping</field>
+            <field name="sequence">60</field>
+            <field name="description">Submit passport for 10-year Golden Visa stamping.</field>
+            <field name="government_fee">1150.00</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- EMIRATES ID - NEW - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_eid_new_1" model="pro.service.step">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="name">Collect Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect passport copy, visa copy, and photos.</field>
+        </record>
+        
+        <record id="step_eid_new_2" model="pro.service.step">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="name">Submit Application</field>
+            <field name="sequence">20</field>
+            <field name="description">Submit Emirates ID application through ICP system.</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_eid_new_3" model="pro.service.step">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="name">Biometrics Appointment</field>
+            <field name="sequence">30</field>
+            <field name="description">Complete biometrics (fingerprints, photo, signature) at typing center.</field>
+        </record>
+        
+        <record id="step_eid_new_4" model="pro.service.step">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="name">Card Production</field>
+            <field name="sequence">40</field>
+            <field name="description">Wait for Emirates ID card production.</field>
+        </record>
+        
+        <record id="step_eid_new_5" model="pro.service.step">
+            <field name="service_id" ref="service_eid_new"/>
+            <field name="name">Card Delivery</field>
+            <field name="sequence">50</field>
+            <field name="description">Collect Emirates ID card from post office or delivery.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- WORK PERMIT - NEW - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_wp_new_1" model="pro.service.step">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="name">Prepare Job Offer</field>
+            <field name="sequence">10</field>
+            <field name="description">Prepare and submit job offer through Tasheel.</field>
+            <field name="government_fee">200.00</field>
+        </record>
+        
+        <record id="step_wp_new_2" model="pro.service.step">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="name">Submit Work Permit Application</field>
+            <field name="sequence">20</field>
+            <field name="description">Submit work permit application through MOHRE.</field>
+            <field name="government_fee">300.00</field>
+        </record>
+        
+        <record id="step_wp_new_3" model="pro.service.step">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="name">Work Permit Approval</field>
+            <field name="sequence">30</field>
+            <field name="description">Wait for work permit approval from MOHRE.</field>
+        </record>
+        
+        <record id="step_wp_new_4" model="pro.service.step">
+            <field name="service_id" ref="service_work_permit_new"/>
+            <field name="name">Print Work Permit</field>
+            <field name="sequence">40</field>
+            <field name="description">Print approved work permit document.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- LABOR CARD - NEW - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_lc_new_1" model="pro.service.step">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="name">Collect Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect passport, visa, Emirates ID, and work permit.</field>
+        </record>
+        
+        <record id="step_lc_new_2" model="pro.service.step">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="name">Submit Labor Card Application</field>
+            <field name="sequence">20</field>
+            <field name="description">Submit labor card application through Tasheel.</field>
+            <field name="government_fee">250.00</field>
+        </record>
+        
+        <record id="step_lc_new_3" model="pro.service.step">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="name">Labor Card Issuance</field>
+            <field name="sequence">30</field>
+            <field name="description">Wait for labor card issuance.</field>
+        </record>
+        
+        <record id="step_lc_new_4" model="pro.service.step">
+            <field name="service_id" ref="service_labor_card_new"/>
+            <field name="name">Collect Labor Card</field>
+            <field name="sequence">40</field>
+            <field name="description">Collect labor card and deliver to employee.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- TRADE LICENSE - RENEWAL - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_tl_ren_1" model="pro.service.step">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="name">Collect Current License</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect current trade license and supporting documents.</field>
+        </record>
+        
+        <record id="step_tl_ren_2" model="pro.service.step">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="name">Renew Tenancy Contract</field>
+            <field name="sequence">20</field>
+            <field name="description">Ensure tenancy contract is valid and registered with Ejari.</field>
+        </record>
+        
+        <record id="step_tl_ren_3" model="pro.service.step">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="name">Pay Chamber of Commerce</field>
+            <field name="sequence">30</field>
+            <field name="description">Pay Chamber of Commerce membership fees.</field>
+            <field name="government_fee">200.00</field>
+        </record>
+        
+        <record id="step_tl_ren_4" model="pro.service.step">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="name">Submit Renewal Application</field>
+            <field name="sequence">40</field>
+            <field name="description">Submit trade license renewal through DED.</field>
+            <field name="government_fee">600.00</field>
+        </record>
+        
+        <record id="step_tl_ren_5" model="pro.service.step">
+            <field name="service_id" ref="service_trade_license_renewal"/>
+            <field name="name">Collect Renewed License</field>
+            <field name="sequence">50</field>
+            <field name="description">Collect renewed trade license.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- MEDICAL FITNESS - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_med_fit_1" model="pro.service.step">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="name">Book Appointment</field>
+            <field name="sequence">10</field>
+            <field name="description">Book medical fitness test appointment at approved center.</field>
+        </record>
+        
+        <record id="step_med_fit_2" model="pro.service.step">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="name">Attend Medical Test</field>
+            <field name="sequence">20</field>
+            <field name="description">Employee attends medical fitness test (blood test, X-ray).</field>
+            <field name="government_fee">270.00</field>
+        </record>
+        
+        <record id="step_med_fit_3" model="pro.service.step">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="name">Wait for Results</field>
+            <field name="sequence">30</field>
+            <field name="description">Wait for medical test results (24 hours standard).</field>
+        </record>
+        
+        <record id="step_med_fit_4" model="pro.service.step">
+            <field name="service_id" ref="service_medical_fitness"/>
+            <field name="name">Collect Certificate</field>
+            <field name="sequence">40</field>
+            <field name="description">Collect medical fitness certificate.</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- DOCUMENT ATTESTATION - STEPS -->
+        <!-- ============================================== -->
+        
+        <record id="step_att_mofa_1" model="pro.service.step">
+            <field name="service_id" ref="service_attestation_mofa"/>
+            <field name="name">Collect Original Documents</field>
+            <field name="sequence">10</field>
+            <field name="description">Collect original documents requiring attestation.</field>
+        </record>
+        
+        <record id="step_att_mofa_2" model="pro.service.step">
+            <field name="service_id" ref="service_attestation_mofa"/>
+            <field name="name">Submit to MOFA</field>
+            <field name="sequence">20</field>
+            <field name="description">Submit documents to Ministry of Foreign Affairs.</field>
+            <field name="government_fee">150.00</field>
+        </record>
+        
+        <record id="step_att_mofa_3" model="pro.service.step">
+            <field name="service_id" ref="service_attestation_mofa"/>
+            <field name="name">Attestation Processing</field>
+            <field name="sequence">30</field>
+            <field name="description">Wait for attestation processing.</field>
+        </record>
+        
+        <record id="step_att_mofa_4" model="pro.service.step">
+            <field name="service_id" ref="service_attestation_mofa"/>
+            <field name="name">Collect Attested Documents</field>
+            <field name="sequence">40</field>
+            <field name="description">Collect attested documents from MOFA.</field>
+        </record>
+        
+    </data>
+</odoo>

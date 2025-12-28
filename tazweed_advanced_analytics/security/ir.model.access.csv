@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payroll_analytics_user,Payroll Analytics User,model_tazweed_payroll_analytics,hr.group_hr_user,1,0,0,0
+access_payroll_analytics_manager,Payroll Analytics Manager,model_tazweed_payroll_analytics,hr.group_hr_manager,1,1,1,1
+access_payroll_analytics_line_user,Payroll Analytics Line User,model_tazweed_payroll_analytics_line,hr.group_hr_user,1,0,0,0
+access_payroll_analytics_line_manager,Payroll Analytics Line Manager,model_tazweed_payroll_analytics_line,hr.group_hr_manager,1,1,1,1
+access_compliance_analytics_user,Compliance Analytics User,model_tazweed_compliance_analytics,hr.group_hr_user,1,0,0,0
+access_compliance_analytics_manager,Compliance Analytics Manager,model_tazweed_compliance_analytics,hr.group_hr_manager,1,1,1,1
+access_performance_analytics_user,Performance Analytics User,model_tazweed_performance_analytics,hr.group_hr_user,1,0,0,0
+access_performance_analytics_manager,Performance Analytics Manager,model_tazweed_performance_analytics,hr.group_hr_manager,1,1,1,1
+access_employee_analytics_user,Employee Analytics User,model_tazweed_employee_analytics,hr.group_hr_user,1,0,0,0
+access_employee_analytics_manager,Employee Analytics Manager,model_tazweed_employee_analytics,hr.group_hr_manager,1,1,1,1
+access_dashboard_analytics_user,Dashboard Analytics User,model_tazweed_dashboard_analytics,hr.group_hr_user,1,0,0,0
+access_dashboard_analytics_manager,Dashboard Analytics Manager,model_tazweed_dashboard_analytics,hr.group_hr_manager,1,1,1,1
+access_analytics_report_user,Analytics Report User,model_tazweed_analytics_report,hr.group_hr_user,1,0,0,0
+access_analytics_report_manager,Analytics Report Manager,model_tazweed_analytics_report,hr.group_hr_manager,1,1,1,1

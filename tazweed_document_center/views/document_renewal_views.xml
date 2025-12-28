@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Renewal Request Tree View -->
+    <record id="view_document_renewal_tree" model="ir.ui.view">
+        <field name="name">document.renewal.request.tree</field>
+        <field name="model">document.renewal.request</field>
+        <field name="arch" type="xml">
+            <tree string="Renewal Requests" decoration-danger="state=='rejected'" 
+                  decoration-warning="priority in ['high', 'urgent']"
+                  decoration-success="state=='completed'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="document_id"/>
+                <field name="document_type_id"/>
+                <field name="current_expiry_date"/>
+                <field name="priority"/>
+                <field name="state" widget="badge" decoration-info="state=='draft'" 
+                       decoration-warning="state in ['pending', 'approved', 'in_progress', 'submitted']"
+                       decoration-success="state=='completed'" decoration-danger="state in ['rejected', 'cancelled']"/>
+                <field name="requested_by"/>
+                <field name="request_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Renewal Request Form View -->
+    <record id="view_document_renewal_form" model="ir.ui.view">
+        <field name="name">document.renewal.request.form</field>
+        <field name="model">document.renewal.request</field>
+        <field name="arch" type="xml">
+            <form string="Renewal Request">
+                <header>
+                    <button name="action_submit" type="object" string="Submit for Approval" 
+                            class="oe_highlight" states="draft"/>
+                    <button name="action_approve" type="object" string="Approve" 
+                            class="oe_highlight" states="pending" groups="tazweed_document_center.group_document_manager"/>
+                    <button name="action_reject" type="object" string="Reject" 
+                            class="btn-danger" states="pending" groups="tazweed_document_center.group_document_manager"/>
+                    <button name="action_start_processing" type="object" string="Start Processing" 
+                            class="oe_highlight" states="approved"/>
+                    <button name="action_submit_to_authority" type="object" string="Submit to Authority" 
+                            states="in_progress"/>
+                    <button name="action_complete" type="object" string="Complete" 
+                            class="btn-success" states="submitted"/>
+                    <button name="action_cancel" type="object" string="Cancel" 
+                            states="draft,pending,approved"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,pending,approved,in_progress,submitted,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_document" type="object" class="oe_stat_button" icon="fa-file">
+                            <span>View Document</span>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Document Information">
+                            <field name="document_id"/>
+                            <field name="employee_id"/>
+                            <field name="document_type_id"/>
+                            <field name="current_expiry_date"/>
+                            <field name="new_expiry_date"/>
+                        </group>
+                        <group string="Request Details">
+                            <field name="priority"/>
+                            <field name="requested_by"/>
+                            <field name="request_date"/>
+                            <field name="reason"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Approval" attrs="{'invisible': [('state', 'in', ['draft', 'pending'])]}">
+                        <group>
+                            <field name="approved_by"/>
+                            <field name="approval_date"/>
+                        </group>
+                        <group attrs="{'invisible': [('state', '!=', 'rejected')]}">
+                            <field name="rejection_reason"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Processing" attrs="{'invisible': [('state', 'not in', ['in_progress', 'submitted', 'completed'])]}">
+                        <group>
+                            <field name="assigned_to"/>
+                            <field name="submission_date"/>
+                        </group>
+                        <group>
+                            <field name="expected_completion"/>
+                            <field name="actual_completion"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Cost" attrs="{'invisible': [('state', 'in', ['draft', 'pending', 'rejected', 'cancelled'])]}">
+                        <field name="renewal_cost"/>
+                        <field name="currency_id"/>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Add notes here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Renewal Request Search View -->
+    <record id="view_document_renewal_search" model="ir.ui.view">
+        <field name="name">document.renewal.request.search</field>
+        <field name="model">document.renewal.request</field>
+        <field name="arch" type="xml">
+            <search string="Renewal Requests">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="document_type_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Pending Approval" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter string="Urgent" name="urgent" domain="[('priority', '=', 'urgent')]"/>
+                <filter string="High Priority" name="high" domain="[('priority', '=', 'high')]"/>
+                <filter string="My Requests" name="my_requests" domain="[('requested_by', '=', uid)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Document Type" name="group_by_type" context="{'group_by': 'document_type_id'}"/>
+                    <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Priority" name="group_by_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Request Date" name="group_by_date" context="{'group_by': 'request_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Document Renewal Request Kanban View -->
+    <record id="view_document_renewal_kanban" model="ir.ui.view">
+        <field name="name">document.renewal.request.kanban</field>
+        <field name="model">document.renewal.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="document_type_id"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.priority.raw_value == 'urgent' ? 'bg-danger-light' : record.priority.raw_value == 'high' ? 'bg-warning-light' : ''}">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="employee_id"/>
+                                    <br/>
+                                    <field name="document_type_id"/>
+                                    <br/>
+                                    <span class="badge" t-att-class="{'urgent': 'badge-danger', 'high': 'badge-warning', 'normal': 'badge-info', 'low': 'badge-secondary'}[record.priority.raw_value]">
+                                        <field name="priority"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Document Renewal Request Action -->
+    <record id="action_document_renewals" model="ir.actions.act_window">
+        <field name="name">Renewal Requests</field>
+        <field name="res_model">document.renewal.request</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Pending Approvals Action -->
+    <record id="action_pending_approvals" model="ir.actions.act_window">
+        <field name="name">Pending Approvals</field>
+        <field name="res_model">document.renewal.request</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'pending')]</field>
+    </record>
+</odoo>

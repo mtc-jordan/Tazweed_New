@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- MOHRE Establishment Form View -->
+    <record id="view_mohre_establishment_form" model="ir.ui.view">
+        <field name="name">tazweed.mohre.establishment.form</field>
+        <field name="model">tazweed.mohre.establishment</field>
+        <field name="arch" type="xml">
+            <form string="MOHRE Establishment">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Registration">
+                            <field name="establishment_id"/>
+                            <field name="mol_id"/>
+                            <field name="trade_license"/>
+                            <field name="trade_license_expiry"/>
+                        </group>
+                        <group string="Classification">
+                            <field name="activity_type"/>
+                            <field name="company_size"/>
+                            <field name="emirate"/>
+                            <field name="is_free_zone"/>
+                            <field name="free_zone_name" attrs="{'invisible': [('is_free_zone', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Contacts">
+                            <field name="authorized_signatory"/>
+                            <field name="contact_person"/>
+                            <field name="contact_email"/>
+                            <field name="contact_phone"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Work Permits" name="permits">
+                            <field name="work_permit_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="employee_id"/>
+                                    <field name="permit_type"/>
+                                    <field name="issue_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Labour Contracts" name="contracts">
+                            <field name="labour_contract_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="employee_id"/>
+                                    <field name="job_title"/>
+                                    <field name="date_start"/>
+                                    <field name="total_salary"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- MOHRE Establishment Tree View -->
+    <record id="view_mohre_establishment_tree" model="ir.ui.view">
+        <field name="name">tazweed.mohre.establishment.tree</field>
+        <field name="model">tazweed.mohre.establishment</field>
+        <field name="arch" type="xml">
+            <tree string="MOHRE Establishments">
+                <field name="name"/>
+                <field name="establishment_id"/>
+                <field name="emirate"/>
+                <field name="activity_type"/>
+                <field name="trade_license_expiry"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- MOHRE Establishment Action -->
+    <record id="action_mohre_establishment" model="ir.actions.act_window">
+        <field name="name">MOHRE Establishments</field>
+        <field name="res_model">tazweed.mohre.establishment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Work Permit Form View -->
+    <record id="view_work_permit_form" model="ir.ui.view">
+        <field name="name">tazweed.work.permit.form</field>
+        <field name="model">tazweed.work.permit</field>
+        <field name="arch" type="xml">
+            <form string="Work Permit">
+                <header>
+                    <button name="action_apply" string="Apply" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" states="applied"/>
+                    <button name="action_issue" string="Issue" type="object" class="btn-success" states="approved"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-danger" states="draft,applied"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <field name="is_expired" invisible="1"/>
+                    <widget name="web_ribbon" title="Expired" bg_color="bg-danger" attrs="{'invisible': [('is_expired', '=', False)]}"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="establishment_id"/>
+                            <field name="permit_type"/>
+                        </group>
+                        <group>
+                            <field name="job_title"/>
+                            <field name="job_code"/>
+                            <field name="issue_date"/>
+                            <field name="expiry_date"/>
+                            <field name="days_to_expiry"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Fees">
+                            <field name="permit_fee"/>
+                            <field name="medical_fee"/>
+                            <field name="total_fee"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Work Permit Tree View -->
+    <record id="view_work_permit_tree" model="ir.ui.view">
+        <field name="name">tazweed.work.permit.tree</field>
+        <field name="model">tazweed.work.permit</field>
+        <field name="arch" type="xml">
+            <tree string="Work Permits" decoration-danger="is_expired == True" decoration-warning="days_to_expiry &lt; 30 and days_to_expiry &gt;= 0">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="permit_type"/>
+                <field name="issue_date"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="is_expired" invisible="1"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Work Permit Action -->
+    <record id="action_work_permit" model="ir.actions.act_window">
+        <field name="name">Work Permits</field>
+        <field name="res_model">tazweed.work.permit</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Labour Contract Form View -->
+    <record id="view_labour_contract_form" model="ir.ui.view">
+        <field name="name">tazweed.labour.contract.form</field>
+        <field name="model">tazweed.labour.contract</field>
+        <field name="arch" type="xml">
+            <form string="Labour Contract">
+                <header>
+                    <button name="action_register" string="Register" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_activate" string="Activate" type="object" class="btn-success" states="registered"/>
+                    <button name="action_terminate" string="Terminate" type="object" class="btn-danger" states="active"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="establishment_id"/>
+                            <field name="contract_type"/>
+                            <field name="job_title"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="duration_months"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salary" name="salary">
+                            <group>
+                                <group>
+                                    <field name="basic_salary"/>
+                                    <field name="housing_allowance"/>
+                                    <field name="transport_allowance"/>
+                                    <field name="other_allowances"/>
+                                    <field name="total_salary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Working Conditions" name="conditions">
+                            <group>
+                                <group>
+                                    <field name="working_hours"/>
+                                    <field name="working_days"/>
+                                    <field name="probation_period"/>
+                                    <field name="notice_period"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Registration" name="registration">
+                            <group>
+                                <field name="mol_registration_no"/>
+                                <field name="registration_date"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Labour Contract Tree View -->
+    <record id="view_labour_contract_tree" model="ir.ui.view">
+        <field name="name">tazweed.labour.contract.tree</field>
+        <field name="model">tazweed.labour.contract</field>
+        <field name="arch" type="xml">
+            <tree string="Labour Contracts">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="job_title"/>
+                <field name="contract_type"/>
+                <field name="date_start"/>
+                <field name="total_salary"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Labour Contract Action -->
+    <record id="action_labour_contract" model="ir.actions.act_window">
+        <field name="name">Labour Contracts</field>
+        <field name="res_model">tazweed.labour.contract</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

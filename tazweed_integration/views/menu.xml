@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_integration_root"
+              name="Integration"
+              web_icon="tazweed_integration,static/description/icon.png"
+              sequence="28"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_integration_dashboard"
+              name="Dashboards"
+              parent="menu_integration_root"
+              action="action_integration_dashboard"
+              sequence="10"/>
+
+    <!-- Logs Menu -->
+    <menuitem id="menu_integration_logs"
+              name="Integration Logs"
+              parent="menu_integration_root"
+              action="action_integration_log"
+              sequence="20"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_integration_config"
+              name="Configuration"
+              parent="menu_integration_root"
+              action="action_integration_config"
+              groups="group_integration_manager"
+              sequence="100"/>
+</odoo>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Request Report Template -->
+    <template id="report_pro_service_request_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>PRO Service Request</h2>
+                        <h3 t-field="doc.name"/>
+                        
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Request Date:</strong>
+                                <span t-field="doc.request_date"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Status:</strong>
+                                <span t-field="doc.state"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <strong>Beneficiary:</strong>
+                                <span t-field="doc.beneficiary_name"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Service:</strong>
+                                <span t-field="doc.service_id.name"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <strong>Expected Completion:</strong>
+                                <span t-field="doc.expected_date"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Assigned To:</strong>
+                                <span t-field="doc.assigned_to.name"/>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4">Required Documents</h4>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Document Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.service_id.required_document_ids" t-as="doc_type">
+                                    <tr>
+                                        <td t-esc="doc_type.name"/>
+                                        <td>
+                                            <t t-if="doc_type.id in doc.document_ids.mapped('document_type_id').ids">
+                                                <span class="text-success">Attached</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="text-danger">Missing</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <h4 class="mt-4">Tasks</h4>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Task</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.task_ids" t-as="task">
+                                    <tr>
+                                        <td t-esc="task.sequence"/>
+                                        <td t-esc="task.name"/>
+                                        <td t-esc="task.state"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Total Fees:</strong>
+                                <span t-field="doc.total_fees" t-options='{"widget": "monetary", "display_currency": doc.service_id.currency_id}'/>
+                            </div>
+                        </div>
+                        
+                        <t t-if="doc.description">
+                            <h4 class="mt-4">Notes</h4>
+                            <p t-field="doc.description"/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report Action -->
+    <record id="action_report_pro_service_request" model="ir.actions.report">
+        <field name="name">Service Request</field>
+        <field name="model">pro.service.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tazweed_pro_services.report_pro_service_request_document</field>
+        <field name="report_file">tazweed_pro_services.report_pro_service_request_document</field>
+        <field name="print_report_name">'PRO Request - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_pro_service_request"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

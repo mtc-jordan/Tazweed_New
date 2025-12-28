@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sync Job Postings Status -->
+        <record id="cron_sync_job_postings" model="ir.cron">
+            <field name="name">Job Board: Sync Posting Status</field>
+            <field name="model_id" ref="model_job_posting"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_sync_status()</field>
+            <field name="interval_number">4</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+
+        <!-- Check Expired Postings -->
+        <record id="cron_check_expired_postings" model="ir.cron">
+            <field name="name">Job Board: Check Expired Postings</field>
+            <field name="model_id" ref="model_job_posting"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_check_expiry()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+
+        <!-- Import New Applications -->
+        <record id="cron_import_applications" model="ir.cron">
+            <field name="name">Job Board: Import Applications</field>
+            <field name="model_id" ref="model_job_board"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_import_applications()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+
+        <!-- Aggregate Daily Analytics -->
+        <record id="cron_aggregate_analytics" model="ir.cron">
+            <field name="name">Job Board: Aggregate Daily Analytics</field>
+            <field name="model_id" ref="model_job_board_analytics"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_aggregate_daily_metrics()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+
+        <!-- Send Scheduled Reports -->
+        <record id="cron_send_scheduled_reports" model="ir.cron">
+            <field name="name">Job Board: Send Scheduled Reports</field>
+            <field name="model_id" ref="model_job_board_report"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_send_scheduled_reports()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+
+        <!-- Process Scheduled Postings -->
+        <record id="cron_process_scheduled_postings" model="ir.cron">
+            <field name="name">Job Board: Process Scheduled Postings</field>
+            <field name="model_id" ref="model_job_posting"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_process_scheduled()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+    </data>
+</odoo>

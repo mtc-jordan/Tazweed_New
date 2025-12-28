@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Structure Types -->
+        <record id="structure_type_employee" model="hr.payroll.structure.type">
+            <field name="name">UAE Employee</field>
+            <field name="code">UAE_EMP</field>
+            <field name="sequence">1</field>
+            <field name="wage_type">monthly</field>
+            <field name="is_uae_structure">True</field>
+            <field name="include_gratuity">True</field>
+            <field name="wps_enabled">True</field>
+        </record>
+
+        <record id="structure_type_worker" model="hr.payroll.structure.type">
+            <field name="name">UAE Worker</field>
+            <field name="code">UAE_WRK</field>
+            <field name="sequence">2</field>
+            <field name="wage_type">monthly</field>
+            <field name="is_uae_structure">True</field>
+            <field name="include_gratuity">True</field>
+            <field name="wps_enabled">True</field>
+        </record>
+
+        <record id="structure_type_daily" model="hr.payroll.structure.type">
+            <field name="name">Daily Wage Worker</field>
+            <field name="code">UAE_DLY</field>
+            <field name="sequence">3</field>
+            <field name="wage_type">daily</field>
+            <field name="is_uae_structure">True</field>
+            <field name="include_gratuity">False</field>
+            <field name="wps_enabled">True</field>
+        </record>
+
+        <!-- Salary Structures -->
+        <record id="structure_uae_employee" model="hr.payroll.structure">
+            <field name="name">UAE Employee Structure</field>
+            <field name="code">UAE_EMP_STR</field>
+            <field name="type_id" ref="structure_type_employee"/>
+            <field name="schedule_pay">monthly</field>
+            <field name="is_uae_structure">True</field>
+            <field name="include_housing">True</field>
+            <field name="include_transport">True</field>
+            <field name="include_overtime">True</field>
+            <field name="include_gratuity">True</field>
+            <field name="use_worked_day_lines">True</field>
+        </record>
+
+        <record id="structure_uae_worker" model="hr.payroll.structure">
+            <field name="name">UAE Worker Structure</field>
+            <field name="code">UAE_WRK_STR</field>
+            <field name="type_id" ref="structure_type_worker"/>
+            <field name="schedule_pay">monthly</field>
+            <field name="is_uae_structure">True</field>
+            <field name="include_housing">True</field>
+            <field name="include_transport">True</field>
+            <field name="include_overtime">True</field>
+            <field name="include_gratuity">True</field>
+            <field name="use_worked_day_lines">True</field>
+        </record>
+
+        <record id="structure_uae_daily" model="hr.payroll.structure">
+            <field name="name">UAE Daily Worker Structure</field>
+            <field name="code">UAE_DLY_STR</field>
+            <field name="type_id" ref="structure_type_daily"/>
+            <field name="schedule_pay">monthly</field>
+            <field name="is_uae_structure">True</field>
+            <field name="include_housing">False</field>
+            <field name="include_transport">False</field>
+            <field name="include_overtime">True</field>
+            <field name="include_gratuity">False</field>
+            <field name="use_worked_day_lines">True</field>
+        </record>
+
+        <!-- Input Types -->
+        <record id="input_type_overtime_hours" model="hr.payslip.input.type">
+            <field name="name">Overtime Hours</field>
+            <field name="code">OT_HOURS</field>
+            <field name="sequence">1</field>
+            <field name="input_type">quantity</field>
+            <field name="is_deduction">False</field>
+        </record>
+
+        <record id="input_type_bonus" model="hr.payslip.input.type">
+            <field name="name">Bonus</field>
+            <field name="code">BONUS</field>
+            <field name="sequence">2</field>
+            <field name="input_type">amount</field>
+            <field name="is_deduction">False</field>
+        </record>
+
+        <record id="input_type_commission" model="hr.payslip.input.type">
+            <field name="name">Commission</field>
+            <field name="code">COMMISSION</field>
+            <field name="sequence">3</field>
+            <field name="input_type">amount</field>
+            <field name="is_deduction">False</field>
+        </record>
+
+        <record id="input_type_deduction" model="hr.payslip.input.type">
+            <field name="name">Other Deduction</field>
+            <field name="code">OTHER_DED</field>
+            <field name="sequence">10</field>
+            <field name="input_type">amount</field>
+            <field name="is_deduction">True</field>
+        </record>
+
+        <record id="input_type_absence" model="hr.payslip.input.type">
+            <field name="name">Absence Days</field>
+            <field name="code">ABSENCE</field>
+            <field name="sequence">11</field>
+            <field name="input_type">quantity</field>
+            <field name="is_deduction">True</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Payslips List -->
+    <template id="portal_payslips" name="Portal Payslips">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>My Payslips</h3>
+                    <a href="/my/salary-history" class="btn btn-outline-primary">
+                        <i class="fa fa-line-chart me-2"/>Salary History
+                    </a>
+                </div>
+
+                <!-- Year Filter -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <label class="form-label mb-0">Filter by Year:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" onchange="window.location.href='/my/payslips?year='+this.value">
+                                    <option value="">All Years</option>
+                                    <t t-foreach="years" t-as="y">
+                                        <option t-att-value="y" t-att-selected="selected_year == y" t-esc="y"/>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payslips Grid -->
+                <t t-if="payslips">
+                    <div class="row">
+                        <t t-foreach="payslips" t-as="payslip">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 payslip-card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0" t-esc="payslip.date_to.strftime('%B %Y')"/>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="text-center mb-3">
+                                            <small class="text-muted">Net Salary</small>
+                                            <h3 class="text-success mb-0">
+                                                <t t-esc="'%.2f' % sum(line.total for line in payslip.line_ids if line.code == 'NET')"/> AED
+                                            </h3>
+                                        </div>
+                                        <hr/>
+                                        <div class="d-flex justify-content-between small">
+                                            <span>Gross:</span>
+                                            <span t-esc="'%.2f AED' % sum(line.total for line in payslip.line_ids if line.code == 'GROSS')"/>
+                                        </div>
+                                        <div class="d-flex justify-content-between small">
+                                            <span>Deductions:</span>
+                                            <span class="text-danger" t-esc="'%.2f AED' % abs(sum(line.total for line in payslip.line_ids if line.category_id.code == 'DED'))"/>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <div class="d-flex justify-content-between">
+                                            <a t-att-href="'/my/payslips/%s' % payslip.id" class="btn btn-sm btn-outline-primary">View Details</a>
+                                            <a t-att-href="'/my/payslips/%s/download' % payslip.id" class="btn btn-sm btn-outline-secondary">
+                                                <i class="fa fa-download"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <t t-call="portal.pager"/>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">No payslips available.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Payslip Detail -->
+    <template id="portal_payslip_detail" name="Portal Payslip Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0">Payslip - <t t-esc="payslip.date_to.strftime('%B %Y')"/></h4>
+                            <small class="text-muted" t-esc="payslip.number or ''"/>
+                        </div>
+                        <a t-att-href="'/my/payslips/%s/download' % payslip.id" class="btn btn-primary">
+                            <i class="fa fa-download me-2"/>Download PDF
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <!-- Employee Info -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Employee Information</h6>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td><strong t-esc="payslip.employee_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Employee ID:</td>
+                                        <td t-esc="payslip.employee_id.employee_number or '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <td>Department:</td>
+                                        <td t-esc="payslip.employee_id.department_id.name or '-'"/>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Pay Period</h6>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td>From:</td>
+                                        <td t-esc="payslip.date_from"/>
+                                    </tr>
+                                    <tr>
+                                        <td>To:</td>
+                                        <td t-esc="payslip.date_to"/>
+                                    </tr>
+                                    <tr>
+                                        <td>Structure:</td>
+                                        <td t-esc="payslip.struct_id.name or '-'"/>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Salary Breakdown -->
+                        <h6 class="text-muted mb-3">Salary Breakdown</h6>
+                        <t t-foreach="lines_by_category.items()" t-as="category_item">
+                            <div class="card mb-3">
+                                <div class="card-header py-2">
+                                    <strong t-esc="category_item[0]"/>
+                                </div>
+                                <div class="card-body py-2">
+                                    <table class="table table-sm mb-0">
+                                        <t t-foreach="category_item[1]" t-as="line">
+                                            <tr>
+                                                <td t-esc="line.name"/>
+                                                <td class="text-end">
+                                                    <t t-if="line.total >= 0">
+                                                        <span class="text-success" t-esc="'%.2f AED' % line.total"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-danger" t-esc="'%.2f AED' % line.total"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Summary -->
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <small class="text-muted">Gross Salary</small>
+                                        <h4 t-esc="'%.2f AED' % sum(line.total for line in payslip.line_ids if line.code == 'GROSS')"/>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <small class="text-muted">Total Deductions</small>
+                                        <h4 class="text-danger" t-esc="'%.2f AED' % abs(sum(line.total for line in payslip.line_ids if line.category_id.code == 'DED'))"/>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <small class="text-muted">Net Salary</small>
+                                        <h4 class="text-success" t-esc="'%.2f AED' % sum(line.total for line in payslip.line_ids if line.code == 'NET')"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/my/payslips" class="btn btn-secondary">Back to Payslips</a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Salary History -->
+    <template id="portal_salary_history" name="Portal Salary History">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <h3 class="mb-4">Salary History</h3>
+
+                <!-- Chart -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Salary Trend (Last 12 Months)</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="salaryChart" height="100"></canvas>
+                    </div>
+                </div>
+
+                <!-- History Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Payment History</h5>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="payslips">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Period</th>
+                                            <th class="text-end">Gross</th>
+                                            <th class="text-end">Deductions</th>
+                                            <th class="text-end">Net</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="payslips" t-as="payslip">
+                                            <tr>
+                                                <td t-esc="payslip.date_to.strftime('%B %Y')"/>
+                                                <td class="text-end" t-esc="'%.2f' % sum(line.total for line in payslip.line_ids if line.code == 'GROSS')"/>
+                                                <td class="text-end text-danger" t-esc="'%.2f' % abs(sum(line.total for line in payslip.line_ids if line.category_id.code == 'DED'))"/>
+                                                <td class="text-end text-success" t-esc="'%.2f' % sum(line.total for line in payslip.line_ids if line.code == 'NET')"/>
+                                                <td>
+                                                    <a t-att-href="'/my/payslips/%s' % payslip.id" class="btn btn-sm btn-outline-primary">View</a>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="alert alert-info">No salary history available.</div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart.js Script -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var chartData = <t t-raw="json.dumps(chart_data) if chart_data else '[]'"/>;
+                    if (chartData.length > 0) {
+                        var ctx = document.getElementById('salaryChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: chartData.map(d => d.month),
+                                datasets: [{
+                                    label: 'Net Salary',
+                                    data: chartData.map(d => d.net),
+                                    borderColor: '#28a745',
+                                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                }, {
+                                    label: 'Gross Salary',
+                                    data: chartData.map(d => d.gross),
+                                    borderColor: '#3498db',
+                                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: function(value) {
+                                                return value.toLocaleString() + ' AED';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            </script>
+        </t>
+    </template>
+
+    <!-- Portal Loans -->
+    <template id="portal_loans" name="Portal Loans">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>My Loans</h3>
+                    <a href="/my/loans/new" class="btn btn-primary">
+                        <i class="fa fa-plus me-2"/>Request Loan
+                    </a>
+                </div>
+
+                <t t-if="loans">
+                    <div class="row">
+                        <t t-foreach="loans" t-as="loan">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <span t-esc="loan.name or 'Loan Request'"/>
+                                        <span t-att-class="'badge bg-%s' % ('success' if loan.state == 'paid' else 'primary' if loan.state == 'approved' else 'warning' if loan.state == 'pending' else 'secondary')"
+                                              t-esc="loan.state"/>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <small class="text-muted">Amount</small>
+                                                <h5 t-esc="'%.2f AED' % loan.amount"/>
+                                            </div>
+                                            <div class="col-6">
+                                                <small class="text-muted">Remaining</small>
+                                                <h5 t-esc="'%.2f AED' % loan.remaining_amount"/>
+                                            </div>
+                                        </div>
+                                        <div class="progress mt-3" style="height: 8px;">
+                                            <t t-set="paid_pct" t-value="((loan.amount - loan.remaining_amount) / loan.amount * 100) if loan.amount else 0"/>
+                                            <div class="progress-bar bg-success" t-att-style="'width: %s%%' % paid_pct"/>
+                                        </div>
+                                        <small class="text-muted"><t t-esc="'%.0f' % paid_pct"/>% paid</small>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <a t-att-href="'/my/loans/%s' % loan.id" class="btn btn-sm btn-outline-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">No loan records found.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Loan Detail -->
+    <template id="portal_loan_detail" name="Portal Loan Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0" t-esc="loan.name or 'Loan Details'"/>
+                        <span t-att-class="'badge bg-%s' % ('success' if loan.state == 'paid' else 'primary' if loan.state == 'approved' else 'warning' if loan.state == 'pending' else 'secondary')"
+                              t-esc="loan.state"/>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Loan Amount:</th>
+                                        <td t-esc="'%.2f AED' % loan.amount"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Installments:</th>
+                                        <td t-esc="loan.installments"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Monthly Payment:</th>
+                                        <td t-esc="'%.2f AED' % loan.installment_amount"/>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Request Date:</th>
+                                        <td t-esc="loan.request_date"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Paid Amount:</th>
+                                        <td t-esc="'%.2f AED' % loan.paid_amount"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Remaining:</th>
+                                        <td t-esc="'%.2f AED' % loan.remaining_amount"/>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Payment Schedule -->
+                        <h6 class="text-muted mb-3">Payment Schedule</h6>
+                        <t t-if="loan.installment_line_ids">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Due Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="loan.installment_line_ids" t-as="inst">
+                                            <tr>
+                                                <td t-esc="inst.sequence"/>
+                                                <td t-esc="inst.date"/>
+                                                <td t-esc="'%.2f AED' % inst.amount"/>
+                                                <td>
+                                                    <span t-att-class="'badge bg-%s' % ('success' if inst.state == 'paid' else 'warning')"
+                                                          t-esc="inst.state"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/my/loans" class="btn btn-secondary">Back to Loans</a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Loan New -->
+    <template id="portal_loan_new" name="Portal Loan New">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="tazweed_employee_portal.portal_breadcrumb"/>
+            
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Request Loan</h4>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="error">
+                            <div class="alert alert-danger" t-esc="error"/>
+                        </t>
+                        <form method="post" action="/my/loans/new">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Loan Type *</label>
+                                        <select name="loan_type" class="form-select" required="required">
+                                            <option value="salary_advance">Salary Advance</option>
+                                            <option value="personal">Personal Loan</option>
+                                            <option value="emergency">Emergency Loan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Amount (AED) *</label>
+                                        <input type="number" name="amount" class="form-control" required="required" min="100" step="100"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Number of Installments *</label>
+                                        <select name="installments" class="form-select" required="required">
+                                            <option value="1">1 Month</option>
+                                            <option value="2">2 Months</option>
+                                            <option value="3">3 Months</option>
+                                            <option value="6">6 Months</option>
+                                            <option value="12">12 Months</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Reason</label>
+                                <textarea name="reason" class="form-control" rows="3" placeholder="Please provide a reason for the loan request..."></textarea>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Submit Request</button>
+                                <a href="/my/loans" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

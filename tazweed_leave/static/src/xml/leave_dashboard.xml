@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_leave.LeaveDashboard" owl="1">
+        <div class="leave-dashboard">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title">
+                        <i class="fa fa-calendar-check-o"></i>
+                        Leave &amp; Attendance Dashboard
+                    </h1>
+                    <p class="dashboard-subtitle">Monitor leave requests, attendance, and team availability</p>
+                </div>
+                <div class="header-right">
+                    <select class="date-range-select" t-on-change="onDateRangeChange">
+                        <option value="week">This Week</option>
+                        <option value="month" selected="selected">This Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    <button class="btn-primary" t-on-click="onNewRequest">
+                        <i class="fa fa-plus"></i> New Request
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Loading dashboard data...</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div t-else="" class="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-blue">
+                        <div class="stat-icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.totalEmployees"/>
+                            <span class="stat-label">Total Employees</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-orange">
+                        <div class="stat-icon">
+                            <i class="fa fa-plane"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.onLeaveToday"/>
+                            <span class="stat-label">On Leave Today</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-yellow">
+                        <div class="stat-icon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.pendingRequests"/>
+                            <span class="stat-label">Pending Requests</span>
+                            <span class="stat-badge" t-if="state.stats.pendingRequests > 0">Needs Action</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-green">
+                        <div class="stat-icon">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.approvedThisMonth"/>
+                            <span class="stat-label">Approved This Month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-purple">
+                        <div class="stat-icon">
+                            <i class="fa fa-bar-chart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value"><t t-esc="state.stats.avgLeaveDays"/> days</span>
+                            <span class="stat-label">Avg. Leave Days</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-teal">
+                        <div class="stat-icon">
+                            <i class="fa fa-pie-chart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value"><t t-esc="state.stats.leaveUtilization"/>%</span>
+                            <span class="stat-label">Leave Utilization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn" t-on-click="onViewAllRequests">
+                        <i class="fa fa-list"></i> All Requests
+                    </button>
+                    <button class="action-btn" t-on-click="onViewAllocations">
+                        <i class="fa fa-database"></i> Allocations
+                    </button>
+                    <button class="action-btn" t-on-click="onViewCalendar">
+                        <i class="fa fa-calendar"></i> Calendar
+                    </button>
+                    <button class="action-btn" t-on-click="onViewPendingRequests">
+                        <i class="fa fa-hourglass-half"></i> Pending
+                    </button>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Leave by Type</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="leaveTypeChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Leave by Department</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card chart-card-wide">
+                        <div class="chart-header">
+                            <h3>Request Trends</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="tables-row">
+                    <!-- Recent Requests -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="fa fa-history"></i> Recent Requests</h3>
+                            <a href="#" t-on-click.prevent="onViewAllRequests" class="view-all-link">View All</a>
+                        </div>
+                        <div class="table-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Type</th>
+                                        <th>Duration</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.recentRequests" t-as="request" t-key="request.id">
+                                        <tr>
+                                            <td>
+                                                <div class="employee-cell">
+                                                    <span class="employee-avatar" t-esc="request.employee_name ? request.employee_name[0] : '?'"/>
+                                                    <span t-esc="request.employee_name"/>
+                                                </div>
+                                            </td>
+                                            <td t-esc="request.leave_type"/>
+                                            <td><t t-esc="request.duration"/> days</td>
+                                            <td>
+                                                <span t-attf-class="status-badge #{getStatusClass(request.state)}" t-esc="getStatusLabel(request.state)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="state.recentRequests.length === 0">
+                                        <td colspan="4" class="no-data">No recent requests</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Leaves -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="fa fa-calendar-o"></i> Upcoming Leaves</h3>
+                            <a href="#" t-on-click.prevent="onViewCalendar" class="view-all-link">View Calendar</a>
+                        </div>
+                        <div class="table-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Days</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.upcomingLeaves" t-as="leave" t-key="leave.id">
+                                        <tr>
+                                            <td>
+                                                <div class="employee-cell">
+                                                    <span class="employee-avatar" t-esc="leave.employee_name ? leave.employee_name[0] : '?'"/>
+                                                    <span t-esc="leave.employee_name"/>
+                                                </div>
+                                            </td>
+                                            <td t-esc="formatDate(leave.date_from)"/>
+                                            <td t-esc="formatDate(leave.date_to)"/>
+                                            <td><t t-esc="leave.duration"/> days</td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="state.upcomingLeaves.length === 0">
+                                        <td colspan="4" class="no-data">No upcoming leaves</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Section -->
+                <div t-if="state.alerts.length > 0" class="alerts-section">
+                    <h3><i class="fa fa-bell"></i> Alerts &amp; Notifications</h3>
+                    <div class="alerts-list">
+                        <t t-foreach="state.alerts" t-as="alert" t-key="alert_index">
+                            <div t-attf-class="alert-item alert-#{alert.type}">
+                                <i t-attf-class="fa #{alert.icon}"></i>
+                                <span t-esc="alert.message"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

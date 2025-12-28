@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Post Job Wizard Form View -->
+    <record id="view_post_job_wizard_form" model="ir.ui.view">
+        <field name="name">post.job.wizard.form</field>
+        <field name="model">post.job.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Post Job to Job Boards">
+                <group>
+                    <group string="Job Information">
+                        <field name="hr_job_id"/>
+                        <field name="template_id"/>
+                        <field name="title"/>
+                        <field name="department_id"/>
+                        <field name="location"/>
+                    </group>
+                    <group string="Employment Details">
+                        <field name="employment_type"/>
+                        <field name="experience_level"/>
+                        <field name="remote_type"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Salary (Optional)">
+                        <field name="show_salary"/>
+                        <field name="salary_min" attrs="{'invisible': [('show_salary', '=', False)]}"/>
+                        <field name="salary_max" attrs="{'invisible': [('show_salary', '=', False)]}"/>
+                        <field name="salary_currency" attrs="{'invisible': [('show_salary', '=', False)]}"/>
+                    </group>
+                    <group string="Posting Options">
+                        <field name="expiry_days"/>
+                        <field name="scheduled_date"/>
+                        <field name="is_featured"/>
+                        <field name="is_sponsored"/>
+                        <field name="daily_budget" attrs="{'invisible': [('is_sponsored', '=', False)]}"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Description" name="description">
+                        <field name="description" widget="html"/>
+                    </page>
+                    <page string="Requirements" name="requirements">
+                        <field name="requirements" widget="html"/>
+                    </page>
+                    <page string="Benefits" name="benefits">
+                        <field name="benefits" widget="html"/>
+                    </page>
+                    <page string="Select Job Boards" name="boards">
+                        <group>
+                            <p class="text-muted">
+                                Select the job boards where you want to post this job.
+                                Estimated costs are shown for each board.
+                            </p>
+                        </group>
+                        <field name="job_board_ids" widget="many2many_checkboxes"/>
+                        <group>
+                            <field name="estimated_cost"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="action_post_jobs" type="object" string="Post Now" class="btn-primary"/>
+                    <button name="action_next_step" type="object" string="Schedule" class="btn-secondary" 
+                        attrs="{'invisible': [('scheduled_date', '=', False)]}"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Post Job Wizard Action -->
+    <record id="action_post_job_wizard" model="ir.actions.act_window">
+        <field name="name">Post Job</field>
+        <field name="res_model">post.job.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Import Candidates Wizard Form View -->
+    <record id="view_import_candidates_wizard_form" model="ir.ui.view">
+        <field name="name">import.candidates.wizard.form</field>
+        <field name="model">import.candidates.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Candidates">
+                <group>
+                    <group string="Import Source">
+                        <field name="import_type" widget="radio"/>
+                    </group>
+                </group>
+                <group attrs="{'invisible': [('import_type', '!=', 'job_board')]}">
+                    <group string="Job Board Import">
+                        <field name="job_board_id"/>
+                        <field name="job_posting_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <group attrs="{'invisible': [('import_type', '!=', 'csv')]}">
+                    <group string="File Import">
+                        <field name="import_file" filename="import_filename"/>
+                        <field name="import_filename" invisible="1"/>
+                    </group>
+                </group>
+                <group attrs="{'invisible': [('import_type', '!=', 'linkedin')]}">
+                </group>
+                <group string="Assignment">
+                    <field name="hr_job_id"/>
+                    <field name="assign_recruiter_id"/>
+                </group>
+                <group attrs="{'invisible': [('preview_count', '=', 0)]}">
+                    <group string="Preview">
+                        <field name="preview_count"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_import" type="object" string="Import" class="btn-primary"
+                        attrs="{'invisible': [('preview_count', '=', 0)]}"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Import Candidates Wizard Action -->
+    <record id="action_import_candidates_wizard" model="ir.actions.act_window">
+        <field name="name">Import Candidates</field>
+        <field name="res_model">import.candidates.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

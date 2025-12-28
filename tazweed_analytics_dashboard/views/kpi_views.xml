@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- KPI Tree View -->
+    <record id="analytics_kpi_view_tree" model="ir.ui.view">
+        <field name="name">analytics.kpi.tree</field>
+        <field name="model">analytics.kpi</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <field name="value_type"/>
+                <field name="display_format"/>
+                <field name="has_target"/>
+                <field name="target_value"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- KPI Form View -->
+    <record id="analytics_kpi_view_form" model="ir.ui.view">
+        <field name="name">analytics.kpi.form</field>
+        <field name="model">analytics.kpi</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" 
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="KPI Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Definition">
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="description"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Display">
+                            <field name="icon"/>
+                            <field name="color" widget="color"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Value Configuration">
+                            <field name="value_type"/>
+                            <field name="model_id" attrs="{'invisible': [('value_type', '=', 'custom')]}"/>
+                            <field name="domain" attrs="{'invisible': [('value_type', '=', 'custom')]}"/>
+                            <field name="field_name" attrs="{'invisible': [('value_type', 'in', ('count', 'custom'))]}"/>
+                        </group>
+                        <group string="Display Format">
+                            <field name="display_format"/>
+                            <field name="decimal_places"/>
+                            <field name="prefix"/>
+                            <field name="suffix"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Target">
+                            <field name="has_target"/>
+                            <field name="target_value" attrs="{'invisible': [('has_target', '=', False)]}"/>
+                            <field name="target_type" attrs="{'invisible': [('has_target', '=', False)]}"/>
+                        </group>
+                        <group string="Thresholds" attrs="{'invisible': [('has_target', '=', False)]}">
+                            <field name="warning_threshold"/>
+                            <field name="danger_threshold"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Trend">
+                            <field name="show_trend"/>
+                            <field name="trend_period" attrs="{'invisible': [('show_trend', '=', False)]}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- KPI Search View -->
+    <record id="analytics_kpi_view_search" model="ir.ui.view">
+        <field name="name">analytics.kpi.search</field>
+        <field name="model">analytics.kpi</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Workforce" name="workforce" domain="[('category', '=', 'workforce')]"/>
+                <filter string="Payroll" name="payroll" domain="[('category', '=', 'payroll')]"/>
+                <filter string="Recruitment" name="recruitment" domain="[('category', '=', 'recruitment')]"/>
+                <filter string="Compliance" name="compliance" domain="[('category', '=', 'compliance')]"/>
+                <separator/>
+                <filter string="Has Target" name="has_target" domain="[('has_target', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                    <filter string="Value Type" name="group_type" context="{'group_by': 'value_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- KPI Action -->
+    <record id="action_analytics_kpi" model="ir.actions.act_window">
+        <field name="name">KPIs</field>
+        <field name="res_model">analytics.kpi</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

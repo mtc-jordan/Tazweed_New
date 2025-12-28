@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Dashboard Template -->
+    <template id="portal_dashboard" name="Portal Dashboard">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <div class="container-fluid py-4 tazweed-dashboard">
+                <!-- Welcome Header -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="welcome-header p-4 rounded" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white;">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <img t-if="employee.image_128" 
+                                         t-att-src="image_data_uri(employee.image_128)" 
+                                         class="rounded-circle" 
+                                         style="width: 80px; height: 80px; object-fit: cover; border: 3px solid white;"/>
+                                    <div t-else="" class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center" 
+                                         style="width: 80px; height: 80px; font-size: 28px; font-weight: bold;">
+                                        <t t-esc="employee.name[:2].upper()"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h2 class="mb-1">Welcome, <t t-esc="employee.name"/>!</h2>
+                                    <p class="mb-0 opacity-75">
+                                        <t t-esc="employee.job_id.name or ''"/> 
+                                        <t t-if="employee.department_id"> | <t t-esc="employee.department_id.name"/></t>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="/my/attendance" class="btn btn-light btn-lg" id="attendance-btn">
+                                        <i class="fa fa-clock-o me-2"/>Check In/Out
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Leave Balance</h6>
+                                        <h3 class="mb-0">
+                                            <t t-set="total_balance" t-value="sum([b['remaining'] for b in dashboard_data.get('leave_balance', {}).values()])"/>
+                                            <t t-esc="total_balance"/> days
+                                        </h3>
+                                    </div>
+                                    <div class="stat-icon bg-primary">
+                                        <i class="fa fa-calendar"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/my/leave-balance" class="text-primary">View Details →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Pending Requests</h6>
+                                        <h3 class="mb-0"><t t-esc="len(dashboard_data.get('pending_leaves', []))"/></h3>
+                                    </div>
+                                    <div class="stat-icon bg-warning">
+                                        <i class="fa fa-hourglass-half"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/my/leaves?filterby=pending" class="text-warning">View Pending →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Pending Approvals</h6>
+                                        <h3 class="mb-0"><t t-esc="dashboard_data.get('pending_approvals', 0)"/></h3>
+                                    </div>
+                                    <div class="stat-icon bg-info">
+                                        <i class="fa fa-check-circle"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/my/approvals" class="text-info">Review →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Expiring Documents</h6>
+                                        <h3 class="mb-0"><t t-esc="dashboard_data.get('expiring_documents', 0)"/></h3>
+                                    </div>
+                                    <div class="stat-icon bg-danger">
+                                        <i class="fa fa-exclamation-triangle"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/my/documents" class="text-danger">View Documents →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Leave Balance -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Leave Balance</h5>
+                                <a href="/my/leaves/new" class="btn btn-primary btn-sm">Request Leave</a>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="dashboard_data.get('leave_balance')">
+                                    <t t-foreach="dashboard_data['leave_balance'].items()" t-as="leave_item">
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span t-esc="leave_item[0]"/>
+                                                <span><t t-esc="leave_item[1]['remaining']"/> / <t t-esc="leave_item[1]['allocated']"/> days</span>
+                                            </div>
+                                            <div class="progress" style="height: 8px;">
+                                                <t t-set="percentage" t-value="(leave_item[1]['remaining'] / leave_item[1]['allocated'] * 100) if leave_item[1]['allocated'] else 0"/>
+                                                <div class="progress-bar" role="progressbar" 
+                                                     t-att-style="'width: %s%%' % percentage"
+                                                     t-att-class="'bg-success' if percentage > 50 else 'bg-warning' if percentage > 25 else 'bg-danger'"/>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted text-center">No leave allocations found.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Attendance -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Attendance</h5>
+                                <a href="/my/attendance" class="btn btn-outline-primary btn-sm">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="dashboard_data.get('recent_attendance')">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Check In</th>
+                                                <th>Check Out</th>
+                                                <th>Hours</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="dashboard_data['recent_attendance']" t-as="att">
+                                                <tr>
+                                                    <td t-esc="att.check_in.strftime('%d %b')"/>
+                                                    <td t-esc="att.check_in.strftime('%H:%M')"/>
+                                                    <td t-esc="att.check_out.strftime('%H:%M') if att.check_out else '-'"/>
+                                                    <td t-esc="'%.1f' % att.worked_hours"/>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted text-center">No recent attendance records.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Recent Payslips -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Payslips</h5>
+                                <a href="/my/payslips" class="btn btn-outline-primary btn-sm">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="dashboard_data.get('recent_payslips')">
+                                    <div class="list-group list-group-flush">
+                                        <t t-foreach="dashboard_data['recent_payslips']" t-as="payslip">
+                                            <a t-att-href="'/my/payslips/%s' % payslip.id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong t-esc="payslip.date_to.strftime('%B %Y')"/>
+                                                    <br/>
+                                                    <small class="text-muted" t-esc="payslip.number or 'Draft'"/>
+                                                </div>
+                                                <span class="badge bg-success">
+                                                    <t t-esc="'%.2f' % sum(line.total for line in payslip.line_ids if line.code == 'NET')"/> AED
+                                                </span>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted text-center">No payslips available.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Announcements -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Announcements</h5>
+                                <a href="/my/announcements" class="btn btn-outline-primary btn-sm">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="dashboard_data.get('announcements')">
+                                    <div class="list-group list-group-flush">
+                                        <t t-foreach="dashboard_data['announcements']" t-as="announcement">
+                                            <a t-att-href="'/my/announcements/%s' % announcement.id" class="list-group-item list-group-item-action">
+                                                <div class="d-flex justify-content-between">
+                                                    <strong t-esc="announcement.name"/>
+                                                    <small class="text-muted" t-esc="announcement.publish_date.strftime('%d %b') if announcement.publish_date else ''"/>
+                                                </div>
+                                                <small class="text-muted" t-esc="announcement.summary[:100] + '...' if announcement.summary and len(announcement.summary) > 100 else announcement.summary or ''"/>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted text-center">No announcements.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Quick Actions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-2 col-4 mb-3">
+                                        <a href="/my/leaves/new" class="quick-action-btn">
+                                            <div class="quick-action-icon bg-primary">
+                                                <i class="fa fa-calendar-plus-o"/>
+                                            </div>
+                                            <span>Request Leave</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-4 mb-3">
+                                        <a href="/my/attendance" class="quick-action-btn">
+                                            <div class="quick-action-icon bg-success">
+                                                <i class="fa fa-clock-o"/>
+                                            </div>
+                                            <span>Attendance</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-4 mb-3">
+                                        <a href="/my/payslips" class="quick-action-btn">
+                                            <div class="quick-action-icon bg-info">
+                                                <i class="fa fa-money"/>
+                                            </div>
+                                            <span>Payslips</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-4 mb-3">
+                                        <a href="/my/documents" class="quick-action-btn">
+                                            <div class="quick-action-icon bg-warning">
+                                                <i class="fa fa-file-text"/>
+                                            </div>
+                                            <span>Documents</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-4 mb-3">
+                                        <a href="/my/profile" class="quick-action-btn">
+                                            <div class="quick-action-icon bg-secondary">
+                                                <i class="fa fa-user"/>
+                                            </div>
+                                            <span>Profile</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-4 mb-3">
+                                        <a href="/my/team" class="quick-action-btn">
+                                            <div class="quick-action-icon bg-dark">
+                                                <i class="fa fa-users"/>
+                                            </div>
+                                            <span>My Team</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

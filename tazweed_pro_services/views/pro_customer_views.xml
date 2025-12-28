@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customer Tree View -->
+    <record id="view_pro_customer_tree" model="ir.ui.view">
+        <field name="name">pro.customer.tree</field>
+        <field name="model">pro.customer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="customer_type"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="emirate"/>
+                <field name="request_count"/>
+                <field name="balance_due"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Customer Form View -->
+    <record id="view_pro_customer_form" model="ir.ui.view">
+        <field name="name">pro.customer.form</field>
+        <field name="model">pro.customer</field>
+        <field name="arch" type="xml">
+            <form string="PRO Customer">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_requests" type="object" class="oe_stat_button" icon="fa-tasks">
+                            <field name="request_count" widget="statinfo" string="Requests"/>
+                        </button>
+                        <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-file">
+                            <field name="document_count" widget="statinfo" string="Documents"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Customer Name"/>
+                        </h1>
+                        <field name="reference" readonly="1"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_type"/>
+                            <field name="partner_id"/>
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                        </group>
+                        <group>
+                            <field name="emirate"/>
+                            <field name="nationality_id" attrs="{'invisible': [('customer_type', '!=', 'individual')]}"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Individual Details" name="individual" 
+                              attrs="{'invisible': [('customer_type', '!=', 'individual')]}">
+                            <group>
+                                <group>
+                                    <field name="passport_number"/>
+                                    <field name="passport_expiry"/>
+                                    <field name="emirates_id"/>
+                                    <field name="emirates_id_expiry"/>
+                                </group>
+                                <group>
+                                    <field name="date_of_birth"/>
+                                    <field name="gender"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Company Details" name="company" 
+                              attrs="{'invisible': [('customer_type', '!=', 'company')]}">
+                            <group>
+                                <group>
+                                    <field name="trade_license_number"/>
+                                    <field name="trade_license_expiry"/>
+                                </group>
+                                <group>
+                                    <field name="company_type"/>
+                                    <field name="free_zone_id" attrs="{'invisible': [('company_type', '!=', 'free_zone')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Address" name="address">
+                            <group>
+                                <group>
+                                    <field name="street"/>
+                                    <field name="street2"/>
+                                    <field name="city"/>
+                                </group>
+                                <group>
+                                    <field name="country_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documents" name="documents">
+                            <field name="document_ids">
+                                <tree>
+                                    <field name="document_type_id"/>
+                                    <field name="name"/>
+                                    <field name="document_number"/>
+                                    <field name="issue_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="status" widget="badge"
+                                           decoration-success="status == 'valid'"
+                                           decoration-warning="status == 'expiring_soon'"
+                                           decoration-danger="status == 'expired'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Billing" name="billing">
+                            <group>
+                                <group>
+                                    <field name="total_billed"/>
+                                    <field name="total_paid"/>
+                                    <field name="balance_due"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Customer Search View -->
+    <record id="view_pro_customer_search" model="ir.ui.view">
+        <field name="name">pro.customer.search</field>
+        <field name="model">pro.customer</field>
+        <field name="arch" type="xml">
+            <search string="PRO Customers">
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="passport_number"/>
+                <field name="trade_license_number"/>
+                <filter string="Individuals" name="individuals" domain="[('customer_type', '=', 'individual')]"/>
+                <filter string="Companies" name="companies" domain="[('customer_type', '=', 'company')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'customer_type'}"/>
+                    <filter string="Emirate" name="group_emirate" context="{'group_by': 'emirate'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Customer Action -->
+    <record id="action_pro_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">pro.customer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PRO customer
+            </p>
+            <p>
+                Manage external customers for PRO services.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_employee_sponsor" model="ir.sequence">
+            <field name="name">Employee Sponsor</field>
+            <field name="code">tazweed.employee.sponsor</field>
+            <field name="prefix">SPO/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

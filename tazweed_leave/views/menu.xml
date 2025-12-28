@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Leave Menu -->
+    <menuitem id="menu_tazweed_leave_root"
+              name="Leave &amp; Attendance"
+              web_icon="tazweed_leave,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_leave_dashboard"
+              name="Dashboard"
+              parent="menu_tazweed_leave_root"
+              action="action_leave_dashboard"
+              sequence="1"/>
+
+    <!-- Leave Requests -->
+    <menuitem id="menu_leave_requests"
+              name="Leave Requests"
+              parent="menu_tazweed_leave_root"
+              sequence="10"/>
+
+    <menuitem id="menu_leave_requests_all"
+              name="All Requests"
+              parent="menu_leave_requests"
+              action="hr_holidays.hr_leave_action_action_approve_department"
+              sequence="10"/>
+
+    <menuitem id="menu_leave_requests_my"
+              name="My Requests"
+              parent="menu_leave_requests"
+              action="hr_holidays.hr_leave_action_my"
+              sequence="20"/>
+
+    <menuitem id="menu_leave_requests_to_approve"
+              name="To Approve"
+              parent="menu_leave_requests"
+              action="hr_holidays.hr_leave_action_action_approve_department"
+              sequence="30"/>
+
+    <!-- Leave Allocations -->
+    <menuitem id="menu_leave_allocations"
+              name="Allocations"
+              parent="menu_tazweed_leave_root"
+              sequence="20"/>
+
+    <menuitem id="menu_leave_allocations_all"
+              name="All Allocations"
+              parent="menu_leave_allocations"
+              action="hr_holidays.hr_leave_allocation_action_all"
+              sequence="10"/>
+
+    <menuitem id="menu_leave_allocations_my"
+              name="My Allocations"
+              parent="menu_leave_allocations"
+              action="hr_holidays.hr_leave_allocation_action_my"
+              sequence="20"/>
+
+    <!-- Attendance -->
+    <menuitem id="menu_attendance"
+              name="Attendance"
+              parent="menu_tazweed_leave_root"
+              sequence="30"/>
+
+    <menuitem id="menu_attendance_all"
+              name="All Attendance"
+              parent="menu_attendance"
+              action="hr_attendance.hr_attendance_action"
+              sequence="10"/>
+
+    <menuitem id="menu_attendance_summary"
+              name="Attendance Summary"
+              parent="menu_attendance"
+              action="action_hr_attendance_summary"
+              sequence="20"/>
+
+    <!-- Public Holidays -->
+    <menuitem id="menu_public_holidays"
+              name="Public Holidays"
+              parent="menu_tazweed_leave_root"
+              sequence="40"/>
+
+    <menuitem id="menu_public_holidays_list"
+              name="Holidays"
+              parent="menu_public_holidays"
+              action="action_public_holiday"
+              sequence="10"/>
+
+    <menuitem id="menu_public_holidays_year"
+              name="Holiday Years"
+              parent="menu_public_holidays"
+              action="action_public_holiday_year"
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_leave_configuration"
+              name="Configuration"
+              parent="menu_tazweed_leave_root"
+              groups="group_leave_manager"
+              sequence="100"/>
+
+    <menuitem id="menu_leave_types"
+              name="Leave Types"
+              parent="menu_leave_configuration"
+              action="hr_holidays.open_view_holiday_status"
+              sequence="10"/>
+
+</odoo>

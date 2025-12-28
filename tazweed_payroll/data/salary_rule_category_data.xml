@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Salary Rule Categories -->
+        <record id="category_basic" model="hr.salary.rule.category">
+            <field name="name">Basic Salary</field>
+            <field name="code">BASIC</field>
+            <field name="sequence">1</field>
+            <field name="category_type">basic</field>
+            <field name="wps_category">basic</field>
+        </record>
+
+        <record id="category_allowance" model="hr.salary.rule.category">
+            <field name="name">Allowances</field>
+            <field name="code">ALW</field>
+            <field name="sequence">10</field>
+            <field name="category_type">allowance</field>
+            <field name="wps_category">other_allowance</field>
+        </record>
+
+        <record id="category_housing" model="hr.salary.rule.category">
+            <field name="name">Housing Allowance</field>
+            <field name="code">HRA</field>
+            <field name="sequence">11</field>
+            <field name="parent_id" ref="category_allowance"/>
+            <field name="category_type">allowance</field>
+            <field name="wps_category">housing</field>
+        </record>
+
+        <record id="category_transport" model="hr.salary.rule.category">
+            <field name="name">Transport Allowance</field>
+            <field name="code">TRA</field>
+            <field name="sequence">12</field>
+            <field name="parent_id" ref="category_allowance"/>
+            <field name="category_type">allowance</field>
+            <field name="wps_category">transport</field>
+        </record>
+
+        <record id="category_overtime" model="hr.salary.rule.category">
+            <field name="name">Overtime</field>
+            <field name="code">OT</field>
+            <field name="sequence">20</field>
+            <field name="category_type">allowance</field>
+            <field name="wps_category">overtime</field>
+        </record>
+
+        <record id="category_commission" model="hr.salary.rule.category">
+            <field name="name">Commission</field>
+            <field name="code">COMM</field>
+            <field name="sequence">25</field>
+            <field name="category_type">allowance</field>
+            <field name="wps_category">commission</field>
+        </record>
+
+        <record id="category_gross" model="hr.salary.rule.category">
+            <field name="name">Gross Salary</field>
+            <field name="code">GROSS</field>
+            <field name="sequence">50</field>
+            <field name="category_type">gross</field>
+            <field name="wps_category">other</field>
+        </record>
+
+        <record id="category_deduction" model="hr.salary.rule.category">
+            <field name="name">Deductions</field>
+            <field name="code">DED</field>
+            <field name="sequence">60</field>
+            <field name="category_type">deduction</field>
+            <field name="wps_category">deduction</field>
+        </record>
+
+        <record id="category_loan" model="hr.salary.rule.category">
+            <field name="name">Loan Deduction</field>
+            <field name="code">LOAN</field>
+            <field name="sequence">61</field>
+            <field name="parent_id" ref="category_deduction"/>
+            <field name="category_type">deduction</field>
+            <field name="wps_category">deduction</field>
+        </record>
+
+        <record id="category_absence" model="hr.salary.rule.category">
+            <field name="name">Absence Deduction</field>
+            <field name="code">ABS</field>
+            <field name="sequence">62</field>
+            <field name="parent_id" ref="category_deduction"/>
+            <field name="category_type">deduction</field>
+            <field name="wps_category">deduction</field>
+        </record>
+
+        <record id="category_net" model="hr.salary.rule.category">
+            <field name="name">Net Salary</field>
+            <field name="code">NET</field>
+            <field name="sequence">100</field>
+            <field name="category_type">net</field>
+            <field name="wps_category">other</field>
+        </record>
+
+        <record id="category_employer" model="hr.salary.rule.category">
+            <field name="name">Employer Contributions</field>
+            <field name="code">EMPR</field>
+            <field name="sequence">110</field>
+            <field name="category_type">contribution</field>
+            <field name="wps_category">other</field>
+        </record>
+
+        <record id="category_gratuity" model="hr.salary.rule.category">
+            <field name="name">Gratuity Provision</field>
+            <field name="code">GRAT</field>
+            <field name="sequence">111</field>
+            <field name="parent_id" ref="category_employer"/>
+            <field name="category_type">contribution</field>
+            <field name="wps_category">other</field>
+        </record>
+    </data>
+</odoo>

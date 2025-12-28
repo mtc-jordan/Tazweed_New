@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Alert Tree View -->
+    <record id="view_document_alert_tree" model="ir.ui.view">
+        <field name="name">document.alert.tree</field>
+        <field name="model">document.alert</field>
+        <field name="arch" type="xml">
+            <tree string="Document Alerts" decoration-danger="priority=='3' or days_to_expiry &lt; 0" 
+                  decoration-warning="priority=='2' or (days_to_expiry &gt;= 0 and days_to_expiry &lt;= 7)"
+                  decoration-info="priority=='1'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="document_type_id"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge" decoration-danger="state=='pending'" 
+                       decoration-warning="state=='sent'" decoration-success="state=='resolved'"/>
+                <field name="notification_count"/>
+                <field name="last_notification_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Alert Form View -->
+    <record id="view_document_alert_form" model="ir.ui.view">
+        <field name="name">document.alert.form</field>
+        <field name="model">document.alert</field>
+        <field name="arch" type="xml">
+            <form string="Document Alert">
+                <header>
+                    <button name="action_send_notification" type="object" string="Send Notification" 
+                            class="oe_highlight" states="pending,sent"/>
+                    <button name="action_acknowledge" type="object" string="Acknowledge" 
+                            states="sent"/>
+                    <button name="action_escalate" type="object" string="Escalate" 
+                            class="btn-warning" states="pending,sent,acknowledged"/>
+                    <button name="action_resolve" type="object" string="Resolve" 
+                            class="btn-success" states="pending,sent,acknowledged,escalated"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,sent,acknowledged,resolved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_document" type="object" class="oe_stat_button" icon="fa-file">
+                            <span>View Document</span>
+                        </button>
+                        <button name="action_create_renewal" type="object" class="oe_stat_button" icon="fa-refresh">
+                            <span>Create Renewal</span>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Document Information">
+                            <field name="document_id"/>
+                            <field name="employee_id"/>
+                            <field name="document_type_id"/>
+                            <field name="expiry_date"/>
+                            <field name="days_to_expiry"/>
+                        </group>
+                        <group string="Alert Settings">
+                            <field name="priority" widget="priority"/>
+                            <field name="alert_level"/>
+                            <field name="notify_employee"/>
+                            <field name="notify_manager"/>
+                            <field name="notify_hr"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Notification History">
+                        <field name="notification_count"/>
+                        <field name="last_notification_date"/>
+                        <field name="next_notification_date"/>
+                    </group>
+                    
+                    <group string="Resolution" attrs="{'invisible': [('state', '!=', 'resolved')]}">
+                        <field name="resolved_by"/>
+                        <field name="resolved_date"/>
+                        <field name="resolution_notes"/>
+                    </group>
+                    
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Alert Search View -->
+    <record id="view_document_alert_search" model="ir.ui.view">
+        <field name="name">document.alert.search</field>
+        <field name="model">document.alert</field>
+        <field name="arch" type="xml">
+            <search string="Document Alerts">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="document_type_id"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                <filter string="Acknowledged" name="acknowledged" domain="[('state', '=', 'acknowledged')]"/>
+                <filter string="Escalated" name="escalated" domain="[('state', '=', 'escalated')]"/>
+                <filter string="Resolved" name="resolved" domain="[('state', '=', 'resolved')]"/>
+                <separator/>
+                <filter string="Critical" name="critical" domain="[('priority', '=', '3')]"/>
+                <filter string="High Priority" name="high" domain="[('priority', '=', '2')]"/>
+                <filter string="Expired" name="expired" domain="[('days_to_expiry', '&lt;', 0)]"/>
+                <filter string="Expiring in 7 Days" name="expiring_7" domain="[('days_to_expiry', '&gt;=', 0), ('days_to_expiry', '&lt;=', 7)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Document Type" name="group_by_type" context="{'group_by': 'document_type_id'}"/>
+                    <filter string="Priority" name="group_by_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Expiry Date" name="group_by_expiry" context="{'group_by': 'expiry_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Document Alert Kanban View -->
+    <record id="view_document_alert_kanban" model="ir.ui.view">
+        <field name="name">document.alert.kanban</field>
+        <field name="model">document.alert</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="document_type_id"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.days_to_expiry.raw_value &lt; 0 ? 'bg-danger-light' : record.days_to_expiry.raw_value &lt;= 7 ? 'bg-warning-light' : ''}">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="employee_id"/>
+                                        </strong>
+                                    </div>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="document_type_id"/>
+                                    <br/>
+                                    <span t-if="record.days_to_expiry.raw_value &lt; 0" class="text-danger">
+                                        <strong>Expired <field name="days_to_expiry"/> days ago</strong>
+                                    </span>
+                                    <span t-elif="record.days_to_expiry.raw_value &lt;= 7" class="text-warning">
+                                        <strong>Expires in <field name="days_to_expiry"/> days</strong>
+                                    </span>
+                                    <span t-else="">
+                                        Expires: <field name="expiry_date"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="state" widget="label_selection" options="{'classes': {'pending': 'danger', 'sent': 'warning', 'acknowledged': 'info', 'resolved': 'success'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Document Alert Action -->
+    <record id="action_document_alerts" model="ir.actions.act_window">
+        <field name="name">Document Alerts</field>
+        <field name="res_model">document.alert</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{'search_default_pending': 1, 'search_default_sent': 1}</field>
+    </record>
+
+    <!-- Active Alerts Action -->
+    <record id="action_active_alerts" model="ir.actions.act_window">
+        <field name="name">Active Alerts</field>
+        <field name="res_model">document.alert</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('state', 'not in', ['resolved'])]</field>
+    </record>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Request Sequence -->
+    <record id="seq_pro_service_request" model="ir.sequence">
+        <field name="name">PRO Service Request</field>
+        <field name="code">pro.service.request</field>
+        <field name="prefix">PRO/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Customer Sequence -->
+    <record id="seq_pro_customer" model="ir.sequence">
+        <field name="name">PRO Customer</field>
+        <field name="code">pro.customer</field>
+        <field name="prefix">CUST/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Billing Sequence -->
+    <record id="seq_pro_billing" model="ir.sequence">
+        <field name="name">PRO Billing</field>
+        <field name="code">pro.billing</field>
+        <field name="prefix">BILL/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

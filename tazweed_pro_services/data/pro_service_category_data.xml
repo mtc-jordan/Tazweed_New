@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Main Service Categories -->
+        
+        <!-- Visa Services -->
+        <record id="category_visa" model="pro.service.category">
+            <field name="name">Visa Services</field>
+            <field name="code">VISA</field>
+            <field name="sequence">10</field>
+            <field name="description">All visa-related services including employment, family, and investor visas</field>
+            <field name="icon">fa-id-card</field>
+            <field name="color">1</field>
+        </record>
+        
+        <record id="category_visa_employment" model="pro.service.category">
+            <field name="name">Employment Visa</field>
+            <field name="code">VISA_EMP</field>
+            <field name="sequence">11</field>
+            <field name="parent_id" ref="category_visa"/>
+            <field name="description">Employment visa services for workers</field>
+        </record>
+        
+        <record id="category_visa_family" model="pro.service.category">
+            <field name="name">Family Visa</field>
+            <field name="code">VISA_FAM</field>
+            <field name="sequence">12</field>
+            <field name="parent_id" ref="category_visa"/>
+            <field name="description">Family and dependent visa services</field>
+        </record>
+        
+        <record id="category_visa_investor" model="pro.service.category">
+            <field name="name">Investor/Partner Visa</field>
+            <field name="code">VISA_INV</field>
+            <field name="sequence">13</field>
+            <field name="parent_id" ref="category_visa"/>
+            <field name="description">Investor and partner visa services</field>
+        </record>
+        
+        <record id="category_visa_golden" model="pro.service.category">
+            <field name="name">Golden Visa</field>
+            <field name="code">VISA_GOLD</field>
+            <field name="sequence">14</field>
+            <field name="parent_id" ref="category_visa"/>
+            <field name="description">UAE Golden Visa (5-10 years)</field>
+        </record>
+
+        <!-- Residence Permit -->
+        <record id="category_residence" model="pro.service.category">
+            <field name="name">Residence Permit</field>
+            <field name="code">RESIDENCE</field>
+            <field name="sequence">20</field>
+            <field name="description">Residence permit and entry permit services</field>
+            <field name="icon">fa-home</field>
+            <field name="color">2</field>
+        </record>
+
+        <!-- Emirates ID -->
+        <record id="category_emirates_id" model="pro.service.category">
+            <field name="name">Emirates ID</field>
+            <field name="code">EID</field>
+            <field name="sequence">30</field>
+            <field name="description">Emirates ID application, renewal, and replacement</field>
+            <field name="icon">fa-address-card</field>
+            <field name="color">3</field>
+        </record>
+
+        <!-- Labor Services -->
+        <record id="category_labor" model="pro.service.category">
+            <field name="name">Labor Services</field>
+            <field name="code">LABOR</field>
+            <field name="sequence">40</field>
+            <field name="description">MOHRE labor and work permit services</field>
+            <field name="icon">fa-briefcase</field>
+            <field name="color">4</field>
+        </record>
+        
+        <record id="category_labor_permit" model="pro.service.category">
+            <field name="name">Work Permit</field>
+            <field name="code">LABOR_WP</field>
+            <field name="sequence">41</field>
+            <field name="parent_id" ref="category_labor"/>
+            <field name="description">Work permit services</field>
+        </record>
+        
+        <record id="category_labor_card" model="pro.service.category">
+            <field name="name">Labor Card</field>
+            <field name="code">LABOR_LC</field>
+            <field name="sequence">42</field>
+            <field name="parent_id" ref="category_labor"/>
+            <field name="description">Labor card services</field>
+        </record>
+
+        <!-- Trade License -->
+        <record id="category_trade_license" model="pro.service.category">
+            <field name="name">Trade License</field>
+            <field name="code">TRADE</field>
+            <field name="sequence">50</field>
+            <field name="description">Trade license services for businesses</field>
+            <field name="icon">fa-certificate</field>
+            <field name="color">5</field>
+        </record>
+
+        <!-- Document Services -->
+        <record id="category_documents" model="pro.service.category">
+            <field name="name">Document Services</field>
+            <field name="code">DOCS</field>
+            <field name="sequence">60</field>
+            <field name="description">Document attestation, translation, and notary services</field>
+            <field name="icon">fa-file-alt</field>
+            <field name="color">6</field>
+        </record>
+        
+        <record id="category_docs_attestation" model="pro.service.category">
+            <field name="name">Attestation</field>
+            <field name="code">DOCS_ATT</field>
+            <field name="sequence">61</field>
+            <field name="parent_id" ref="category_documents"/>
+            <field name="description">Document attestation services</field>
+        </record>
+        
+        <record id="category_docs_translation" model="pro.service.category">
+            <field name="name">Translation</field>
+            <field name="code">DOCS_TRANS</field>
+            <field name="sequence">62</field>
+            <field name="parent_id" ref="category_documents"/>
+            <field name="description">Legal translation services</field>
+        </record>
+
+        <!-- Medical Services -->
+        <record id="category_medical" model="pro.service.category">
+            <field name="name">Medical Services</field>
+            <field name="code">MEDICAL</field>
+            <field name="sequence">70</field>
+            <field name="description">Medical fitness tests and health card services</field>
+            <field name="icon">fa-heartbeat</field>
+            <field name="color">7</field>
+        </record>
+
+        <!-- Company Services -->
+        <record id="category_company" model="pro.service.category">
+            <field name="name">Company Services</field>
+            <field name="code">COMPANY</field>
+            <field name="sequence">80</field>
+            <field name="description">Company formation and registration services</field>
+            <field name="icon">fa-building</field>
+            <field name="color">8</field>
+        </record>
+
+        <!-- Government Approvals -->
+        <record id="category_approvals" model="pro.service.category">
+            <field name="name">Government Approvals</field>
+            <field name="code">APPROVALS</field>
+            <field name="sequence">90</field>
+            <field name="description">Various government approvals and NOCs</field>
+            <field name="icon">fa-check-circle</field>
+            <field name="color">9</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_performance.PerformanceDashboard" owl="1">
+        <div class="performance-dashboard">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title">
+                        <i class="fa fa-line-chart"></i>
+                        Performance Dashboard
+                    </h1>
+                    <p class="dashboard-subtitle">Track employee performance, goals, and development</p>
+                </div>
+                <div class="header-right">
+                    <select class="period-select" t-on-change="onPeriodChange">
+                        <option value="current" selected="selected">Current Period</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                        <option value="all">All Time</option>
+                    </select>
+                    <button class="btn-primary" t-on-click="onNewReview">
+                        <i class="fa fa-plus"></i> New Review
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Loading performance data...</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div t-else="" class="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-blue">
+                        <div class="stat-icon">
+                            <i class="fa fa-clipboard"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.totalReviews"/>
+                            <span class="stat-label">Total Reviews</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-orange">
+                        <div class="stat-icon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.pendingReviews"/>
+                            <span class="stat-label">Pending Reviews</span>
+                            <span class="stat-badge" t-if="state.stats.pendingReviews > 0">Needs Action</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-green">
+                        <div class="stat-icon">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.completedReviews"/>
+                            <span class="stat-label">Completed Reviews</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-purple">
+                        <div class="stat-icon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.avgRating.toFixed(1)"/>
+                            <span class="stat-label">Avg. Rating</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-teal">
+                        <div class="stat-icon">
+                            <i class="fa fa-bullseye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.activeGoals"/>
+                            <span class="stat-label">Active Goals</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-indigo">
+                        <div class="stat-icon">
+                            <i class="fa fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.goalsAchieved"/>
+                            <span class="stat-label">Goals Achieved</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-pink">
+                        <div class="stat-icon">
+                            <i class="fa fa-comments"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.feedbackGiven"/>
+                            <span class="stat-label">Feedback Given</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-cyan">
+                        <div class="stat-icon">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" t-esc="state.stats.developmentPlans"/>
+                            <span class="stat-label">Development Plans</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn" t-on-click="onViewAllReviews">
+                        <i class="fa fa-list"></i> All Reviews
+                    </button>
+                    <button class="action-btn" t-on-click="onViewGoals">
+                        <i class="fa fa-bullseye"></i> Goals
+                    </button>
+                    <button class="action-btn" t-on-click="onViewFeedback">
+                        <i class="fa fa-comments"></i> Feedback
+                    </button>
+                    <button class="action-btn" t-on-click="onViewCompetencies">
+                        <i class="fa fa-star"></i> Competencies
+                    </button>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Rating Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="ratingDistributionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Reviews by Department</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="departmentReviewChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Goal Progress</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="goalProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="tables-row">
+                    <!-- Top Performers -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="fa fa-trophy"></i> Top Performers</h3>
+                        </div>
+                        <div class="table-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Employee</th>
+                                        <th>Department</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.topPerformers" t-as="performer" t-key="performer.id">
+                                        <tr>
+                                            <td>
+                                                <span class="rank-badge" t-esc="performer_index + 1"/>
+                                            </td>
+                                            <td>
+                                                <div class="employee-cell">
+                                                    <span class="employee-avatar" t-esc="performer.name ? performer.name[0] : '?'"/>
+                                                    <span t-esc="performer.name"/>
+                                                </div>
+                                            </td>
+                                            <td t-esc="performer.department"/>
+                                            <td>
+                                                <span t-attf-class="rating #{getRatingClass(performer.rating)}">
+                                                    <t t-esc="performer.rating.toFixed(1)"/> <i class="fa fa-star"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="state.topPerformers.length === 0">
+                                        <td colspan="4" class="no-data">No top performers data</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reviews -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="fa fa-clipboard"></i> Recent Reviews</h3>
+                            <a href="#" t-on-click.prevent="onViewAllReviews" class="view-all-link">View All</a>
+                        </div>
+                        <div class="table-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Period</th>
+                                        <th>Rating</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.recentReviews" t-as="review" t-key="review.id">
+                                        <tr>
+                                            <td>
+                                                <div class="employee-cell">
+                                                    <span class="employee-avatar" t-esc="review.employee_name ? review.employee_name[0] : '?'"/>
+                                                    <span t-esc="review.employee_name"/>
+                                                </div>
+                                            </td>
+                                            <td t-esc="review.period"/>
+                                            <td>
+                                                <span t-if="review.rating" t-attf-class="rating #{getRatingClass(review.rating)}">
+                                                    <t t-esc="review.rating.toFixed(1)"/> <i class="fa fa-star"></i>
+                                                </span>
+                                                <span t-else="" class="text-muted">-</span>
+                                            </td>
+                                            <td>
+                                                <span t-attf-class="status-badge #{getStatusClass(review.state)}" t-esc="getStatusLabel(review.state)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="state.recentReviews.length === 0">
+                                        <td colspan="4" class="no-data">No recent reviews</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Reviews -->
+                <div t-if="state.upcomingReviews.length > 0" class="upcoming-section">
+                    <h3><i class="fa fa-calendar"></i> Upcoming Reviews</h3>
+                    <div class="upcoming-list">
+                        <t t-foreach="state.upcomingReviews" t-as="review" t-key="review.id">
+                            <div class="upcoming-item">
+                                <div class="upcoming-avatar" t-esc="review.employee_name ? review.employee_name[0] : '?'"/>
+                                <div class="upcoming-info">
+                                    <span class="upcoming-name" t-esc="review.employee_name"/>
+                                    <span class="upcoming-date">Due: <t t-esc="formatDate(review.due_date)"/></span>
+                                </div>
+                                <span class="upcoming-days" t-esc="review.days_until"/> days
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- Alerts Section -->
+                <div t-if="state.alerts.length > 0" class="alerts-section">
+                    <h3><i class="fa fa-bell"></i> Alerts &amp; Notifications</h3>
+                    <div class="alerts-list">
+                        <t t-foreach="state.alerts" t-as="alert" t-key="alert_index">
+                            <div t-attf-class="alert-item alert-#{alert.type}">
+                                <i t-attf-class="fa #{alert.icon}"></i>
+                                <span t-esc="alert.message"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

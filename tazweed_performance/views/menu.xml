@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_performance_root" name="Performance" web_icon="tazweed_performance,static/description/icon.png" sequence="25"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_performance_dashboard" name="Dashboard" parent="menu_performance_root" action="action_performance_dashboard" sequence="1"/>
+
+    <!-- Performance Reviews Menu -->
+    <menuitem id="menu_performance_reviews" name="Reviews" parent="menu_performance_root" sequence="10"/>
+    <menuitem id="menu_performance_review_all" name="All Reviews" parent="menu_performance_reviews" action="action_performance_review" sequence="10"/>
+    <menuitem id="menu_performance_period" name="Review Periods" parent="menu_performance_reviews" action="action_performance_period" sequence="20"/>
+
+    <!-- Goals Menu -->
+    <menuitem id="menu_performance_goals" name="Goals" parent="menu_performance_root" sequence="20"/>
+    <menuitem id="menu_performance_goal_all" name="All Goals" parent="menu_performance_goals" action="action_performance_goal" sequence="10"/>
+
+    <!-- KPIs Menu -->
+    <menuitem id="menu_performance_kpis" name="KPIs" parent="menu_performance_root" sequence="30"/>
+    <menuitem id="menu_performance_kpi_all" name="KPI Definitions" parent="menu_performance_kpis" action="action_performance_kpi" sequence="10"/>
+
+    <!-- Competencies Menu -->
+    <menuitem id="menu_performance_competencies" name="Competencies" parent="menu_performance_root" sequence="40"/>
+    <menuitem id="menu_competency_all" name="Competency Library" parent="menu_performance_competencies" action="action_competency" sequence="10"/>
+    <menuitem id="menu_competency_assessment" name="Assessments" parent="menu_performance_competencies" action="action_competency_assessment" sequence="20"/>
+
+    <!-- Development Menu -->
+    <menuitem id="menu_performance_development" name="Development" parent="menu_performance_root" sequence="50"/>
+    <menuitem id="menu_development_plan" name="Development Plans" parent="menu_performance_development" action="action_development_plan" sequence="10"/>
+
+    <!-- Feedback Menu -->
+    <menuitem id="menu_performance_feedback" name="Feedback" parent="menu_performance_root" sequence="60"/>
+    <menuitem id="menu_feedback_all" name="All Feedback" parent="menu_performance_feedback" action="action_performance_feedback" sequence="10"/>
+    <menuitem id="menu_recognition" name="Recognition" parent="menu_performance_feedback" action="action_recognition" sequence="20"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_performance_config" name="Configuration" parent="menu_performance_root" sequence="100" groups="group_performance_admin"/>
+    <menuitem id="menu_performance_templates" name="Review Templates" parent="menu_performance_config" action="action_performance_period" sequence="10"/>
+    <menuitem id="menu_performance_competency_config" name="Competencies" parent="menu_performance_config" action="action_competency" sequence="20"/>
+    <menuitem id="menu_performance_kpi_config" name="KPIs" parent="menu_performance_config" action="action_performance_kpi" sequence="30"/>
+</odoo>

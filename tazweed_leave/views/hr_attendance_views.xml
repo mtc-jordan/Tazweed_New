@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Attendance Form View Extension -->
+    <record id="view_hr_attendance_form_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.form.inherit.tazweed</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="reference" readonly="1"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Schedule" name="schedule">
+                        <group>
+                            <group string="Scheduled">
+                                <field name="scheduled_check_in"/>
+                                <field name="scheduled_check_out"/>
+                                <field name="scheduled_hours"/>
+                            </group>
+                            <group string="Actual">
+                                <field name="check_in"/>
+                                <field name="check_out"/>
+                                <field name="worked_hours"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Variance" name="variance">
+                        <group>
+                            <group string="Late/Early">
+                                <field name="is_late"/>
+                                <field name="late_minutes"/>
+                                <field name="is_early_leave"/>
+                                <field name="early_leave_minutes"/>
+                            </group>
+                            <group string="Status">
+                                <field name="attendance_status"/>
+                                <field name="state"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Overtime" name="overtime">
+                        <group>
+                            <group string="Overtime">
+                                <field name="overtime_hours"/>
+                                <field name="overtime_type"/>
+                                <field name="overtime_approved"/>
+                                <field name="overtime_approved_by_id"/>
+                            </group>
+                        </group>
+                        <div>
+                            <button name="action_approve_overtime" string="Approve Overtime" type="object" 
+                                    class="btn-primary" attrs="{'invisible': ['|', ('overtime_hours', '=', 0), ('overtime_approved', '=', True)]}"/>
+                        </div>
+                    </page>
+                    <page string="Break" name="break">
+                        <group>
+                            <group>
+                                <field name="break_start"/>
+                                <field name="break_end"/>
+                                <field name="break_duration"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Location" name="location">
+                        <group>
+                            <group string="Check In">
+                                <field name="check_in_latitude"/>
+                                <field name="check_in_longitude"/>
+                                <field name="check_in_address"/>
+                                <field name="check_in_device"/>
+                                <field name="check_in_method"/>
+                            </group>
+                            <group string="Check Out">
+                                <field name="check_out_latitude"/>
+                                <field name="check_out_longitude"/>
+                                <field name="check_out_address"/>
+                                <field name="check_out_device"/>
+                                <field name="check_out_method"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Notes" name="notes">
+                        <group>
+                            <field name="notes"/>
+                            <field name="manager_notes"/>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Attendance Tree View Extension -->
+    <record id="view_hr_attendance_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.tree.inherit.tazweed</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="reference"/>
+            </xpath>
+            <xpath expr="//field[@name='worked_hours']" position="after">
+                <field name="is_late" widget="boolean"/>
+                <field name="late_minutes"/>
+                <field name="overtime_hours"/>
+                <field name="attendance_status"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Form View -->
+    <record id="view_hr_attendance_summary_form" model="ir.ui.view">
+        <field name="name">hr.attendance.summary.form</field>
+        <field name="model">hr.attendance.summary</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Summary">
+                <sheet>
+                    <group>
+                        <group string="Period">
+                            <field name="employee_id"/>
+                            <field name="month"/>
+                            <field name="year"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="attendance_percentage" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Days">
+                            <field name="working_days"/>
+                            <field name="present_days"/>
+                            <field name="absent_days"/>
+                            <field name="half_days"/>
+                            <field name="leave_days"/>
+                            <field name="holiday_days"/>
+                            <field name="weekend_days"/>
+                        </group>
+                        <group string="Hours">
+                            <field name="scheduled_hours"/>
+                            <field name="worked_hours"/>
+                            <field name="overtime_hours"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Late/Early">
+                            <field name="late_count"/>
+                            <field name="total_late_minutes"/>
+                            <field name="early_leave_count"/>
+                            <field name="total_early_leave_minutes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Tree View -->
+    <record id="view_hr_attendance_summary_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.summary.tree</field>
+        <field name="model">hr.attendance.summary</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Summary">
+                <field name="employee_id"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="working_days"/>
+                <field name="present_days"/>
+                <field name="absent_days"/>
+                <field name="overtime_hours" sum="Total OT"/>
+                <field name="attendance_percentage" widget="progressbar"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Action -->
+    <record id="action_hr_attendance_summary" model="ir.actions.act_window">
+        <field name="name">Attendance Summary</field>
+        <field name="res_model">hr.attendance.summary</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

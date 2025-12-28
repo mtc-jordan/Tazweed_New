@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Notification Template Form View -->
+        <record id="view_notification_template_form" model="ir.ui.view">
+            <field name="name">Notification Template Form</field>
+            <field name="model">tazweed.notification.template</field>
+            <field name="arch" type="xml">
+                <form string="Notification Template">
+                    <header>
+                        <button name="action_activate" string="Activate" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_deactivate" string="Deactivate" type="object" attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                        <button name="action_test_notification" string="Test Notification" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Template Name"/>
+                            </h1>
+                        </div>
+                        
+                        <!-- Basic Information -->
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="trigger_event"/>
+                            </group>
+                            <group>
+                                <field name="notification_type"/>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+                        
+                        <field name="description" placeholder="Template Description"/>
+                        
+                        <!-- Email Configuration -->
+                        <separator string="Email Configuration" class="oe_inline" attrs="{'invisible': [('notification_type', 'not in', ['email', 'multi'])]}"/>
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['email', 'multi'])]}">
+                            <field name="email_subject" placeholder="Email Subject" nolabel="1"/>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['email', 'multi'])]}">
+                            <field name="email_body" placeholder="Email Body" nolabel="1"/>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['email', 'multi'])]}">
+                            <group>
+                                <field name="email_recipients" placeholder="Recipients (comma-separated)"/>
+                                <field name="email_cc" placeholder="CC"/>
+                            </group>
+                            <group>
+                                <field name="email_bcc" placeholder="BCC"/>
+                            </group>
+                        </group>
+                        
+                        <!-- In-App Notification -->
+                        <separator string="In-App Notification" class="oe_inline" attrs="{'invisible': [('notification_type', 'not in', ['in_app', 'multi'])]}"/>
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['in_app', 'multi'])]}">
+                            <group>
+                                <field name="notification_title" placeholder="Notification Title"/>
+                                <field name="notification_type_display"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['in_app', 'multi'])]}">
+                            <field name="notification_message" placeholder="Notification Message" nolabel="1"/>
+                        </group>
+                        
+                        <!-- SMS Configuration -->
+                        <separator string="SMS Configuration" class="oe_inline" attrs="{'invisible': [('notification_type', 'not in', ['sms', 'multi'])]}"/>
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['sms', 'multi'])]}">
+                            <group>
+                                <field name="sms_recipients" placeholder="Phone Numbers (comma-separated)"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['sms', 'multi'])]}">
+                            <field name="sms_message" placeholder="SMS Message (max 160 characters)" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Webhook Configuration -->
+                        <separator string="Webhook Configuration" class="oe_inline" attrs="{'invisible': [('notification_type', 'not in', ['webhook', 'multi'])]}"/>
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['webhook', 'multi'])]}">
+                            <group>
+                                <field name="webhook_url" placeholder="Webhook URL"/>
+                                <field name="webhook_method"/>
+                            </group>
+                        </group>
+                        
+                        <group attrs="{'invisible': [('notification_type', 'not in', ['webhook', 'multi'])]}">
+                            <field name="webhook_payload" placeholder="JSON Payload Template" nolabel="1"/>
+                        </group>
+                        
+                        <!-- Scheduling -->
+                        <separator string="Scheduling" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="send_immediately"/>
+                                <field name="schedule_delay_minutes" attrs="{'invisible': [('send_immediately', '=', True)]}"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Statistics -->
+                        <separator string="Statistics" class="oe_inline"/>
+                        <group>
+                            <group>
+                                <field name="total_sent" readonly="1"/>
+                                <field name="total_failed" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Notification Template Tree View -->
+        <record id="view_notification_template_tree" model="ir.ui.view">
+            <field name="name">Notification Template Tree</field>
+            <field name="model">tazweed.notification.template</field>
+            <field name="arch" type="xml">
+                <tree string="Notification Templates">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="trigger_event"/>
+                    <field name="notification_type"/>
+                    <field name="state"/>
+                    <field name="is_active"/>
+                    <field name="total_sent"/>
+                    <field name="total_failed"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Notification Template Search View -->
+        <record id="view_notification_template_search" model="ir.ui.view">
+            <field name="name">Notification Template Search</field>
+            <field name="model">tazweed.notification.template</field>
+            <field name="arch" type="xml">
+                <search string="Notification Templates">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="trigger_event"/>
+                    <separator/>
+                    <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                    <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_email" string="Email" domain="[('notification_type', 'in', ['email', 'multi'])]"/>
+                    <filter name="filter_sms" string="SMS" domain="[('notification_type', 'in', ['sms', 'multi'])]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Notification Template Action -->
+        <record id="action_notification_template" model="ir.actions.act_window">
+            <field name="name">Notification Templates</field>
+            <field name="res_model">tazweed.notification.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Notification Template
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

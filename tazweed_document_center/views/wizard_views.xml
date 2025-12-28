@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bulk Notification Wizard Form -->
+    <record id="view_bulk_notification_wizard_form" model="ir.ui.view">
+        <field name="name">document.bulk.notification.wizard.form</field>
+        <field name="model">document.bulk.notification.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Bulk Notifications">
+                <group>
+                    <group string="Filter Documents">
+                        <field name="notification_type"/>
+                        <field name="department_id"/>
+                        <field name="document_type_id"/>
+                    </group>
+                    <group string="Summary">
+                        <field name="document_count" readonly="1"/>
+                        <field name="employee_count" readonly="1"/>
+                    </group>
+                </group>
+                <group string="Notification Recipients">
+                    <field name="notify_employees"/>
+                    <field name="notify_managers"/>
+                    <field name="notify_hr"/>
+                </group>
+                <group string="Custom Message">
+                    <field name="custom_message" placeholder="Optional custom message to include in notifications..."/>
+                </group>
+                <footer>
+                    <button name="action_send_notifications" type="object" string="Send Notifications" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Bulk Notification Wizard Action -->
+    <record id="action_bulk_notification_wizard" model="ir.actions.act_window">
+        <field name="name">Send Bulk Notifications</field>
+        <field name="res_model">document.bulk.notification.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Bulk Renewal Wizard Form -->
+    <record id="view_bulk_renewal_wizard_form" model="ir.ui.view">
+        <field name="name">document.bulk.renewal.wizard.form</field>
+        <field name="model">document.bulk.renewal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Bulk Renewals">
+                <group>
+                    <group string="Filter Documents">
+                        <field name="renewal_type"/>
+                        <field name="department_id"/>
+                        <field name="document_type_id"/>
+                    </group>
+                    <group string="Summary">
+                        <field name="document_count" readonly="1"/>
+                    </group>
+                </group>
+                <group string="Renewal Settings">
+                    <field name="priority"/>
+                    <field name="auto_submit"/>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="action_create_renewals" type="object" string="Create Renewal Requests" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Bulk Renewal Wizard Action -->
+    <record id="action_bulk_renewal_wizard" model="ir.actions.act_window">
+        <field name="name">Create Bulk Renewals</field>
+        <field name="res_model">document.bulk.renewal.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Export Wizard Form -->
+    <record id="view_document_export_wizard_form" model="ir.ui.view">
+        <field name="name">document.export.wizard.form</field>
+        <field name="model">document.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Document Data">
+                <group>
+                    <group string="Export Options">
+                        <field name="export_type"/>
+                        <field name="format"/>
+                    </group>
+                    <group string="Filters">
+                        <field name="department_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_export" type="object" string="Export" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Export Wizard Action -->
+    <record id="action_document_export_wizard" model="ir.actions.act_window">
+        <field name="name">Export Documents</field>
+        <field name="res_model">document.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

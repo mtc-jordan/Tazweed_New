@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_analytics_root" name="Analytics" parent="hr.menu_hr_root" sequence="50"/>
+        
+        <!-- Dashboards Menu -->
+        <menuitem id="menu_dashboards" name="Dashboards" parent="menu_analytics_root" sequence="10"/>
+        <menuitem id="menu_dashboard_analytics" name="All Dashboards" parent="menu_dashboards" action="action_dashboard_analytics" sequence="10"/>
+        
+        <!-- Payroll Analytics Menu -->
+        <menuitem id="menu_payroll_analytics" name="Payroll Analytics" parent="menu_analytics_root" sequence="20"/>
+        <menuitem id="menu_payroll_analytics_view" name="Payroll Analytics" parent="menu_payroll_analytics" action="action_payroll_analytics" sequence="10"/>
+        
+        <!-- Compliance Analytics Menu -->
+        <menuitem id="menu_compliance_analytics" name="Compliance Analytics" parent="menu_analytics_root" sequence="30"/>
+        <menuitem id="menu_compliance_analytics_view" name="Compliance Analytics" parent="menu_compliance_analytics" action="action_compliance_analytics" sequence="10"/>
+        
+        <!-- Performance Analytics Menu -->
+        <menuitem id="menu_performance_analytics" name="Performance Analytics" parent="menu_analytics_root" sequence="40"/>
+        <menuitem id="menu_performance_analytics_view" name="Performance Analytics" parent="menu_performance_analytics" action="action_performance_analytics" sequence="10"/>
+        
+        <!-- Employee Analytics Menu -->
+        <menuitem id="menu_employee_analytics" name="Employee Analytics" parent="menu_analytics_root" sequence="50"/>
+        <menuitem id="menu_employee_analytics_view" name="Employee Analytics" parent="menu_employee_analytics" action="action_employee_analytics" sequence="10"/>
+        
+        <!-- Reports Menu -->
+        <menuitem id="menu_analytics_reports" name="Reports" parent="menu_analytics_root" sequence="60"/>
+        <menuitem id="menu_analytics_report_view" name="Analytics Reports" parent="menu_analytics_reports" action="action_analytics_report" sequence="10"/>
+    </data>
+</odoo>

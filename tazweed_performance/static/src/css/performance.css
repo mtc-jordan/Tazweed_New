@@ -1,0 +1,307 @@
+/* Tazweed Performance Management Styles */
+
+/* Performance Review Card */
+.o_performance_review_card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Rating Stars */
+.o_rating_stars {
+    color: #f1c40f;
+    font-size: 1.2em;
+}
+
+.o_rating_stars .fa-star-o {
+    color: #bdc3c7;
+}
+
+/* Progress Bars */
+.o_goal_progress {
+    height: 8px;
+    border-radius: 4px;
+    background: #ecf0f1;
+    overflow: hidden;
+}
+
+.o_goal_progress_bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.o_goal_progress_bar.success {
+    background: linear-gradient(90deg, #27ae60, #2ecc71);
+}
+
+.o_goal_progress_bar.warning {
+    background: linear-gradient(90deg, #f39c12, #f1c40f);
+}
+
+.o_goal_progress_bar.danger {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+/* KPI Cards */
+.o_kpi_card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.o_kpi_card:hover {
+    transform: translateY(-5px);
+}
+
+.o_kpi_value {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.o_kpi_label {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+/* Competency Levels */
+.o_competency_level {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.o_competency_dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ecf0f1;
+}
+
+.o_competency_dot.filled {
+    background: #3498db;
+}
+
+.o_competency_dot.filled.expert {
+    background: #9b59b6;
+}
+
+/* Feedback Cards */
+.o_feedback_card {
+    background: white;
+    border-left: 4px solid #3498db;
+    border-radius: 0 8px 8px 0;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.o_feedback_card.recognition {
+    border-left-color: #27ae60;
+}
+
+.o_feedback_card.constructive {
+    border-left-color: #f39c12;
+}
+
+/* Recognition Badge */
+.o_recognition_badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f39c12 0%, #e74c3c 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.o_recognition_badge .fa {
+    font-size: 1.2em;
+}
+
+/* Goal Status Badges */
+.o_goal_status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.o_goal_status.draft {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.o_goal_status.in_progress {
+    background: #3498db;
+    color: white;
+}
+
+.o_goal_status.completed {
+    background: #27ae60;
+    color: white;
+}
+
+.o_goal_status.overdue {
+    background: #e74c3c;
+    color: white;
+}
+
+/* Review Timeline */
+.o_review_timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.o_review_timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ecf0f1;
+}
+
+.o_timeline_item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.o_timeline_item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #3498db;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #3498db;
+}
+
+.o_timeline_item.completed::before {
+    background: #27ae60;
+    box-shadow: 0 0 0 2px #27ae60;
+}
+
+/* Development Plan Progress */
+.o_development_progress {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.o_development_step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.o_development_step::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #ecf0f1;
+}
+
+.o_development_step:last-child::after {
+    display: none;
+}
+
+.o_development_step_icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.o_development_step.completed .o_development_step_icon {
+    background: #27ae60;
+    color: white;
+}
+
+.o_development_step.active .o_development_step_icon {
+    background: #3498db;
+    color: white;
+}
+
+/* Stat Buttons Enhancement */
+.o_performance_stat_button {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.o_performance_stat_button:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Score Display */
+.o_score_display {
+    font-size: 3em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Rating Label Colors */
+.o_rating_exceptional {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.o_rating_exceeds {
+    color: #2ecc71;
+}
+
+.o_rating_meets {
+    color: #3498db;
+}
+
+.o_rating_below {
+    color: #f39c12;
+}
+
+.o_rating_unsatisfactory {
+    color: #e74c3c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .o_kpi_card {
+        margin-bottom: 15px;
+    }
+    
+    .o_development_progress {
+        flex-direction: column;
+    }
+    
+    .o_development_step::after {
+        display: none;
+    }
+}

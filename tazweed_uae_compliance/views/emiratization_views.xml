@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Emiratization Quota Form View -->
+    <record id="view_emiratization_quota_form" model="ir.ui.view">
+        <field name="name">tazweed.emiratization.quota.form</field>
+        <field name="model">tazweed.emiratization.quota</field>
+        <field name="arch" type="xml">
+            <form string="Emiratization Quota">
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" class="btn-secondary"/>
+                    <button name="action_activate" string="Activate" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_close" string="Close" type="object" states="active"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_refresh" icon="fa-refresh">
+                            <span>Refresh Data</span>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Compliant" bg_color="bg-success" attrs="{'invisible': [('is_compliant', '=', False)]}"/>
+                    <widget name="web_ribbon" title="Non-Compliant" bg_color="bg-danger" attrs="{'invisible': [('is_compliant', '=', True)]}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="year"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="industry_category"/>
+                            <field name="required_percentage"/>
+                        </group>
+                        <group string="Current Status">
+                            <field name="total_employees"/>
+                            <field name="uae_nationals"/>
+                            <field name="current_percentage"/>
+                            <field name="is_compliant"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Gap Analysis">
+                            <field name="target_count"/>
+                            <field name="gap_count"/>
+                        </group>
+                        <group string="Penalty Estimation">
+                            <field name="penalty_per_employee"/>
+                            <field name="estimated_penalty"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="UAE Nationals" name="nationals">
+                            <field name="national_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="job_id"/>
+                                    <field name="department_id"/>
+                                    <field name="work_email"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Emiratization Quota Tree View -->
+    <record id="view_emiratization_quota_tree" model="ir.ui.view">
+        <field name="name">tazweed.emiratization.quota.tree</field>
+        <field name="model">tazweed.emiratization.quota</field>
+        <field name="arch" type="xml">
+            <tree string="Emiratization Quotas" decoration-success="is_compliant == True" decoration-danger="is_compliant == False">
+                <field name="year"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="total_employees"/>
+                <field name="uae_nationals"/>
+                <field name="required_percentage"/>
+                <field name="current_percentage"/>
+                <field name="gap_count"/>
+                <field name="is_compliant"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Emiratization Quota Action -->
+    <record id="action_emiratization_quota" model="ir.actions.act_window">
+        <field name="name">Emiratization Quotas</field>
+        <field name="res_model">tazweed.emiratization.quota</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Emiratization quota
+            </p>
+        </field>
+    </record>
+
+    <!-- Emiratization Plan Form View -->
+    <record id="view_emiratization_plan_form" model="ir.ui.view">
+        <field name="name">tazweed.emiratization.plan.form</field>
+        <field name="model">tazweed.emiratization.plan</field>
+        <field name="arch" type="xml">
+            <form string="Emiratization Plan">
+                <header>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_start" string="Start" type="object" class="btn-primary" states="approved"/>
+                    <button name="action_complete" string="Complete" type="object" class="btn-success" states="in_progress"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="quota_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="target_hires"/>
+                            <field name="actual_hires"/>
+                            <field name="budget"/>
+                            <field name="spent"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Plan Lines" name="lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="job_id"/>
+                                    <field name="department_id"/>
+                                    <field name="target_count"/>
+                                    <field name="hired_count"/>
+                                    <field name="target_date"/>
+                                    <field name="employee_id"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Emiratization Plan Tree View -->
+    <record id="view_emiratization_plan_tree" model="ir.ui.view">
+        <field name="name">tazweed.emiratization.plan.tree</field>
+        <field name="model">tazweed.emiratization.plan</field>
+        <field name="arch" type="xml">
+            <tree string="Emiratization Plans">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="target_hires"/>
+                <field name="actual_hires"/>
+                <field name="budget"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Emiratization Plan Action -->
+    <record id="action_emiratization_plan" model="ir.actions.act_window">
+        <field name="name">Emiratization Plans</field>
+        <field name="res_model">tazweed.emiratization.plan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

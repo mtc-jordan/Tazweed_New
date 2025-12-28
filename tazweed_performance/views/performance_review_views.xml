@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Performance Review Form View -->
+    <record id="view_performance_review_form" model="ir.ui.view">
+        <field name="name">tazweed.performance.review.form</field>
+        <field name="model">tazweed.performance.review</field>
+        <field name="arch" type="xml">
+            <form string="Performance Review">
+                <header>
+                    <button name="action_start_self_review" string="Start Self Review" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_submit_self_review" string="Submit Self Review" type="object" class="btn-primary" states="self_review"/>
+                    <button name="action_submit_manager_review" string="Submit Manager Review" type="object" class="btn-primary" states="manager_review"/>
+                    <button name="action_complete" string="Complete Review" type="object" class="btn-success" states="calibration"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,self_review"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" states="cancelled"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,self_review,manager_review,calibration,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(tazweed_performance.action_performance_goal)d" type="action" class="oe_stat_button" icon="fa-bullseye">
+                            <field name="goal_count" widget="statinfo" string="Goals"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-line-chart">
+                            <field name="kpi_count" widget="statinfo" string="KPIs"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-graduation-cap">
+                            <field name="competency_count" widget="statinfo" string="Competencies"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="manager_id"/>
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                        </group>
+                        <group>
+                            <field name="period_id"/>
+                            <field name="template_id"/>
+                            <field name="review_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dates">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="self_review_date"/>
+                            <field name="manager_review_date"/>
+                            <field name="completion_date"/>
+                        </group>
+                        <group string="Scores">
+                            <field name="self_rating"/>
+                            <field name="manager_rating"/>
+                            <field name="final_rating"/>
+                            <field name="overall_score"/>
+                            <field name="rating_label"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Weights">
+                            <field name="goal_weight"/>
+                            <field name="kpi_weight"/>
+                            <field name="competency_weight"/>
+                        </group>
+                        <group string="Component Scores">
+                            <field name="goal_score"/>
+                            <field name="kpi_score"/>
+                            <field name="competency_score"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Goals" name="goals">
+                            <field name="goal_ids" context="{'default_employee_id': employee_id, 'default_review_id': id}">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="category"/>
+                                    <field name="date_deadline"/>
+                                    <field name="progress" widget="progressbar"/>
+                                    <field name="weight"/>
+                                    <field name="self_score"/>
+                                    <field name="manager_score"/>
+                                    <field name="achievement_score"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="KPIs" name="kpis">
+                            <field name="kpi_ids">
+                                <tree editable="bottom">
+                                    <field name="kpi_id"/>
+                                    <field name="target_value"/>
+                                    <field name="actual_value"/>
+                                    <field name="unit"/>
+                                    <field name="achievement_pct"/>
+                                    <field name="score"/>
+                                    <field name="weight"/>
+                                    <field name="comments"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Competencies" name="competencies">
+                            <field name="competency_ids">
+                                <tree editable="bottom">
+                                    <field name="competency_id"/>
+                                    <field name="expected_level"/>
+                                    <field name="self_rating"/>
+                                    <field name="manager_rating"/>
+                                    <field name="rating"/>
+                                    <field name="gap"/>
+                                    <field name="self_comments"/>
+                                    <field name="manager_comments"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Self Assessment" name="self_assessment">
+                            <field name="self_assessment" placeholder="Employee self-assessment..."/>
+                            <separator string="Key Achievements"/>
+                            <field name="achievements" placeholder="List key achievements during this period..."/>
+                            <separator string="Career Aspirations"/>
+                            <field name="career_aspirations" placeholder="Career goals and aspirations..."/>
+                        </page>
+                        <page string="Manager Assessment" name="manager_assessment">
+                            <field name="manager_assessment" placeholder="Manager assessment..."/>
+                            <group>
+                                <group>
+                                    <field name="strengths" placeholder="Key strengths..."/>
+                                </group>
+                                <group>
+                                    <field name="areas_for_improvement" placeholder="Areas for improvement..."/>
+                                </group>
+                            </group>
+                            <separator string="Training Recommendations"/>
+                            <field name="training_recommendations" placeholder="Recommended training and development..."/>
+                        </page>
+                        <page string="Feedback" name="feedback">
+                            <field name="feedback_ids">
+                                <tree>
+                                    <field name="provider_id"/>
+                                    <field name="feedback_type"/>
+                                    <field name="rating"/>
+                                    <field name="state"/>
+                                    <field name="create_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Comments" name="comments">
+                            <group>
+                                <field name="employee_comments" placeholder="Employee comments..."/>
+                                <field name="manager_comments" placeholder="Manager comments..."/>
+                                <field name="hr_comments" placeholder="HR comments..." groups="hr.group_hr_manager"/>
+                            </group>
+                        </page>
+                        <page string="Acknowledgement" name="acknowledgement">
+                            <group>
+                                <field name="employee_acknowledged"/>
+                                <field name="employee_acknowledged_date"/>
+                                <field name="employee_signature" widget="image"/>
+                            </group>
+                            <button name="action_acknowledge" string="Acknowledge Review" type="object" class="btn-primary" attrs="{'invisible': [('employee_acknowledged', '=', True)]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Performance Review Tree View -->
+    <record id="view_performance_review_tree" model="ir.ui.view">
+        <field name="name">tazweed.performance.review.tree</field>
+        <field name="model">tazweed.performance.review</field>
+        <field name="arch" type="xml">
+            <tree string="Performance Reviews" decoration-info="state == 'draft'" decoration-warning="state in ('self_review', 'manager_review')" decoration-success="state == 'completed'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="period_id"/>
+                <field name="review_type"/>
+                <field name="overall_score"/>
+                <field name="final_rating"/>
+                <field name="rating_label"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Performance Review Search View -->
+    <record id="view_performance_review_search" model="ir.ui.view">
+        <field name="name">tazweed.performance.review.search</field>
+        <field name="model">tazweed.performance.review</field>
+        <field name="arch" type="xml">
+            <search string="Search Reviews">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="period_id"/>
+                <separator/>
+                <filter name="my_reviews" string="My Reviews" domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter name="team_reviews" string="Team Reviews" domain="[('manager_id.user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="in_progress" string="In Progress" domain="[('state', 'in', ('self_review', 'manager_review', 'calibration'))]"/>
+                <filter name="completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_period" string="Period" context="{'group_by': 'period_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_rating" string="Rating" context="{'group_by': 'rating_label'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Performance Review Action -->
+    <record id="action_performance_review" model="ir.actions.act_window">
+        <field name="name">Performance Reviews</field>
+        <field name="res_model">tazweed.performance.review</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_performance_review_search"/>
+        <field name="context">{'search_default_in_progress': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first performance review
+            </p>
+        </field>
+    </record>
+
+    <!-- Performance Period Views -->
+    <record id="view_performance_period_form" model="ir.ui.view">
+        <field name="name">tazweed.performance.period.form</field>
+        <field name="model">tazweed.performance.period</field>
+        <field name="arch" type="xml">
+            <form string="Performance Period">
+                <header>
+                    <button name="action_open" string="Open" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_start_self_review" string="Start Self Review" type="object" states="open"/>
+                    <button name="action_start_manager_review" string="Start Manager Review" type="object" states="self_review"/>
+                    <button name="action_start_calibration" string="Start Calibration" type="object" states="manager_review"/>
+                    <button name="action_close" string="Close" type="object" states="calibration"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_reviews" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="review_count" widget="statinfo" string="Reviews"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g., 2025 Annual Review"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="period_type"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="self_review_start"/>
+                            <field name="self_review_end"/>
+                            <field name="manager_review_start"/>
+                            <field name="manager_review_end"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="calibration_start"/>
+                            <field name="calibration_end"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_performance_period_tree" model="ir.ui.view">
+        <field name="name">tazweed.performance.period.tree</field>
+        <field name="model">tazweed.performance.period</field>
+        <field name="arch" type="xml">
+            <tree string="Performance Periods">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="period_type"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="review_count"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_performance_period" model="ir.actions.act_window">
+        <field name="name">Performance Periods</field>
+        <field name="res_model">tazweed.performance.period</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first performance period
+            </p>
+        </field>
+    </record>
+</odoo>

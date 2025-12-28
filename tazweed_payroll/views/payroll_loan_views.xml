@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Loan Form View -->
+    <record id="view_payroll_loan_form" model="ir.ui.view">
+        <field name="name">tazweed.payroll.loan.form</field>
+        <field name="model">tazweed.payroll.loan</field>
+        <field name="arch" type="xml">
+            <form string="Employee Loan">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" 
+                            states="draft" class="btn-primary"/>
+                    <button name="action_approve" string="Approve" type="object" 
+                            states="submitted" class="btn-success" groups="tazweed_payroll.group_payroll_manager"/>
+                    <button name="action_disburse" string="Disburse" type="object" 
+                            states="approved" class="btn-primary" groups="tazweed_payroll.group_payroll_manager"/>
+                    <button name="action_reject" string="Reject" type="object" 
+                            states="submitted" class="btn-danger" groups="tazweed_payroll.group_payroll_manager"/>
+                    <button name="action_cancel" string="Cancel" type="object" 
+                            states="draft,submitted" class="btn-secondary"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" 
+                            states="rejected,cancelled" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,disbursed,active,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Employee">
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group string="Loan Details">
+                            <field name="loan_type"/>
+                            <field name="loan_amount"/>
+                            <field name="interest_rate"/>
+                            <field name="total_amount"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Repayment">
+                            <field name="installment_count"/>
+                            <field name="installment_amount"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group string="Status">
+                            <field name="paid_amount"/>
+                            <field name="balance_amount"/>
+                            <field name="request_date"/>
+                        </group>
+                    </group>
+                    <group string="Approval" attrs="{'invisible': [('state', 'in', ['draft', 'submitted'])]}">
+                        <group>
+                            <field name="approved_by_id"/>
+                            <field name="approval_date"/>
+                        </group>
+                        <group>
+                            <field name="disbursement_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Installments" name="installments">
+                            <field name="installment_ids">
+                                <tree editable="bottom" decoration-success="state == 'paid'">
+                                    <field name="sequence"/>
+                                    <field name="due_date"/>
+                                    <field name="amount"/>
+                                    <field name="paid_date"/>
+                                    <field name="state"/>
+                                    <button name="action_mark_paid" string="Mark Paid" type="object" 
+                                            icon="fa-check" attrs="{'invisible': [('state', '=', 'paid')]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="reason" placeholder="Reason for loan..."/>
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Loan Tree View -->
+    <record id="view_payroll_loan_tree" model="ir.ui.view">
+        <field name="name">tazweed.payroll.loan.tree</field>
+        <field name="model">tazweed.payroll.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Loans" decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'submitted'" decoration-success="state == 'paid'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="loan_type"/>
+                <field name="loan_amount" sum="Total Loans"/>
+                <field name="paid_amount" sum="Total Paid"/>
+                <field name="balance_amount" sum="Total Remaining"/>
+                <field name="start_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Loan Search View -->
+    <record id="view_payroll_loan_search" model="ir.ui.view">
+        <field name="name">tazweed.payroll.loan.search</field>
+        <field name="model">tazweed.payroll.loan</field>
+        <field name="arch" type="xml">
+            <search string="Employee Loans">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="submitted" string="Submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter name="approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <filter name="my_loans" string="My Loans" domain="[('employee_id.user_id', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_type" string="Loan Type" context="{'group_by': 'loan_type'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Loan Action -->
+    <record id="action_payroll_loan" model="ir.actions.act_window">
+        <field name="name">Employee Loans</field>
+        <field name="res_model">tazweed.payroll.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new employee loan
+            </p>
+            <p>
+                Manage employee loans with automatic installment generation and payroll deduction.
+            </p>
+        </field>
+    </record>
+</odoo>

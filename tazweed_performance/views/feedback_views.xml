@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Performance Feedback Form View -->
+    <record id="view_performance_feedback_form" model="ir.ui.view">
+        <field name="name">tazweed.performance.feedback.form</field>
+        <field name="model">tazweed.performance.feedback</field>
+        <field name="arch" type="xml">
+            <form string="Feedback">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_acknowledge" string="Acknowledge" type="object" class="btn-success" states="submitted"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="provider_id" attrs="{'invisible': [('is_anonymous', '=', True)]}"/>
+                            <field name="review_id"/>
+                        </group>
+                        <group>
+                            <field name="feedback_type"/>
+                            <field name="category"/>
+                            <field name="rating"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_anonymous"/>
+                            <field name="is_private"/>
+                            <field name="visibility"/>
+                        </group>
+                        <group>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Feedback" name="feedback">
+                            <field name="subject" placeholder="Subject..."/>
+                            <field name="feedback" placeholder="Provide your feedback..."/>
+                        </page>
+                        <page string="Response" name="response" attrs="{'invisible': [('state', '!=', 'acknowledged')]}">
+                            <group>
+                                <field name="acknowledged_date"/>
+                                <field name="employee_response" placeholder="Employee response..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Performance Feedback Tree View -->
+    <record id="view_performance_feedback_tree" model="ir.ui.view">
+        <field name="name">tazweed.performance.feedback.tree</field>
+        <field name="model">tazweed.performance.feedback</field>
+        <field name="arch" type="xml">
+            <tree string="Feedback" decoration-success="feedback_type == 'recognition'" decoration-info="state == 'draft'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="provider_id"/>
+                <field name="feedback_type"/>
+                <field name="category"/>
+                <field name="rating"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Performance Feedback Search View -->
+    <record id="view_performance_feedback_search" model="ir.ui.view">
+        <field name="name">tazweed.performance.feedback.search</field>
+        <field name="model">tazweed.performance.feedback</field>
+        <field name="arch" type="xml">
+            <search string="Search Feedback">
+                <field name="employee_id"/>
+                <field name="provider_id"/>
+                <field name="feedback_type"/>
+                <separator/>
+                <filter name="my_feedback" string="About Me" domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter name="given_feedback" string="Given by Me" domain="[('provider_id.user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="recognition" string="Recognition" domain="[('feedback_type', '=', 'recognition')]"/>
+                <filter name="constructive" string="Constructive" domain="[('feedback_type', '=', 'constructive')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_type" string="Type" context="{'group_by': 'feedback_type'}"/>
+                    <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Performance Feedback Action -->
+    <record id="action_performance_feedback" model="ir.actions.act_window">
+        <field name="name">Feedback</field>
+        <field name="res_model">tazweed.performance.feedback</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_performance_feedback_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Give your first feedback
+            </p>
+        </field>
+    </record>
+
+    <!-- Recognition Form View -->
+    <record id="view_recognition_form" model="ir.ui.view">
+        <field name="name">tazweed.recognition.form</field>
+        <field name="model">tazweed.recognition</field>
+        <field name="arch" type="xml">
+            <form string="Recognition">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Recognition title..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="recognizer_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="recognition_type"/>
+                            <field name="award_type"/>
+                            <field name="award_value"/>
+                            <field name="is_public"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Describe the achievement..."/>
+                    <group>
+                        <field name="like_count"/>
+                        <button name="action_like" string="Like" type="object" icon="fa-thumbs-up"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Recognition Tree View -->
+    <record id="view_recognition_tree" model="ir.ui.view">
+        <field name="name">tazweed.recognition.tree</field>
+        <field name="model">tazweed.recognition</field>
+        <field name="arch" type="xml">
+            <tree string="Recognition">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="recognizer_id"/>
+                <field name="recognition_type"/>
+                <field name="award_type"/>
+                <field name="date"/>
+                <field name="like_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Recognition Action -->
+    <record id="action_recognition" model="ir.actions.act_window">
+        <field name="name">Recognition</field>
+        <field name="res_model">tazweed.recognition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Recognize an employee's achievement
+            </p>
+        </field>
+    </record>
+
+    <!-- KPI Views -->
+    <record id="view_performance_kpi_form" model="ir.ui.view">
+        <field name="name">tazweed.performance.kpi.form</field>
+        <field name="model">tazweed.performance.kpi</field>
+        <field name="arch" type="xml">
+            <form string="KPI">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="KPI name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="kpi_type"/>
+                            <field name="measurement_type"/>
+                            <field name="unit"/>
+                        </group>
+                        <group>
+                            <field name="target_type"/>
+                            <field name="default_target"/>
+                            <field name="min_threshold"/>
+                            <field name="max_threshold"/>
+                            <field name="weight"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="calculation_method"/>
+                            <field name="measurement_frequency"/>
+                        </group>
+                        <group>
+                            <field name="department_ids" widget="many2many_tags"/>
+                            <field name="job_ids" widget="many2many_tags"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..."/>
+                    <group attrs="{'invisible': [('calculation_method', '!=', 'formula')]}">
+                        <field name="formula" placeholder="Formula..."/>
+                        <field name="data_source" placeholder="Data source..."/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_performance_kpi_tree" model="ir.ui.view">
+        <field name="name">tazweed.performance.kpi.tree</field>
+        <field name="model">tazweed.performance.kpi</field>
+        <field name="arch" type="xml">
+            <tree string="KPIs">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="measurement_type"/>
+                <field name="default_target"/>
+                <field name="measurement_frequency"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_performance_kpi" model="ir.actions.act_window">
+        <field name="name">KPIs</field>
+        <field name="res_model">tazweed.performance.kpi</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define your first KPI
+            </p>
+        </field>
+    </record>
+</odoo>

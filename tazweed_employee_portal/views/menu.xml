@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action for Announcements - must be defined before menu items that reference it -->
+    <record id="action_portal_announcement" model="ir.actions.act_window">
+        <field name="name">Announcements</field>
+        <field name="res_model">tazweed.portal.announcement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first announcement
+            </p>
+            <p>
+                Announcements will be displayed on the employee portal dashboard.
+            </p>
+        </field>
+    </record>
+
+    <!-- Backend Menu for Portal Administration -->
+    <menuitem id="menu_portal_root"
+              name="Employee Portal"
+              web_icon="tazweed_employee_portal,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_employee_dashboard"
+              name="Dashboard"
+              parent="menu_portal_root"
+              action="action_employee_dashboard"
+              sequence="1"/>
+
+    <!-- Announcements Menu -->
+    <menuitem id="menu_portal_announcements"
+              name="Announcements"
+              parent="menu_portal_root"
+              sequence="10"/>
+
+    <menuitem id="menu_portal_announcements_list"
+              name="All Announcements"
+              parent="menu_portal_announcements"
+              action="action_portal_announcement"
+              sequence="10"/>
+
+    <!-- Portal Settings -->
+    <menuitem id="menu_portal_settings"
+              name="Settings"
+              parent="menu_portal_root"
+              sequence="90"/>
+
+    <!-- Announcement Tree View -->
+    <record id="view_portal_announcement_tree" model="ir.ui.view">
+        <field name="name">tazweed.portal.announcement.tree</field>
+        <field name="model">tazweed.portal.announcement</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="announcement_type"/>
+                <field name="priority"/>
+                <field name="publish_date"/>
+                <field name="expiry_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Announcement Form View -->
+    <record id="view_portal_announcement_form" model="ir.ui.view">
+        <field name="name">tazweed.portal.announcement.form</field>
+        <field name="model">tazweed.portal.announcement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_publish" string="Publish" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_archive" string="Archive" type="object" states="published"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Announcement Title"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="announcement_type"/>
+                            <field name="priority"/>
+                            <field name="publish_date"/>
+                            <field name="expiry_date"/>
+                        </group>
+                        <group>
+                            <field name="target_type"/>
+                            <field name="target_department_ids" widget="many2many_tags" attrs="{'invisible': [('target_type', '!=', 'department')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content">
+                            <field name="summary" placeholder="Brief summary..."/>
+                            <field name="content" placeholder="Full announcement content..."/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Announcement Search View -->
+    <record id="view_portal_announcement_search" model="ir.ui.view">
+        <field name="name">tazweed.portal.announcement.search</field>
+        <field name="model">tazweed.portal.announcement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="announcement_type"/>
+                <filter name="published" string="Published" domain="[('state', '=', 'published')]"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_type" string="Type" context="{'group_by': 'announcement_type'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
