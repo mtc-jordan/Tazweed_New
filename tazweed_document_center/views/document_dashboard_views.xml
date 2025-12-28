@@ -176,6 +176,12 @@
             ('expiry_date', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))
         ]</field>
     </record>
+    <!-- Document Center OWL Dashboard Action -->
+    <record id="action_document_center_dashboard" model="ir.actions.client">
+        <field name="name">Document Center Dashboard</field>
+        <field name="tag">document_center_dashboard</field>
+    </record>
+
     <!-- Active Alerts Action -->
     <record id="action_active_alerts" model="ir.actions.act_window">
         <field name="name">Active Alerts</field>

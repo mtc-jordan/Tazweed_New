@@ -1,4 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_unified_document_user,document.center.unified.user,model_document_center_unified,group_document_user,1,1,1,0
+access_unified_document_manager,document.center.unified.manager,model_document_center_unified,group_document_manager,1,1,1,0
+access_unified_document_admin,document.center.unified.admin,model_document_center_unified,group_document_admin,1,1,1,1
 access_document_dashboard_user,document.dashboard.user,model_document_dashboard,group_document_user,1,0,0,0
 access_document_dashboard_manager,document.dashboard.manager,model_document_dashboard,group_document_manager,1,1,1,0
 access_document_dashboard_admin,document.dashboard.admin,model_document_dashboard,group_document_admin,1,1,1,1

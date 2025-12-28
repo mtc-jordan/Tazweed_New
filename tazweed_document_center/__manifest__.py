@@ -1,38 +1,50 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Document Management Center',
-    'version': '16.0.1.0.0',
+    'version': '16.0.2.0.0',
     'category': 'Human Resources/Staffing',
-    'summary': 'Comprehensive Document Management with Expiry Tracking & Alerts',
+    'summary': 'Central Document Hub with Cross-Module Integration & Expiry Tracking',
     'description': """
 Tazweed Document Management Center
 ==================================
 
-A complete document management solution for HR and staffing operations with 
-advanced expiry tracking, automated alerts, and compliance monitoring.
+A complete document management solution serving as the central hub for all HR 
+documents across modules with advanced expiry tracking, automated alerts, and 
+compliance monitoring.
 
 Key Features:
 -------------
-* Centralized Document Dashboard
-* Multi-level Expiry Alerts (90/60/30/15/7/1 days)
-* Automated Email Notifications
-* Renewal Workflow Management
-* Document Compliance Reports
-* Bulk Actions (Mass Renewal, Notifications)
-* Employee Compliance Status Tracking
-* Mobile-friendly Interface
+* **Central Document Hub** - Aggregates documents from all HR modules
+* **Cross-Module Integration** - Syncs with Core, Placement, Payroll, Leave, Performance
+* **Multi-level Expiry Alerts** (90/60/30/15/7/1 days)
+* **Automated Email Notifications**
+* **Renewal Workflow Management**
+* **Document Compliance Reports**
+* **Bulk Actions** (Mass Renewal, Notifications)
+* **Employee Compliance Status Tracking**
+* **Version Control** - Track document versions
+* **Verification Workflow** - Document verification status
+* **Mobile-friendly Interface**
 
-Document Types Tracked:
------------------------
-* Emirates ID
-* Passport
-* Work Visa
-* Labour Card
-* Medical Insurance
-* Trade License
-* Employment Contract
+Document Categories:
+--------------------
+* Identity Documents (Passport, Emirates ID)
+* Visa & Work Permits
+* Contracts & Agreements
 * Certificates & Qualifications
-* Custom Document Types
+* Medical Documents
+* Financial Documents
+* Leave Documents
+* Performance Documents
+
+Source Modules:
+---------------
+* HR Core - Employee documents
+* Placement - Candidate documents
+* Payroll - Salary certificates, payslips
+* Leave - Leave request documents
+* Performance - Review documents
+* Manual Upload - Direct uploads
 
 Alert System:
 -------------
@@ -49,14 +61,6 @@ Compliance Features:
 * Audit Trail & History
 * Document Verification Status
 * Expiry Analytics & Reports
-
-Best Practices:
----------------
-* Role-based Access Control
-* Secure Document Storage
-* Version Control
-* Digital Signatures Integration
-* Automated Backup
     """,
     'author': 'Tazweed HR Solutions',
     'website': 'https://www.tazweed.ae',
@@ -76,6 +80,7 @@ Best Practices:
         'data/cron_data.xml',
         'data/email_templates.xml',
         # Views
+        'views/unified_document_views.xml',
         'views/document_dashboard_views.xml',
         'views/document_alert_views.xml',
         'views/document_renewal_views.xml',
@@ -88,6 +93,7 @@ Best Practices:
         'web.assets_backend': [
             'tazweed_document_center/static/src/css/document_dashboard.css',
             'tazweed_document_center/static/src/js/document_dashboard.js',
+            'tazweed_document_center/static/src/xml/document_dashboard.xml',
         ],
     },
     'installable': True,

@@ -36,20 +36,6 @@
                 </button>
             </xpath>
             
-            <!-- Add document compliance banner at top -->
-            <xpath expr="//sheet" position="before">
-                <div class="alert alert-danger" role="alert" 
-                     attrs="{'invisible': [('document_compliance_status', '!=', 'non_compliant')]}">
-                    <strong>⚠️ Non-Compliant:</strong> This employee has expired or missing mandatory documents.
-                    <button name="action_view_document_dashboard" type="object" class="btn btn-link">View Details</button>
-                </div>
-                <div class="alert alert-warning" role="alert" 
-                     attrs="{'invisible': [('document_compliance_status', '!=', 'warning')]}">
-                    <strong>⏰ Warning:</strong> Some documents are expiring soon.
-                    <button name="action_view_document_dashboard" type="object" class="btn btn-link">View Details</button>
-                </div>
-            </xpath>
-            
             <!-- Add document actions to form -->
             <xpath expr="//notebook" position="inside">
                 <page string="Document Compliance" name="document_compliance">
@@ -82,32 +68,12 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//tree" position="attributes">
-                <attribute name="decoration-danger">document_compliance_status == 'non_compliant'</attribute>
-                <attribute name="decoration-warning">document_compliance_status == 'warning'</attribute>
-            </xpath>
             <xpath expr="//field[@name='department_id']" position="after">
                 <field name="document_compliance_status" widget="badge" 
                        decoration-danger="document_compliance_status=='non_compliant'"
                        decoration-warning="document_compliance_status=='warning'"
                        decoration-success="document_compliance_status=='compliant'" optional="show"/>
                 <field name="document_compliance_score" widget="progressbar" optional="hide"/>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- Extend HR Employee Search View -->
-    <record id="view_employee_search_document_center" model="ir.ui.view">
-        <field name="name">hr.employee.search.document.center</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_filter"/>
-        <field name="arch" type="xml">
-            <xpath expr="//search" position="inside">
-                <separator/>
-                <filter string="Compliant" name="doc_compliant" domain="[('document_compliance_status', '=', 'compliant')]"/>
-                <filter string="Warning" name="doc_warning" domain="[('document_compliance_status', '=', 'warning')]"/>
-                <filter string="Non-Compliant" name="doc_non_compliant" domain="[('document_compliance_status', '=', 'non_compliant')]"/>
-                <filter string="Has Critical Documents" name="has_critical" domain="[('critical_documents_count', '>', 0)]"/>
             </xpath>
         </field>
     </record>

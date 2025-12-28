@@ -228,3 +228,45 @@
         font-size: 1.5rem;
     }
 }
+
+
+/* Document Center Dashboard - New Styles */
+
+.o_document_center_dashboard {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.o_document_center_dashboard .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+
+.o_document_center_dashboard .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.o_document_center_dashboard .card.cursor-pointer {
+    cursor: pointer;
+}
+
+.o_document_center_dashboard .card-header {
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.25rem;
+}
+
+/* Gap utility */
+.gap-2 {
+    gap: 0.5rem;
+}
+
+/* Cursor pointer */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Background opacity */
+.bg-opacity-10 {
+    --bs-bg-opacity: 0.1;
+}

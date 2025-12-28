@@ -7,23 +7,30 @@ class HrEmployeeDocumentCenter(models.Model):
     """Extend HR Employee with document center features."""
     _inherit = 'hr.employee'
 
+    # Document relationship - define it here if not already defined
+    document_ids = fields.One2many(
+        'tazweed.employee.document',
+        'employee_id',
+        string='Documents'
+    )
+
     # Document statistics
     document_compliance_score = fields.Float(
         string='Compliance Score',
         compute='_compute_document_compliance',
-        store=True
+        store=False  # Changed to non-stored to avoid installation issues
     )
     
     document_compliance_status = fields.Selection([
         ('compliant', 'Compliant'),
         ('warning', 'Warning'),
         ('non_compliant', 'Non-Compliant'),
-    ], string='Compliance Status', compute='_compute_document_compliance', store=True)
+    ], string='Compliance Status', compute='_compute_document_compliance', store=False)
     
     critical_documents_count = fields.Integer(
         string='Critical Documents',
         compute='_compute_critical_documents',
-        store=True
+        store=False
     )
     
     pending_renewals_count = fields.Integer(
@@ -36,14 +43,14 @@ class HrEmployeeDocumentCenter(models.Model):
         compute='_compute_active_alerts'
     )
 
-    @api.depends('document_ids', 'document_ids.expiry_date', 'document_ids.state')
     def _compute_document_compliance(self):
         """Compute document compliance score and status."""
         today = fields.Date.today()
         warning_date = today + timedelta(days=30)
         
         for employee in self:
-            docs = employee.document_ids
+            # Safely get documents
+            docs = employee.document_ids if hasattr(employee, 'document_ids') else self.env['tazweed.employee.document']
             total = len(docs)
             
             if total == 0:
@@ -68,32 +75,41 @@ class HrEmployeeDocumentCenter(models.Model):
             else:
                 employee.document_compliance_status = 'compliant'
 
-    @api.depends('document_ids', 'document_ids.expiry_date')
     def _compute_critical_documents(self):
         """Count critical (expired or expiring in 7 days) documents."""
         today = fields.Date.today()
         critical_date = today + timedelta(days=7)
         
         for employee in self:
-            employee.critical_documents_count = len(employee.document_ids.filtered(
+            # Safely get documents
+            docs = employee.document_ids if hasattr(employee, 'document_ids') else self.env['tazweed.employee.document']
+            employee.critical_documents_count = len(docs.filtered(
                 lambda d: d.expiry_date and d.expiry_date <= critical_date
             ))
 
     def _compute_pending_renewals(self):
         """Count pending renewal requests."""
+        RenewalRequest = self.env['document.renewal.request']
         for employee in self:
-            employee.pending_renewals_count = self.env['document.renewal.request'].search_count([
-                ('employee_id', '=', employee.id),
-                ('state', 'in', ['draft', 'pending', 'approved', 'in_progress', 'submitted'])
-            ])
+            try:
+                employee.pending_renewals_count = RenewalRequest.search_count([
+                    ('employee_id', '=', employee.id),
+                    ('state', 'in', ['draft', 'pending', 'approved', 'in_progress', 'submitted'])
+                ])
+            except Exception:
+                employee.pending_renewals_count = 0
 
     def _compute_active_alerts(self):
         """Count active document alerts."""
+        Alert = self.env['document.alert']
         for employee in self:
-            employee.active_alerts_count = self.env['document.alert'].search_count([
-                ('employee_id', '=', employee.id),
-                ('state', 'in', ['pending', 'sent', 'acknowledged'])
-            ])
+            try:
+                employee.active_alerts_count = Alert.search_count([
+                    ('employee_id', '=', employee.id),
+                    ('state', 'in', ['pending', 'sent', 'acknowledged'])
+                ])
+            except Exception:
+                employee.active_alerts_count = 0
 
     def action_view_document_dashboard(self):
         """Open document dashboard for this employee."""
@@ -138,7 +154,8 @@ class HrEmployeeDocumentCenter(models.Model):
         today = fields.Date.today()
         warning_date = today + timedelta(days=30)
         
-        docs_to_renew = self.document_ids.filtered(
+        docs = self.document_ids if hasattr(self, 'document_ids') else self.env['tazweed.employee.document']
+        docs_to_renew = docs.filtered(
             lambda d: d.expiry_date and d.expiry_date <= warning_date and d.state != 'renewed'
         )
         
