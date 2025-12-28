@@ -50,7 +50,7 @@ export class PerformanceDashboard extends Component {
     async loadDashboardData() {
         try {
             const data = await this.orm.call(
-                "performance.review",
+                "tazweed.performance.review",
                 "get_performance_dashboard_data",
                 [this.state.selectedPeriod]
             );
@@ -243,7 +243,7 @@ export class PerformanceDashboard extends Component {
         this.action.doAction({
             type: "ir.actions.act_window",
             name: "New Performance Review",
-            res_model: "performance.review",
+            res_model: "tazweed.performance.review",
             view_mode: "form",
             views: [[false, "form"]],
             target: "current",
@@ -254,7 +254,7 @@ export class PerformanceDashboard extends Component {
         this.action.doAction({
             type: "ir.actions.act_window",
             name: "All Reviews",
-            res_model: "performance.review",
+            res_model: "tazweed.performance.review",
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             target: "current",
@@ -265,7 +265,7 @@ export class PerformanceDashboard extends Component {
         this.action.doAction({
             type: "ir.actions.act_window",
             name: "Goals",
-            res_model: "performance.goal",
+            res_model: "tazweed.performance.goal",
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             target: "current",
@@ -276,7 +276,7 @@ export class PerformanceDashboard extends Component {
         this.action.doAction({
             type: "ir.actions.act_window",
             name: "Feedback",
-            res_model: "performance.feedback",
+            res_model: "tazweed.performance.feedback",
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             target: "current",
@@ -287,7 +287,7 @@ export class PerformanceDashboard extends Component {
         this.action.doAction({
             type: "ir.actions.act_window",
             name: "Competencies",
-            res_model: "hr.competency",
+            res_model: "tazweed.competency",
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             target: "current",
