@@ -239,46 +239,173 @@
                 <field name="date_from"/>
                 <field name="date_to"/>
                 <field name="view_type"/>
+                <field name="total_employees"/>
+                <field name="total_cost" widget="monetary"/>
+                <field name="total_revenue" widget="monetary"/>
+                <field name="margin_percent" widget="percentage"/>
             </tree>
         </field>
     </record>
     
-    <!-- Dashboard Form View -->
+    <!-- Dashboard Form View - Enhanced with Visual KPIs -->
     <record id="view_cost_center_dashboard_form" model="ir.ui.view">
         <field name="name">employee.cost.center.dashboard.form</field>
         <field name="model">employee.cost.center.dashboard</field>
         <field name="arch" type="xml">
             <form string="Cost Center Dashboard">
                 <header>
-                    <button name="action_refresh" string="Refresh" type="object" class="btn-primary"/>
-                    <button name="action_generate_cost_data" string="Generate Cost Data" type="object" class="btn-secondary"/>
-                    <button name="action_export_excel" string="Export Excel" type="object" class="btn-secondary"/>
-                    <button name="action_export_pdf" string="Export PDF" type="object" class="btn-secondary"/>
+                    <button name="action_refresh" string="Refresh Data" type="object" class="btn-primary" icon="fa-refresh"/>
+                    <button name="action_generate_cost_data" string="Generate Cost Data" type="object" class="btn-secondary" icon="fa-cogs"/>
+                    <button name="action_export_excel" string="Export Excel" type="object" class="btn-secondary" icon="fa-file-excel-o"/>
+                    <button name="action_export_pdf" string="Export PDF" type="object" class="btn-secondary" icon="fa-file-pdf-o"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="name"/>
+                            <field name="name" placeholder="Dashboard Name"/>
                         </h1>
                     </div>
-                    <group>
-                        <group string="Period">
-                            <field name="date_from"/>
-                            <field name="date_to"/>
-                        </group>
-                        <group string="View">
-                            <field name="view_type"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
-                        </group>
+                    
+                    <!-- Filters Section -->
+                    <group string="Dashboard Filters" col="4">
+                        <field name="date_from" widget="date"/>
+                        <field name="date_to" widget="date"/>
+                        <field name="view_type"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
                     </group>
-                    <group string="Filters">
-                        <field name="department_ids" widget="many2many_tags"/>
+                    
+                    <group string="Filter by" col="3">
+                        <field name="department_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="client_ids" widget="many2many_tags"/>
                         <field name="employee_ids" widget="many2many_tags"/>
                     </group>
+                    
                     <notebook>
-                        <page string="Dashboard" name="dashboard">
-                            <field name="dashboard_data" widget="text" readonly="1"/>
+                        <page string="Dashboard Overview" name="overview">
+                            <!-- KPI Summary Cards -->
+                            <div class="o_kanban_view o_kanban_dashboard">
+                                <div class="container-fluid">
+                                    <h3 class="text-center mt-3 mb-4">
+                                        <i class="fa fa-tachometer"/> Key Performance Indicators
+                                    </h3>
+                                    
+                                    <!-- KPI Cards Row 1 -->
+                                    <group col="6" class="mb-4">
+                                        <div class="o_kanban_card_manage_pane" style="background: linear-gradient(135deg, #2196F3, #1976D2); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                            <h4 style="color: white;"><i class="fa fa-users"/> Total Employees</h4>
+                                            <h2 style="color: white; font-weight: bold;"><field name="total_employees"/></h2>
+                                        </div>
+                                        <div class="o_kanban_card_manage_pane" style="background: linear-gradient(135deg, #F44336, #D32F2F); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                            <h4 style="color: white;"><i class="fa fa-money"/> Total Cost</h4>
+                                            <h2 style="color: white; font-weight: bold;"><field name="total_cost" widget="monetary"/></h2>
+                                        </div>
+                                        <div class="o_kanban_card_manage_pane" style="background: linear-gradient(135deg, #4CAF50, #388E3C); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                            <h4 style="color: white;"><i class="fa fa-line-chart"/> Total Revenue</h4>
+                                            <h2 style="color: white; font-weight: bold;"><field name="total_revenue" widget="monetary"/></h2>
+                                        </div>
+                                        <div class="o_kanban_card_manage_pane" style="background: linear-gradient(135deg, #FF9800, #F57C00); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                            <h4 style="color: white;"><i class="fa fa-balance-scale"/> Gross Margin</h4>
+                                            <h2 style="color: white; font-weight: bold;"><field name="total_margin" widget="monetary"/></h2>
+                                        </div>
+                                        <div class="o_kanban_card_manage_pane" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                            <h4 style="color: white;"><i class="fa fa-user"/> Avg Cost/Employee</h4>
+                                            <h2 style="color: white; font-weight: bold;"><field name="avg_cost_per_employee" widget="monetary"/></h2>
+                                        </div>
+                                        <div class="o_kanban_card_manage_pane" style="background: linear-gradient(135deg, #00BCD4, #0097A7); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                            <h4 style="color: white;"><i class="fa fa-percent"/> Margin %</h4>
+                                            <h2 style="color: white; font-weight: bold;"><field name="margin_percent"/>%</h2>
+                                        </div>
+                                    </group>
+                                    
+                                    <!-- Cost Breakdown -->
+                                    <h3 class="text-center mt-4 mb-3">
+                                        <i class="fa fa-pie-chart"/> Cost Breakdown
+                                    </h3>
+                                    
+                                    <group col="4" class="mb-4">
+                                        <div style="background: #E3F2FD; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #2196F3; margin: 5px;">
+                                            <h5><i class="fa fa-money text-primary"/> Salary Cost</h5>
+                                            <h3 class="text-primary"><field name="total_salary_cost" widget="monetary"/></h3>
+                                        </div>
+                                        <div style="background: #E8F5E9; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #4CAF50; margin: 5px;">
+                                            <h5><i class="fa fa-heart text-success"/> Benefits Cost</h5>
+                                            <h3 class="text-success"><field name="total_benefits_cost" widget="monetary"/></h3>
+                                        </div>
+                                        <div style="background: #FFF3E0; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #FF9800; margin: 5px;">
+                                            <h5><i class="fa fa-file-text text-warning"/> Compliance Cost</h5>
+                                            <h3 class="text-warning"><field name="total_compliance_cost" widget="monetary"/></h3>
+                                        </div>
+                                        <div style="background: #F3E5F5; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #9C27B0; margin: 5px;">
+                                            <h5><i class="fa fa-building text-purple"/> Overhead Cost</h5>
+                                            <h3 style="color: #9C27B0;"><field name="total_overhead_cost" widget="monetary"/></h3>
+                                        </div>
+                                    </group>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info mt-4" role="alert">
+                                <strong><i class="fa fa-info-circle"/> Tip:</strong> 
+                                Click "Refresh Data" to update the dashboard with the latest cost data. 
+                                Use "Generate Cost Data" to create cost records for all employees in the selected period.
+                            </div>
+                        </page>
+                        
+                        <page string="Detailed Data" name="data">
+                            <group string="Dashboard JSON Data">
+                                <field name="dashboard_data" widget="text" readonly="1" nolabel="1"/>
+                            </group>
+                        </page>
+                        
+                        <page string="Cost Analysis" name="analysis">
+                            <group string="Quick Analysis Links">
+                                <div class="row">
+                                    <div class="col-md-4 mb-2">
+                                        <button name="%(action_cost_by_department)d" string="Cost by Department" type="action" class="btn btn-outline-primary btn-block" icon="fa-building"/>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button name="%(action_cost_by_client)d" string="Cost by Client" type="action" class="btn btn-outline-success btn-block" icon="fa-users"/>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button name="%(action_cost_by_employee)d" string="Cost by Employee" type="action" class="btn btn-outline-info btn-block" icon="fa-user"/>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-6 mb-2">
+                                        <button name="%(action_profitability_analysis)d" string="Profitability Analysis" type="action" class="btn btn-outline-warning btn-block" icon="fa-line-chart"/>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <button name="%(action_cost_trend)d" string="Cost Trend" type="action" class="btn btn-outline-secondary btn-block" icon="fa-area-chart"/>
+                                    </div>
+                                </div>
+                            </group>
+                        </page>
+                        
+                        <page string="Help" name="help">
+                            <group string="Dashboard Guide">
+                                <div class="alert alert-secondary">
+                                    <h4><i class="fa fa-book"/> How to Use This Dashboard</h4>
+                                    <hr/>
+                                    <p><strong>1. Set Period:</strong> Select the date range for analysis using From Date and To Date.</p>
+                                    <p><strong>2. Apply Filters:</strong> Optionally filter by Department, Client, or specific Employees.</p>
+                                    <p><strong>3. Choose View Type:</strong> Select how you want to see the data (Summary, By Employee, By Department, etc.)</p>
+                                    <p><strong>4. Refresh:</strong> Click "Refresh Data" to update the dashboard with current data.</p>
+                                    <p><strong>5. Generate Data:</strong> Use "Generate Cost Data" to create cost records for all employees.</p>
+                                    <p><strong>6. Export:</strong> Export the data to Excel or PDF for reporting.</p>
+                                </div>
+                            </group>
+                            
+                            <group string="View Types Explained">
+                                <div class="alert alert-light">
+                                    <ul>
+                                        <li><strong>Summary:</strong> Overall totals and key metrics</li>
+                                        <li><strong>By Employee:</strong> Individual employee cost breakdown</li>
+                                        <li><strong>By Department:</strong> Costs grouped by department</li>
+                                        <li><strong>By Client:</strong> Costs and margins per client</li>
+                                        <li><strong>By Cost Type:</strong> Breakdown by salary, benefits, compliance, etc.</li>
+                                        <li><strong>Trend Analysis:</strong> Monthly cost trends over time</li>
+                                    </ul>
+                                </div>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -291,12 +418,14 @@
         <field name="name">Cost Center Dashboard</field>
         <field name="res_model">employee.cost.center.dashboard</field>
         <field name="view_mode">form,tree</field>
+        <field name="context">{'default_name': 'Cost Center Analysis'}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first Cost Center Dashboard
             </p>
             <p>
                 Analyze employee costs by department, client, cost type, and more.
+                Track profitability and identify cost optimization opportunities.
             </p>
         </field>
     </record>

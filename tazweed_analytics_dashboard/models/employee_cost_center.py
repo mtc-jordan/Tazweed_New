@@ -268,9 +268,18 @@ class EmployeeCostCenterDashboard(models.Model):
                              default=lambda self: fields.Date.today().replace(day=1) - relativedelta(months=11))
     date_to = fields.Date(string='To Date', default=fields.Date.today)
     
-    department_ids = fields.Many2many('hr.department', string='Departments')
-    client_ids = fields.Many2many('tazweed.client', string='Clients')
-    employee_ids = fields.Many2many('hr.employee', string='Employees')
+    department_ids = fields.Many2many('hr.department', 
+                                        'cost_center_dashboard_department_rel',
+                                        'dashboard_id', 'department_id',
+                                        string='Departments')
+    client_ids = fields.Many2many('tazweed.client', 
+                                   'cost_center_dashboard_client_rel',
+                                   'dashboard_id', 'client_id',
+                                   string='Clients')
+    employee_ids = fields.Many2many('hr.employee', 
+                                     'cost_center_dashboard_employee_rel',
+                                     'dashboard_id', 'employee_id',
+                                     string='Employees')
     
     # View Type
     view_type = fields.Selection([
@@ -285,8 +294,72 @@ class EmployeeCostCenterDashboard(models.Model):
     # Dashboard Data (JSON)
     dashboard_data = fields.Text(string='Dashboard Data', compute='_compute_dashboard_data')
     
+    # Computed KPI Fields for Display
+    total_employees = fields.Integer(string='Total Employees', compute='_compute_kpi_values')
+    total_cost = fields.Float(string='Total Cost', digits=(16, 2), compute='_compute_kpi_values')
+    total_revenue = fields.Float(string='Total Revenue', digits=(16, 2), compute='_compute_kpi_values')
+    total_margin = fields.Float(string='Gross Margin', digits=(16, 2), compute='_compute_kpi_values')
+    avg_cost_per_employee = fields.Float(string='Avg Cost/Employee', digits=(16, 2), compute='_compute_kpi_values')
+    margin_percent = fields.Float(string='Margin %', digits=(5, 2), compute='_compute_kpi_values')
+    total_salary_cost = fields.Float(string='Total Salary Cost', digits=(16, 2), compute='_compute_kpi_values')
+    total_benefits_cost = fields.Float(string='Total Benefits Cost', digits=(16, 2), compute='_compute_kpi_values')
+    total_compliance_cost = fields.Float(string='Total Compliance Cost', digits=(16, 2), compute='_compute_kpi_values')
+    total_overhead_cost = fields.Float(string='Total Overhead Cost', digits=(16, 2), compute='_compute_kpi_values')
+    
     company_id = fields.Many2one('res.company', string='Company', 
                                   default=lambda self: self.env.company)
+    
+    @api.depends('date_from', 'date_to', 'department_ids', 'client_ids', 'employee_ids')
+    def _compute_kpi_values(self):
+        """Compute KPI values for dashboard display."""
+        for record in self:
+            # Set default values first
+            record.total_employees = 0
+            record.total_cost = 0
+            record.total_revenue = 0
+            record.total_margin = 0
+            record.avg_cost_per_employee = 0
+            record.margin_percent = 0
+            record.total_salary_cost = 0
+            record.total_benefits_cost = 0
+            record.total_compliance_cost = 0
+            record.total_overhead_cost = 0
+            
+            # Skip if no dates set
+            if not record.date_from or not record.date_to:
+                continue
+            
+            try:
+                domain = [
+                    ('date', '>=', record.date_from),
+                    ('date', '<=', record.date_to),
+                ]
+                
+                # Safely check Many2many fields
+                if record.id and record.department_ids:
+                    domain.append(('department_id', 'in', record.department_ids.ids))
+                if record.id and record.client_ids:
+                    domain.append(('client_id', 'in', record.client_ids.ids))
+                if record.id and record.employee_ids:
+                    domain.append(('employee_id', 'in', record.employee_ids.ids))
+                
+                CostCenter = self.env['employee.cost.center'].sudo()
+                cost_records = CostCenter.search(domain)
+                
+                if cost_records:
+                    record.total_employees = len(set(cost_records.mapped('employee_id.id')))
+                    record.total_cost = sum(cost_records.mapped('total_cost'))
+                    record.total_revenue = sum(cost_records.mapped('revenue'))
+                    record.total_margin = record.total_revenue - record.total_cost
+                    record.avg_cost_per_employee = record.total_cost / record.total_employees if record.total_employees else 0
+                    record.margin_percent = (record.total_margin / record.total_revenue * 100) if record.total_revenue else 0
+                    record.total_salary_cost = sum(cost_records.mapped('total_salary_cost'))
+                    record.total_benefits_cost = sum(cost_records.mapped('total_benefits_cost'))
+                    record.total_compliance_cost = sum(cost_records.mapped('total_compliance_cost'))
+                    record.total_overhead_cost = sum(cost_records.mapped('total_overhead_cost'))
+            except Exception:
+                # Keep default values on error
+                pass
     
     def _compute_dashboard_data(self):
         for record in self:
@@ -294,19 +367,44 @@ class EmployeeCostCenterDashboard(models.Model):
     
     def get_dashboard_data(self):
         """Get comprehensive dashboard data."""
+        self.ensure_one()
+        
+        # Return empty data if no dates
+        if not self.date_from or not self.date_to:
+            return {
+                'summary': self._get_summary_data(self.env['employee.cost.center']),
+                'by_employee': [],
+                'by_department': [],
+                'by_client': [],
+                'by_cost_type': {},
+                'trend': [],
+                'charts': {},
+                'kpis': [],
+            }
+        
         domain = [
             ('date', '>=', self.date_from),
             ('date', '<=', self.date_to),
         ]
         
-        if self.department_ids:
-            domain.append(('department_id', 'in', self.department_ids.ids))
-        if self.client_ids:
-            domain.append(('client_id', 'in', self.client_ids.ids))
-        if self.employee_ids:
-            domain.append(('employee_id', 'in', self.employee_ids.ids))
+        # Safely access Many2many fields
+        try:
+            if self.id and self.department_ids:
+                domain.append(('department_id', 'in', self.department_ids.ids))
+        except Exception:
+            pass
+        try:
+            if self.id and self.client_ids:
+                domain.append(('client_id', 'in', self.client_ids.ids))
+        except Exception:
+            pass
+        try:
+            if self.id and self.employee_ids:
+                domain.append(('employee_id', 'in', self.employee_ids.ids))
+        except Exception:
+            pass
         
-        CostCenter = self.env['employee.cost.center']
+        CostCenter = self.env['employee.cost.center'].sudo()
         records = CostCenter.search(domain)
         
         return {
