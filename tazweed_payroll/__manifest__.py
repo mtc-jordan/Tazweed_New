@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Payroll',
-    'version': '16.0.2.0.0',
+    'version': '16.0.2.0.1',
     'category': 'Human Resources/Payroll',
     'summary': 'Enterprise Payroll Management for UAE with WPS Integration',
     'description': """
@@ -63,6 +63,7 @@ Website: https://tazweedjobs.ae
         'views/hr_payslip_run_views.xml',
         'views/payroll_loan_views.xml',
         'views/gratuity_views.xml',
+        'views/wps_file_views.xml',
         'views/dashboard_views.xml',
         'views/menu.xml',
         # Wizards

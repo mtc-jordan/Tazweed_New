@@ -55,12 +55,23 @@
               action="action_gratuity"
               sequence="10"/>
 
+    <!-- WPS Integration - Link to WPS Module -->
+    <menuitem id="menu_wps_integration"
+              name="WPS Integration"
+              parent="menu_tazweed_payroll_root"
+              sequence="50"/>
+
+    <menuitem id="menu_wps_files_payroll"
+              name="WPS Files"
+              parent="menu_wps_integration"
+              action="tazweed_wps.action_wps_file"
+              sequence="10"/>
+
     <!-- Configuration -->
     <menuitem id="menu_payroll_config"
               name="Configuration"
               parent="menu_tazweed_payroll_root"
-              sequence="100"
-              groups="tazweed_payroll.group_payroll_manager"/>
+              sequence="100"/>
 
     <menuitem id="menu_salary_structures"
               name="Salary Structures"
@@ -91,5 +102,6 @@
     <menuitem id="menu_payroll_analysis"
               name="Payroll Analysis"
               parent="menu_payroll_reports"
+              action="action_hr_payslip"
               sequence="10"/>
 </odoo>
