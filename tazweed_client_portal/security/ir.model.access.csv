@@ -15,3 +15,13 @@ access_portal_document_access_portal,client.portal.document.access.portal,model_
 access_portal_message_portal,client.portal.message.portal,model_client_portal_message,base.group_portal,1,1,1,0
 access_portal_message_thread_portal,client.portal.message.thread.portal,model_client_portal_message_thread,base.group_portal,1,0,0,0
 access_portal_notification_portal,client.portal.notification.portal,model_client_portal_notification,base.group_portal,1,1,0,0
+access_client_request_type_user,client.request.type.user,model_client_request_type,base.group_user,1,1,1,1
+access_client_request_type_portal,client.request.type.portal,model_client_request_type,base.group_portal,1,0,0,0
+access_client_request_user,client.request.user,model_client_request,base.group_user,1,1,1,1
+access_client_request_portal,client.request.portal,model_client_request,base.group_portal,1,1,1,0
+access_client_invoice_request_user,client.invoice.request.user,model_client_invoice_request,base.group_user,1,1,1,1
+access_client_invoice_request_portal,client.invoice.request.portal,model_client_invoice_request,base.group_portal,1,1,1,0
+access_client_worker_request_user,client.worker.request.user,model_client_worker_request,base.group_user,1,1,1,1
+access_client_worker_request_portal,client.worker.request.portal,model_client_worker_request,base.group_portal,1,1,1,0
+access_client_portal_dashboard_user,client.portal.dashboard.user,model_client_portal_dashboard,base.group_user,1,1,1,1
+access_client_request_reject_wizard_user,client.request.reject.wizard.user,model_client_request_reject_wizard,base.group_user,1,1,1,1

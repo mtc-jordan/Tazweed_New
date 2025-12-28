@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Email Template: Request Submitted -->
+        <record id="email_template_client_request_submitted" model="mail.template">
+            <field name="name">Client Request: Submitted Confirmation</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">Request ${object.reference} - Submitted Successfully</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="email_to">${object.portal_user_id.email or ''}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #875A7B; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Request Submitted</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>Dear <t t-out="object.portal_user_id.name or 'Valued Client'"/>,</p>
+                
+                <p>Your request has been submitted successfully and is now being processed.</p>
+                
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5; width: 40%;"><strong>Reference:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.reference"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Request Type:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.request_type_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Subject:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.subject"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Expected Completion:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.expected_date"/></td>
+                    </tr>
+                </table>
+                
+                <p>You can track the status of your request through the client portal.</p>
+                
+                <p style="margin-top: 30px;">
+                    Best regards,<br/>
+                    <strong>Tazweed Client Services Team</strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: #333; color: #fff; padding: 15px; text-align: center; font-size: 12px;">
+                <p style="margin: 0;">This is an automated message. Please do not reply directly to this email.</p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+        <!-- Email Template: Request Under Review -->
+        <record id="email_template_client_request_under_review" model="mail.template">
+            <field name="name">Client Request: Under Review</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">Request ${object.reference} - Under Review</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="email_to">${object.portal_user_id.email or ''}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #17a2b8; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Request Under Review</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>Dear <t t-out="object.portal_user_id.name or 'Valued Client'"/>,</p>
+                
+                <p>Your request <strong><t t-out="object.reference"/></strong> is now under review by our team.</p>
+                
+                <t t-if="object.assigned_to">
+                    <p>Your request has been assigned to <strong><t t-out="object.assigned_to.name"/></strong> who will be handling your request.</p>
+                </t>
+                
+                <p>We will update you once the review is complete.</p>
+                
+                <p style="margin-top: 30px;">
+                    Best regards,<br/>
+                    <strong>Tazweed Client Services Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+        <!-- Email Template: Information Requested -->
+        <record id="email_template_client_request_info_needed" model="mail.template">
+            <field name="name">Client Request: Additional Information Needed</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">Request ${object.reference} - Additional Information Required</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="email_to">${object.portal_user_id.email or ''}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #ffc107; padding: 20px; text-align: center;">
+                <h1 style="color: #333; margin: 0;">Information Required</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>Dear <t t-out="object.portal_user_id.name or 'Valued Client'"/>,</p>
+                
+                <p>We need additional information to process your request <strong><t t-out="object.reference"/></strong>.</p>
+                
+                <p>Please log in to the client portal to provide the required information.</p>
+                
+                <p style="margin-top: 30px;">
+                    Best regards,<br/>
+                    <strong>Tazweed Client Services Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+        <!-- Email Template: Request Approved -->
+        <record id="email_template_client_request_approved" model="mail.template">
+            <field name="name">Client Request: Approved</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">Request ${object.reference} - Approved</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="email_to">${object.portal_user_id.email or ''}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #28a745; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Request Approved</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>Dear <t t-out="object.portal_user_id.name or 'Valued Client'"/>,</p>
+                
+                <p>Great news! Your request <strong><t t-out="object.reference"/></strong> has been approved and is now being processed.</p>
+                
+                <p>We will notify you once the request is completed.</p>
+                
+                <p style="margin-top: 30px;">
+                    Best regards,<br/>
+                    <strong>Tazweed Client Services Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+        <!-- Email Template: Request Completed -->
+        <record id="email_template_client_request_completed" model="mail.template">
+            <field name="name">Client Request: Completed</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">Request ${object.reference} - Completed</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="email_to">${object.portal_user_id.email or ''}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #28a745; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Request Completed</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>Dear <t t-out="object.portal_user_id.name or 'Valued Client'"/>,</p>
+                
+                <p>Your request <strong><t t-out="object.reference"/></strong> has been completed.</p>
+                
+                <t t-if="object.response">
+                    <div style="background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                        <strong>Response:</strong><br/>
+                        <t t-out="object.response"/>
+                    </div>
+                </t>
+                
+                <t t-if="object.response_attachment_ids">
+                    <p>Please log in to the client portal to download any attached documents.</p>
+                </t>
+                
+                <p>We would appreciate your feedback on our service. Please rate your experience through the client portal.</p>
+                
+                <p style="margin-top: 30px;">
+                    Best regards,<br/>
+                    <strong>Tazweed Client Services Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+        <!-- Email Template: Request Rejected -->
+        <record id="email_template_client_request_rejected" model="mail.template">
+            <field name="name">Client Request: Rejected</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">Request ${object.reference} - Unable to Process</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="email_to">${object.portal_user_id.email or ''}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #dc3545; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Request Unable to Process</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>Dear <t t-out="object.portal_user_id.name or 'Valued Client'"/>,</p>
+                
+                <p>We regret to inform you that we are unable to process your request <strong><t t-out="object.reference"/></strong>.</p>
+                
+                <t t-if="object.response">
+                    <div style="background-color: #f8d7da; padding: 15px; border-radius: 5px; margin: 20px 0; border: 1px solid #f5c6cb;">
+                        <strong>Reason:</strong><br/>
+                        <t t-out="object.response"/>
+                    </div>
+                </t>
+                
+                <p>If you have any questions or would like to discuss this further, please contact your account manager.</p>
+                
+                <p style="margin-top: 30px;">
+                    Best regards,<br/>
+                    <strong>Tazweed Client Services Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+        <!-- Email Template: Internal - New Request Notification -->
+        <record id="email_template_client_request_internal_new" model="mail.template">
+            <field name="name">Client Request: Internal - New Request</field>
+            <field name="model_id" ref="model_client_request"/>
+            <field name="subject">[Action Required] New Client Request: ${object.reference}</field>
+            <field name="email_from">${(object.company_id.email or user.email_formatted) | safe}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #007bff; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">New Client Request</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; background-color: #f9f9f9;">
+                <p>A new client request has been submitted and requires attention.</p>
+                
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5; width: 40%;"><strong>Reference:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.reference"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Client:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.client_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Request Type:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.request_type_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Priority:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.priority"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Subject:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.subject"/></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>SLA Due:</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><t t-out="object.expected_date"/></td>
+                    </tr>
+                </table>
+                
+                <p>Please review and process this request promptly.</p>
+            </td>
+        </tr>
+    </table>
+</div>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

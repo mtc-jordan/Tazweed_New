@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Client Request Sequence -->
+        <record id="seq_client_request" model="ir.sequence">
+            <field name="name">Client Request</field>
+            <field name="code">client.request</field>
+            <field name="prefix">CR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+        <!-- Client Invoice Request Sequence -->
+        <record id="seq_client_invoice_request" model="ir.sequence">
+            <field name="name">Client Invoice Request</field>
+            <field name="code">client.invoice.request</field>
+            <field name="prefix">CIR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+        <!-- Client Worker Request Sequence -->
+        <record id="seq_client_worker_request" model="ir.sequence">
+            <field name="name">Client Worker Request</field>
+            <field name="code">client.worker.request</field>
+            <field name="prefix">CWR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+    </data>
+</odoo>

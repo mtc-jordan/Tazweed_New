@@ -6,7 +6,49 @@
               web_icon="tazweed_client_portal,static/description/icon.png"
               sequence="100"/>
 
-    <!-- Portal Users Menu -->
+    <!-- ============================================== -->
+    <!-- CLIENT REQUESTS MENU -->
+    <!-- ============================================== -->
+    
+    <menuitem id="menu_client_requests"
+              name="Client Requests"
+              parent="menu_client_portal_root"
+              sequence="5"/>
+    
+    <menuitem id="menu_client_request_all"
+              name="All Requests"
+              parent="menu_client_requests"
+              action="action_client_request_all"
+              sequence="10"/>
+    
+    <menuitem id="menu_client_request_my"
+              name="My Assigned"
+              parent="menu_client_requests"
+              action="action_client_request_my"
+              sequence="20"/>
+    
+    <menuitem id="menu_client_request_overdue"
+              name="Overdue"
+              parent="menu_client_requests"
+              action="action_client_request_overdue"
+              sequence="30"/>
+    
+    <menuitem id="menu_client_invoice_request"
+              name="Invoice Requests"
+              parent="menu_client_requests"
+              action="action_client_invoice_request"
+              sequence="40"/>
+    
+    <menuitem id="menu_client_worker_request"
+              name="Worker Requests"
+              parent="menu_client_requests"
+              action="action_client_worker_request"
+              sequence="50"/>
+
+    <!-- ============================================== -->
+    <!-- PORTAL USERS MENU -->
+    <!-- ============================================== -->
+    
     <record id="action_client_portal_users" model="ir.actions.act_window">
         <field name="name">Portal Users</field>
         <field name="res_model">client.portal.user</field>
@@ -19,7 +61,10 @@
               action="action_client_portal_users"
               sequence="10"/>
 
-    <!-- Portal Documents Menu -->
+    <!-- ============================================== -->
+    <!-- PORTAL DOCUMENTS MENU -->
+    <!-- ============================================== -->
+    
     <record id="action_client_portal_documents" model="ir.actions.act_window">
         <field name="name">Shared Documents</field>
         <field name="res_model">client.portal.document</field>
@@ -32,7 +77,10 @@
               action="action_client_portal_documents"
               sequence="20"/>
 
-    <!-- Portal Messages Menu -->
+    <!-- ============================================== -->
+    <!-- PORTAL MESSAGES MENU -->
+    <!-- ============================================== -->
+    
     <record id="action_client_portal_messages" model="ir.actions.act_window">
         <field name="name">Portal Messages</field>
         <field name="res_model">client.portal.message</field>
@@ -45,7 +93,10 @@
               action="action_client_portal_messages"
               sequence="30"/>
 
-    <!-- Portal Notifications Menu -->
+    <!-- ============================================== -->
+    <!-- PORTAL NOTIFICATIONS MENU -->
+    <!-- ============================================== -->
+    
     <record id="action_client_portal_notifications" model="ir.actions.act_window">
         <field name="name">Notifications</field>
         <field name="res_model">client.portal.notification</field>
@@ -58,7 +109,21 @@
               action="action_client_portal_notifications"
               sequence="40"/>
 
-    <!-- Portal Settings Menu -->
+    <!-- ============================================== -->
+    <!-- CONFIGURATION MENU -->
+    <!-- ============================================== -->
+    
+    <menuitem id="menu_client_portal_config"
+              name="Configuration"
+              parent="menu_client_portal_root"
+              sequence="90"/>
+    
+    <menuitem id="menu_client_request_types"
+              name="Request Types"
+              parent="menu_client_portal_config"
+              action="action_client_request_type"
+              sequence="10"/>
+
     <record id="action_client_portal_settings" model="ir.actions.act_window">
         <field name="name">Portal Settings</field>
         <field name="res_model">client.portal.settings</field>
@@ -66,8 +131,8 @@
     </record>
 
     <menuitem id="menu_portal_settings"
-              name="Settings"
-              parent="menu_client_portal_root"
+              name="Portal Settings"
+              parent="menu_client_portal_config"
               action="action_client_portal_settings"
-              sequence="100"/>
+              sequence="20"/>
 </odoo>

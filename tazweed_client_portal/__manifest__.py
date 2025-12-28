@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Client Portal',
-    'version': '16.0.1.0.0',
+    'version': '16.0.2.0.0',
     'category': 'Human Resources/Staffing',
-    'summary': 'Self-service client portal for staffing agency clients',
+    'summary': 'Self-service client portal for staffing agency clients with request management',
     'description': """
 Tazweed Client Portal
 =====================
@@ -21,6 +21,18 @@ Key Features:
 * Real-time messaging and notifications
 * Mobile-responsive design
 * White-label branding support
+
+NEW - Client Request System:
+----------------------------
+* 35+ pre-configured request types
+* Invoice requests (copies, corrections, credit notes, payment plans)
+* Worker requests (additional, replacement, termination, issues)
+* Document requests (contracts, compliance, worker documents)
+* Service requests (site visits, rate negotiation, training)
+* Support requests (inquiries, complaints, emergencies)
+* SLA tracking and escalation management
+* Email notifications for all request stages
+* Client satisfaction rating and feedback
 
 Best Practices Implemented:
 ---------------------------
@@ -44,7 +56,11 @@ Best Practices Implemented:
         'security/ir.model.access.csv',
         'data/portal_data.xml',
         'data/email_templates.xml',
+        'data/client_request_sequence.xml',
+        'data/client_request_type_data.xml',
+        'data/client_request_email_templates.xml',
         'views/client_portal_views.xml',
+        'views/client_request_views.xml',
         'views/portal_templates.xml',
         'views/portal_dashboard.xml',
         'views/portal_job_order.xml',

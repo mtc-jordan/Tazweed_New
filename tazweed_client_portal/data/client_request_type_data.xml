@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- ============================================== -->
+        <!-- INVOICE & BILLING REQUEST TYPES -->
+        <!-- ============================================== -->
+        
+        <record id="request_type_invoice_copy" model="client.request.type">
+            <field name="name">Invoice Copy Request</field>
+            <field name="code">INV_COPY</field>
+            <field name="category">invoice</field>
+            <field name="description">Request a copy of a specific invoice or multiple invoices</field>
+            <field name="sequence">10</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+            <field name="requires_invoice_selection">True</field>
+        </record>
+        
+        <record id="request_type_invoice_correction" model="client.request.type">
+            <field name="name">Invoice Correction</field>
+            <field name="code">INV_CORRECT</field>
+            <field name="category">invoice</field>
+            <field name="description">Request correction to an invoice (wrong amount, details, etc.)</field>
+            <field name="sequence">20</field>
+            <field name="approval_type">finance</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+            <field name="requires_invoice_selection">True</field>
+        </record>
+        
+        <record id="request_type_credit_note" model="client.request.type">
+            <field name="name">Credit Note Request</field>
+            <field name="code">CREDIT_NOTE</field>
+            <field name="category">invoice</field>
+            <field name="description">Request a credit note for returned services or adjustments</field>
+            <field name="sequence">30</field>
+            <field name="approval_type">both</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_finance">True</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_invoice_selection">True</field>
+            <field name="requires_amount">True</field>
+        </record>
+        
+        <record id="request_type_payment_extension" model="client.request.type">
+            <field name="name">Payment Extension Request</field>
+            <field name="code">PAY_EXTEND</field>
+            <field name="category">invoice</field>
+            <field name="description">Request extension of payment due date</field>
+            <field name="sequence">40</field>
+            <field name="approval_type">both</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_invoice_selection">True</field>
+            <field name="requires_date_range">True</field>
+        </record>
+        
+        <record id="request_type_payment_plan" model="client.request.type">
+            <field name="name">Payment Plan Request</field>
+            <field name="code">PAY_PLAN</field>
+            <field name="category">invoice</field>
+            <field name="description">Request installment payment plan for outstanding invoices</field>
+            <field name="sequence">50</field>
+            <field name="approval_type">both</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_finance">True</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_amount">True</field>
+        </record>
+        
+        <record id="request_type_account_statement" model="client.request.type">
+            <field name="name">Account Statement</field>
+            <field name="code">ACC_STMT</field>
+            <field name="category">invoice</field>
+            <field name="description">Request account statement for a specific period</field>
+            <field name="sequence">60</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+            <field name="requires_date_range">True</field>
+        </record>
+        
+        <record id="request_type_payment_receipt" model="client.request.type">
+            <field name="name">Payment Receipt</field>
+            <field name="code">PAY_RECEIPT</field>
+            <field name="category">invoice</field>
+            <field name="description">Request payment receipt or confirmation</field>
+            <field name="sequence">70</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+        </record>
+        
+        <record id="request_type_tax_certificate" model="client.request.type">
+            <field name="name">Tax Certificate / VAT Certificate</field>
+            <field name="code">TAX_CERT</field>
+            <field name="category">invoice</field>
+            <field name="description">Request tax certificate or VAT registration certificate</field>
+            <field name="sequence">80</field>
+            <field name="approval_type">finance</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- WORKER MANAGEMENT REQUEST TYPES -->
+        <!-- ============================================== -->
+        
+        <record id="request_type_additional_workers" model="client.request.type">
+            <field name="name">Request Additional Workers</field>
+            <field name="code">WORKER_ADD</field>
+            <field name="category">worker</field>
+            <field name="description">Request additional workers for your site or project</field>
+            <field name="sequence">10</field>
+            <field name="approval_type">account_manager</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_operations">True</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_worker_replacement" model="client.request.type">
+            <field name="name">Worker Replacement</field>
+            <field name="code">WORKER_REPLACE</field>
+            <field name="category">worker</field>
+            <field name="description">Request replacement for an existing worker</field>
+            <field name="sequence">20</field>
+            <field name="approval_type">operations</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <record id="request_type_contract_extension" model="client.request.type">
+            <field name="name">Contract Extension</field>
+            <field name="code">CONTRACT_EXT</field>
+            <field name="category">worker</field>
+            <field name="description">Request extension of worker contract</field>
+            <field name="sequence">30</field>
+            <field name="approval_type">account_manager</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_worker_selection">True</field>
+            <field name="requires_date_range">True</field>
+        </record>
+        
+        <record id="request_type_worker_termination" model="client.request.type">
+            <field name="name">Worker Termination Request</field>
+            <field name="code">WORKER_TERM</field>
+            <field name="category">worker</field>
+            <field name="description">Request termination of worker assignment</field>
+            <field name="sequence">40</field>
+            <field name="approval_type">both</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <record id="request_type_worker_transfer" model="client.request.type">
+            <field name="name">Worker Transfer Request</field>
+            <field name="code">WORKER_TRANS</field>
+            <field name="category">worker</field>
+            <field name="description">Request transfer of worker to different site or department</field>
+            <field name="sequence">50</field>
+            <field name="approval_type">operations</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <record id="request_type_performance_issue" model="client.request.type">
+            <field name="name">Report Performance Issue</field>
+            <field name="code">PERF_ISSUE</field>
+            <field name="category">worker</field>
+            <field name="description">Report performance issues with assigned workers</field>
+            <field name="sequence">60</field>
+            <field name="approval_type">operations</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <record id="request_type_attendance_issue" model="client.request.type">
+            <field name="name">Report Attendance Issue</field>
+            <field name="code">ATTEND_ISSUE</field>
+            <field name="category">worker</field>
+            <field name="description">Report attendance issues (absence, late arrival, early departure)</field>
+            <field name="sequence">70</field>
+            <field name="approval_type">operations</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+            <field name="requires_date_range">True</field>
+        </record>
+        
+        <record id="request_type_conduct_issue" model="client.request.type">
+            <field name="name">Report Conduct Issue</field>
+            <field name="code">CONDUCT_ISSUE</field>
+            <field name="category">worker</field>
+            <field name="description">Report conduct or behavioral issues with workers</field>
+            <field name="sequence">80</field>
+            <field name="approval_type">manager</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <record id="request_type_worker_appreciation" model="client.request.type">
+            <field name="name">Worker Appreciation</field>
+            <field name="code">WORKER_APPR</field>
+            <field name="category">worker</field>
+            <field name="description">Submit appreciation or commendation for workers</field>
+            <field name="sequence">90</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- DOCUMENT REQUEST TYPES -->
+        <!-- ============================================== -->
+        
+        <record id="request_type_contract_copy" model="client.request.type">
+            <field name="name">Contract Copy</field>
+            <field name="code">DOC_CONTRACT</field>
+            <field name="category">document</field>
+            <field name="description">Request copy of service contract or agreement</field>
+            <field name="sequence">10</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_compliance_cert" model="client.request.type">
+            <field name="name">Compliance Certificate</field>
+            <field name="code">DOC_COMPLIANCE</field>
+            <field name="category">document</field>
+            <field name="description">Request compliance or regulatory certificates</field>
+            <field name="sequence">20</field>
+            <field name="approval_type">account_manager</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_worker_documents" model="client.request.type">
+            <field name="name">Worker Documents</field>
+            <field name="code">DOC_WORKER</field>
+            <field name="category">document</field>
+            <field name="description">Request documents for assigned workers (visa, labor card, etc.)</field>
+            <field name="sequence">30</field>
+            <field name="approval_type">operations</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <record id="request_type_insurance_cert" model="client.request.type">
+            <field name="name">Insurance Certificate</field>
+            <field name="code">DOC_INSURANCE</field>
+            <field name="category">document</field>
+            <field name="description">Request insurance certificate or policy documents</field>
+            <field name="sequence">40</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_trade_license" model="client.request.type">
+            <field name="name">Trade License Copy</field>
+            <field name="code">DOC_LICENSE</field>
+            <field name="category">document</field>
+            <field name="description">Request copy of trade license</field>
+            <field name="sequence">50</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_wps_report" model="client.request.type">
+            <field name="name">WPS Report</field>
+            <field name="code">DOC_WPS</field>
+            <field name="category">document</field>
+            <field name="description">Request WPS (Wage Protection System) report</field>
+            <field name="sequence">60</field>
+            <field name="approval_type">finance</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_finance">True</field>
+            <field name="requires_date_range">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- SERVICE REQUEST TYPES -->
+        <!-- ============================================== -->
+        
+        <record id="request_type_site_visit" model="client.request.type">
+            <field name="name">Request Site Visit</field>
+            <field name="code">SVC_VISIT</field>
+            <field name="category">service</field>
+            <field name="description">Request a site visit from account manager or operations team</field>
+            <field name="sequence">10</field>
+            <field name="approval_type">account_manager</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+            <field name="requires_date_range">True</field>
+        </record>
+        
+        <record id="request_type_account_review" model="client.request.type">
+            <field name="name">Account Review Meeting</field>
+            <field name="code">SVC_REVIEW</field>
+            <field name="category">service</field>
+            <field name="description">Request account review meeting with management</field>
+            <field name="sequence">20</field>
+            <field name="approval_type">account_manager</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_rate_negotiation" model="client.request.type">
+            <field name="name">Rate Negotiation</field>
+            <field name="code">SVC_RATE</field>
+            <field name="category">service</field>
+            <field name="description">Request rate review or negotiation</field>
+            <field name="sequence">30</field>
+            <field name="approval_type">both</field>
+            <field name="sla_days">7</field>
+            <field name="priority_sla_days">3</field>
+            <field name="notify_account_manager">True</field>
+            <field name="notify_finance">True</field>
+        </record>
+        
+        <record id="request_type_service_expansion" model="client.request.type">
+            <field name="name">Service Expansion</field>
+            <field name="code">SVC_EXPAND</field>
+            <field name="category">service</field>
+            <field name="description">Request expansion of services or new service categories</field>
+            <field name="sequence">40</field>
+            <field name="approval_type">account_manager</field>
+            <field name="sla_days">7</field>
+            <field name="priority_sla_days">3</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_training" model="client.request.type">
+            <field name="name">Training Request</field>
+            <field name="code">SVC_TRAINING</field>
+            <field name="category">service</field>
+            <field name="description">Request training for assigned workers</field>
+            <field name="sequence">50</field>
+            <field name="approval_type">operations</field>
+            <field name="sla_days">7</field>
+            <field name="priority_sla_days">3</field>
+            <field name="notify_operations">True</field>
+            <field name="requires_worker_selection">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- SUPPORT REQUEST TYPES -->
+        <!-- ============================================== -->
+        
+        <record id="request_type_general_inquiry" model="client.request.type">
+            <field name="name">General Inquiry</field>
+            <field name="code">SUP_INQUIRY</field>
+            <field name="category">support</field>
+            <field name="description">General questions or inquiries</field>
+            <field name="sequence">10</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_portal_support" model="client.request.type">
+            <field name="name">Portal Technical Support</field>
+            <field name="code">SUP_PORTAL</field>
+            <field name="category">support</field>
+            <field name="description">Technical issues with the client portal</field>
+            <field name="sequence">20</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_complaint" model="client.request.type">
+            <field name="name">Complaint</field>
+            <field name="code">SUP_COMPLAINT</field>
+            <field name="category">support</field>
+            <field name="description">Submit a complaint or escalation</field>
+            <field name="sequence">30</field>
+            <field name="approval_type">manager</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_emergency" model="client.request.type">
+            <field name="name">Emergency Request</field>
+            <field name="code">SUP_EMERGENCY</field>
+            <field name="category">support</field>
+            <field name="description">Urgent or emergency situations requiring immediate attention</field>
+            <field name="sequence">40</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+            <field name="notify_operations">True</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- FEEDBACK REQUEST TYPES -->
+        <!-- ============================================== -->
+        
+        <record id="request_type_feedback" model="client.request.type">
+            <field name="name">General Feedback</field>
+            <field name="code">FB_GENERAL</field>
+            <field name="category">feedback</field>
+            <field name="description">Share general feedback about our services</field>
+            <field name="sequence">10</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_suggestion" model="client.request.type">
+            <field name="name">Suggestion</field>
+            <field name="code">FB_SUGGEST</field>
+            <field name="category">feedback</field>
+            <field name="description">Submit suggestions for service improvement</field>
+            <field name="sequence">20</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">2</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+        <record id="request_type_testimonial" model="client.request.type">
+            <field name="name">Testimonial / Review</field>
+            <field name="code">FB_TESTIMONIAL</field>
+            <field name="category">feedback</field>
+            <field name="description">Submit a testimonial or review</field>
+            <field name="sequence">30</field>
+            <field name="approval_type">none</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="notify_account_manager">True</field>
+        </record>
+        
+    </data>
+</odoo>
