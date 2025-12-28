@@ -120,14 +120,17 @@ class UnifiedDocument(models.Model):
     def _compute_display_name(self):
         for record in self:
             parts = []
-            if record.employee_id:
-                parts.append(record.employee_id.name)
-            elif record.candidate_id:
-                parts.append(record.candidate_id.name)
-            if record.document_type_id:
-                parts.append(record.document_type_id.name)
-            elif record.name:
-                parts.append(record.name)
+            try:
+                if record.employee_id and record.employee_id.exists():
+                    parts.append(record.employee_id.name or 'Unknown Employee')
+                elif record.candidate_id and record.candidate_id.exists():
+                    parts.append(record.candidate_id.name or 'Unknown Candidate')
+                if record.document_type_id and record.document_type_id.exists():
+                    parts.append(record.document_type_id.name or 'Unknown Type')
+                elif record.name:
+                    parts.append(record.name)
+            except Exception:
+                parts = [record.name or 'Document']
             record.display_name = ' - '.join(parts) if parts else 'New Document'
 
     @api.depends('expiry_date')
