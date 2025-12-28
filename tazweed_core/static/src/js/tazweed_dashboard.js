@@ -20,34 +20,23 @@ export class TazweedDashboard extends Component {
         this.trendChartRef = useRef("trendChart");
         
         this.state = useState({
-            // Main KPIs
             totalEmployees: 0,
             uaeNationals: 0,
             uaeNationalPercent: 0,
             documentsAttention: 0,
             availableForPlacement: 0,
-            
-            // Secondary stats
             activeContracts: 0,
             expiringContracts: 0,
             activeSponsors: 0,
             totalDocuments: 0,
             placedEmployees: 0,
-            
-            // Alerts
             alerts: [],
-            
-            // Documents requiring attention
             expiringDocuments: [],
-            
-            // Chart data
             visaStatusData: {},
             categoryData: {},
             departmentData: {},
             placementData: {},
             documentStatusData: {},
-            
-            // Loading state
             isLoading: true,
         });
 
@@ -62,7 +51,6 @@ export class TazweedDashboard extends Component {
 
     async loadDashboardData() {
         try {
-            // Load employee data - use only fields that exist
             const employees = await this.orm.searchRead(
                 "hr.employee",
                 [["active", "=", true]],
@@ -70,21 +58,18 @@ export class TazweedDashboard extends Component {
                  "is_available", "department_id", "employee_category_ids"]
             );
 
-            // Load contracts
             const contracts = await this.orm.searchRead(
                 "hr.contract",
                 [["state", "=", "open"]],
                 ["id", "date_end"]
             );
 
-            // Load sponsors
             const sponsors = await this.orm.searchRead(
                 "tazweed.employee.sponsor",
                 [["state", "=", "active"]],
                 ["id", "name", "employee_count", "visa_quota", "available_quota"]
             );
 
-            // Load documents
             const documents = await this.orm.searchRead(
                 "tazweed.employee.document",
                 [["active", "=", true]],
@@ -92,7 +77,6 @@ export class TazweedDashboard extends Component {
                  "days_to_expiry", "state"]
             );
 
-            // Load categories
             const categories = await this.orm.searchRead(
                 "tazweed.employee.category",
                 [],
@@ -105,7 +89,6 @@ export class TazweedDashboard extends Component {
             this.state.uaeNationalPercent = this.state.totalEmployees > 0 
                 ? Math.round((this.state.uaeNationals / this.state.totalEmployees) * 100) 
                 : 0;
-            // Use is_available field (correct field name)
             this.state.availableForPlacement = employees.filter(e => e.is_available).length;
             this.state.placedEmployees = employees.filter(e => e.placement_status === 'placed').length;
 
@@ -137,7 +120,7 @@ export class TazweedDashboard extends Component {
             // Generate alerts
             this.generateAlerts();
 
-            // Prepare chart data - use employee_category_ids (correct field name)
+            // Prepare chart data
             this.prepareChartData(employees, documents, categories);
 
             this.state.isLoading = false;
@@ -156,7 +139,7 @@ export class TazweedDashboard extends Component {
                 icon: 'fa-file-contract',
                 title: 'Contracts Expiring',
                 message: `${this.state.expiringContracts} contract(s) expiring within 30 days`,
-                action: 'view_contracts'
+                action: 'contracts'
             });
         }
 
@@ -166,7 +149,7 @@ export class TazweedDashboard extends Component {
                 icon: 'fa-exclamation-triangle',
                 title: 'Documents Need Attention',
                 message: `${this.state.documentsAttention} document(s) expired or expiring soon`,
-                action: 'view_documents'
+                action: 'documents'
             });
         }
 
@@ -176,7 +159,7 @@ export class TazweedDashboard extends Component {
                 icon: 'fa-flag',
                 title: 'Emiratization Rate',
                 message: `Current rate is ${this.state.uaeNationalPercent}%. Consider hiring more UAE nationals.`,
-                action: 'view_employees'
+                action: 'employees'
             });
         }
 
@@ -190,13 +173,12 @@ export class TazweedDashboard extends Component {
             if (e.visa_status && visaStatuses.hasOwnProperty(e.visa_status)) {
                 visaStatuses[e.visa_status]++;
             } else {
-                // Count employees without visa status as valid
                 visaStatuses.valid++;
             }
         });
         this.state.visaStatusData = visaStatuses;
 
-        // Category distribution - use employee_category_ids (correct field name)
+        // Category distribution
         const categoryCount = {};
         categories.forEach(cat => {
             categoryCount[cat.name] = 0;
@@ -227,7 +209,6 @@ export class TazweedDashboard extends Component {
             if (e.placement_status && placementStatuses.hasOwnProperty(e.placement_status)) {
                 placementStatuses[e.placement_status]++;
             } else {
-                // Default to available
                 placementStatuses.available++;
             }
         });
@@ -255,7 +236,6 @@ export class TazweedDashboard extends Component {
     renderVisaChart() {
         const canvas = this.visaChartRef.el;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         const data = this.state.visaStatusData;
         
@@ -266,8 +246,7 @@ export class TazweedDashboard extends Component {
                 datasets: [{
                     data: [data.valid || 0, data.expired || 0, data.cancelled || 0, data.in_process || 0],
                     backgroundColor: ['#10B981', '#EF4444', '#6B7280', '#F59E0B'],
-                    borderWidth: 0,
-                    hoverOffset: 4
+                    borderWidth: 0
                 }]
             },
             options: {
@@ -275,14 +254,7 @@ export class TazweedDashboard extends Component {
                 maintainAspectRatio: false,
                 cutout: '70%',
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 15,
-                            usePointStyle: true,
-                            font: { size: 11, family: "'Inter', sans-serif" }
-                        }
-                    }
+                    legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true } }
                 }
             }
         });
@@ -291,41 +263,24 @@ export class TazweedDashboard extends Component {
     renderCategoryChart() {
         const canvas = this.categoryChartRef.el;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         const data = this.state.categoryData;
-        const labels = Object.keys(data);
-        const values = Object.values(data);
         
         new Chart(ctx, {
-            type: 'bar',
+            type: 'pie',
             data: {
-                labels: labels,
+                labels: Object.keys(data),
                 datasets: [{
-                    label: 'Employees',
-                    data: values,
-                    backgroundColor: ['#8B5CF6', '#06B6D4', '#F97316', '#10B981', '#EF4444'],
-                    borderRadius: 8,
-                    barThickness: 30
+                    data: Object.values(data),
+                    backgroundColor: ['#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#3B82F6'],
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                indexAxis: 'y',
                 plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        grid: { display: false },
-                        ticks: { font: { size: 11 } }
-                    },
-                    y: {
-                        grid: { display: false },
-                        ticks: { font: { size: 11 } }
-                    }
+                    legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true } }
                 }
             }
         });
@@ -334,44 +289,28 @@ export class TazweedDashboard extends Component {
     renderDepartmentChart() {
         const canvas = this.departmentChartRef.el;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         const data = this.state.departmentData;
-        const labels = Object.keys(data);
-        const values = Object.values(data);
         
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: labels,
+                labels: Object.keys(data),
                 datasets: [{
                     label: 'Employees',
-                    data: values,
-                    backgroundColor: '#667EEA',
-                    borderRadius: 8,
-                    barThickness: 25
+                    data: Object.values(data),
+                    backgroundColor: '#8B5CF6',
+                    borderRadius: 8
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
                 scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { 
-                            font: { size: 10 },
-                            maxRotation: 45,
-                            minRotation: 45
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#E5E7EB' },
-                        ticks: { font: { size: 11 } }
-                    }
+                    x: { beginAtZero: true, grid: { display: false } },
+                    y: { grid: { display: false } }
                 }
             }
         });
@@ -380,33 +319,25 @@ export class TazweedDashboard extends Component {
     renderPlacementChart() {
         const canvas = this.placementChartRef.el;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         const data = this.state.placementData;
         
         new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: ['Available', 'Placed', 'On Leave', 'Resigned'],
                 datasets: [{
                     data: [data.available || 0, data.placed || 0, data.on_leave || 0, data.resigned || 0],
                     backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EF4444'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '70%',
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 15,
-                            usePointStyle: true,
-                            font: { size: 11 }
-                        }
-                    }
+                    legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true } }
                 }
             }
         });
@@ -415,14 +346,13 @@ export class TazweedDashboard extends Component {
     renderDocumentChart() {
         const canvas = this.documentChartRef.el;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         const data = this.state.documentStatusData;
         
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Valid', 'Expiring Soon', 'Expired'],
+                labels: ['Valid', 'Expiring', 'Expired'],
                 datasets: [{
                     data: [data.valid || 0, data.expiring || 0, data.expired || 0],
                     backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
@@ -432,16 +362,9 @@ export class TazweedDashboard extends Component {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '65%',
+                cutout: '70%',
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 15,
-                            usePointStyle: true,
-                            font: { size: 11 }
-                        }
-                    }
+                    legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true } }
                 }
             }
         });
@@ -450,30 +373,15 @@ export class TazweedDashboard extends Component {
     renderTrendChart() {
         const canvas = this.trendChartRef.el;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         
-        // Generate mock trend data for last 6 months
-        const months = [];
-        const totalData = [];
-        const placedData = [];
-        const today = new Date();
+        const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const total = this.state.totalEmployees;
+        const baseValue = Math.max(Math.floor(total * 0.4), 5);
+        const totalData = months.map((_, i) => Math.floor(baseValue + (total - baseValue) * (i / 5)));
+        totalData[5] = total;
         
-        for (let i = 5; i >= 0; i--) {
-            const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-            months.push(d.toLocaleString('default', { month: 'short' }));
-            // Use actual current data for the latest month
-            if (i === 0) {
-                totalData.push(this.state.totalEmployees);
-                placedData.push(this.state.placedEmployees);
-            } else {
-                // Generate realistic trend data
-                const baseTotal = Math.max(1, this.state.totalEmployees - (i * 2));
-                const basePlaced = Math.max(0, this.state.placedEmployees - i);
-                totalData.push(baseTotal);
-                placedData.push(basePlaced);
-            }
-        }
+        const placedData = totalData.map(v => Math.floor(v * 0.1));
         
         new Chart(ctx, {
             type: 'line',
@@ -483,22 +391,17 @@ export class TazweedDashboard extends Component {
                     {
                         label: 'Total Employees',
                         data: totalData,
-                        borderColor: '#667EEA',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
                         fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#667EEA'
+                        tension: 0.4
                     },
                     {
                         label: 'Placed',
                         data: placedData,
                         borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#10B981'
+                        backgroundColor: 'transparent',
+                        tension: 0.4
                     }
                 ]
             },
@@ -506,40 +409,45 @@ export class TazweedDashboard extends Component {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20,
-                            font: { size: 11 }
-                        }
-                    }
+                    legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } }
                 },
                 scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 11 } }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#E5E7EB' },
-                        ticks: { font: { size: 11 } }
-                    }
+                    x: { grid: { display: false } },
+                    y: { beginAtZero: true, grid: { color: '#E5E7EB' } }
                 }
             }
         });
     }
 
-    // ==================== ACTIONS ====================
+    // ==================== ALL ACTION HANDLERS ====================
     
-    async refreshData() {
+    // Refresh dashboard
+    refreshDashboard() {
         this.state.isLoading = true;
-        await this.loadDashboardData();
-        // Destroy existing charts and re-render
-        this.renderCharts();
+        this.loadDashboardData().then(() => {
+            this.renderCharts();
+        });
     }
 
-    viewAllEmployees() {
+    // Handle alert clicks
+    handleAlertAction(action) {
+        switch(action) {
+            case 'contracts':
+                this.viewContracts();
+                break;
+            case 'documents':
+                this.viewDocumentsAttention();
+                break;
+            case 'employees':
+                this.viewEmployees();
+                break;
+            default:
+                this.viewEmployees();
+        }
+    }
+
+    // View all employees
+    viewEmployees() {
         this.action.doAction({
             type: 'ir.actions.act_window',
             name: 'Employees',
@@ -550,62 +458,7 @@ export class TazweedDashboard extends Component {
         });
     }
 
-    addEmployee() {
-        this.action.doAction({
-            type: 'ir.actions.act_window',
-            name: 'New Employee',
-            res_model: 'hr.employee',
-            view_mode: 'form',
-            views: [[false, 'form']],
-            target: 'current',
-        });
-    }
-
-    uploadDocument() {
-        this.action.doAction({
-            type: 'ir.actions.act_window',
-            name: 'New Document',
-            res_model: 'tazweed.employee.document',
-            view_mode: 'form',
-            views: [[false, 'form']],
-            target: 'new',
-        });
-    }
-
-    addSponsor() {
-        this.action.doAction({
-            type: 'ir.actions.act_window',
-            name: 'New Sponsor',
-            res_model: 'tazweed.employee.sponsor',
-            view_mode: 'form',
-            views: [[false, 'form']],
-            target: 'current',
-        });
-    }
-
-    manageContracts() {
-        this.action.doAction({
-            type: 'ir.actions.act_window',
-            name: 'Contracts',
-            res_model: 'hr.contract',
-            view_mode: 'tree,form',
-            views: [[false, 'list'], [false, 'form']],
-            target: 'current',
-        });
-    }
-
-    viewDocumentsAttention() {
-        this.action.doAction({
-            type: 'ir.actions.act_window',
-            name: 'Documents Requiring Attention',
-            res_model: 'tazweed.employee.document',
-            view_mode: 'tree,form',
-            domain: [['state', 'in', ['expiring', 'expired']]],
-            views: [[false, 'list'], [false, 'form']],
-            target: 'current',
-        });
-    }
-
+    // View UAE nationals
     viewUAENationals() {
         this.action.doAction({
             type: 'ir.actions.act_window',
@@ -618,6 +471,20 @@ export class TazweedDashboard extends Component {
         });
     }
 
+    // View documents requiring attention
+    viewDocumentsAttention() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            name: 'Documents Requiring Attention',
+            res_model: 'tazweed.employee.document',
+            view_mode: 'tree,form',
+            domain: [['state', 'in', ['expiring', 'expired']]],
+            views: [[false, 'list'], [false, 'form']],
+            target: 'current',
+        });
+    }
+
+    // View available employees
     viewAvailableEmployees() {
         this.action.doAction({
             type: 'ir.actions.act_window',
@@ -630,6 +497,19 @@ export class TazweedDashboard extends Component {
         });
     }
 
+    // View contracts
+    viewContracts() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            name: 'Contracts',
+            res_model: 'hr.contract',
+            view_mode: 'tree,form',
+            views: [[false, 'list'], [false, 'form']],
+            target: 'current',
+        });
+    }
+
+    // View sponsors
     viewSponsors() {
         this.action.doAction({
             type: 'ir.actions.act_window',
@@ -641,6 +521,55 @@ export class TazweedDashboard extends Component {
         });
     }
 
+    // View all documents
+    viewDocuments() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            name: 'Documents',
+            res_model: 'tazweed.employee.document',
+            view_mode: 'tree,form',
+            views: [[false, 'list'], [false, 'form']],
+            target: 'current',
+        });
+    }
+
+    // Add new employee
+    addEmployee() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            name: 'New Employee',
+            res_model: 'hr.employee',
+            view_mode: 'form',
+            views: [[false, 'form']],
+            target: 'current',
+        });
+    }
+
+    // Add new document (upload document)
+    addDocument() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            name: 'New Document',
+            res_model: 'tazweed.employee.document',
+            view_mode: 'form',
+            views: [[false, 'form']],
+            target: 'new',
+        });
+    }
+
+    // Add new sponsor
+    addSponsor() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            name: 'New Sponsor',
+            res_model: 'tazweed.employee.sponsor',
+            view_mode: 'form',
+            views: [[false, 'form']],
+            target: 'current',
+        });
+    }
+
+    // View placed employees
     viewPlacedEmployees() {
         this.action.doAction({
             type: 'ir.actions.act_window',
@@ -651,11 +580,6 @@ export class TazweedDashboard extends Component {
             views: [[false, 'kanban'], [false, 'list'], [false, 'form']],
             target: 'current',
         });
-    }
-
-    getCurrentDate() {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date().toLocaleDateString('en-US', options);
     }
 }
 
