@@ -284,4 +284,109 @@ class AnalyticsKPI(models.Model):
 
     def _calc_placement_fill_rate(self, previous=False):
         """Calculate placement fill rate."""
-        return 85  # Placeholder percentage
+        if 'tazweed.placement' in self.env:
+            Placement = self.env['tazweed.placement'].sudo()
+            total = Placement.search_count([]) or 1
+            filled = Placement.search_count([('state', '=', 'active')])
+            return (filled / total) * 100
+        return 0
+
+    def _calc_pending_client_requests(self, previous=False):
+        """Calculate pending client requests."""
+        if 'client.request' in self.env:
+            return self.env['client.request'].sudo().search_count([
+                ('state', 'in', ['submitted', 'under_review', 'pending_info'])
+            ])
+        return 0
+
+    def _calc_overdue_client_requests(self, previous=False):
+        """Calculate overdue client requests."""
+        if 'client.request' in self.env:
+            return self.env['client.request'].sudo().search_count([
+                ('sla_status', '=', 'overdue'),
+                ('state', 'not in', ['completed', 'rejected', 'cancelled'])
+            ])
+        return 0
+
+    def _calc_client_request_sla(self, previous=False):
+        """Calculate client request SLA compliance rate."""
+        if 'client.request' in self.env:
+            completed = self.env['client.request'].sudo().search([
+                ('state', '=', 'completed')
+            ])
+            if not completed:
+                return 100
+            on_time = len([r for r in completed if r.completion_date and r.expected_date 
+                          and r.completion_date.date() <= r.expected_date])
+            return (on_time / len(completed)) * 100
+        return 0
+
+    def _calc_total_client_requests(self, previous=False):
+        """Calculate total client requests this month."""
+        if 'client.request' in self.env:
+            today = fields.Date.today()
+            month_start = today.replace(day=1)
+            return self.env['client.request'].sudo().search_count([
+                ('create_date', '>=', month_start)
+            ])
+        return 0
+
+    def _calc_pending_hr_requests(self, previous=False):
+        """Calculate pending HR service requests."""
+        if 'hr.service.request' in self.env:
+            return self.env['hr.service.request'].sudo().search_count([
+                ('state', 'in', ['submitted', 'manager_approval', 'hr_approval', 'processing'])
+            ])
+        return 0
+
+    def _calc_total_hr_requests(self, previous=False):
+        """Calculate total HR requests this month."""
+        if 'hr.service.request' in self.env:
+            today = fields.Date.today()
+            month_start = today.replace(day=1)
+            return self.env['hr.service.request'].sudo().search_count([
+                ('create_date', '>=', month_start)
+            ])
+        return 0
+
+    def _calc_active_clients(self, previous=False):
+        """Calculate active clients."""
+        if 'tazweed.client' in self.env:
+            return self.env['tazweed.client'].sudo().search_count([
+                ('active', '=', True)
+            ])
+        return 0
+
+    def _calc_active_placements(self, previous=False):
+        """Calculate active placements."""
+        if 'tazweed.placement' in self.env:
+            return self.env['tazweed.placement'].sudo().search_count([
+                ('state', '=', 'active')
+            ])
+        return 0
+
+    def _calc_expiring_documents(self, previous=False):
+        """Calculate documents expiring in 30 days."""
+        if 'hr.employee.document' in self.env:
+            today = fields.Date.today()
+            return self.env['hr.employee.document'].sudo().search_count([
+                ('expiry_date', '>=', today),
+                ('expiry_date', '<=', today + timedelta(days=30))
+            ])
+        return 0
+
+    def _calc_pending_workflows(self, previous=False):
+        """Calculate pending workflow instances."""
+        if 'tazweed.workflow.instance' in self.env:
+            return self.env['tazweed.workflow.instance'].sudo().search_count([
+                ('state', 'in', ['running', 'pending'])
+            ])
+        return 0
+
+    def _calc_pending_signatures(self, previous=False):
+        """Calculate pending signature requests."""
+        if 'tazweed.signature.request' in self.env:
+            return self.env['tazweed.signature.request'].sudo().search_count([
+                ('state', 'in', ['sent', 'partial'])
+            ])
+        return 0

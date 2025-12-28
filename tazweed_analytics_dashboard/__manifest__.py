@@ -65,6 +65,7 @@ Best Practices:
         'security/analytics_security.xml',
         'security/ir.model.access.csv',
         'data/analytics_data.xml',
+        'data/kpi_data.xml',
         'views/dashboard_views.xml',
         'views/kpi_views.xml',
         'views/report_views.xml',

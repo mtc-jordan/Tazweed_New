@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- ==================== WORKFORCE KPIs ==================== -->
+        
+        <record id="kpi_total_employees" model="analytics.kpi">
+            <field name="name">Total Employees</field>
+            <field name="code">total_employees</field>
+            <field name="sequence">10</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-users</field>
+            <field name="color">#2196F3</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_new_hires" model="analytics.kpi">
+            <field name="name">New Hires (This Month)</field>
+            <field name="code">new_hires_month</field>
+            <field name="sequence">20</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-user-plus</field>
+            <field name="color">#4CAF50</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_turnover_rate" model="analytics.kpi">
+            <field name="name">Turnover Rate</field>
+            <field name="code">turnover_rate</field>
+            <field name="sequence">30</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-exchange-alt</field>
+            <field name="color">#FF9800</field>
+            <field name="has_target">True</field>
+            <field name="target_value">5</field>
+            <field name="target_type">lower</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_avg_tenure" model="analytics.kpi">
+            <field name="name">Average Tenure (Years)</field>
+            <field name="code">avg_tenure</field>
+            <field name="sequence">40</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">decimal</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-calendar-check</field>
+            <field name="color">#9C27B0</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <!-- ==================== RECRUITMENT KPIs ==================== -->
+        
+        <record id="kpi_open_positions" model="analytics.kpi">
+            <field name="name">Open Positions</field>
+            <field name="code">open_positions</field>
+            <field name="sequence">50</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-briefcase</field>
+            <field name="color">#FF5722</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_time_to_hire" model="analytics.kpi">
+            <field name="name">Avg Time to Hire (Days)</field>
+            <field name="code">time_to_hire</field>
+            <field name="sequence">60</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="suffix"> days</field>
+            <field name="icon">fa-clock</field>
+            <field name="color">#00BCD4</field>
+            <field name="has_target">True</field>
+            <field name="target_value">30</field>
+            <field name="target_type">lower</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_placement_fill_rate" model="analytics.kpi">
+            <field name="name">Placement Fill Rate</field>
+            <field name="code">placement_fill_rate</field>
+            <field name="sequence">70</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-check-circle</field>
+            <field name="color">#4CAF50</field>
+            <field name="has_target">True</field>
+            <field name="target_value">90</field>
+            <field name="target_type">higher</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_active_placements" model="analytics.kpi">
+            <field name="name">Active Placements</field>
+            <field name="code">active_placements</field>
+            <field name="sequence">80</field>
+            <field name="category">recruitment</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-user-tie</field>
+            <field name="color">#3F51B5</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <!-- ==================== CLIENT KPIs ==================== -->
+        
+        <record id="kpi_active_clients" model="analytics.kpi">
+            <field name="name">Active Clients</field>
+            <field name="code">active_clients</field>
+            <field name="sequence">90</field>
+            <field name="category">financial</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-building</field>
+            <field name="color">#673AB7</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_total_client_requests" model="analytics.kpi">
+            <field name="name">Client Requests (This Month)</field>
+            <field name="code">total_client_requests</field>
+            <field name="sequence">100</field>
+            <field name="category">financial</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-inbox</field>
+            <field name="color">#2196F3</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_pending_client_requests" model="analytics.kpi">
+            <field name="name">Pending Client Requests</field>
+            <field name="code">pending_client_requests</field>
+            <field name="sequence">110</field>
+            <field name="category">financial</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-hourglass-half</field>
+            <field name="color">#FF9800</field>
+            <field name="has_target">True</field>
+            <field name="target_value">10</field>
+            <field name="target_type">lower</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_overdue_client_requests" model="analytics.kpi">
+            <field name="name">Overdue Client Requests</field>
+            <field name="code">overdue_client_requests</field>
+            <field name="sequence">120</field>
+            <field name="category">financial</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-exclamation-triangle</field>
+            <field name="color">#F44336</field>
+            <field name="has_target">True</field>
+            <field name="target_value">0</field>
+            <field name="target_type">lower</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_client_request_sla" model="analytics.kpi">
+            <field name="name">Client Request SLA Compliance</field>
+            <field name="code">client_request_sla</field>
+            <field name="sequence">130</field>
+            <field name="category">financial</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-tachometer-alt</field>
+            <field name="color">#4CAF50</field>
+            <field name="has_target">True</field>
+            <field name="target_value">95</field>
+            <field name="target_type">higher</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <!-- ==================== HR SERVICE REQUEST KPIs ==================== -->
+        
+        <record id="kpi_total_hr_requests" model="analytics.kpi">
+            <field name="name">HR Requests (This Month)</field>
+            <field name="code">total_hr_requests</field>
+            <field name="sequence">140</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-file-alt</field>
+            <field name="color">#009688</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_pending_hr_requests" model="analytics.kpi">
+            <field name="name">Pending HR Requests</field>
+            <field name="code">pending_hr_requests</field>
+            <field name="sequence">150</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-tasks</field>
+            <field name="color">#FF9800</field>
+            <field name="has_target">True</field>
+            <field name="target_value">5</field>
+            <field name="target_type">lower</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <!-- ==================== COMPLIANCE KPIs ==================== -->
+        
+        <record id="kpi_emiratization_rate" model="analytics.kpi">
+            <field name="name">Emiratization Rate</field>
+            <field name="code">emiratization_rate</field>
+            <field name="sequence">160</field>
+            <field name="category">compliance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-flag</field>
+            <field name="color">#009688</field>
+            <field name="has_target">True</field>
+            <field name="target_value">2</field>
+            <field name="target_type">higher</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_expiring_documents" model="analytics.kpi">
+            <field name="name">Documents Expiring (30 Days)</field>
+            <field name="code">expiring_documents</field>
+            <field name="sequence">170</field>
+            <field name="category">compliance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-file-exclamation</field>
+            <field name="color">#FF5722</field>
+            <field name="has_target">True</field>
+            <field name="target_value">0</field>
+            <field name="target_type">lower</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <!-- ==================== OPERATIONS KPIs ==================== -->
+        
+        <record id="kpi_pending_workflows" model="analytics.kpi">
+            <field name="name">Pending Workflows</field>
+            <field name="code">pending_workflows</field>
+            <field name="sequence">180</field>
+            <field name="category">performance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-project-diagram</field>
+            <field name="color">#795548</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_pending_signatures" model="analytics.kpi">
+            <field name="name">Pending Signatures</field>
+            <field name="code">pending_signatures</field>
+            <field name="sequence">190</field>
+            <field name="category">performance</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">number</field>
+            <field name="icon">fa-signature</field>
+            <field name="color">#607D8B</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <!-- ==================== PAYROLL KPIs ==================== -->
+        
+        <record id="kpi_payroll_cost" model="analytics.kpi">
+            <field name="name">Monthly Payroll Cost</field>
+            <field name="code">payroll_cost</field>
+            <field name="sequence">200</field>
+            <field name="category">payroll</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">currency</field>
+            <field name="decimal_places">0</field>
+            <field name="icon">fa-money-bill-wave</field>
+            <field name="color">#4CAF50</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_revenue_per_employee" model="analytics.kpi">
+            <field name="name">Revenue per Employee</field>
+            <field name="code">revenue_per_employee</field>
+            <field name="sequence">210</field>
+            <field name="category">payroll</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">currency</field>
+            <field name="decimal_places">0</field>
+            <field name="icon">fa-chart-line</field>
+            <field name="color">#2196F3</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+        <record id="kpi_leave_utilization" model="analytics.kpi">
+            <field name="name">Leave Utilization Rate</field>
+            <field name="code">leave_utilization</field>
+            <field name="sequence">220</field>
+            <field name="category">workforce</field>
+            <field name="value_type">custom</field>
+            <field name="display_format">percentage</field>
+            <field name="decimal_places">1</field>
+            <field name="icon">fa-umbrella-beach</field>
+            <field name="color">#00BCD4</field>
+            <field name="show_trend">True</field>
+        </record>
+        
+    </data>
+</odoo>
