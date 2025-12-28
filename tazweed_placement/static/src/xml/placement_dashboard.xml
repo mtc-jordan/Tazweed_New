@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_placement.PlacementDashboard" owl="1">
+        <div class="o_placement_dashboard">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="dashboard-title">Placement Dashboard</h1>
+                        <p class="text-muted mb-0">Overview of recruitment and placement activities</p>
+                    </div>
+                    <button class="btn btn-primary" t-on-click="refreshData">
+                        <i class="fa fa-refresh"/> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div t-if="state.loading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Loading dashboard data...</p>
+            </div>
+            
+            <!-- Dashboard Content -->
+            <div t-else="">
+                <!-- KPI Cards Row 1 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-purple" t-on-click="openCandidates">
+                            <div class="kpi-icon">
+                                <i class="fa fa-users"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value" t-esc="state.kpis.total_candidates"/>
+                                <p class="kpi-label">Total Candidates</p>
+                                <span class="kpi-badge">
+                                    <t t-esc="state.kpis.active_candidates"/> active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-teal" t-on-click="openClients">
+                            <div class="kpi-icon">
+                                <i class="fa fa-building"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value" t-esc="state.kpis.total_clients"/>
+                                <p class="kpi-label">Total Clients</p>
+                                <span class="kpi-badge">
+                                    <t t-esc="state.kpis.active_clients"/> active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-orange" t-on-click="openJobOrders">
+                            <div class="kpi-icon">
+                                <i class="fa fa-file-text"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value" t-esc="state.kpis.open_job_orders"/>
+                                <p class="kpi-label">Open Job Orders</p>
+                                <span class="kpi-badge">recruiting</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-yellow" t-on-click="openInterviews">
+                            <div class="kpi-icon">
+                                <i class="fa fa-calendar"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value" t-esc="state.kpis.pending_interviews"/>
+                                <p class="kpi-label">Pending Interviews</p>
+                                <span class="kpi-badge">scheduled</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- KPI Cards Row 2 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-green" t-on-click="openPlacements">
+                            <div class="kpi-icon">
+                                <i class="fa fa-briefcase"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value" t-esc="state.kpis.total_placements"/>
+                                <p class="kpi-label">Total Placements</p>
+                                <span class="kpi-badge">
+                                    <t t-esc="state.kpis.active_placements"/> active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-blue" t-on-click="openPlacements">
+                            <div class="kpi-icon">
+                                <i class="fa fa-trophy"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value" t-esc="state.kpis.this_month_placements"/>
+                                <p class="kpi-label">This Month</p>
+                                <span class="kpi-badge">placements</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-pink">
+                            <div class="kpi-icon">
+                                <i class="fa fa-money"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value">
+                                    <t t-esc="(state.kpis.this_month_revenue / 1000).toFixed(1)"/>K
+                                </h3>
+                                <p class="kpi-label">Monthly Revenue</p>
+                                <span class="kpi-badge">AED</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="kpi-card kpi-purple" t-on-click="openPipeline">
+                            <div class="kpi-icon">
+                                <i class="fa fa-filter"/>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 class="kpi-value">
+                                    <t t-esc="state.pipeline_data.reduce((a, b) => a + b.count, 0)"/>
+                                </h3>
+                                <p class="kpi-label">In Pipeline</p>
+                                <span class="kpi-badge">candidates</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 1 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-8">
+                        <div class="chart-card">
+                            <canvas t-ref="placementTrendChart" height="300"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="chart-card">
+                            <canvas t-ref="sourceChart" height="300"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 2 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-6">
+                        <div class="chart-card">
+                            <canvas t-ref="pipelineChart" height="280"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="chart-card">
+                            <canvas t-ref="categoryChart" height="280"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lists Row -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="list-card">
+                            <div class="list-card-header">
+                                <h5><i class="fa fa-briefcase me-2"/>Recent Placements</h5>
+                                <button class="btn btn-sm btn-outline-primary" t-on-click="openPlacements">
+                                    View All
+                                </button>
+                            </div>
+                            <div class="list-card-body">
+                                <t t-if="state.recent_placements.length === 0">
+                                    <p class="text-muted text-center py-3">No recent placements</p>
+                                </t>
+                                <t t-else="">
+                                    <div t-foreach="state.recent_placements" t-as="placement" t-key="placement.id"
+                                         class="list-item" t-on-click="() => this.openPlacement(placement.id)">
+                                        <div class="list-item-avatar">
+                                            <i class="fa fa-user"/>
+                                        </div>
+                                        <div class="list-item-content">
+                                            <h6 t-esc="placement.candidate_name"/>
+                                            <p class="text-muted mb-0">
+                                                <t t-esc="placement.job_title"/> at <t t-esc="placement.client_name"/>
+                                            </p>
+                                        </div>
+                                        <div class="list-item-meta">
+                                            <span class="badge" t-attf-class="badge-#{placement.state === 'active' ? 'success' : 'secondary'}">
+                                                <t t-esc="placement.state"/>
+                                            </span>
+                                            <small class="text-muted d-block mt-1" t-esc="placement.date_start"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="list-card">
+                            <div class="list-card-header">
+                                <h5><i class="fa fa-calendar me-2"/>Upcoming Interviews</h5>
+                                <button class="btn btn-sm btn-outline-primary" t-on-click="openInterviews">
+                                    View All
+                                </button>
+                            </div>
+                            <div class="list-card-body">
+                                <t t-if="state.upcoming_interviews.length === 0">
+                                    <p class="text-muted text-center py-3">No upcoming interviews</p>
+                                </t>
+                                <t t-else="">
+                                    <div t-foreach="state.upcoming_interviews" t-as="interview" t-key="interview.id"
+                                         class="list-item" t-on-click="() => this.openInterview(interview.id)">
+                                        <div class="list-item-avatar interview-avatar">
+                                            <i class="fa fa-video-camera"/>
+                                        </div>
+                                        <div class="list-item-content">
+                                            <h6 t-esc="interview.candidate_name"/>
+                                            <p class="text-muted mb-0">
+                                                <t t-esc="interview.interview_type"/> - <t t-esc="interview.job_title"/>
+                                            </p>
+                                        </div>
+                                        <div class="list-item-meta">
+                                            <span class="badge badge-warning">
+                                                <t t-esc="interview.state"/>
+                                            </span>
+                                            <small class="text-muted d-block mt-1" t-esc="interview.scheduled_date"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

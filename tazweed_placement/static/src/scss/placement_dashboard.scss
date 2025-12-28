@@ -1,0 +1,299 @@
+// Tazweed Placement Dashboard Styles
+// Color scheme: Purple, Teal, Orange, Yellow accents
+
+// Variables
+$purple: #805AD5;
+$purple-light: #B794F4;
+$purple-dark: #553C9A;
+$teal: #14B8A6;
+$teal-light: #5EEAD4;
+$orange: #F97316;
+$orange-light: #FDBA74;
+$yellow: #EAB308;
+$yellow-light: #FDE047;
+$green: #10B981;
+$blue: #3B82F6;
+$pink: #EC4899;
+$gray: #6B7280;
+
+.o_placement_dashboard {
+    padding: 24px;
+    background: linear-gradient(135deg, #f8f9fc 0%, #e9ecef 100%);
+    min-height: 100vh;
+    
+    // Header
+    .dashboard-header {
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: $purple-dark;
+            margin-bottom: 4px;
+        }
+    }
+    
+    // KPI Cards
+    .kpi-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+        
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .kpi-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            i {
+                font-size: 28px;
+                color: white;
+            }
+        }
+        
+        .kpi-content {
+            flex: 1;
+            
+            .kpi-value {
+                font-size: 2rem;
+                font-weight: 700;
+                margin: 0;
+                line-height: 1.2;
+            }
+            
+            .kpi-label {
+                font-size: 0.875rem;
+                color: $gray;
+                margin: 4px 0 8px;
+            }
+            
+            .kpi-badge {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-weight: 500;
+            }
+        }
+        
+        // Color variants
+        &.kpi-purple {
+            border-color: rgba($purple, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $purple 0%, $purple-light 100%); }
+            .kpi-value { color: $purple-dark; }
+            .kpi-badge { background: rgba($purple, 0.1); color: $purple; }
+            &:hover { border-color: $purple; }
+        }
+        
+        &.kpi-teal {
+            border-color: rgba($teal, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $teal 0%, $teal-light 100%); }
+            .kpi-value { color: darken($teal, 15%); }
+            .kpi-badge { background: rgba($teal, 0.1); color: $teal; }
+            &:hover { border-color: $teal; }
+        }
+        
+        &.kpi-orange {
+            border-color: rgba($orange, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $orange 0%, $orange-light 100%); }
+            .kpi-value { color: darken($orange, 15%); }
+            .kpi-badge { background: rgba($orange, 0.1); color: $orange; }
+            &:hover { border-color: $orange; }
+        }
+        
+        &.kpi-yellow {
+            border-color: rgba($yellow, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $yellow 0%, $yellow-light 100%); }
+            .kpi-value { color: darken($yellow, 20%); }
+            .kpi-badge { background: rgba($yellow, 0.1); color: darken($yellow, 10%); }
+            &:hover { border-color: $yellow; }
+        }
+        
+        &.kpi-green {
+            border-color: rgba($green, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $green 0%, lighten($green, 20%) 100%); }
+            .kpi-value { color: darken($green, 15%); }
+            .kpi-badge { background: rgba($green, 0.1); color: $green; }
+            &:hover { border-color: $green; }
+        }
+        
+        &.kpi-blue {
+            border-color: rgba($blue, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $blue 0%, lighten($blue, 20%) 100%); }
+            .kpi-value { color: darken($blue, 15%); }
+            .kpi-badge { background: rgba($blue, 0.1); color: $blue; }
+            &:hover { border-color: $blue; }
+        }
+        
+        &.kpi-pink {
+            border-color: rgba($pink, 0.2);
+            .kpi-icon { background: linear-gradient(135deg, $pink 0%, lighten($pink, 20%) 100%); }
+            .kpi-value { color: darken($pink, 15%); }
+            .kpi-badge { background: rgba($pink, 0.1); color: $pink; }
+            &:hover { border-color: $pink; }
+        }
+    }
+    
+    // Chart Cards
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        height: 100%;
+        
+        canvas {
+            width: 100% !important;
+        }
+    }
+    
+    // List Cards
+    .list-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        
+        .list-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, rgba($purple, 0.05) 0%, rgba($teal, 0.05) 100%);
+            
+            h5 {
+                margin: 0;
+                font-weight: 600;
+                color: #374151;
+                
+                i {
+                    color: $purple;
+                }
+            }
+        }
+        
+        .list-card-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            
+            &:hover {
+                background: #f9fafb;
+            }
+            
+            &:last-child {
+                border-bottom: none;
+            }
+            
+            .list-item-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, $purple 0%, $purple-light 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                
+                i {
+                    font-size: 20px;
+                    color: white;
+                }
+                
+                &.interview-avatar {
+                    background: linear-gradient(135deg, $teal 0%, $teal-light 100%);
+                }
+            }
+            
+            .list-item-content {
+                flex: 1;
+                min-width: 0;
+                
+                h6 {
+                    margin: 0 0 4px;
+                    font-weight: 600;
+                    color: #1f2937;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                
+                p {
+                    font-size: 0.875rem;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+            
+            .list-item-meta {
+                text-align: right;
+                
+                .badge {
+                    font-size: 0.75rem;
+                    padding: 4px 10px;
+                    border-radius: 20px;
+                    
+                    &.badge-success {
+                        background: rgba($green, 0.1);
+                        color: $green;
+                    }
+                    
+                    &.badge-warning {
+                        background: rgba($yellow, 0.1);
+                        color: darken($yellow, 10%);
+                    }
+                    
+                    &.badge-secondary {
+                        background: rgba($gray, 0.1);
+                        color: $gray;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Responsive adjustments
+    @media (max-width: 768px) {
+        padding: 16px;
+        
+        .kpi-card {
+            padding: 16px;
+            
+            .kpi-icon {
+                width: 48px;
+                height: 48px;
+                
+                i {
+                    font-size: 20px;
+                }
+            }
+            
+            .kpi-content {
+                .kpi-value {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+}

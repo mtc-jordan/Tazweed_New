@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Interview Form View -->
+    <record id="view_tazweed_interview_form" model="ir.ui.view">
+        <field name="name">tazweed.interview.form</field>
+        <field name="model">tazweed.interview</field>
+        <field name="arch" type="xml">
+            <form string="Interview">
+                <header>
+                    <button name="action_schedule" string="Schedule" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            attrs="{'invisible': [('state', '!=', 'scheduled')]}"/>
+                    <button name="action_start" string="Start" type="object"
+                            attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
+                    <button name="action_complete" string="Complete" type="object" class="btn-success"
+                            attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_add_feedback" string="Add Feedback" type="object"
+                            attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                    <button name="action_pass" string="Pass" type="object" class="btn-success"
+                            attrs="{'invisible': ['|', ('state', '!=', 'completed'), ('result', '!=', 'pending')]}"/>
+                    <button name="action_fail" string="Fail" type="object" class="btn-danger"
+                            attrs="{'invisible': ['|', ('state', '!=', 'completed'), ('result', '!=', 'pending')]}"/>
+                    <button name="action_reschedule" string="Reschedule" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('scheduled', 'confirmed'))]}"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            attrs="{'invisible': [('state', 'in', ('completed', 'cancelled', 'no_show'))]}"/>
+                    <button name="action_no_show" string="No Show" type="object" class="btn-warning"
+                            attrs="{'invisible': [('state', 'not in', ('scheduled', 'confirmed'))]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,confirmed,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="candidate_id"/>
+                            <field name="job_order_id"/>
+                            <field name="client_id"/>
+                            <field name="pipeline_id"/>
+                        </group>
+                        <group>
+                            <field name="interview_type"/>
+                            <field name="interview_round"/>
+                            <field name="result" widget="badge" decoration-success="result == 'passed'" decoration-danger="result == 'failed'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Schedule">
+                            <field name="scheduled_date"/>
+                            <field name="duration"/>
+                            <field name="end_datetime"/>
+                        </group>
+                        <group string="Location">
+                            <field name="location_type"/>
+                            <field name="location" attrs="{'invisible': [('location_type', '=', 'remote')]}"/>
+                            <field name="meeting_link" widget="url" attrs="{'invisible': [('location_type', '!=', 'remote')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Interviewers">
+                            <field name="interviewer_ids" widget="many2many_tags"/>
+                            <field name="external_interviewer"/>
+                        </group>
+                        <group string="Confirmation">
+                            <field name="candidate_confirmed"/>
+                            <field name="confirmation_date"/>
+                            <field name="reminder_sent"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Feedback" name="feedback">
+                            <group>
+                                <group>
+                                    <field name="overall_rating"/>
+                                    <field name="recommendation"/>
+                                </group>
+                            </group>
+                            <field name="feedback_ids">
+                                <tree>
+                                    <field name="interviewer_id"/>
+                                    <field name="technical_skills"/>
+                                    <field name="communication"/>
+                                    <field name="problem_solving"/>
+                                    <field name="cultural_fit"/>
+                                    <field name="overall_rating"/>
+                                    <field name="recommendation" widget="badge"/>
+                                    <field name="create_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <group>
+                                <field name="notes" placeholder="Notes for candidate..."/>
+                            </group>
+                            <group>
+                                <field name="internal_notes" placeholder="Internal notes..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Interview Tree View -->
+    <record id="view_tazweed_interview_tree" model="ir.ui.view">
+        <field name="name">tazweed.interview.tree</field>
+        <field name="model">tazweed.interview</field>
+        <field name="arch" type="xml">
+            <tree string="Interviews" decoration-success="result == 'passed'" decoration-danger="result == 'failed'" decoration-warning="state == 'no_show'">
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="job_order_id"/>
+                <field name="interview_type"/>
+                <field name="interview_round"/>
+                <field name="scheduled_date"/>
+                <field name="duration"/>
+                <field name="location_type"/>
+                <field name="interviewer_ids" widget="many2many_tags"/>
+                <field name="candidate_confirmed"/>
+                <field name="state" widget="badge"/>
+                <field name="result" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Interview Calendar View -->
+    <record id="view_tazweed_interview_calendar" model="ir.ui.view">
+        <field name="name">tazweed.interview.calendar</field>
+        <field name="model">tazweed.interview</field>
+        <field name="arch" type="xml">
+            <calendar string="Interviews" date_start="scheduled_date" date_stop="end_datetime" color="interview_type" mode="week" quick_add="False">
+                <field name="candidate_id"/>
+                <field name="job_order_id"/>
+                <field name="interview_type"/>
+                <field name="location_type"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Interview Search View -->
+    <record id="view_tazweed_interview_search" model="ir.ui.view">
+        <field name="name">tazweed.interview.search</field>
+        <field name="model">tazweed.interview</field>
+        <field name="arch" type="xml">
+            <search string="Search Interviews">
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="job_order_id"/>
+                <field name="client_id"/>
+                <separator/>
+                <filter string="Scheduled" name="scheduled" domain="[('state', '=', 'scheduled')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('scheduled_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('scheduled_date', '&lt;', datetime.datetime.combine(context_today() + relativedelta(days=1), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week" domain="[('scheduled_date', '&gt;=', (context_today() - relativedelta(weekday=0)).strftime('%Y-%m-%d')), ('scheduled_date', '&lt;', (context_today() + relativedelta(weekday=6, days=1)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Passed" name="passed" domain="[('result', '=', 'passed')]"/>
+                <filter string="Failed" name="failed" domain="[('result', '=', 'failed')]"/>
+                <separator/>
+                <filter string="My Interviews" name="my_interviews" domain="[('interviewer_ids', 'in', uid)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'interview_type'}"/>
+                    <filter string="Client" name="group_client" context="{'group_by': 'client_id'}"/>
+                    <filter string="Result" name="group_result" context="{'group_by': 'result'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'scheduled_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Interview Action -->
+    <record id="action_tazweed_interview" model="ir.actions.act_window">
+        <field name="name">Interviews</field>
+        <field name="res_model">tazweed.interview</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="search_view_id" ref="view_tazweed_interview_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule your first interview
+            </p>
+            <p>
+                Schedule and manage interviews with candidates.
+            </p>
+        </field>
+    </record>
+
+    <!-- Interview Feedback Form -->
+    <record id="view_tazweed_interview_feedback_form" model="ir.ui.view">
+        <field name="name">tazweed.interview.feedback.form</field>
+        <field name="model">tazweed.interview.feedback</field>
+        <field name="arch" type="xml">
+            <form string="Interview Feedback">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="interview_id" readonly="1"/>
+                            <field name="interviewer_id"/>
+                        </group>
+                    </group>
+                    <group string="Ratings">
+                        <group>
+                            <field name="technical_skills" widget="radio"/>
+                            <field name="communication" widget="radio"/>
+                            <field name="problem_solving" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="cultural_fit" widget="radio"/>
+                            <field name="leadership" widget="radio"/>
+                            <field name="overall_rating" widget="radio"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="recommendation" widget="radio"/>
+                    </group>
+                    <group string="Comments">
+                        <field name="strengths" placeholder="Candidate strengths..."/>
+                        <field name="weaknesses" placeholder="Areas for improvement..."/>
+                        <field name="comments" placeholder="Additional comments..."/>
+                    </group>
+                    <group>
+                        <field name="questions_asked" placeholder="Questions asked during interview..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

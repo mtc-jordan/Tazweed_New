@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Recruitment Stages -->
+        <record id="stage_new" model="tazweed.recruitment.stage">
+            <field name="name">New</field>
+            <field name="sequence">1</field>
+            <field name="is_initial">True</field>
+            <field name="requirements">Initial candidate submission</field>
+        </record>
+        
+        <record id="stage_screening" model="tazweed.recruitment.stage">
+            <field name="name">Screening</field>
+            <field name="sequence">2</field>
+            <field name="requirements">Resume review and initial phone screening</field>
+        </record>
+        
+        <record id="stage_interview" model="tazweed.recruitment.stage">
+            <field name="name">Interview</field>
+            <field name="sequence">3</field>
+            <field name="requirements">Technical and HR interviews</field>
+        </record>
+        
+        <record id="stage_assessment" model="tazweed.recruitment.stage">
+            <field name="name">Assessment</field>
+            <field name="sequence">4</field>
+            <field name="requirements">Skills assessment and background check</field>
+        </record>
+        
+        <record id="stage_offer" model="tazweed.recruitment.stage">
+            <field name="name">Offer</field>
+            <field name="sequence">5</field>
+            <field name="requirements">Offer negotiation and acceptance</field>
+        </record>
+        
+        <record id="stage_hired" model="tazweed.recruitment.stage">
+            <field name="name">Hired</field>
+            <field name="sequence">6</field>
+            <field name="is_hired">True</field>
+            <field name="fold">True</field>
+            <field name="requirements">Candidate hired and onboarding</field>
+        </record>
+        
+        <record id="stage_rejected" model="tazweed.recruitment.stage">
+            <field name="name">Rejected</field>
+            <field name="sequence">99</field>
+            <field name="is_rejected">True</field>
+            <field name="fold">True</field>
+            <field name="requirements">Candidate not selected</field>
+        </record>
+    </data>
+</odoo>

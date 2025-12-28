@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Recruitment Stage Form View -->
+    <record id="view_tazweed_recruitment_stage_form" model="ir.ui.view">
+        <field name="name">tazweed.recruitment.stage.form</field>
+        <field name="model">tazweed.recruitment.stage</field>
+        <field name="arch" type="xml">
+            <form string="Stage">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="fold"/>
+                        </group>
+                        <group>
+                            <field name="is_initial"/>
+                            <field name="is_hired"/>
+                            <field name="is_rejected"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="requirements"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Recruitment Stage Tree View -->
+    <record id="view_tazweed_recruitment_stage_tree" model="ir.ui.view">
+        <field name="name">tazweed.recruitment.stage.tree</field>
+        <field name="model">tazweed.recruitment.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Stages" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_initial"/>
+                <field name="is_hired"/>
+                <field name="is_rejected"/>
+                <field name="fold"/>
+                <field name="pipeline_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Pipeline Form View -->
+    <record id="view_tazweed_pipeline_form" model="ir.ui.view">
+        <field name="name">tazweed.recruitment.pipeline.form</field>
+        <field name="model">tazweed.recruitment.pipeline</field>
+        <field name="arch" type="xml">
+            <form string="Pipeline">
+                <header>
+                    <button name="action_schedule_interview" string="Schedule Interview" type="object" class="btn-primary"/>
+                    <button name="action_hire" string="Hire" type="object" class="btn-success"
+                            attrs="{'invisible': [('result', '=', 'hired')]}"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger"
+                            attrs="{'invisible': [('result', 'in', ('hired', 'rejected'))]}"/>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_interviews" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="interview_count" widget="statinfo" string="Interviews"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="candidate_name" readonly="1"/>
+                        </h1>
+                        <h4>
+                            <field name="name" readonly="1"/>
+                        </h4>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="candidate_id"/>
+                            <field name="candidate_email" widget="email"/>
+                            <field name="candidate_mobile" widget="phone"/>
+                        </group>
+                        <group>
+                            <field name="job_order_id"/>
+                            <field name="job_title"/>
+                            <field name="client_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Scoring">
+                            <field name="match_score" widget="progressbar"/>
+                            <field name="recruiter_rating"/>
+                        </group>
+                        <group string="Status">
+                            <field name="priority"/>
+                            <field name="kanban_state" widget="state_selection"/>
+                            <field name="result"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dates">
+                            <field name="date_applied"/>
+                            <field name="date_last_stage_change"/>
+                            <field name="days_in_stage"/>
+                        </group>
+                        <group string="Assignment">
+                            <field name="recruiter_id"/>
+                            <field name="next_interview_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Interviews" name="interviews">
+                            <field name="interview_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="interview_type"/>
+                                    <field name="interview_round"/>
+                                    <field name="scheduled_date"/>
+                                    <field name="location_type"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="result" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Rejection" name="rejection" attrs="{'invisible': [('result', '!=', 'rejected')]}">
+                            <group>
+                                <field name="rejection_reason"/>
+                                <field name="rejection_notes"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Pipeline Tree View -->
+    <record id="view_tazweed_pipeline_tree" model="ir.ui.view">
+        <field name="name">tazweed.recruitment.pipeline.tree</field>
+        <field name="model">tazweed.recruitment.pipeline</field>
+        <field name="arch" type="xml">
+            <tree string="Pipeline" decoration-success="result == 'hired'" decoration-danger="result == 'rejected'">
+                <field name="name"/>
+                <field name="candidate_name"/>
+                <field name="job_title"/>
+                <field name="client_id"/>
+                <field name="stage_id"/>
+                <field name="match_score" widget="progressbar"/>
+                <field name="days_in_stage"/>
+                <field name="recruiter_id"/>
+                <field name="next_interview_date"/>
+                <field name="result" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Pipeline Kanban View -->
+    <record id="view_tazweed_pipeline_kanban" model="ir.ui.view">
+        <field name="name">tazweed.recruitment.pipeline.kanban</field>
+        <field name="model">tazweed.recruitment.pipeline</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column o_recruitment_kanban" on_create="quick_create">
+                <field name="id"/>
+                <field name="candidate_id"/>
+                <field name="candidate_name"/>
+                <field name="candidate_image"/>
+                <field name="job_title"/>
+                <field name="client_id"/>
+                <field name="stage_id"/>
+                <field name="match_score"/>
+                <field name="priority"/>
+                <field name="kanban_state"/>
+                <field name="result"/>
+                <field name="color"/>
+                <field name="interview_count"/>
+                <field name="next_interview_date"/>
+                <progressbar field="kanban_state" colors='{"normal": "secondary", "done": "success", "blocked": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <div class="o_kanban_image">
+                                            <img t-att-src="kanban_image('tazweed.candidate', 'image_128', record.candidate_id.raw_value)" 
+                                                 class="rounded-circle" width="40" height="40" alt="Candidate"/>
+                                        </div>
+                                        <div class="ms-2">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="candidate_name"/>
+                                            </strong>
+                                            <div class="text-muted small">
+                                                <field name="job_title"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="text-muted small mb-1">
+                                        <i class="fa fa-building-o"/> <field name="client_id"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="text-muted small">Match Score:</span>
+                                        <field name="match_score" widget="progressbar"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <t t-if="record.interview_count.raw_value > 0">
+                                            <span class="badge badge-info">
+                                                <i class="fa fa-calendar"/> <field name="interview_count"/>
+                                            </span>
+                                        </t>
+                                        <t t-if="record.next_interview_date.raw_value">
+                                            <span class="badge badge-warning" title="Next Interview">
+                                                <field name="next_interview_date" widget="date"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="kanban_state" widget="state_selection"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Pipeline Search View -->
+    <record id="view_tazweed_pipeline_search" model="ir.ui.view">
+        <field name="name">tazweed.recruitment.pipeline.search</field>
+        <field name="model">tazweed.recruitment.pipeline</field>
+        <field name="arch" type="xml">
+            <search string="Search Pipeline">
+                <field name="candidate_name"/>
+                <field name="job_order_id"/>
+                <field name="client_id"/>
+                <field name="recruiter_id"/>
+                <separator/>
+                <filter string="Pending" name="pending" domain="[('result', '=', 'pending')]"/>
+                <filter string="Hired" name="hired" domain="[('result', '=', 'hired')]"/>
+                <filter string="Rejected" name="rejected" domain="[('result', '=', 'rejected')]"/>
+                <separator/>
+                <filter string="High Match (80%+)" name="high_match" domain="[('match_score', '>=', 80)]"/>
+                <filter string="Has Interview" name="has_interview" domain="[('interview_count', '>', 0)]"/>
+                <separator/>
+                <filter string="My Pipeline" name="my_pipeline" domain="[('recruiter_id', '=', uid)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Job Order" name="group_job" context="{'group_by': 'job_order_id'}"/>
+                    <filter string="Client" name="group_client" context="{'group_by': 'client_id'}"/>
+                    <filter string="Result" name="group_result" context="{'group_by': 'result'}"/>
+                    <filter string="Recruiter" name="group_recruiter" context="{'group_by': 'recruiter_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Pipeline Action -->
+    <record id="action_tazweed_pipeline" model="ir.actions.act_window">
+        <field name="name">Recruitment Pipeline</field>
+        <field name="res_model">tazweed.recruitment.pipeline</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_tazweed_pipeline_search"/>
+        <field name="context">{'search_default_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No candidates in pipeline
+            </p>
+            <p>
+                Add candidates to job orders to see them in the recruitment pipeline.
+            </p>
+        </field>
+    </record>
+
+    <!-- Stage Action -->
+    <record id="action_tazweed_recruitment_stage" model="ir.actions.act_window">
+        <field name="name">Pipeline Stages</field>
+        <field name="res_model">tazweed.recruitment.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

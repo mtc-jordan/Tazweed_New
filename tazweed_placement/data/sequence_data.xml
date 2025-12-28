@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Candidate Sequence -->
+        <record id="seq_tazweed_candidate" model="ir.sequence">
+            <field name="name">Candidate Sequence</field>
+            <field name="code">tazweed.candidate</field>
+            <field name="prefix">CAND/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Client Sequence -->
+        <record id="seq_tazweed_client" model="ir.sequence">
+            <field name="name">Client Sequence</field>
+            <field name="code">tazweed.client</field>
+            <field name="prefix">CLT/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Job Order Sequence -->
+        <record id="seq_tazweed_job_order" model="ir.sequence">
+            <field name="name">Job Order Sequence</field>
+            <field name="code">tazweed.job.order</field>
+            <field name="prefix">JO/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Pipeline Sequence -->
+        <record id="seq_tazweed_pipeline" model="ir.sequence">
+            <field name="name">Pipeline Sequence</field>
+            <field name="code">tazweed.recruitment.pipeline</field>
+            <field name="prefix">PL/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Interview Sequence -->
+        <record id="seq_tazweed_interview" model="ir.sequence">
+            <field name="name">Interview Sequence</field>
+            <field name="code">tazweed.interview</field>
+            <field name="prefix">INT/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Placement Sequence -->
+        <record id="seq_tazweed_placement" model="ir.sequence">
+            <field name="name">Placement Sequence</field>
+            <field name="code">tazweed.placement</field>
+            <field name="prefix">PLC/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Invoice Sequence -->
+        <record id="seq_tazweed_placement_invoice" model="ir.sequence">
+            <field name="name">Placement Invoice Sequence</field>
+            <field name="code">tazweed.placement.invoice</field>
+            <field name="prefix">INV/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

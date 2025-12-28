@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_tazweed_placement_root"
+              name="Placement"
+              web_icon="tazweed_placement,static/description/icon.png"
+              sequence="15"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_tazweed_placement_dashboard"
+              name="Dashboard"
+              parent="menu_tazweed_placement_root"
+              action="action_tazweed_placement_dashboard"
+              sequence="1"/>
+
+    <!-- Recruitment Menu -->
+    <menuitem id="menu_tazweed_recruitment"
+              name="Recruitment"
+              parent="menu_tazweed_placement_root"
+              sequence="10"/>
+
+    <menuitem id="menu_tazweed_job_orders"
+              name="Job Orders"
+              parent="menu_tazweed_recruitment"
+              action="action_tazweed_job_order"
+              sequence="10"/>
+
+    <menuitem id="menu_tazweed_pipeline"
+              name="Pipeline"
+              parent="menu_tazweed_recruitment"
+              action="action_tazweed_pipeline"
+              sequence="20"/>
+
+    <menuitem id="menu_tazweed_interviews"
+              name="Interviews"
+              parent="menu_tazweed_recruitment"
+              action="action_tazweed_interview"
+              sequence="30"/>
+
+    <!-- Candidates Menu -->
+    <menuitem id="menu_tazweed_candidates"
+              name="Candidates"
+              parent="menu_tazweed_placement_root"
+              action="action_tazweed_candidate"
+              sequence="20"/>
+
+    <!-- Clients Menu -->
+    <menuitem id="menu_tazweed_clients"
+              name="Clients"
+              parent="menu_tazweed_placement_root"
+              action="action_tazweed_client"
+              sequence="30"/>
+
+    <!-- Placements Menu -->
+    <menuitem id="menu_tazweed_placements"
+              name="Placements"
+              parent="menu_tazweed_placement_root"
+              sequence="40"/>
+
+    <menuitem id="menu_tazweed_placements_all"
+              name="All Placements"
+              parent="menu_tazweed_placements"
+              action="action_tazweed_placement"
+              sequence="10"/>
+
+    <menuitem id="menu_tazweed_invoices"
+              name="Invoices"
+              parent="menu_tazweed_placements"
+              action="action_tazweed_placement_invoice"
+              sequence="20"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_tazweed_placement_config"
+              name="Configuration"
+              parent="menu_tazweed_placement_root"
+              sequence="100"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_tazweed_recruitment_stages"
+              name="Pipeline Stages"
+              parent="menu_tazweed_placement_config"
+              action="action_tazweed_recruitment_stage"
+              sequence="10"/>
+</odoo>

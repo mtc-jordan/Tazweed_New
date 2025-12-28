@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Candidate Match Wizard Form -->
+    <record id="view_tazweed_candidate_match_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.candidate.match.wizard.form</field>
+        <field name="model">tazweed.candidate.match.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Find Matching Candidates">
+                <group>
+                    <group>
+                        <field name="job_order_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="min_score"/>
+                        <field name="max_results"/>
+                    </group>
+                </group>
+                <separator string="Matching Candidates"/>
+                <field name="match_ids">
+                    <tree editable="bottom">
+                        <field name="selected"/>
+                        <field name="candidate_name"/>
+                        <field name="candidate_email"/>
+                        <field name="total_experience"/>
+                        <field name="education_level"/>
+                        <field name="expected_salary"/>
+                        <field name="match_score" widget="progressbar"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_search" string="Search" type="object" class="btn-secondary"/>
+                    <button name="action_add_selected" string="Add Selected to Pipeline" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Reject Wizard Form -->
+    <record id="view_tazweed_reject_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.reject.wizard.form</field>
+        <field name="model">tazweed.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Candidate">
+                <group>
+                    <field name="pipeline_id" invisible="1"/>
+                    <field name="rejection_reason"/>
+                    <field name="rejection_notes"/>
+                    <field name="send_notification"/>
+                </group>
+                <footer>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Reschedule Wizard Form -->
+    <record id="view_tazweed_reschedule_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.reschedule.wizard.form</field>
+        <field name="model">tazweed.reschedule.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reschedule Interview">
+                <group>
+                    <field name="interview_id" invisible="1"/>
+                    <field name="current_date"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="new_date"/>
+                        <field name="new_duration"/>
+                    </group>
+                    <group>
+                        <field name="reschedule_reason"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <group>
+                    <field name="notify_candidate"/>
+                    <field name="notify_interviewers"/>
+                </group>
+                <footer>
+                    <button name="action_reschedule" string="Reschedule" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Extend Wizard Form -->
+    <record id="view_tazweed_extend_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.extend.wizard.form</field>
+        <field name="model">tazweed.extend.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Extend Contract">
+                <group>
+                    <field name="placement_id" invisible="1"/>
+                    <field name="current_end_date"/>
+                    <field name="current_salary"/>
+                    <field name="current_bill_rate"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="extension_type" widget="radio"/>
+                        <field name="extension_months" attrs="{'invisible': [('extension_type', '!=', 'months')]}"/>
+                        <field name="new_end_date"/>
+                    </group>
+                    <group>
+                        <field name="new_salary"/>
+                        <field name="new_bill_rate"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_extend" string="Extend" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Terminate Wizard Form -->
+    <record id="view_tazweed_terminate_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.terminate.wizard.form</field>
+        <field name="model">tazweed.terminate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Terminate Placement">
+                <group>
+                    <field name="placement_id" invisible="1"/>
+                    <field name="termination_date"/>
+                    <field name="termination_reason"/>
+                </group>
+                <group>
+                    <field name="termination_notes"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="replacement_required"/>
+                        <field name="replacement_deadline" attrs="{'invisible': [('replacement_required', '=', False)]}"/>
+                    </group>
+                    <group>
+                        <field name="final_settlement"/>
+                        <field name="settlement_notes"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_terminate" string="Terminate" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payment Wizard Form -->
+    <record id="view_tazweed_payment_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.payment.wizard.form</field>
+        <field name="model">tazweed.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register Payment">
+                <group>
+                    <field name="invoice_id" invisible="1"/>
+                    <field name="invoice_amount"/>
+                    <field name="amount_due"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="payment_amount"/>
+                        <field name="payment_date"/>
+                    </group>
+                    <group>
+                        <field name="payment_method"/>
+                        <field name="payment_reference"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_register_payment" string="Register Payment" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Add to Pipeline Wizard Form -->
+    <record id="view_tazweed_add_pipeline_wizard_form" model="ir.ui.view">
+        <field name="name">tazweed.add.pipeline.wizard.form</field>
+        <field name="model">tazweed.add.pipeline.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add to Pipeline">
+                <group>
+                    <field name="candidate_id" readonly="1"/>
+                    <field name="job_order_id"/>
+                    <field name="stage_id"/>
+                    <field name="recruiter_id"/>
+                </group>
+                <group>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_add" string="Add to Pipeline" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

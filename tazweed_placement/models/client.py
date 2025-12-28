@@ -2,17 +2,24 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from datetime import date
 
 
 class PlacementClient(models.Model):
     """Client Company for Placement"""
     _name = 'tazweed.client'
-    _description = 'Tazweed Client'
+    _description = 'Placement Client'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
 
     name = fields.Char(string='Company Name', required=True, tracking=True)
-    code = fields.Char(string='Client Code', required=True, copy=False)
+    code = fields.Char(
+        string='Client Code',
+        required=True,
+        copy=False,
+        readonly=True,
+        default=lambda self: _('New'),
+    )
     
     partner_id = fields.Many2one(
         'res.partner',
@@ -50,22 +57,11 @@ class PlacementClient(models.Model):
     is_free_zone = fields.Boolean(string='Is Free Zone Company')
     
     # Contacts
-    contact_ids = fields.One2many(
-        'tazweed.client.contact',
-        'client_id',
-        string='Contacts',
-    )
-    primary_contact_id = fields.Many2one(
-        'tazweed.client.contact',
-        string='Primary Contact',
-    )
+    contact_ids = fields.One2many('tazweed.client.contact', 'client_id', string='Contacts')
+    primary_contact_id = fields.Many2one('tazweed.client.contact', string='Primary Contact')
     
     # Contract & Billing
-    contract_ids = fields.One2many(
-        'tazweed.client.contract',
-        'client_id',
-        string='Contracts',
-    )
+    contract_ids = fields.One2many('tazweed.client.contract', 'client_id', string='Contracts')
     active_contract_id = fields.Many2one(
         'tazweed.client.contract',
         string='Active Contract',
@@ -95,42 +91,29 @@ class PlacementClient(models.Model):
     ], string='Status', default='prospect', tracking=True)
     
     # Statistics
-    job_order_ids = fields.One2many(
-        'tazweed.job.order',
-        'client_id',
-        string='Job Orders',
-    )
     job_order_count = fields.Integer(compute='_compute_counts')
-    
-    placement_ids = fields.One2many(
-        'tazweed.placement',
-        'client_id',
-        string='Placements',
-    )
     placement_count = fields.Integer(compute='_compute_counts')
     active_placement_count = fields.Integer(compute='_compute_counts')
-    
     total_revenue = fields.Float(compute='_compute_revenue')
     
     # Documents
-    document_ids = fields.One2many(
-        'tazweed.client.document',
-        'client_id',
-        string='Documents',
-    )
+    document_ids = fields.One2many('tazweed.client.document', 'client_id', string='Documents')
     
     notes = fields.Text(string='Notes')
     active = fields.Boolean(default=True)
+    color = fields.Integer(string='Color Index')
     
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        default=lambda self: self.env.company,
-    )
+    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
 
     _sql_constraints = [
         ('code_uniq', 'unique(code)', 'Client code must be unique!'),
     ]
+
+    @api.model
+    def create(self, vals):
+        if vals.get('code', _('New')) == _('New'):
+            vals['code'] = self.env['ir.sequence'].next_by_code('tazweed.client') or _('New')
+        return super().create(vals)
 
     @api.depends('contract_ids', 'contract_ids.state')
     def _compute_active_contract(self):
@@ -138,37 +121,50 @@ class PlacementClient(models.Model):
             active = client.contract_ids.filtered(lambda c: c.state == 'active')
             client.active_contract_id = active[0] if active else False
 
-    @api.depends('job_order_ids', 'placement_ids')
     def _compute_counts(self):
         for client in self:
-            client.job_order_count = len(client.job_order_ids)
-            client.placement_count = len(client.placement_ids)
-            client.active_placement_count = len(client.placement_ids.filtered(
-                lambda p: p.state == 'active'
-            ))
+            job_orders = self.env['tazweed.job.order'].search_count([('client_id', '=', client.id)])
+            placements = self.env['tazweed.placement'].search([('client_id', '=', client.id)])
+            client.job_order_count = job_orders
+            client.placement_count = len(placements)
+            client.active_placement_count = len(placements.filtered(lambda p: p.state == 'active'))
 
     def _compute_revenue(self):
         for client in self:
-            # Calculate total revenue from placements
-            client.total_revenue = sum(
-                p.total_billing for p in client.placement_ids
-                if p.state in ('active', 'completed')
-            )
+            placements = self.env['tazweed.placement'].search([
+                ('client_id', '=', client.id),
+                ('state', 'in', ('active', 'completed')),
+            ])
+            client.total_revenue = sum(p.total_billing for p in placements)
 
     def action_activate(self):
-        """Activate client"""
         self.write({'state': 'active'})
-        return True
 
     def action_hold(self):
-        """Put client on hold"""
         self.write({'state': 'on_hold'})
-        return True
 
     def action_deactivate(self):
-        """Deactivate client"""
         self.write({'state': 'inactive'})
-        return True
+
+    def action_view_job_orders(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Job Orders'),
+            'res_model': 'tazweed.job.order',
+            'view_mode': 'tree,form',
+            'domain': [('client_id', '=', self.id)],
+            'context': {'default_client_id': self.id},
+        }
+
+    def action_view_placements(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Placements'),
+            'res_model': 'tazweed.placement',
+            'view_mode': 'tree,form',
+            'domain': [('client_id', '=', self.id)],
+            'context': {'default_client_id': self.id},
+        }
 
 
 class ClientContact(models.Model):
@@ -177,17 +173,8 @@ class ClientContact(models.Model):
     _description = 'Client Contact'
     _order = 'is_primary desc, name'
 
-    client_id = fields.Many2one(
-        'tazweed.client',
-        string='Client',
-        required=True,
-        ondelete='cascade',
-    )
-    partner_id = fields.Many2one(
-        'res.partner',
-        string='Contact',
-        domain="[('is_company', '=', False)]",
-    )
+    client_id = fields.Many2one('tazweed.client', required=True, ondelete='cascade')
+    partner_id = fields.Many2one('res.partner', domain="[('is_company', '=', False)]")
     
     name = fields.Char(string='Name', required=True)
     designation = fields.Char(string='Designation')
@@ -227,12 +214,7 @@ class ClientContract(models.Model):
         default=lambda self: _('New'),
     )
     
-    client_id = fields.Many2one(
-        'tazweed.client',
-        string='Client',
-        required=True,
-        ondelete='cascade',
-    )
+    client_id = fields.Many2one('tazweed.client', required=True, ondelete='cascade')
     
     contract_type = fields.Selection([
         ('manpower', 'Manpower Supply'),
@@ -260,11 +242,7 @@ class ClientContract(models.Model):
     payment_terms = fields.Integer(string='Payment Terms (Days)', default=30)
     
     # Rates
-    rate_ids = fields.One2many(
-        'tazweed.client.rate',
-        'contract_id',
-        string='Rate Card',
-    )
+    rate_ids = fields.One2many('tazweed.client.rate', 'contract_id', string='Rate Card')
     
     # Documents
     contract_document = fields.Binary(string='Contract Document')
@@ -279,12 +257,7 @@ class ClientContract(models.Model):
     ], string='Status', default='draft', tracking=True)
     
     notes = fields.Text(string='Terms and Conditions')
-    
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        default=lambda self: self.env.company,
-    )
+    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
 
     @api.model
     def create(self, vals):
@@ -293,24 +266,16 @@ class ClientContract(models.Model):
         return super().create(vals)
 
     def action_submit(self):
-        """Submit for approval"""
         self.write({'state': 'pending'})
-        return True
 
     def action_approve(self):
-        """Approve contract"""
         self.write({'state': 'active'})
-        return True
 
     def action_expire(self):
-        """Expire contract"""
         self.write({'state': 'expired'})
-        return True
 
     def action_cancel(self):
-        """Cancel contract"""
         self.write({'state': 'cancelled'})
-        return True
 
 
 class ClientRate(models.Model):
@@ -318,12 +283,7 @@ class ClientRate(models.Model):
     _name = 'tazweed.client.rate'
     _description = 'Client Rate'
 
-    contract_id = fields.Many2one(
-        'tazweed.client.contract',
-        string='Contract',
-        required=True,
-        ondelete='cascade',
-    )
+    contract_id = fields.Many2one('tazweed.client.contract', required=True, ondelete='cascade')
     
     job_category = fields.Selection([
         ('unskilled', 'Unskilled'),
@@ -347,11 +307,7 @@ class ClientRate(models.Model):
     markup_pct = fields.Float(string='Markup %')
     bill_rate = fields.Float(string='Bill Rate', compute='_compute_bill_rate', store=True)
     
-    currency_id = fields.Many2one(
-        'res.currency',
-        string='Currency',
-        default=lambda self: self.env.company.currency_id,
-    )
+    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
 
     @api.depends('base_rate', 'markup_pct')
     def _compute_bill_rate(self):
@@ -365,12 +321,7 @@ class ClientDocument(models.Model):
     _description = 'Client Document'
     _order = 'create_date desc'
 
-    client_id = fields.Many2one(
-        'tazweed.client',
-        string='Client',
-        required=True,
-        ondelete='cascade',
-    )
+    client_id = fields.Many2one('tazweed.client', required=True, ondelete='cascade')
     
     name = fields.Char(string='Document Name', required=True)
     document_type = fields.Selection([

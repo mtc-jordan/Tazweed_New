@@ -1,74 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Job Order Form View -->
-    <record id="view_job_order_form" model="ir.ui.view">
+    <record id="view_tazweed_job_order_form" model="ir.ui.view">
         <field name="name">tazweed.job.order.form</field>
         <field name="model">tazweed.job.order</field>
         <field name="arch" type="xml">
             <form string="Job Order">
                 <header>
-                    <button name="action_open" string="Open" type="object" class="btn-primary" states="draft"/>
-                    <button name="action_fill" string="Mark Filled" type="object" class="btn-success" states="open,in_progress"/>
-                    <button name="action_cancel" string="Cancel" type="object" states="draft,open"/>
+                    <button name="action_open" string="Open" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_start" string="Start Recruiting" type="object"
+                            attrs="{'invisible': [('state', '!=', 'open')]}"/>
+                    <button name="action_find_candidates" string="Find Candidates" type="object" class="btn-secondary"
+                            attrs="{'invisible': [('state', 'not in', ('open', 'in_progress'))]}"/>
+                    <button name="action_hold" string="Put On Hold" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('open', 'in_progress'))]}"/>
+                    <button name="action_fill" string="Mark as Filled" type="object" class="btn-success"
+                            attrs="{'invisible': [('state', 'not in', ('open', 'in_progress'))]}"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            attrs="{'invisible': [('state', 'in', ('filled', 'cancelled'))]}"/>
+                    <button name="action_reopen" string="Reopen" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('on_hold', 'cancelled'))]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,open,in_progress,filled"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" icon="fa-users" type="action" name="%(action_placement)d">
+                        <button name="action_view_pipeline" type="object" class="oe_stat_button" icon="fa-filter">
+                            <field name="pipeline_count" widget="statinfo" string="Pipeline"/>
+                        </button>
+                        <button name="action_view_placements" type="object" class="oe_stat_button" icon="fa-users">
                             <field name="placement_count" widget="statinfo" string="Placements"/>
                         </button>
                     </div>
+                    <widget name="web_ribbon" title="Urgent" bg_color="bg-danger" attrs="{'invisible': [('priority', '!=', 'urgent')]}"/>
                     <div class="oe_title">
-                        <label for="name"/>
+                        <label for="job_title"/>
                         <h1>
-                            <field name="name" readonly="1"/>
+                            <field name="job_title" placeholder="Job Title"/>
                         </h1>
+                        <h4>
+                            <field name="name" readonly="1"/>
+                        </h4>
                     </div>
                     <group>
                         <group>
                             <field name="client_id"/>
-                            <field name="job_title"/>
+                            <field name="client_contact_id" domain="[('client_id', '=', client_id)]"/>
+                            <field name="job_id"/>
                             <field name="department"/>
                         </group>
                         <group>
                             <field name="job_category"/>
                             <field name="employment_type"/>
+                            <field name="priority"/>
+                            <field name="recruiter_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Positions">
                             <field name="positions_required"/>
                             <field name="positions_filled"/>
+                            <field name="positions_remaining"/>
                         </group>
-                    </group>
-                    <group>
-                        <group>
+                        <group string="Dates">
                             <field name="date_received"/>
                             <field name="date_required"/>
-                            <field name="priority"/>
-                        </group>
-                        <group>
-                            <field name="recruiter_id"/>
-                            <field name="education_level"/>
-                            <field name="experience_years"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group>
-                            <field name="salary_min"/>
-                            <field name="salary_max"/>
+                            <field name="date_closed"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Description" name="description">
-                            <field name="job_description" placeholder="Job description..."/>
+                        <page string="Requirements" name="requirements">
+                            <group>
+                                <group string="Experience">
+                                    <field name="min_experience"/>
+                                    <field name="max_experience"/>
+                                </group>
+                                <group string="Education">
+                                    <field name="education_required"/>
+                                </group>
+                            </group>
+                            <group string="Skills">
+                                <field name="skill_ids" widget="many2many_tags" nolabel="1"/>
+                            </group>
+                            <separator string="Job Description"/>
+                            <field name="description"/>
+                            <separator string="Requirements"/>
+                            <field name="requirements"/>
+                            <separator string="Responsibilities"/>
+                            <field name="responsibilities"/>
                         </page>
-                        <page string="Placements" name="placements">
-                            <field name="placement_ids">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="candidate_id"/>
-                                    <field name="date_start"/>
-                                    <field name="total_salary"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
+                        <page string="Location &amp; Compensation" name="compensation">
+                            <group>
+                                <group string="Location">
+                                    <field name="work_location"/>
+                                    <field name="emirate"/>
+                                </group>
+                                <group string="Salary Range">
+                                    <field name="salary_min"/>
+                                    <field name="salary_max"/>
+                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                </group>
+                            </group>
+                            <group string="Benefits">
+                                <field name="benefits" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Preferences" name="preferences">
+                            <group>
+                                <group>
+                                    <field name="gender_preference"/>
+                                    <field name="age_min"/>
+                                    <field name="age_max"/>
+                                </group>
+                                <group>
+                                    <field name="nationality_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Billing" name="billing">
+                            <group>
+                                <group>
+                                    <field name="bill_rate"/>
+                                    <field name="markup_pct"/>
+                                </group>
+                                <group>
+                                    <field name="match_score_threshold"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Internal notes..."/>
                         </page>
                     </notebook>
                 </sheet>
@@ -82,59 +143,122 @@
     </record>
 
     <!-- Job Order Tree View -->
-    <record id="view_job_order_tree" model="ir.ui.view">
+    <record id="view_tazweed_job_order_tree" model="ir.ui.view">
         <field name="name">tazweed.job.order.tree</field>
         <field name="model">tazweed.job.order</field>
         <field name="arch" type="xml">
             <tree string="Job Orders" decoration-danger="priority == 'urgent'" decoration-warning="priority == 'high'">
                 <field name="name"/>
-                <field name="client_id"/>
                 <field name="job_title"/>
+                <field name="client_id"/>
                 <field name="job_category"/>
                 <field name="positions_required"/>
                 <field name="positions_filled"/>
+                <field name="positions_remaining"/>
                 <field name="date_required"/>
-                <field name="priority"/>
                 <field name="recruiter_id"/>
-                <field name="state"/>
+                <field name="priority"/>
+                <field name="state" widget="badge" decoration-success="state == 'filled'" decoration-info="state in ('open', 'in_progress')" decoration-warning="state == 'on_hold'" decoration-muted="state == 'cancelled'"/>
             </tree>
         </field>
     </record>
 
+    <!-- Job Order Kanban View -->
+    <record id="view_tazweed_job_order_kanban" model="ir.ui.view">
+        <field name="name">tazweed.job.order.kanban</field>
+        <field name="model">tazweed.job.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="client_id"/>
+                <field name="positions_required"/>
+                <field name="positions_filled"/>
+                <field name="date_required"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <field name="color"/>
+                <progressbar field="state" colors='{"draft": "secondary", "open": "info", "in_progress": "primary", "on_hold": "warning", "filled": "success", "cancelled": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="job_title"/>
+                                        </strong>
+                                    </div>
+                                    <span t-if="record.priority.raw_value == 'urgent'" class="badge badge-danger">Urgent</span>
+                                    <span t-if="record.priority.raw_value == 'high'" class="badge badge-warning">High</span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><field name="client_id"/></div>
+                                    <div class="text-muted"><field name="name"/></div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span class="badge badge-secondary">
+                                            <field name="positions_filled"/>/<field name="positions_required"/>
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="date_required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <!-- Job Order Search View -->
-    <record id="view_job_order_search" model="ir.ui.view">
+    <record id="view_tazweed_job_order_search" model="ir.ui.view">
         <field name="name">tazweed.job.order.search</field>
         <field name="model">tazweed.job.order</field>
         <field name="arch" type="xml">
             <search string="Search Job Orders">
                 <field name="name"/>
-                <field name="client_id"/>
                 <field name="job_title"/>
+                <field name="client_id"/>
                 <field name="recruiter_id"/>
                 <separator/>
-                <filter name="open" string="Open" domain="[('state', '=', 'open')]"/>
-                <filter name="urgent" string="Urgent" domain="[('priority', '=', 'urgent')]"/>
-                <filter name="my_orders" string="My Orders" domain="[('recruiter_id', '=', uid)]"/>
+                <filter string="Open" name="open" domain="[('state', '=', 'open')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Active" name="active_jobs" domain="[('state', 'in', ('open', 'in_progress'))]"/>
+                <separator/>
+                <filter string="Urgent" name="urgent" domain="[('priority', '=', 'urgent')]"/>
+                <filter string="High Priority" name="high" domain="[('priority', 'in', ('high', 'urgent'))]"/>
+                <separator/>
+                <filter string="My Jobs" name="my_jobs" domain="[('recruiter_id', '=', uid)]"/>
+                <separator/>
                 <group expand="0" string="Group By">
-                    <filter name="group_client" string="Client" context="{'group_by': 'client_id'}"/>
-                    <filter name="group_category" string="Category" context="{'group_by': 'job_category'}"/>
-                    <filter name="group_recruiter" string="Recruiter" context="{'group_by': 'recruiter_id'}"/>
-                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Client" name="group_client" context="{'group_by': 'client_id'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'job_category'}"/>
+                    <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Recruiter" name="group_recruiter" context="{'group_by': 'recruiter_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
     <!-- Job Order Action -->
-    <record id="action_job_order" model="ir.actions.act_window">
+    <record id="action_tazweed_job_order" model="ir.actions.act_window">
         <field name="name">Job Orders</field>
         <field name="res_model">tazweed.job.order</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_job_order_search"/>
-        <field name="context">{'search_default_open': 1}</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_tazweed_job_order_search"/>
+        <field name="context">{'search_default_active_jobs': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first job order
+            </p>
+            <p>
+                Add job orders from clients and start recruiting candidates.
             </p>
         </field>
     </record>

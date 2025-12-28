@@ -1,90 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Placement Form View -->
-    <record id="view_placement_form" model="ir.ui.view">
+    <record id="view_tazweed_placement_form" model="ir.ui.view">
         <field name="name">tazweed.placement.form</field>
         <field name="model">tazweed.placement</field>
         <field name="arch" type="xml">
             <form string="Placement">
                 <header>
-                    <button name="action_submit" string="Submit" type="object" class="btn-primary" states="draft"/>
-                    <button name="action_approve" string="Approve" type="object" class="btn-primary" states="pending"/>
-                    <button name="action_activate" string="Activate" type="object" class="btn-success" states="approved"/>
-                    <button name="action_complete" string="Complete" type="object" states="active"/>
-                    <button name="action_terminate" string="Terminate" type="object" class="btn-danger" states="active"/>
-                    <button name="action_cancel" string="Cancel" type="object" states="draft,pending"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,active,completed"/>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_start" string="Start" type="object"
+                            attrs="{'invisible': [('state', '!=', 'pending')]}"/>
+                    <button name="action_pass_probation" string="Pass Probation" type="object" class="btn-success"
+                            attrs="{'invisible': [('state', '!=', 'probation')]}"/>
+                    <button name="action_extend" string="Extend Contract" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('active', 'extended'))]}"/>
+                    <button name="action_complete" string="Complete" type="object" class="btn-success"
+                            attrs="{'invisible': [('state', 'not in', ('active', 'extended'))]}"/>
+                    <button name="action_terminate" string="Terminate" type="object" class="btn-danger"
+                            attrs="{'invisible': [('state', 'not in', ('probation', 'active', 'extended'))]}"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('draft', 'pending'))]}"/>
+                    <button name="action_create_employee" string="Create Employee" type="object"
+                            attrs="{'invisible': ['|', ('employee_id', '!=', False), ('state', 'not in', ('probation', 'active'))]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,probation,active,completed"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_create_employee" string="Create Employee" type="object" class="oe_stat_button" icon="fa-user-plus" attrs="{'invisible': ['|', ('employee_id', '!=', False), ('state', 'not in', ('approved', 'active'))]}"/>
+                        <button name="action_view_invoices" type="object" class="oe_stat_button" icon="fa-money">
+                            <field name="total_invoiced" widget="statinfo" string="Invoiced"/>
+                        </button>
                     </div>
+                    <widget name="web_ribbon" title="Terminated" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'terminated')]}"/>
                     <div class="oe_title">
-                        <label for="name"/>
+                        <label for="job_title"/>
                         <h1>
-                            <field name="name" readonly="1"/>
+                            <field name="job_title" placeholder="Job Title"/>
                         </h1>
+                        <h4>
+                            <field name="name" readonly="1"/>
+                        </h4>
                     </div>
                     <group>
                         <group>
-                            <field name="client_id"/>
                             <field name="candidate_id"/>
-                            <field name="job_order_id" domain="[('client_id', '=', client_id)]"/>
-                            <field name="employee_id" readonly="1"/>
+                            <field name="client_id"/>
+                            <field name="job_order_id"/>
+                            <field name="pipeline_id"/>
                         </group>
                         <group>
-                            <field name="job_title"/>
+                            <field name="placement_type"/>
                             <field name="department"/>
                             <field name="work_location"/>
-                            <field name="contract_type"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group>
-                            <field name="date_start"/>
-                            <field name="date_end"/>
-                            <field name="contract_duration"/>
+                            <field name="employee_id"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Compensation" name="compensation">
+                        <page string="Dates" name="dates">
                             <group>
-                                <group string="Salary">
-                                    <field name="basic_salary"/>
-                                    <field name="housing_allowance"/>
-                                    <field name="transport_allowance"/>
-                                    <field name="food_allowance"/>
-                                    <field name="other_allowances"/>
-                                    <field name="total_salary"/>
-                                </group>
-                                <group string="Billing">
-                                    <field name="bill_rate"/>
-                                    <field name="markup_pct"/>
-                                    <field name="total_billing"/>
-                                    <field name="commission_pct"/>
-                                    <field name="commission_amount"/>
-                                    <field name="currency_id"/>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="Deployments" name="deployments">
-                            <field name="current_deployment_id" readonly="1"/>
-                            <field name="deployment_ids">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="site_name"/>
+                                <group string="Placement Dates">
+                                    <field name="date_placed"/>
                                     <field name="date_start"/>
                                     <field name="date_end"/>
-                                    <field name="state"/>
+                                    <field name="contract_duration"/>
+                                </group>
+                                <group string="Probation">
+                                    <field name="probation_period"/>
+                                    <field name="probation_end_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Compensation" name="compensation">
+                            <group>
+                                <group string="Candidate Salary">
+                                    <field name="salary"/>
+                                    <field name="salary_type"/>
+                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                    <field name="housing_allowance"/>
+                                    <field name="transport_allowance"/>
+                                    <field name="other_allowances"/>
+                                    <field name="total_package"/>
+                                </group>
+                                <group string="Client Billing">
+                                    <field name="bill_rate"/>
+                                    <field name="bill_rate_type"/>
+                                    <field name="markup_pct"/>
+                                    <field name="margin"/>
+                                    <field name="margin_pct" widget="percentage"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Fees &amp; Invoicing" name="fees">
+                            <group>
+                                <group string="Placement Fee">
+                                    <field name="placement_fee"/>
+                                    <field name="placement_fee_pct"/>
+                                    <field name="fee_paid"/>
+                                    <field name="fee_paid_date"/>
+                                </group>
+                                <group string="Totals">
+                                    <field name="total_billing"/>
+                                    <field name="total_invoiced"/>
+                                    <field name="total_paid"/>
+                                </group>
+                            </group>
+                            <separator string="Invoices"/>
+                            <field name="invoice_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="invoice_type"/>
+                                    <field name="date_invoice"/>
+                                    <field name="date_due"/>
+                                    <field name="amount"/>
+                                    <field name="vat_amount"/>
+                                    <field name="total_amount" sum="Total"/>
+                                    <field name="amount_paid"/>
+                                    <field name="state" widget="badge"/>
                                 </tree>
                             </field>
+                            <button name="action_create_invoice" string="Create Invoice" type="object" class="btn-secondary"/>
                         </page>
-                        <page string="Termination" name="termination" attrs="{'invisible': [('state', 'not in', ('terminated', 'completed'))]}">
+                        <page string="Documents" name="documents">
                             <group>
-                                <field name="termination_reason"/>
-                                <field name="termination_date"/>
+                                <group>
+                                    <field name="offer_letter" filename="offer_letter_name"/>
+                                    <field name="offer_letter_name" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="contract_document" filename="contract_document_name"/>
+                                    <field name="contract_document_name" invisible="1"/>
+                                </group>
                             </group>
-                            <field name="termination_notes" placeholder="Termination notes..."/>
+                        </page>
+                        <page string="Termination" name="termination" attrs="{'invisible': [('state', '!=', 'terminated')]}">
+                            <group>
+                                <group>
+                                    <field name="termination_date"/>
+                                    <field name="termination_reason"/>
+                                </group>
+                                <group>
+                                    <field name="replacement_required"/>
+                                    <field name="replacement_deadline" attrs="{'invisible': [('replacement_required', '=', False)]}"/>
+                                    <field name="replacement_pipeline_id" attrs="{'invisible': [('replacement_required', '=', False)]}"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="termination_notes"/>
+                            </group>
+                        </page>
+                        <page string="Assignment" name="assignment">
+                            <group>
+                                <group>
+                                    <field name="account_manager_id"/>
+                                    <field name="recruiter_id"/>
+                                </group>
+                            </group>
                         </page>
                         <page string="Notes" name="notes">
                             <field name="notes" placeholder="Notes..."/>
@@ -101,98 +171,183 @@
     </record>
 
     <!-- Placement Tree View -->
-    <record id="view_placement_tree" model="ir.ui.view">
+    <record id="view_tazweed_placement_tree" model="ir.ui.view">
         <field name="name">tazweed.placement.tree</field>
         <field name="model">tazweed.placement</field>
         <field name="arch" type="xml">
-            <tree string="Placements" decoration-success="state == 'active'" decoration-muted="state in ('completed', 'terminated', 'cancelled')">
+            <tree string="Placements" decoration-success="state == 'active'" decoration-info="state == 'probation'" decoration-danger="state == 'terminated'" decoration-muted="state in ('completed', 'cancelled')">
                 <field name="name"/>
-                <field name="client_id"/>
                 <field name="candidate_id"/>
+                <field name="client_id"/>
                 <field name="job_title"/>
+                <field name="placement_type"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
-                <field name="total_salary"/>
-                <field name="total_billing"/>
-                <field name="state"/>
+                <field name="salary"/>
+                <field name="bill_rate"/>
+                <field name="margin"/>
+                <field name="total_billing" sum="Total"/>
+                <field name="state" widget="badge"/>
             </tree>
         </field>
     </record>
 
+    <!-- Placement Kanban View -->
+    <record id="view_tazweed_placement_kanban" model="ir.ui.view">
+        <field name="name">tazweed.placement.kanban</field>
+        <field name="model">tazweed.placement</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="client_id"/>
+                <field name="job_title"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="salary"/>
+                <field name="bill_rate"/>
+                <field name="state"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="candidate_id"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><field name="job_title"/></div>
+                                    <div class="text-muted"><field name="client_id"/></div>
+                                    <div class="mt-2">
+                                        <span class="badge badge-info">
+                                            <field name="date_start"/> - <field name="date_end"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span>Bill: <field name="bill_rate"/></span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="name"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <!-- Placement Search View -->
-    <record id="view_placement_search" model="ir.ui.view">
+    <record id="view_tazweed_placement_search" model="ir.ui.view">
         <field name="name">tazweed.placement.search</field>
         <field name="model">tazweed.placement</field>
         <field name="arch" type="xml">
             <search string="Search Placements">
                 <field name="name"/>
-                <field name="client_id"/>
                 <field name="candidate_id"/>
+                <field name="client_id"/>
                 <field name="job_title"/>
                 <separator/>
-                <filter name="active" string="Active" domain="[('state', '=', 'active')]"/>
-                <filter name="pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Active" name="active_placements" domain="[('state', '=', 'active')]"/>
+                <filter string="Probation" name="probation" domain="[('state', '=', 'probation')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Terminated" name="terminated" domain="[('state', '=', 'terminated')]"/>
+                <separator/>
+                <filter string="Permanent" name="permanent" domain="[('placement_type', '=', 'permanent')]"/>
+                <filter string="Contract" name="contract" domain="[('placement_type', '=', 'contract')]"/>
+                <separator/>
                 <group expand="0" string="Group By">
-                    <filter name="group_client" string="Client" context="{'group_by': 'client_id'}"/>
-                    <filter name="group_type" string="Contract Type" context="{'group_by': 'contract_type'}"/>
-                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Client" name="group_client" context="{'group_by': 'client_id'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'placement_type'}"/>
+                    <filter string="Start Date" name="group_start" context="{'group_by': 'date_start:month'}"/>
                 </group>
             </search>
         </field>
     </record>
 
     <!-- Placement Action -->
-    <record id="action_placement" model="ir.actions.act_window">
+    <record id="action_tazweed_placement" model="ir.actions.act_window">
         <field name="name">Placements</field>
         <field name="res_model">tazweed.placement</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_placement_search"/>
-        <field name="context">{'search_default_active': 1}</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_tazweed_placement_search"/>
+        <field name="context">{'search_default_active_placements': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first placement
             </p>
+            <p>
+                Track placements of candidates with clients.
+            </p>
         </field>
     </record>
 
-    <!-- Deployment Form View -->
-    <record id="view_deployment_form" model="ir.ui.view">
-        <field name="name">tazweed.deployment.form</field>
-        <field name="model">tazweed.deployment</field>
+    <!-- Placement Invoice Form -->
+    <record id="view_tazweed_placement_invoice_form" model="ir.ui.view">
+        <field name="name">tazweed.placement.invoice.form</field>
+        <field name="model">tazweed.placement.invoice</field>
         <field name="arch" type="xml">
-            <form string="Deployment">
+            <form string="Invoice">
                 <header>
-                    <button name="action_activate" string="Activate" type="object" class="btn-primary" states="draft"/>
-                    <button name="action_complete" string="Complete" type="object" states="active"/>
-                    <button name="action_cancel" string="Cancel" type="object" states="draft"/>
-                    <field name="state" widget="statusbar"/>
+                    <button name="action_send" string="Send" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_register_payment" string="Register Payment" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('sent', 'partial', 'overdue'))]}"/>
+                    <button name="action_mark_paid" string="Mark as Paid" type="object" class="btn-success"
+                            attrs="{'invisible': [('state', 'not in', ('sent', 'partial', 'overdue'))]}"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            attrs="{'invisible': [('state', 'in', ('paid', 'cancelled'))]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,paid"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="name" readonly="1"/>
                             <field name="placement_id"/>
                             <field name="client_id"/>
-                            <field name="candidate_id"/>
+                            <field name="invoice_type"/>
                         </group>
                         <group>
-                            <field name="site_name"/>
-                            <field name="site_location"/>
-                            <field name="site_supervisor"/>
-                            <field name="site_contact"/>
+                            <field name="date_invoice"/>
+                            <field name="date_due"/>
                         </group>
                     </group>
                     <group>
-                        <group>
-                            <field name="date_start"/>
-                            <field name="date_end"/>
+                        <group string="Period">
+                            <field name="period_start"/>
+                            <field name="period_end"/>
                         </group>
-                        <group>
-                            <field name="work_schedule"/>
-                            <field name="shift_pattern"/>
+                        <group string="Amounts">
+                            <field name="amount"/>
+                            <field name="vat_pct"/>
+                            <field name="vat_amount"/>
+                            <field name="total_amount"/>
                         </group>
                     </group>
-                    <field name="notes" placeholder="Notes..."/>
+                    <group>
+                        <group string="Payment">
+                            <field name="amount_paid"/>
+                            <field name="amount_due"/>
+                            <field name="payment_date"/>
+                            <field name="payment_reference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
@@ -203,32 +358,30 @@
         </field>
     </record>
 
-    <!-- Deployment Tree View -->
-    <record id="view_deployment_tree" model="ir.ui.view">
-        <field name="name">tazweed.deployment.tree</field>
-        <field name="model">tazweed.deployment</field>
+    <!-- Placement Invoice Tree -->
+    <record id="view_tazweed_placement_invoice_tree" model="ir.ui.view">
+        <field name="name">tazweed.placement.invoice.tree</field>
+        <field name="model">tazweed.placement.invoice</field>
         <field name="arch" type="xml">
-            <tree string="Deployments">
+            <tree string="Invoices" decoration-danger="state == 'overdue'" decoration-success="state == 'paid'">
                 <field name="name"/>
                 <field name="placement_id"/>
                 <field name="client_id"/>
-                <field name="site_name"/>
-                <field name="date_start"/>
-                <field name="date_end"/>
-                <field name="state"/>
+                <field name="invoice_type"/>
+                <field name="date_invoice"/>
+                <field name="date_due"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="amount_paid" sum="Paid"/>
+                <field name="amount_due" sum="Due"/>
+                <field name="state" widget="badge"/>
             </tree>
         </field>
     </record>
 
-    <!-- Deployment Action -->
-    <record id="action_deployment" model="ir.actions.act_window">
-        <field name="name">Deployments</field>
-        <field name="res_model">tazweed.deployment</field>
+    <!-- Placement Invoice Action -->
+    <record id="action_tazweed_placement_invoice" model="ir.actions.act_window">
+        <field name="name">Invoices</field>
+        <field name="res_model">tazweed.placement.invoice</field>
         <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first deployment
-            </p>
-        </field>
     </record>
 </odoo>

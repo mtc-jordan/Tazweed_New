@@ -3,215 +3,304 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 
 class Placement(models.Model):
-    """Placement Record"""
+    """Placement Record - When candidate is placed with client"""
     _name = 'tazweed.placement'
     _description = 'Placement'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'create_date desc'
 
     name = fields.Char(
-        string='Placement No.',
+        string='Placement Reference',
         required=True,
         copy=False,
         readonly=True,
         default=lambda self: _('New'),
     )
     
-    # Links
-    client_id = fields.Many2one('tazweed.client', string='Client', required=True, tracking=True)
+    # Core Relations
     candidate_id = fields.Many2one('tazweed.candidate', string='Candidate', required=True, tracking=True)
-    job_order_id = fields.Many2one('tazweed.job.order', string='Job Order')
+    client_id = fields.Many2one('tazweed.client', string='Client', required=True, tracking=True)
+    job_order_id = fields.Many2one('tazweed.job.order', string='Job Order', required=True)
+    pipeline_id = fields.Many2one('tazweed.recruitment.pipeline', string='Pipeline Record')
+    
+    # Employee Link
     employee_id = fields.Many2one('hr.employee', string='Employee Record')
     
-    # Position
+    # Job Details
     job_title = fields.Char(string='Job Title', required=True)
     department = fields.Char(string='Department')
     work_location = fields.Char(string='Work Location')
     
-    # Contract
-    date_start = fields.Date(string='Start Date', required=True, tracking=True)
-    date_end = fields.Date(string='End Date')
-    contract_duration = fields.Integer(string='Duration (Months)')
-    
-    contract_type = fields.Selection([
-        ('permanent', 'Permanent'),
-        ('temporary', 'Temporary'),
+    # Placement Type
+    placement_type = fields.Selection([
+        ('permanent', 'Permanent Placement'),
         ('contract', 'Contract'),
-        ('project', 'Project Based'),
-    ], string='Contract Type', default='permanent')
+        ('temp_to_perm', 'Temp to Perm'),
+        ('outsourcing', 'Outsourcing'),
+    ], string='Placement Type', required=True, default='contract', tracking=True)
     
-    # Compensation
-    basic_salary = fields.Float(string='Basic Salary', tracking=True)
-    housing_allowance = fields.Float(string='Housing Allowance')
-    transport_allowance = fields.Float(string='Transport Allowance')
-    food_allowance = fields.Float(string='Food Allowance')
-    other_allowances = fields.Float(string='Other Allowances')
-    total_salary = fields.Float(string='Total Salary', compute='_compute_totals', store=True)
+    # Dates
+    date_placed = fields.Date(string='Placement Date', default=fields.Date.today, required=True)
+    date_start = fields.Date(string='Start Date', required=True)
+    date_end = fields.Date(string='End Date')
     
-    # Billing
-    bill_rate = fields.Float(string='Bill Rate')
-    markup_pct = fields.Float(string='Markup %')
-    total_billing = fields.Float(string='Total Billing', compute='_compute_totals', store=True)
+    contract_duration = fields.Integer(string='Contract Duration (Months)')
+    probation_period = fields.Integer(string='Probation Period (Days)', default=90)
+    probation_end_date = fields.Date(string='Probation End Date', compute='_compute_probation_end')
     
-    # Commission
-    commission_pct = fields.Float(string='Commission %')
-    commission_amount = fields.Float(string='Commission Amount', compute='_compute_totals', store=True)
+    # Compensation - Candidate
+    salary = fields.Float(string='Salary', required=True)
+    salary_type = fields.Selection([
+        ('monthly', 'Monthly'),
+        ('hourly', 'Hourly'),
+        ('daily', 'Daily'),
+        ('annual', 'Annual'),
+    ], string='Salary Type', default='monthly')
     
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     
-    # Deployment
-    deployment_ids = fields.One2many('tazweed.deployment', 'placement_id', string='Deployments')
-    current_deployment_id = fields.Many2one('tazweed.deployment', string='Current Deployment', compute='_compute_deployment')
+    housing_allowance = fields.Float(string='Housing Allowance')
+    transport_allowance = fields.Float(string='Transport Allowance')
+    other_allowances = fields.Float(string='Other Allowances')
+    total_package = fields.Float(string='Total Package', compute='_compute_total_package', store=True)
+    
+    # Billing - Client
+    bill_rate = fields.Float(string='Bill Rate')
+    bill_rate_type = fields.Selection([
+        ('monthly', 'Monthly'),
+        ('hourly', 'Hourly'),
+        ('daily', 'Daily'),
+    ], string='Bill Rate Type', default='monthly')
+    
+    markup_pct = fields.Float(string='Markup %')
+    margin = fields.Float(string='Margin', compute='_compute_margin', store=True)
+    margin_pct = fields.Float(string='Margin %', compute='_compute_margin', store=True)
+    
+    # Fees
+    placement_fee = fields.Float(string='Placement Fee')
+    placement_fee_pct = fields.Float(string='Placement Fee %')
+    fee_paid = fields.Boolean(string='Fee Paid')
+    fee_paid_date = fields.Date(string='Fee Paid Date')
+    
+    # Invoicing
+    invoice_ids = fields.One2many('tazweed.placement.invoice', 'placement_id', string='Invoices')
+    total_invoiced = fields.Float(string='Total Invoiced', compute='_compute_invoiced')
+    total_paid = fields.Float(string='Total Paid', compute='_compute_invoiced')
+    total_billing = fields.Float(string='Total Billing', compute='_compute_total_billing')
     
     # Status
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('pending', 'Pending Approval'),
-        ('approved', 'Approved'),
+        ('pending', 'Pending Start'),
+        ('probation', 'Probation'),
         ('active', 'Active'),
+        ('extended', 'Extended'),
         ('completed', 'Completed'),
         ('terminated', 'Terminated'),
         ('cancelled', 'Cancelled'),
     ], string='Status', default='draft', tracking=True)
     
+    # Termination
+    termination_date = fields.Date(string='Termination Date')
     termination_reason = fields.Selection([
         ('contract_end', 'Contract End'),
         ('resignation', 'Resignation'),
+        ('termination', 'Termination'),
         ('client_request', 'Client Request'),
         ('performance', 'Performance Issues'),
-        ('absconding', 'Absconding'),
         ('other', 'Other'),
     ], string='Termination Reason')
-    
-    termination_date = fields.Date(string='Termination Date')
     termination_notes = fields.Text(string='Termination Notes')
     
+    # Replacement
+    replacement_required = fields.Boolean(string='Replacement Required')
+    replacement_deadline = fields.Date(string='Replacement Deadline')
+    replacement_pipeline_id = fields.Many2one('tazweed.recruitment.pipeline', string='Replacement Pipeline')
+    
+    # Documents
+    offer_letter = fields.Binary(string='Offer Letter')
+    offer_letter_name = fields.Char(string='Offer Letter Filename')
+    contract_document = fields.Binary(string='Contract Document')
+    contract_document_name = fields.Char(string='Contract Filename')
+    
+    # Assignment
+    account_manager_id = fields.Many2one('res.users', string='Account Manager')
+    recruiter_id = fields.Many2one('res.users', string='Recruiter')
+    
     notes = fields.Text(string='Notes')
+    active = fields.Boolean(default=True)
+    color = fields.Integer(string='Color Index')
+    
     company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
+
+    _sql_constraints = [
+        ('name_uniq', 'unique(name)', 'Placement reference must be unique!'),
+    ]
 
     @api.model
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('tazweed.placement') or _('New')
-        return super().create(vals)
+        
+        result = super().create(vals)
+        
+        # Update candidate state
+        result.candidate_id.write({'state': 'placed'})
+        
+        # Update pipeline if linked
+        if result.pipeline_id:
+            result.pipeline_id.write({
+                'result': 'hired',
+                'placement_id': result.id,
+            })
+        
+        return result
 
-    @api.depends('basic_salary', 'housing_allowance', 'transport_allowance', 'food_allowance', 
-                 'other_allowances', 'bill_rate', 'markup_pct', 'commission_pct')
-    def _compute_totals(self):
-        for rec in self:
-            rec.total_salary = (rec.basic_salary + rec.housing_allowance + 
-                               rec.transport_allowance + rec.food_allowance + rec.other_allowances)
-            if rec.bill_rate:
-                rec.total_billing = rec.bill_rate
+    @api.depends('date_start', 'probation_period')
+    def _compute_probation_end(self):
+        for placement in self:
+            if placement.date_start and placement.probation_period:
+                placement.probation_end_date = placement.date_start + relativedelta(days=placement.probation_period)
             else:
-                rec.total_billing = rec.total_salary * (1 + rec.markup_pct / 100)
-            rec.commission_amount = rec.total_billing * rec.commission_pct / 100
+                placement.probation_end_date = False
 
-    def _compute_deployment(self):
-        for rec in self:
-            active = rec.deployment_ids.filtered(lambda d: d.state == 'active')
-            rec.current_deployment_id = active[0] if active else False
+    @api.depends('salary', 'housing_allowance', 'transport_allowance', 'other_allowances')
+    def _compute_total_package(self):
+        for placement in self:
+            placement.total_package = (
+                placement.salary +
+                placement.housing_allowance +
+                placement.transport_allowance +
+                placement.other_allowances
+            )
 
-    def action_submit(self):
+    @api.depends('bill_rate', 'total_package')
+    def _compute_margin(self):
+        for placement in self:
+            if placement.bill_rate and placement.total_package:
+                placement.margin = placement.bill_rate - placement.total_package
+                placement.margin_pct = (placement.margin / placement.bill_rate) * 100 if placement.bill_rate else 0
+            else:
+                placement.margin = 0
+                placement.margin_pct = 0
+
+    def _compute_invoiced(self):
+        for placement in self:
+            invoices = placement.invoice_ids
+            placement.total_invoiced = sum(inv.amount for inv in invoices)
+            placement.total_paid = sum(inv.amount for inv in invoices.filtered(lambda i: i.state == 'paid'))
+
+    @api.depends('date_start', 'date_end', 'bill_rate', 'state')
+    def _compute_total_billing(self):
+        """Calculate total billing based on duration and rate"""
+        for placement in self:
+            if placement.bill_rate and placement.date_start:
+                end_date = placement.date_end or date.today()
+                if placement.state in ('active', 'completed', 'extended'):
+                    months = relativedelta(end_date, placement.date_start).months + 1
+                    placement.total_billing = placement.bill_rate * months
+                else:
+                    placement.total_billing = 0
+            else:
+                placement.total_billing = 0
+
+    def action_confirm(self):
+        """Confirm placement and move to pending start"""
         self.write({'state': 'pending'})
 
-    def action_approve(self):
-        self.write({'state': 'approved'})
+    def action_start(self):
+        """Start placement - candidate begins work"""
+        self.write({'state': 'probation'})
 
-    def action_activate(self):
+    def action_pass_probation(self):
+        """Pass probation period"""
         self.write({'state': 'active'})
-        # Update candidate status
-        self.candidate_id.write({'state': 'placed'})
+
+    def action_extend(self):
+        """Extend contract"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Extend Contract'),
+            'res_model': 'tazweed.extend.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_placement_id': self.id},
+        }
 
     def action_complete(self):
-        self.write({'state': 'completed', 'termination_reason': 'contract_end', 'termination_date': date.today()})
+        """Complete placement (contract ended normally)"""
+        self.write({
+            'state': 'completed',
+            'termination_date': fields.Date.today(),
+            'termination_reason': 'contract_end',
+        })
 
     def action_terminate(self):
-        self.write({'state': 'terminated', 'termination_date': date.today()})
+        """Terminate placement early"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Terminate Placement'),
+            'res_model': 'tazweed.terminate.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_placement_id': self.id},
+        }
 
     def action_cancel(self):
+        """Cancel placement before start"""
         self.write({'state': 'cancelled'})
 
     def action_create_employee(self):
         """Create employee record from placement"""
         self.ensure_one()
-        if self.employee_id:
-            raise ValidationError(_('Employee already exists for this placement.'))
         
-        employee = self.env['hr.employee'].create({
+        employee_vals = {
             'name': self.candidate_id.name,
+            'job_title': self.job_title,
+            'department_id': False,  # Would need to map
+            'work_email': self.candidate_id.email,
+            'mobile_phone': self.candidate_id.mobile,
             'gender': self.candidate_id.gender,
             'birthday': self.candidate_id.date_of_birth,
             'country_id': self.candidate_id.nationality_id.id,
-            'work_email': self.candidate_id.email,
-            'work_phone': self.candidate_id.phone,
-            'mobile_phone': self.candidate_id.mobile,
-            'job_title': self.job_title,
-        })
-        self.employee_id = employee
+            'marital': self.candidate_id.marital_status,
+        }
+        
+        employee = self.env['hr.employee'].create(employee_vals)
+        self.write({'employee_id': employee.id})
+        
         return {
             'type': 'ir.actions.act_window',
+            'name': _('Employee'),
             'res_model': 'hr.employee',
-            'res_id': employee.id,
             'view_mode': 'form',
+            'res_id': employee.id,
         }
 
+    def action_view_invoices(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Invoices'),
+            'res_model': 'tazweed.placement.invoice',
+            'view_mode': 'tree,form',
+            'domain': [('placement_id', '=', self.id)],
+            'context': {'default_placement_id': self.id},
+        }
 
-class Deployment(models.Model):
-    """Worker Deployment"""
-    _name = 'tazweed.deployment'
-    _description = 'Deployment'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'date_start desc'
-
-    name = fields.Char(string='Deployment No.', copy=False, readonly=True, default=lambda self: _('New'))
-    
-    placement_id = fields.Many2one('tazweed.placement', string='Placement', required=True, ondelete='cascade')
-    client_id = fields.Many2one(related='placement_id.client_id', store=True)
-    candidate_id = fields.Many2one(related='placement_id.candidate_id', store=True)
-    
-    # Site
-    site_name = fields.Char(string='Site Name')
-    site_location = fields.Char(string='Site Location')
-    site_supervisor = fields.Char(string='Site Supervisor')
-    site_contact = fields.Char(string='Site Contact')
-    
-    # Duration
-    date_start = fields.Date(string='Start Date', required=True)
-    date_end = fields.Date(string='End Date')
-    
-    # Schedule
-    work_schedule = fields.Selection([
-        ('regular', 'Regular (8 hours)'),
-        ('shift', 'Shift Work'),
-        ('rotational', 'Rotational'),
-    ], string='Work Schedule', default='regular')
-    
-    shift_pattern = fields.Char(string='Shift Pattern')
-    
-    state = fields.Selection([
-        ('draft', 'Draft'),
-        ('active', 'Active'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-    ], string='Status', default='draft', tracking=True)
-    
-    notes = fields.Text(string='Notes')
-
-    @api.model
-    def create(self, vals):
-        if vals.get('name', _('New')) == _('New'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('tazweed.deployment') or _('New')
-        return super().create(vals)
-
-    def action_activate(self):
-        self.write({'state': 'active'})
-
-    def action_complete(self):
-        self.write({'state': 'completed', 'date_end': date.today()})
-
-    def action_cancel(self):
-        self.write({'state': 'cancelled'})
+    def action_create_invoice(self):
+        """Create new invoice for this placement"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Create Invoice'),
+            'res_model': 'tazweed.placement.invoice',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_placement_id': self.id,
+                'default_client_id': self.client_id.id,
+            },
+        }

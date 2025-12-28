@@ -1,122 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Candidate Form View -->
-    <record id="view_candidate_form" model="ir.ui.view">
+    <record id="view_tazweed_candidate_form" model="ir.ui.view">
         <field name="name">tazweed.candidate.form</field>
         <field name="model">tazweed.candidate</field>
         <field name="arch" type="xml">
             <form string="Candidate">
                 <header>
-                    <button name="action_activate" string="Activate" type="object" class="btn-primary" states="new"/>
-                    <button name="action_blacklist" string="Blacklist" type="object" class="btn-danger" states="active"/>
-                    <field name="state" widget="statusbar" statusbar_visible="new,active,placed"/>
+                    <button name="action_qualify" string="Qualify" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', 'not in', ('new', 'screening'))]}"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            attrs="{'invisible': [('state', 'in', ('rejected', 'blacklisted', 'placed'))]}"/>
+                    <button name="action_blacklist" string="Blacklist" type="object" class="btn-danger"
+                            attrs="{'invisible': [('state', '=', 'blacklisted')]}"/>
+                    <button name="action_reactivate" string="Reactivate" type="object"
+                            attrs="{'invisible': [('state', 'not in', ('rejected', 'blacklisted'))]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,screening,qualified,in_process,placed"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" icon="fa-briefcase" type="action" name="%(action_placement)d">
+                        <button name="action_view_pipeline" type="object" class="oe_stat_button" icon="fa-filter">
+                            <field name="pipeline_count" widget="statinfo" string="Pipeline"/>
+                        </button>
+                        <button name="action_view_interviews" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="interview_count" widget="statinfo" string="Interviews"/>
+                        </button>
+                        <button type="object" class="oe_stat_button" icon="fa-briefcase" name="action_view_pipeline">
                             <field name="placement_count" widget="statinfo" string="Placements"/>
                         </button>
                     </div>
-                    <field name="photo" widget="image" class="oe_avatar"/>
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
                     <div class="oe_title">
                         <label for="name"/>
                         <h1>
-                            <field name="name" placeholder="Full Name..."/>
+                            <field name="name" placeholder="Full Name"/>
                         </h1>
-                        <field name="code" readonly="1"/>
+                        <h4>
+                            <field name="code" readonly="1"/>
+                        </h4>
                     </div>
                     <group>
                         <group>
-                            <field name="gender"/>
-                            <field name="date_of_birth"/>
-                            <field name="age"/>
-                            <field name="marital_status"/>
+                            <field name="email" widget="email"/>
+                            <field name="mobile" widget="phone"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="whatsapp"/>
                         </group>
                         <group>
-                            <field name="nationality_id"/>
-                            <field name="email"/>
-                            <field name="mobile"/>
-                            <field name="phone"/>
+                            <field name="job_title"/>
+                            <field name="current_employer"/>
+                            <field name="total_experience"/>
+                            <field name="profile_score" widget="progressbar"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Personal" name="personal">
+                        <page string="Personal Information" name="personal">
                             <group>
-                                <group string="Address">
-                                    <field name="address"/>
-                                    <field name="city"/>
-                                    <field name="country_id"/>
+                                <group string="Basic Info">
+                                    <field name="first_name"/>
+                                    <field name="middle_name"/>
+                                    <field name="last_name"/>
+                                    <field name="gender"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="age"/>
+                                    <field name="marital_status"/>
+                                    <field name="religion"/>
                                 </group>
-                                <group string="Documents">
-                                    <field name="passport_no"/>
-                                    <field name="passport_expiry"/>
-                                    <field name="emirates_id"/>
-                                    <field name="emirates_id_expiry"/>
-                                    <field name="visa_status"/>
+                                <group string="Nationality &amp; Location">
+                                    <field name="nationality_id" options="{'no_create': True}"/>
+                                    <field name="is_uae_national"/>
+                                    <field name="country_id" options="{'no_create': True}"/>
+                                    <field name="city"/>
+                                    <field name="address"/>
                                 </group>
                             </group>
                         </page>
-                        <page string="Education" name="education">
-                            <field name="education_level"/>
+                        <page string="Professional" name="professional">
+                            <group>
+                                <group string="Education">
+                                    <field name="education_level"/>
+                                </group>
+                                <group string="Skills">
+                                    <field name="skill_ids" widget="many2many_tags"/>
+                                    <field name="languages"/>
+                                </group>
+                            </group>
+                            <separator string="Education History"/>
                             <field name="education_ids">
                                 <tree editable="bottom">
                                     <field name="degree"/>
                                     <field name="field_of_study"/>
                                     <field name="institution"/>
                                     <field name="country_id"/>
-                                    <field name="year_end"/>
-                                    <field name="is_verified"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="grade"/>
+                                    <field name="is_completed"/>
                                 </tree>
                             </field>
-                        </page>
-                        <page string="Experience" name="experience">
-                            <field name="total_experience"/>
+                            <separator string="Work Experience"/>
                             <field name="experience_ids">
                                 <tree editable="bottom">
-                                    <field name="company_name"/>
+                                    <field name="company"/>
                                     <field name="job_title"/>
+                                    <field name="country_id"/>
                                     <field name="date_start"/>
                                     <field name="date_end"/>
                                     <field name="is_current"/>
                                     <field name="duration_years"/>
-                                    <field name="is_verified"/>
+                                    <field name="salary"/>
                                 </tree>
                             </field>
                         </page>
-                        <page string="Skills" name="skills">
-                            <field name="skill_ids" widget="many2many_tags"/>
-                        </page>
-                        <page string="Preferences" name="preferences">
-                            <group>
-                                <group>
-                                    <field name="expected_salary"/>
-                                    <field name="preferred_location"/>
-                                </group>
-                                <group>
-                                    <field name="notice_period"/>
-                                    <field name="available_from"/>
-                                </group>
-                            </group>
-                        </page>
                         <page string="Documents" name="documents">
                             <group>
-                                <field name="cv" filename="cv_name"/>
-                                <field name="cv_name" invisible="1"/>
+                                <group string="Passport">
+                                    <field name="passport_number"/>
+                                    <field name="passport_expiry"/>
+                                </group>
+                                <group string="Visa">
+                                    <field name="visa_status"/>
+                                    <field name="visa_expiry"/>
+                                </group>
                             </group>
+                            <group string="Resume">
+                                <field name="resume" filename="resume_name"/>
+                                <field name="resume_name" invisible="1"/>
+                            </group>
+                            <separator string="Other Documents"/>
                             <field name="document_ids">
                                 <tree>
                                     <field name="name"/>
                                     <field name="document_type"/>
+                                    <field name="document_number"/>
                                     <field name="expiry_date"/>
                                     <field name="is_verified"/>
                                 </tree>
                             </field>
                         </page>
+                        <page string="Expectations" name="expectations">
+                            <group>
+                                <group>
+                                    <field name="expected_salary"/>
+                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                    <field name="notice_period"/>
+                                    <field name="available_from"/>
+                                </group>
+                                <group>
+                                    <field name="willing_to_relocate"/>
+                                    <field name="preferred_locations"/>
+                                </group>
+                            </group>
+                        </page>
                         <page string="Source" name="source">
                             <group>
-                                <field name="source"/>
+                                <group>
+                                    <field name="source"/>
+                                    <field name="source_detail"/>
+                                    <field name="referred_by"/>
+                                </group>
                             </group>
-                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Internal notes..."/>
                         </page>
                     </notebook>
                 </sheet>
@@ -130,56 +176,117 @@
     </record>
 
     <!-- Candidate Tree View -->
-    <record id="view_candidate_tree" model="ir.ui.view">
+    <record id="view_tazweed_candidate_tree" model="ir.ui.view">
         <field name="name">tazweed.candidate.tree</field>
         <field name="model">tazweed.candidate</field>
         <field name="arch" type="xml">
-            <tree string="Candidates">
+            <tree string="Candidates" decoration-muted="state == 'rejected'" decoration-danger="state == 'blacklisted'">
                 <field name="code"/>
                 <field name="name"/>
-                <field name="nationality_id"/>
-                <field name="education_level"/>
+                <field name="email"/>
+                <field name="mobile"/>
+                <field name="job_title"/>
                 <field name="total_experience"/>
+                <field name="education_level"/>
+                <field name="nationality_id"/>
                 <field name="expected_salary"/>
-                <field name="visa_status"/>
-                <field name="state"/>
+                <field name="profile_score" widget="progressbar"/>
+                <field name="state" widget="badge" decoration-success="state == 'placed'" decoration-info="state in ('qualified', 'in_process')" decoration-warning="state == 'screening'" decoration-danger="state in ('rejected', 'blacklisted')"/>
             </tree>
         </field>
     </record>
 
+    <!-- Candidate Kanban View -->
+    <record id="view_tazweed_candidate_kanban" model="ir.ui.view">
+        <field name="name">tazweed.candidate.kanban</field>
+        <field name="model">tazweed.candidate</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="email"/>
+                <field name="mobile"/>
+                <field name="job_title"/>
+                <field name="total_experience"/>
+                <field name="profile_score"/>
+                <field name="state"/>
+                <field name="image_128"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('tazweed.candidate', 'image_128', record.id.raw_value)" alt="Candidate"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <span class="badge badge-secondary"><field name="code"/></span>
+                                </div>
+                                <div>
+                                    <field name="job_title"/>
+                                </div>
+                                <div>
+                                    <i class="fa fa-briefcase"/> <field name="total_experience"/> years
+                                </div>
+                                <div>
+                                    <field name="profile_score" widget="progressbar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <!-- Candidate Search View -->
-    <record id="view_candidate_search" model="ir.ui.view">
+    <record id="view_tazweed_candidate_search" model="ir.ui.view">
         <field name="name">tazweed.candidate.search</field>
         <field name="model">tazweed.candidate</field>
         <field name="arch" type="xml">
             <search string="Search Candidates">
                 <field name="name"/>
                 <field name="code"/>
+                <field name="email"/>
+                <field name="mobile"/>
+                <field name="job_title"/>
                 <field name="nationality_id"/>
-                <field name="skill_ids"/>
                 <separator/>
-                <filter name="active" string="Active" domain="[('state', '=', 'active')]"/>
-                <filter name="available" string="Available" domain="[('state', 'in', ('new', 'active'))]"/>
+                <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
+                <filter string="Qualified" name="qualified" domain="[('state', '=', 'qualified')]"/>
+                <filter string="In Process" name="in_process" domain="[('state', '=', 'in_process')]"/>
+                <filter string="Placed" name="placed" domain="[('state', '=', 'placed')]"/>
+                <filter string="Available" name="available" domain="[('state', 'in', ('new', 'qualified'))]"/>
+                <separator/>
+                <filter string="UAE Nationals" name="uae_national" domain="[('is_uae_national', '=', True)]"/>
+                <separator/>
                 <group expand="0" string="Group By">
-                    <filter name="group_nationality" string="Nationality" context="{'group_by': 'nationality_id'}"/>
-                    <filter name="group_education" string="Education" context="{'group_by': 'education_level'}"/>
-                    <filter name="group_visa" string="Visa Status" context="{'group_by': 'visa_status'}"/>
-                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Nationality" name="group_nationality" context="{'group_by': 'nationality_id'}"/>
+                    <filter string="Education" name="group_education" context="{'group_by': 'education_level'}"/>
+                    <filter string="Source" name="group_source" context="{'group_by': 'source'}"/>
                 </group>
             </search>
         </field>
     </record>
 
     <!-- Candidate Action -->
-    <record id="action_candidate" model="ir.actions.act_window">
+    <record id="action_tazweed_candidate" model="ir.actions.act_window">
         <field name="name">Candidates</field>
         <field name="res_model">tazweed.candidate</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_candidate_search"/>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_tazweed_candidate_search"/>
         <field name="context">{'search_default_available': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Add your first candidate
+                Create your first candidate
+            </p>
+            <p>
+                Add candidates to your talent pool and track them through the recruitment process.
             </p>
         </field>
     </record>
