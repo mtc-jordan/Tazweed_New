@@ -13,6 +13,61 @@
               action="action_analytics_dashboard"
               sequence="10"/>
 
+    <!-- Cost Center Menu -->
+    <menuitem id="menu_cost_center"
+              name="Cost Center"
+              parent="menu_analytics_root"
+              sequence="15"/>
+    
+    <!-- Cost Center Dashboard -->
+    <menuitem id="menu_cost_center_dashboard"
+              name="Cost Dashboard"
+              parent="menu_cost_center"
+              action="action_cost_center_dashboard"
+              sequence="1"/>
+    
+    <!-- Cost Center Data -->
+    <menuitem id="menu_cost_center_data"
+              name="Cost Data"
+              parent="menu_cost_center"
+              action="action_employee_cost_center"
+              sequence="5"/>
+    
+    <!-- Cost by Employee -->
+    <menuitem id="menu_cost_by_employee"
+              name="By Employee"
+              parent="menu_cost_center"
+              action="action_cost_by_employee"
+              sequence="10"/>
+    
+    <!-- Cost by Department -->
+    <menuitem id="menu_cost_by_department"
+              name="By Department"
+              parent="menu_cost_center"
+              action="action_cost_by_department"
+              sequence="20"/>
+    
+    <!-- Cost by Client -->
+    <menuitem id="menu_cost_by_client"
+              name="By Client"
+              parent="menu_cost_center"
+              action="action_cost_by_client"
+              sequence="30"/>
+    
+    <!-- Profitability Analysis -->
+    <menuitem id="menu_profitability_analysis"
+              name="Profitability"
+              parent="menu_cost_center"
+              action="action_profitability_analysis"
+              sequence="40"/>
+    
+    <!-- Cost Trend -->
+    <menuitem id="menu_cost_trend"
+              name="Cost Trend"
+              parent="menu_cost_center"
+              action="action_cost_trend"
+              sequence="50"/>
+
     <!-- Reports Menu -->
     <menuitem id="menu_analytics_reports"
               name="Reports"

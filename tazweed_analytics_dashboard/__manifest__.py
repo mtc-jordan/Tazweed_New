@@ -69,6 +69,7 @@ Best Practices:
         'views/dashboard_views.xml',
         'views/kpi_views.xml',
         'views/report_views.xml',
+        'views/cost_center_views.xml',
         'views/menu.xml',
     ],
     'assets': {

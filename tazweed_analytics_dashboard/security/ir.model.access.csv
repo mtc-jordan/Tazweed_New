@@ -5,3 +5,7 @@ access_analytics_kpi_user,analytics.kpi.user,model_analytics_kpi,group_analytics
 access_analytics_kpi_manager,analytics.kpi.manager,model_analytics_kpi,group_analytics_manager,1,1,1,1
 access_analytics_report_user,analytics.report.user,model_analytics_report,group_analytics_user,1,1,1,0
 access_analytics_report_manager,analytics.report.manager,model_analytics_report,group_analytics_manager,1,1,1,1
+access_employee_cost_center_user,employee.cost.center.user,model_employee_cost_center,group_analytics_user,1,0,0,0
+access_employee_cost_center_manager,employee.cost.center.manager,model_employee_cost_center,group_analytics_manager,1,1,1,1
+access_cost_center_dashboard_user,employee.cost.center.dashboard.user,model_employee_cost_center_dashboard,group_analytics_user,1,1,1,0
+access_cost_center_dashboard_manager,employee.cost.center.dashboard.manager,model_employee_cost_center_dashboard,group_analytics_manager,1,1,1,1

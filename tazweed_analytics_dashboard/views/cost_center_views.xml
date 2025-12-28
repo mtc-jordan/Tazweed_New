@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ==================== Employee Cost Center Views ==================== -->
+    
+    <!-- Cost Center Tree View -->
+    <record id="view_employee_cost_center_tree" model="ir.ui.view">
+        <field name="name">employee.cost.center.tree</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Cost Center" decoration-danger="gross_margin &lt; 0">
+                <field name="date"/>
+                <field name="employee_name"/>
+                <field name="department_id"/>
+                <field name="client_id"/>
+                <field name="gross_salary" sum="Total Gross"/>
+                <field name="total_benefits_cost" sum="Total Benefits"/>
+                <field name="total_compliance_cost" sum="Total Compliance"/>
+                <field name="total_cost" sum="Total Cost"/>
+                <field name="revenue" sum="Total Revenue"/>
+                <field name="gross_margin" sum="Total Margin"/>
+                <field name="gross_margin_percent" widget="percentage"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Cost Center Form View -->
+    <record id="view_employee_cost_center_form" model="ir.ui.view">
+        <field name="name">employee.cost.center.form</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <form string="Employee Cost Center">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Period">
+                            <field name="date"/>
+                            <field name="period_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Employee">
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Assignment">
+                            <field name="client_id"/>
+                            <field name="placement_id"/>
+                        </group>
+                        <group string="Revenue">
+                            <field name="billing_rate"/>
+                            <field name="revenue"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salary" name="salary">
+                            <group>
+                                <group string="Basic Compensation">
+                                    <field name="basic_salary"/>
+                                    <field name="housing_allowance"/>
+                                    <field name="transport_allowance"/>
+                                    <field name="food_allowance"/>
+                                    <field name="other_allowances"/>
+                                    <field name="gross_salary" class="oe_subtotal_footer_separator"/>
+                                </group>
+                                <group string="Leave Costs">
+                                    <field name="leave_cost"/>
+                                    <field name="sick_leave_cost"/>
+                                    <field name="total_salary_cost" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Benefits" name="benefits">
+                            <group>
+                                <group string="Insurance &amp; Pension">
+                                    <field name="pension_contribution"/>
+                                    <field name="medical_insurance"/>
+                                    <field name="life_insurance"/>
+                                    <field name="workman_compensation"/>
+                                </group>
+                                <group string="End of Service">
+                                    <field name="gratuity_provision"/>
+                                    <field name="total_benefits_cost" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Compliance" name="compliance">
+                            <group>
+                                <group string="Visa &amp; Documents">
+                                    <field name="visa_cost"/>
+                                    <field name="labor_card_cost"/>
+                                    <field name="emirates_id_cost"/>
+                                    <field name="medical_test_cost"/>
+                                </group>
+                                <group string="PRO Services">
+                                    <field name="pro_service_cost"/>
+                                    <field name="total_compliance_cost" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Overhead" name="overhead">
+                            <group>
+                                <group string="Training &amp; Equipment">
+                                    <field name="training_cost"/>
+                                    <field name="certification_cost"/>
+                                    <field name="equipment_cost"/>
+                                    <field name="uniform_cost"/>
+                                </group>
+                                <group string="Administrative">
+                                    <field name="office_overhead"/>
+                                    <field name="admin_overhead"/>
+                                    <field name="total_overhead_cost" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Summary" name="summary">
+                            <group>
+                                <group string="Cost Summary">
+                                    <field name="total_salary_cost"/>
+                                    <field name="total_benefits_cost"/>
+                                    <field name="total_compliance_cost"/>
+                                    <field name="total_overhead_cost"/>
+                                    <field name="total_cost" class="oe_subtotal_footer_separator"/>
+                                </group>
+                                <group string="Profitability">
+                                    <field name="revenue"/>
+                                    <field name="gross_margin"/>
+                                    <field name="gross_margin_percent" widget="percentage"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Cost Center Pivot View -->
+    <record id="view_employee_cost_center_pivot" model="ir.ui.view">
+        <field name="name">employee.cost.center.pivot</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <pivot string="Cost Analysis">
+                <field name="department_id" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="total_cost" type="measure"/>
+                <field name="revenue" type="measure"/>
+                <field name="gross_margin" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Cost Center Graph View -->
+    <record id="view_employee_cost_center_graph" model="ir.ui.view">
+        <field name="name">employee.cost.center.graph</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <graph string="Cost Analysis" type="bar">
+                <field name="department_id"/>
+                <field name="total_cost" type="measure"/>
+                <field name="revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Cost Center Search View -->
+    <record id="view_employee_cost_center_search" model="ir.ui.view">
+        <field name="name">employee.cost.center.search</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <search string="Search Cost Center">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="client_id"/>
+                <field name="date"/>
+                <separator/>
+                <filter name="this_month" string="This Month" 
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="last_month" string="Last Month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(months=1, day=1)).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', (context_today() - relativedelta(months=1, day=31)).strftime('%Y-%m-%d'))]"/>
+                <filter name="this_quarter" string="This Quarter"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1, month=((context_today().month - 1) // 3) * 3 + 1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="this_year" string="This Year"
+                        domain="[('date', '&gt;=', (context_today().replace(month=1, day=1)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="profitable" string="Profitable" domain="[('gross_margin', '&gt;', 0)]"/>
+                <filter name="loss_making" string="Loss Making" domain="[('gross_margin', '&lt;', 0)]"/>
+                <separator/>
+                <filter name="has_client" string="Assigned to Client" domain="[('client_id', '!=', False)]"/>
+                <filter name="internal" string="Internal" domain="[('client_id', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_client" string="Client" context="{'group_by': 'client_id'}"/>
+                    <filter name="group_job" string="Job Position" context="{'group_by': 'job_id'}"/>
+                    <filter name="group_month" string="Month" context="{'group_by': 'date:month'}"/>
+                    <filter name="group_quarter" string="Quarter" context="{'group_by': 'date:quarter'}"/>
+                    <filter name="group_year" string="Year" context="{'group_by': 'date:year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Cost Center Action -->
+    <record id="action_employee_cost_center" model="ir.actions.act_window">
+        <field name="name">Employee Cost Center</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_employee_cost_center_search"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No cost data found
+            </p>
+            <p>
+                Generate cost data from the Cost Center Dashboard or create entries manually.
+            </p>
+        </field>
+    </record>
+    
+    <!-- ==================== Cost Center Dashboard Views ==================== -->
+    
+    <!-- Dashboard Tree View -->
+    <record id="view_cost_center_dashboard_tree" model="ir.ui.view">
+        <field name="name">employee.cost.center.dashboard.tree</field>
+        <field name="model">employee.cost.center.dashboard</field>
+        <field name="arch" type="xml">
+            <tree string="Cost Center Dashboards">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="view_type"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Dashboard Form View -->
+    <record id="view_cost_center_dashboard_form" model="ir.ui.view">
+        <field name="name">employee.cost.center.dashboard.form</field>
+        <field name="model">employee.cost.center.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Cost Center Dashboard">
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" class="btn-primary"/>
+                    <button name="action_generate_cost_data" string="Generate Cost Data" type="object" class="btn-secondary"/>
+                    <button name="action_export_excel" string="Export Excel" type="object" class="btn-secondary"/>
+                    <button name="action_export_pdf" string="Export PDF" type="object" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Period">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group string="View">
+                            <field name="view_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Filters">
+                        <field name="department_ids" widget="many2many_tags"/>
+                        <field name="client_ids" widget="many2many_tags"/>
+                        <field name="employee_ids" widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Dashboard" name="dashboard">
+                            <field name="dashboard_data" widget="text" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Dashboard Action -->
+    <record id="action_cost_center_dashboard" model="ir.actions.act_window">
+        <field name="name">Cost Center Dashboard</field>
+        <field name="res_model">employee.cost.center.dashboard</field>
+        <field name="view_mode">form,tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Cost Center Dashboard
+            </p>
+            <p>
+                Analyze employee costs by department, client, cost type, and more.
+            </p>
+        </field>
+    </record>
+    
+    <!-- ==================== Analysis Actions ==================== -->
+    
+    <!-- By Department Action -->
+    <record id="action_cost_by_department" model="ir.actions.act_window">
+        <field name="name">Cost by Department</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="context">{
+            'search_default_this_month': 1,
+            'search_default_group_department': 1,
+            'pivot_measures': ['total_cost', 'revenue', 'gross_margin'],
+            'pivot_row_groupby': ['department_id'],
+        }</field>
+    </record>
+    
+    <!-- By Client Action -->
+    <record id="action_cost_by_client" model="ir.actions.act_window">
+        <field name="name">Cost by Client</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="domain">[('client_id', '!=', False)]</field>
+        <field name="context">{
+            'search_default_this_month': 1,
+            'search_default_group_client': 1,
+            'pivot_measures': ['total_cost', 'revenue', 'gross_margin'],
+            'pivot_row_groupby': ['client_id'],
+        }</field>
+    </record>
+    
+    <!-- By Employee Action -->
+    <record id="action_cost_by_employee" model="ir.actions.act_window">
+        <field name="name">Cost by Employee</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">tree,pivot,graph,form</field>
+        <field name="context">{
+            'search_default_this_month': 1,
+            'search_default_group_employee': 1,
+        }</field>
+    </record>
+    
+    <!-- Profitability Analysis Action -->
+    <record id="action_profitability_analysis" model="ir.actions.act_window">
+        <field name="name">Profitability Analysis</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="domain">[('client_id', '!=', False)]</field>
+        <field name="context">{
+            'search_default_this_month': 1,
+            'pivot_measures': ['revenue', 'total_cost', 'gross_margin', 'gross_margin_percent'],
+            'pivot_row_groupby': ['client_id'],
+        }</field>
+    </record>
+    
+    <!-- Cost Trend Action -->
+    <record id="action_cost_trend" model="ir.actions.act_window">
+        <field name="name">Cost Trend</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="context">{
+            'search_default_this_year': 1,
+            'search_default_group_month': 1,
+            'graph_mode': 'line',
+        }</field>
+    </record>
+    
+</odoo>
