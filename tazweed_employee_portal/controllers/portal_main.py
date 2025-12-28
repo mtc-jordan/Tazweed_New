@@ -23,10 +23,14 @@ class TazweedEmployeePortal(CustomerPortal):
             ])
         
         if 'payslip_count' in counters:
-            values['payslip_count'] = request.env['hr.payslip'].search_count([
-                ('employee_id', '=', employee.id),
-                ('state', '=', 'done'),
-            ])
+            # Only count payslips if payroll module is installed
+            if 'hr.payslip' in request.env:
+                values['payslip_count'] = request.env['hr.payslip'].search_count([
+                    ('employee_id', '=', employee.id),
+                    ('state', '=', 'done'),
+                ])
+            else:
+                values['payslip_count'] = 0
         
         if 'document_count' in counters:
             values['document_count'] = request.env['tazweed.employee.document'].search_count([

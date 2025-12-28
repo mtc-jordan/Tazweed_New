@@ -48,21 +48,6 @@ class HrAttendancePortal(models.Model):
         return f'/my/attendance/{self.id}'
 
 
-class HrPayslipPortal(models.Model):
-    """Extend hr.payslip for portal access"""
-    _inherit = 'hr.payslip'
-
-    portal_visible = fields.Boolean(
-        string='Visible in Portal',
-        default=True,
-    )
-
-    def _get_portal_url(self):
-        """Get portal URL for payslip"""
-        self.ensure_one()
-        return f'/my/payslips/{self.id}'
-
-
 class EmployeeDocumentPortal(models.Model):
     """Extend tazweed.employee.document for portal access"""
     _inherit = 'tazweed.employee.document'

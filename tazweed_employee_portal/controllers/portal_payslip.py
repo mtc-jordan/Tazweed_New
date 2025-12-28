@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 class TazweedPayslipPortal(CustomerPortal):
-    """Payslip Portal Controller"""
+    """Payslip Portal Controller - Optional features when payroll is installed"""
 
     def _get_current_employee(self):
         """Get current user's employee record"""
@@ -17,12 +17,23 @@ class TazweedPayslipPortal(CustomerPortal):
         ], limit=1)
         return employee
 
+    def _payroll_installed(self):
+        """Check if payroll module is installed"""
+        return 'hr.payslip' in request.env
+
     @http.route(['/my/payslips', '/my/payslips/page/<int:page>'], type='http', auth='user', website=True)
     def portal_payslips(self, page=1, year=None, **kw):
         """Payslips List"""
         employee = self._get_current_employee()
         if not employee:
             return request.redirect('/my')
+        
+        # Check if payroll module is installed
+        if not self._payroll_installed():
+            return request.render('tazweed_employee_portal.portal_payslips_not_available', {
+                'page_name': 'payslips',
+                'employee': employee,
+            })
         
         Payslip = request.env['hr.payslip'].sudo()
         
@@ -59,7 +70,7 @@ class TazweedPayslipPortal(CustomerPortal):
             ('employee_id', '=', employee.id),
             ('state', '=', 'done'),
         ])
-        years = sorted(set(p.date_to.year for p in all_payslips), reverse=True)
+        years = sorted(set(p.date_to.year for p in all_payslips), reverse=True) if all_payslips else []
         
         values = {
             'page_name': 'payslips',
@@ -78,6 +89,9 @@ class TazweedPayslipPortal(CustomerPortal):
         employee = self._get_current_employee()
         if not employee:
             return request.redirect('/my')
+        
+        if not self._payroll_installed():
+            return request.redirect('/my/payslips')
         
         payslip = request.env['hr.payslip'].sudo().browse(payslip_id)
         if not payslip.exists() or payslip.employee_id.id != employee.id:
@@ -107,25 +121,31 @@ class TazweedPayslipPortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
+        if not self._payroll_installed():
+            return request.redirect('/my/payslips')
+        
         payslip = request.env['hr.payslip'].sudo().browse(payslip_id)
         if not payslip.exists() or payslip.employee_id.id != employee.id:
             return request.redirect('/my/payslips')
         
         # Generate PDF
-        pdf_content, content_type = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
-            'hr_payroll.action_report_payslip',
-            [payslip.id],
-        )
-        
-        filename = f'payslip_{payslip.number or payslip.id}.pdf'
-        
-        return request.make_response(
-            pdf_content,
-            headers=[
-                ('Content-Type', 'application/pdf'),
-                ('Content-Disposition', f'attachment; filename="{filename}"'),
-            ],
-        )
+        try:
+            pdf_content, content_type = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
+                'hr_payroll.action_report_payslip',
+                [payslip.id],
+            )
+            
+            filename = f'payslip_{payslip.number or payslip.id}.pdf'
+            
+            return request.make_response(
+                pdf_content,
+                headers=[
+                    ('Content-Type', 'application/pdf'),
+                    ('Content-Disposition', f'attachment; filename="{filename}"'),
+                ],
+            )
+        except Exception:
+            return request.redirect(f'/my/payslips/{payslip_id}')
 
     @http.route(['/my/salary-history'], type='http', auth='user', website=True)
     def portal_salary_history(self, **kw):
@@ -133,6 +153,12 @@ class TazweedPayslipPortal(CustomerPortal):
         employee = self._get_current_employee()
         if not employee:
             return request.redirect('/my')
+        
+        if not self._payroll_installed():
+            return request.render('tazweed_employee_portal.portal_payslips_not_available', {
+                'page_name': 'salary_history',
+                'employee': employee,
+            })
         
         # Get all payslips
         payslips = request.env['hr.payslip'].sudo().search([
@@ -169,6 +195,13 @@ class TazweedPayslipPortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
+        # Check if loan model exists
+        if 'tazweed.payroll.loan' not in request.env:
+            return request.render('tazweed_employee_portal.portal_payslips_not_available', {
+                'page_name': 'loans',
+                'employee': employee,
+            })
+        
         loans = request.env['tazweed.payroll.loan'].sudo().search([
             ('employee_id', '=', employee.id),
         ], order='request_date desc')
@@ -188,6 +221,9 @@ class TazweedPayslipPortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
+        if 'tazweed.payroll.loan' not in request.env:
+            return request.redirect('/my')
+        
         loan = request.env['tazweed.payroll.loan'].sudo().browse(loan_id)
         if not loan.exists() or loan.employee_id.id != employee.id:
             return request.redirect('/my/loans')
@@ -205,6 +241,9 @@ class TazweedPayslipPortal(CustomerPortal):
         """Request New Loan"""
         employee = self._get_current_employee()
         if not employee:
+            return request.redirect('/my')
+        
+        if 'tazweed.payroll.loan' not in request.env:
             return request.redirect('/my')
         
         if request.httprequest.method == 'POST':

@@ -33,18 +33,6 @@
         <field name="perm_unlink" eval="False"/>
     </record>
 
-    <!-- Payslip: Own records only -->
-    <record id="rule_portal_payslip_own" model="ir.rule">
-        <field name="name">Portal: Own Payslips</field>
-        <field name="model_id" ref="tazweed_payroll.model_hr_payslip"/>
-        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
-        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
-    </record>
-
     <!-- Documents: Own records only -->
     <record id="rule_portal_document_own" model="ir.rule">
         <field name="name">Portal: Own Documents</field>
@@ -66,6 +54,18 @@
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>
         <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    
+    <!-- HR Service Requests: Own records only -->
+    <record id="rule_portal_service_request_own" model="ir.rule">
+        <field name="name">Portal: Own Service Requests</field>
+        <field name="model_id" ref="model_hr_service_request"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
         <field name="perm_unlink" eval="False"/>
     </record>
 </odoo>

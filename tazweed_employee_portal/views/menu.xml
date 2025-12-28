@@ -28,6 +28,63 @@
               action="action_employee_dashboard"
               sequence="1"/>
 
+    <!-- ============================================== -->
+    <!-- HR SERVICE REQUESTS MENUS -->
+    <!-- ============================================== -->
+    
+    <!-- Service Requests Parent Menu -->
+    <menuitem id="menu_service_requests"
+              name="Service Requests"
+              parent="menu_portal_root"
+              sequence="5"/>
+    
+    <!-- My Requests (for all employees) -->
+    <menuitem id="menu_my_service_requests"
+              name="My Requests"
+              parent="menu_service_requests"
+              action="action_hr_service_request_my"
+              sequence="1"/>
+    
+    <!-- Team Requests (for managers) -->
+    <menuitem id="menu_team_service_requests"
+              name="Team Requests"
+              parent="menu_service_requests"
+              action="action_hr_service_request_team"
+              sequence="2"
+              groups="hr.group_hr_user"/>
+    
+    <!-- All Requests (for HR) -->
+    <menuitem id="menu_all_service_requests"
+              name="All Requests"
+              parent="menu_service_requests"
+              action="action_hr_service_request_all"
+              sequence="3"
+              groups="hr.group_hr_user"/>
+    
+    <!-- Pending Approval (for HR) -->
+    <menuitem id="menu_pending_service_requests"
+              name="Pending Approval"
+              parent="menu_service_requests"
+              action="action_hr_service_request_pending"
+              sequence="4"
+              groups="hr.group_hr_user"/>
+    
+    <!-- In Processing (for HR) -->
+    <menuitem id="menu_processing_service_requests"
+              name="In Processing"
+              parent="menu_service_requests"
+              action="action_hr_service_request_processing"
+              sequence="5"
+              groups="hr.group_hr_user"/>
+    
+    <!-- Ready for Collection (for HR) -->
+    <menuitem id="menu_ready_service_requests"
+              name="Ready for Collection"
+              parent="menu_service_requests"
+              action="action_hr_service_request_ready"
+              sequence="6"
+              groups="hr.group_hr_user"/>
+
     <!-- Announcements Menu -->
     <menuitem id="menu_portal_announcements"
               name="Announcements"
@@ -40,11 +97,27 @@
               action="action_portal_announcement"
               sequence="10"/>
 
+    <!-- ============================================== -->
+    <!-- CONFIGURATION MENUS -->
+    <!-- ============================================== -->
+    
     <!-- Portal Settings -->
     <menuitem id="menu_portal_settings"
-              name="Settings"
+              name="Configuration"
               parent="menu_portal_root"
-              sequence="90"/>
+              sequence="90"
+              groups="hr.group_hr_manager"/>
+    
+    <!-- Request Types Configuration -->
+    <menuitem id="menu_service_request_types"
+              name="Request Types"
+              parent="menu_portal_settings"
+              action="action_hr_service_request_type"
+              sequence="10"/>
+
+    <!-- ============================================== -->
+    <!-- VIEWS -->
+    <!-- ============================================== -->
 
     <!-- Announcement Tree View -->
     <record id="view_portal_announcement_tree" model="ir.ui.view">

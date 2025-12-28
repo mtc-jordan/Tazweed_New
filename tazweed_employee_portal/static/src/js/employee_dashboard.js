@@ -189,16 +189,27 @@ export class EmployeeDashboard extends Component {
         });
     }
 
-    onViewPayslips() {
-        this.action.doAction({
-            type: "ir.actions.act_window",
-            name: "My Payslips",
-            res_model: "hr.payslip",
-            view_mode: "list,form",
-            views: [[false, "list"], [false, "form"]],
-            domain: [["employee_id.user_id", "=", this.env.services.user.userId]],
-            target: "current",
-        });
+    async onViewPayslips() {
+        // Check if payroll module is installed
+        try {
+            const models = await this.orm.call("ir.model", "search_read", [[['model', '=', 'hr.payslip']]], {fields: ['id']});
+            if (models.length > 0) {
+                this.action.doAction({
+                    type: "ir.actions.act_window",
+                    name: "My Payslips",
+                    res_model: "hr.payslip",
+                    view_mode: "list,form",
+                    views: [[false, "list"], [false, "form"]],
+                    domain: [["employee_id.user_id", "=", this.env.services.user.userId]],
+                    target: "current",
+                });
+            } else {
+                // Payroll not installed - redirect to portal
+                window.location.href = '/my/payslips';
+            }
+        } catch (e) {
+            window.location.href = '/my/payslips';
+        }
     }
 
     onViewAttendance() {

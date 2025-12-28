@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- HR Service Request Sequence -->
+        <record id="seq_hr_service_request" model="ir.sequence">
+            <field name="name">HR Service Request</field>
+            <field name="code">hr.service.request</field>
+            <field name="prefix">HSR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+    </data>
+</odoo>

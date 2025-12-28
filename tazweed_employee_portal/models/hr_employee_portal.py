@@ -107,11 +107,13 @@ class HrEmployeePortal(models.Model):
             ('employee_id', '=', self.id),
         ], limit=5, order='check_in desc')
         
-        # Recent payslips
-        recent_payslips = self.env['hr.payslip'].search([
-            ('employee_id', '=', self.id),
-            ('state', '=', 'done'),
-        ], limit=3, order='date_to desc')
+        # Recent payslips (optional - only if payroll module is installed)
+        recent_payslips = []
+        if 'hr.payslip' in self.env:
+            recent_payslips = self.env['hr.payslip'].search([
+                ('employee_id', '=', self.id),
+                ('state', '=', 'done'),
+            ], limit=3, order='date_to desc')
         
         # Pending requests
         pending_leaves = self.env['hr.leave'].search([

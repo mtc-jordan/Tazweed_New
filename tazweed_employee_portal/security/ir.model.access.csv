@@ -3,3 +3,11 @@ access_portal_announcement_user,tazweed.portal.announcement.user,model_tazweed_p
 access_portal_announcement_hr,tazweed.portal.announcement.hr,model_tazweed_portal_announcement,hr.group_hr_user,1,1,1,0
 access_portal_announcement_manager,tazweed.portal.announcement.manager,model_tazweed_portal_announcement,hr.group_hr_manager,1,1,1,1
 access_portal_announcement_portal,tazweed.portal.announcement.portal,model_tazweed_portal_announcement,base.group_portal,1,0,0,0
+access_hr_service_request_type_user,hr.service.request.type.user,model_hr_service_request_type,base.group_user,1,0,0,0
+access_hr_service_request_type_hr,hr.service.request.type.hr,model_hr_service_request_type,hr.group_hr_user,1,1,0,0
+access_hr_service_request_type_manager,hr.service.request.type.manager,model_hr_service_request_type,hr.group_hr_manager,1,1,1,1
+access_hr_service_request_user,hr.service.request.user,model_hr_service_request,base.group_user,1,1,1,0
+access_hr_service_request_hr,hr.service.request.hr,model_hr_service_request,hr.group_hr_user,1,1,1,0
+access_hr_service_request_manager,hr.service.request.manager,model_hr_service_request,hr.group_hr_manager,1,1,1,1
+access_hr_service_request_portal,hr.service.request.portal,model_hr_service_request,base.group_portal,1,1,1,0
+access_hr_service_request_reject_wizard_hr,hr.service.request.reject.wizard.hr,model_hr_service_request_reject_wizard,hr.group_hr_user,1,1,1,1

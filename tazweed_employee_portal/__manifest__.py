@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Employee Portal',
-    'version': '16.0.1.0.0',
+    'version': '16.0.2.0.0',
     'category': 'Human Resources/Employee',
-    'summary': 'Employee Self-Service Portal for Tazweed',
+    'summary': 'Employee Self-Service Portal with HR Service Requests',
     'description': """
 Tazweed Employee Self-Service Portal
 ====================================
@@ -23,6 +23,34 @@ Features:
 * Expense Claims
 * Announcements
 
+HR Service Requests:
+--------------------
+* Salary Certificate Request
+* Experience Letter Request
+* No Objection Certificate (NOC)
+* Bank Letter Request
+* Embassy/Visa Support Letter
+* Employment Contract Copy
+* Payslip Copy Request
+* Name Change Request
+* Bank Account Change
+* Dependent Addition
+* Insurance Card Request
+* Salary Advance Request
+* Employee Loan Request
+* Expense Reimbursement
+* And many more...
+
+Workflow Features:
+------------------
+* Easy request submission
+* Manager approval workflow
+* HR approval workflow
+* SLA tracking
+* Email notifications
+* Document generation
+* Request tracking
+
 Portal Features:
 ----------------
 * Mobile-responsive design
@@ -40,9 +68,9 @@ Website: https://tazweedjobs.ae
     'depends': [
         'tazweed_core',
         'tazweed_leave',
-        'tazweed_payroll',
         'portal',
         'website',
+        'mail',
     ],
     'data': [
         # Security
@@ -50,6 +78,9 @@ Website: https://tazweedjobs.ae
         'security/ir.model.access.csv',
         # Data
         'data/portal_data.xml',
+        'data/hr_service_request_sequence.xml',
+        'data/hr_service_request_type_data.xml',
+        'data/hr_service_request_email_templates.xml',
         # Views
         'views/portal_templates.xml',
         'views/portal_dashboard.xml',
@@ -58,6 +89,7 @@ Website: https://tazweedjobs.ae
         'views/portal_payslip.xml',
         'views/portal_document.xml',
         'views/dashboard_views.xml',
+        'views/hr_service_request_views.xml',
         'views/menu.xml',
     ],
     'assets': {

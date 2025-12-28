@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- ============================================== -->
+        <!-- CERTIFICATES & LETTERS -->
+        <!-- ============================================== -->
+        
+        <!-- Salary Certificate -->
+        <record id="request_type_salary_certificate" model="hr.service.request.type">
+            <field name="name">Salary Certificate</field>
+            <field name="code">SALARY_CERT</field>
+            <field name="category">certificate</field>
+            <field name="sequence">1</field>
+            <field name="description">Official certificate confirming employee's current salary and employment details. Commonly required for bank loans, credit cards, visa applications, and rental agreements.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Salary Certificate Request</h5>
+                    <p>Please provide the following information:</p>
+                    <ul>
+                        <li>Purpose of the certificate (bank, visa, etc.)</li>
+                        <li>Name of the organization it's addressed to</li>
+                        <li>Preferred language (English/Arabic/Both)</li>
+                        <li>Number of copies needed</li>
+                    </ul>
+                    <p><strong>Processing Time:</strong> 1-2 business days</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Experience Letter / Employment Certificate -->
+        <record id="request_type_experience_letter" model="hr.service.request.type">
+            <field name="name">Experience Letter / Employment Certificate</field>
+            <field name="code">EXP_LETTER</field>
+            <field name="category">certificate</field>
+            <field name="sequence">2</field>
+            <field name="description">Official letter confirming employment history, job title, and tenure with the company. Required for new employment, visa applications, or professional certifications.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">1</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Experience Letter Request</h5>
+                    <p>Please provide:</p>
+                    <ul>
+                        <li>Purpose of the letter</li>
+                        <li>Specific details to include (if any)</li>
+                        <li>Preferred language</li>
+                    </ul>
+                    <p><strong>Note:</strong> For current employees, this will be an employment verification letter. For departing employees, a full experience letter will be issued.</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- No Objection Certificate (NOC) -->
+        <record id="request_type_noc" model="hr.service.request.type">
+            <field name="name">No Objection Certificate (NOC)</field>
+            <field name="code">NOC</field>
+            <field name="category">certificate</field>
+            <field name="sequence">3</field>
+            <field name="description">Certificate stating the company has no objection to the employee's specific activity (visa transfer, part-time work, higher education, etc.)</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager_hr</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">2</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-warning">
+                    <h5>NOC Request</h5>
+                    <p><strong>Important:</strong> NOC requests require both Manager and HR approval.</p>
+                    <p>Please specify:</p>
+                    <ul>
+                        <li>Purpose of NOC (visa transfer, education, part-time work, etc.)</li>
+                        <li>Duration (if applicable)</li>
+                        <li>Any specific conditions</li>
+                    </ul>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Bank Letter -->
+        <record id="request_type_bank_letter" model="hr.service.request.type">
+            <field name="name">Bank Letter</field>
+            <field name="code">BANK_LETTER</field>
+            <field name="category">certificate</field>
+            <field name="sequence">4</field>
+            <field name="description">Letter addressed to a bank for account opening, loan application, or credit card request.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Bank Letter Request</h5>
+                    <p>Please provide:</p>
+                    <ul>
+                        <li>Bank name</li>
+                        <li>Purpose (account opening, loan, credit card)</li>
+                        <li>Any specific information the bank requires</li>
+                    </ul>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Embassy Letter -->
+        <record id="request_type_embassy_letter" model="hr.service.request.type">
+            <field name="name">Embassy / Visa Support Letter</field>
+            <field name="code">EMBASSY_LETTER</field>
+            <field name="category">certificate</field>
+            <field name="sequence">5</field>
+            <field name="description">Letter addressed to an embassy or consulate supporting visa application for business or personal travel.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager_hr</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">2</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Embassy Letter Request</h5>
+                    <p>Please provide:</p>
+                    <ul>
+                        <li>Embassy/Consulate name and country</li>
+                        <li>Purpose of travel (business/personal)</li>
+                        <li>Travel dates</li>
+                        <li>Any specific requirements from the embassy</li>
+                    </ul>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Promotion Letter -->
+        <record id="request_type_promotion_letter" model="hr.service.request.type">
+            <field name="name">Promotion Letter Copy</field>
+            <field name="code">PROMO_LETTER</field>
+            <field name="category">certificate</field>
+            <field name="sequence">6</field>
+            <field name="description">Copy of promotion letter for personal records or external requirements.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- Address Proof Letter -->
+        <record id="request_type_address_proof" model="hr.service.request.type">
+            <field name="name">Address Proof Letter</field>
+            <field name="code">ADDRESS_PROOF</field>
+            <field name="category">certificate</field>
+            <field name="sequence">7</field>
+            <field name="description">Letter confirming employee's residential address as per company records.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- DOCUMENT REQUESTS -->
+        <!-- ============================================== -->
+        
+        <!-- Payslip Copy -->
+        <record id="request_type_payslip_copy" model="hr.service.request.type">
+            <field name="name">Payslip Copy</field>
+            <field name="code">PAYSLIP_COPY</field>
+            <field name="category">document</field>
+            <field name="sequence">10</field>
+            <field name="description">Request for duplicate or certified copy of payslip for a specific period.</field>
+            <field name="requires_approval">False</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Payslip Copy Request</h5>
+                    <p>Please specify:</p>
+                    <ul>
+                        <li>Month(s) and year of payslip needed</li>
+                        <li>Whether you need a stamped/certified copy</li>
+                    </ul>
+                    <p><strong>Note:</strong> You can also download payslips directly from the Employee Portal.</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Contract Copy -->
+        <record id="request_type_contract_copy" model="hr.service.request.type">
+            <field name="name">Employment Contract Copy</field>
+            <field name="code">CONTRACT_COPY</field>
+            <field name="category">document</field>
+            <field name="sequence">11</field>
+            <field name="description">Request for copy of employment contract or specific contract amendments.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- Offer Letter Copy -->
+        <record id="request_type_offer_letter" model="hr.service.request.type">
+            <field name="name">Offer Letter Copy</field>
+            <field name="code">OFFER_LETTER</field>
+            <field name="category">document</field>
+            <field name="sequence">12</field>
+            <field name="description">Request for copy of original offer letter.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- Tax Documents -->
+        <record id="request_type_tax_docs" model="hr.service.request.type">
+            <field name="name">Tax Documents</field>
+            <field name="code">TAX_DOCS</field>
+            <field name="category">document</field>
+            <field name="sequence">13</field>
+            <field name="description">Request for tax-related documents (Form 16, tax certificates, etc.)</field>
+            <field name="requires_approval">False</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">2</field>
+        </record>
+        
+        <!-- Passport Copy Return -->
+        <record id="request_type_passport_return" model="hr.service.request.type">
+            <field name="name">Passport Return Request</field>
+            <field name="code">PASSPORT_RET</field>
+            <field name="category">document</field>
+            <field name="sequence">14</field>
+            <field name="description">Request to collect passport from HR (if held by company for visa processing).</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-warning">
+                    <h5>Passport Return Request</h5>
+                    <p>Please specify:</p>
+                    <ul>
+                        <li>Reason for passport collection</li>
+                        <li>Expected return date (if applicable)</li>
+                    </ul>
+                    <p><strong>Note:</strong> You will need to sign an acknowledgment upon collection.</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- HR SERVICES -->
+        <!-- ============================================== -->
+        
+        <!-- Name Change Request -->
+        <record id="request_type_name_change" model="hr.service.request.type">
+            <field name="name">Name Change Request</field>
+            <field name="code">NAME_CHANGE</field>
+            <field name="category">service</field>
+            <field name="sequence">20</field>
+            <field name="description">Request to update name in company records (due to marriage, legal name change, etc.)</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Name Change Request</h5>
+                    <p>Required documents:</p>
+                    <ul>
+                        <li>Legal document supporting name change (marriage certificate, court order, etc.)</li>
+                        <li>Updated Emirates ID (if applicable)</li>
+                        <li>Updated passport (if applicable)</li>
+                    </ul>
+                    <p><strong>Note:</strong> This will update your name across all company systems and documents.</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Bank Account Change -->
+        <record id="request_type_bank_change" model="hr.service.request.type">
+            <field name="name">Salary Bank Account Change</field>
+            <field name="code">BANK_CHANGE</field>
+            <field name="category">service</field>
+            <field name="sequence">21</field>
+            <field name="description">Request to change salary bank account details.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-warning">
+                    <h5>Bank Account Change Request</h5>
+                    <p>Required documents:</p>
+                    <ul>
+                        <li>Bank account details (IBAN, account number)</li>
+                        <li>Bank letter or cancelled cheque</li>
+                    </ul>
+                    <p><strong>Important:</strong> Changes will be effective from the next payroll cycle.</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Emergency Contact Update -->
+        <record id="request_type_emergency_contact" model="hr.service.request.type">
+            <field name="name">Emergency Contact Update</field>
+            <field name="code">EMERGENCY_UPD</field>
+            <field name="category">service</field>
+            <field name="sequence">22</field>
+            <field name="description">Update emergency contact information in company records.</field>
+            <field name="requires_approval">False</field>
+            <field name="sla_days">1</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- Personal Information Update -->
+        <record id="request_type_personal_update" model="hr.service.request.type">
+            <field name="name">Personal Information Update</field>
+            <field name="code">PERSONAL_UPD</field>
+            <field name="category">service</field>
+            <field name="sequence">23</field>
+            <field name="description">Update personal information (address, phone, marital status, etc.)</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- Dependent Addition -->
+        <record id="request_type_dependent_add" model="hr.service.request.type">
+            <field name="name">Add/Update Dependents</field>
+            <field name="code">DEPENDENT_ADD</field>
+            <field name="category">service</field>
+            <field name="sequence">24</field>
+            <field name="description">Add or update dependent information for insurance and benefits.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-info">
+                    <h5>Dependent Update Request</h5>
+                    <p>Required documents:</p>
+                    <ul>
+                        <li>Dependent's passport copy</li>
+                        <li>Dependent's Emirates ID (if applicable)</li>
+                        <li>Relationship proof (marriage certificate, birth certificate)</li>
+                    </ul>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Insurance Card Request -->
+        <record id="request_type_insurance_card" model="hr.service.request.type">
+            <field name="name">Insurance Card Request</field>
+            <field name="code">INSURANCE_CARD</field>
+            <field name="category">service</field>
+            <field name="sequence">25</field>
+            <field name="description">Request for new or replacement insurance card.</field>
+            <field name="requires_approval">False</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- FINANCIAL REQUESTS -->
+        <!-- ============================================== -->
+        
+        <!-- Salary Advance -->
+        <record id="request_type_salary_advance" model="hr.service.request.type">
+            <field name="name">Salary Advance Request</field>
+            <field name="code">SALARY_ADV</field>
+            <field name="category">financial</field>
+            <field name="sequence">30</field>
+            <field name="description">Request for advance payment of salary.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager_hr</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">2</field>
+            <field name="instructions"><![CDATA[
+                <div class="alert alert-warning">
+                    <h5>Salary Advance Request</h5>
+                    <p>Please provide:</p>
+                    <ul>
+                        <li>Amount requested</li>
+                        <li>Reason for advance</li>
+                        <li>Preferred repayment schedule</li>
+                    </ul>
+                    <p><strong>Note:</strong> Subject to company policy and approval. Maximum advance is typically 50% of monthly salary.</p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Loan Request -->
+        <record id="request_type_loan" model="hr.service.request.type">
+            <field name="name">Employee Loan Request</field>
+            <field name="code">EMP_LOAN</field>
+            <field name="category">financial</field>
+            <field name="sequence">31</field>
+            <field name="description">Request for employee loan (if company policy allows).</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager_hr</field>
+            <field name="sla_days">7</field>
+            <field name="priority_sla_days">5</field>
+        </record>
+        
+        <!-- Expense Reimbursement -->
+        <record id="request_type_expense" model="hr.service.request.type">
+            <field name="name">Expense Reimbursement</field>
+            <field name="code">EXPENSE_REIMB</field>
+            <field name="category">financial</field>
+            <field name="sequence">32</field>
+            <field name="description">Request for reimbursement of work-related expenses.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+        </record>
+        
+        <!-- Gratuity Calculation -->
+        <record id="request_type_gratuity_calc" model="hr.service.request.type">
+            <field name="name">Gratuity Calculation Request</field>
+            <field name="code">GRATUITY_CALC</field>
+            <field name="category">financial</field>
+            <field name="sequence">33</field>
+            <field name="description">Request for calculation of end-of-service gratuity (for information purposes).</field>
+            <field name="requires_approval">False</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">2</field>
+        </record>
+        
+        <!-- ============================================== -->
+        <!-- OTHER REQUESTS -->
+        <!-- ============================================== -->
+        
+        <!-- IT Equipment Request -->
+        <record id="request_type_it_equipment" model="hr.service.request.type">
+            <field name="name">IT Equipment Request</field>
+            <field name="code">IT_EQUIP</field>
+            <field name="category">other</field>
+            <field name="sequence">40</field>
+            <field name="description">Request for IT equipment (laptop, monitor, accessories, etc.)</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+        </record>
+        
+        <!-- Business Card Request -->
+        <record id="request_type_business_card" model="hr.service.request.type">
+            <field name="name">Business Card Request</field>
+            <field name="code">BIZ_CARD</field>
+            <field name="category">other</field>
+            <field name="sequence">41</field>
+            <field name="description">Request for new or additional business cards.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager</field>
+            <field name="sla_days">7</field>
+            <field name="priority_sla_days">5</field>
+        </record>
+        
+        <!-- Access Card Request -->
+        <record id="request_type_access_card" model="hr.service.request.type">
+            <field name="name">Access Card Request</field>
+            <field name="code">ACCESS_CARD</field>
+            <field name="category">other</field>
+            <field name="sequence">42</field>
+            <field name="description">Request for new or replacement office access card.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- Parking Request -->
+        <record id="request_type_parking" model="hr.service.request.type">
+            <field name="name">Parking Space Request</field>
+            <field name="code">PARKING</field>
+            <field name="category">other</field>
+            <field name="sequence">43</field>
+            <field name="description">Request for parking space allocation.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">hr</field>
+            <field name="sla_days">5</field>
+            <field name="priority_sla_days">3</field>
+        </record>
+        
+        <!-- Training Request -->
+        <record id="request_type_training" model="hr.service.request.type">
+            <field name="name">Training Request</field>
+            <field name="code">TRAINING</field>
+            <field name="category">other</field>
+            <field name="sequence">44</field>
+            <field name="description">Request for training or professional development.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager_hr</field>
+            <field name="sla_days">7</field>
+            <field name="priority_sla_days">5</field>
+        </record>
+        
+        <!-- Work From Home Request -->
+        <record id="request_type_wfh" model="hr.service.request.type">
+            <field name="name">Work From Home Request</field>
+            <field name="code">WFH</field>
+            <field name="category">other</field>
+            <field name="sequence">45</field>
+            <field name="description">Request for work from home arrangement.</field>
+            <field name="requires_approval">True</field>
+            <field name="approval_type">manager</field>
+            <field name="sla_days">2</field>
+            <field name="priority_sla_days">1</field>
+        </record>
+        
+        <!-- General HR Inquiry -->
+        <record id="request_type_general" model="hr.service.request.type">
+            <field name="name">General HR Inquiry</field>
+            <field name="code">GENERAL</field>
+            <field name="category">other</field>
+            <field name="sequence">99</field>
+            <field name="description">General inquiry or request not covered by other categories.</field>
+            <field name="requires_approval">False</field>
+            <field name="sla_days">3</field>
+            <field name="priority_sla_days">2</field>
+        </record>
+        
+    </data>
+</odoo>
