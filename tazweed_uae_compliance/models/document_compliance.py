@@ -152,6 +152,63 @@ class ComplianceDashboard(models.Model):
     expiring_permits = fields.Integer(string='Expiring Permits')
     expired_permits = fields.Integer(string='Expired Permits')
 
+    @api.model
+    def get_compliance_dashboard_data(self):
+        """Get compliance dashboard data"""
+        company = self.env.company
+        today = date.today()
+        
+        # Emiratization data
+        quota = self.env['tazweed.emiratization.quota'].search([
+            ('company_id', '=', company.id),
+            ('state', '=', 'active'),
+        ], limit=1)
+        
+        emiratization_rate = quota.current_percentage if quota else 0
+        emiratization_gap = quota.gap_count if quota else 0
+        is_emiratization_compliant = quota.is_compliant if quota else True
+        
+        # WPS data
+        wps_files = self.env['tazweed.wps.file'].search([
+            ('company_id', '=', company.id),
+        ])
+        wps_pending = len(wps_files.filtered(lambda w: w.state == 'draft'))
+        wps_submitted = len(wps_files.filtered(lambda w: w.state in ['submitted', 'processed']))
+        
+        # Document compliance
+        doc_compliance = self.env['tazweed.document.compliance'].search([
+            ('company_id', '=', company.id),
+        ])
+        expiring_docs = len(doc_compliance.filtered(lambda d: d.expiry_status == 'expiring_soon'))
+        expired_docs = len(doc_compliance.filtered(lambda d: d.expiry_status == 'expired'))
+        
+        # Work permits
+        permits = self.env['tazweed.work.permit'].search([
+            ('company_id', '=', company.id),
+        ])
+        expiring_permits = len(permits.filtered(lambda p: 0 < p.days_to_expiry <= 30))
+        expired_permits = len(permits.filtered(lambda p: p.is_expired))
+        
+        return {
+            'emiratization': {
+                'rate': emiratization_rate,
+                'gap': emiratization_gap,
+                'is_compliant': is_emiratization_compliant,
+            },
+            'wps': {
+                'pending': wps_pending,
+                'submitted': wps_submitted,
+            },
+            'documents': {
+                'expiring': expiring_docs,
+                'expired': expired_docs,
+            },
+            'permits': {
+                'expiring': expiring_permits,
+                'expired': expired_permits,
+            },
+        }
+
     def init(self):
         """Create view for compliance dashboard"""
         self.env.cr.execute("""
