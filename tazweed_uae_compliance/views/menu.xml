@@ -15,13 +15,13 @@
     <menuitem id="menu_wps_files"
               name="WPS Files"
               parent="menu_compliance_wps"
-              action="action_wps_file"
+              action="action_wps_files_compliance"
               sequence="10"/>
 
     <menuitem id="menu_wps_compliance"
               name="WPS Compliance"
               parent="menu_compliance_wps"
-              action="action_wps_compliance"
+              action="action_wps_compliance_uae"
               sequence="20"/>
 
     <!-- Emiratization Menu -->

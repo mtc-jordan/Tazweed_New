@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- UAE Local Banks -->
+        <record id="bank_adcb" model="tazweed.wps.bank">
+            <field name="name">Abu Dhabi Commercial Bank</field>
+            <field name="code">ADCB</field>
+            <field name="routing_code">ADCBAEAA</field>
+            <field name="swift_code">ADCBAEAA</field>
+            <field name="short_name">ADCB</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <record id="bank_adib" model="tazweed.wps.bank">
+            <field name="name">Abu Dhabi Islamic Bank</field>
+            <field name="code">ADIB</field>
+            <field name="routing_code">ABDIAEAD</field>
+            <field name="swift_code">ABDIAEAD</field>
+            <field name="short_name">ADIB</field>
+            <field name="bank_type">islamic</field>
+        </record>
+        
+        <record id="bank_cbd" model="tazweed.wps.bank">
+            <field name="name">Commercial Bank of Dubai</field>
+            <field name="code">CBD</field>
+            <field name="routing_code">CBDUAEAD</field>
+            <field name="swift_code">CBDUAEAD</field>
+            <field name="short_name">CBD</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <record id="bank_dib" model="tazweed.wps.bank">
+            <field name="name">Dubai Islamic Bank</field>
+            <field name="code">DIB</field>
+            <field name="routing_code">DUIBAEAD</field>
+            <field name="swift_code">DUIBAEAD</field>
+            <field name="short_name">DIB</field>
+            <field name="bank_type">islamic</field>
+        </record>
+        
+        <record id="bank_enbd" model="tazweed.wps.bank">
+            <field name="name">Emirates NBD</field>
+            <field name="code">ENBD</field>
+            <field name="routing_code">ABORAEAD</field>
+            <field name="swift_code">EABORAEXXX</field>
+            <field name="short_name">ENBD</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <record id="bank_fab" model="tazweed.wps.bank">
+            <field name="name">First Abu Dhabi Bank</field>
+            <field name="code">FAB</field>
+            <field name="routing_code">NBABORAEXXX</field>
+            <field name="swift_code">NBADORAEXXX</field>
+            <field name="short_name">FAB</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <record id="bank_mashreq" model="tazweed.wps.bank">
+            <field name="name">Mashreq Bank</field>
+            <field name="code">MASH</field>
+            <field name="routing_code">BOMLAEAD</field>
+            <field name="swift_code">BOMLAEAD</field>
+            <field name="short_name">Mashreq</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <record id="bank_rakbank" model="tazweed.wps.bank">
+            <field name="name">RAK Bank</field>
+            <field name="code">RAKB</field>
+            <field name="routing_code">NABORAERXXX</field>
+            <field name="swift_code">NABORAERXXX</field>
+            <field name="short_name">RAKBANK</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <record id="bank_sib" model="tazweed.wps.bank">
+            <field name="name">Sharjah Islamic Bank</field>
+            <field name="code">SIB</field>
+            <field name="routing_code">NBSHAEAS</field>
+            <field name="swift_code">NBSHAEAS</field>
+            <field name="short_name">SIB</field>
+            <field name="bank_type">islamic</field>
+        </record>
+        
+        <record id="bank_uab" model="tazweed.wps.bank">
+            <field name="name">United Arab Bank</field>
+            <field name="code">UAB</field>
+            <field name="routing_code">UABORAEXXX</field>
+            <field name="swift_code">UABORAEXXX</field>
+            <field name="short_name">UAB</field>
+            <field name="bank_type">local</field>
+        </record>
+        
+        <!-- Foreign Banks -->
+        <record id="bank_hsbc" model="tazweed.wps.bank">
+            <field name="name">HSBC Bank Middle East</field>
+            <field name="code">HSBC</field>
+            <field name="routing_code">BBABORAEXXX</field>
+            <field name="swift_code">BBMEAEAD</field>
+            <field name="short_name">HSBC</field>
+            <field name="bank_type">foreign</field>
+        </record>
+        
+        <record id="bank_citi" model="tazweed.wps.bank">
+            <field name="name">Citibank N.A.</field>
+            <field name="code">CITI</field>
+            <field name="routing_code">CITIAEADXXX</field>
+            <field name="swift_code">CITIAEADXXX</field>
+            <field name="short_name">Citibank</field>
+            <field name="bank_type">foreign</field>
+        </record>
+        
+        <record id="bank_sc" model="tazweed.wps.bank">
+            <field name="name">Standard Chartered Bank</field>
+            <field name="code">SCB</field>
+            <field name="routing_code">SCBLAEADXXX</field>
+            <field name="swift_code">SCBLAEADXXX</field>
+            <field name="short_name">SCB</field>
+            <field name="bank_type">foreign</field>
+        </record>
+        
+        <!-- Exchange Houses -->
+        <record id="bank_ae_exchange" model="tazweed.wps.bank">
+            <field name="name">Al Ansari Exchange</field>
+            <field name="code">AAE</field>
+            <field name="routing_code">AAEEXCHG</field>
+            <field name="swift_code">AAEEXCHG</field>
+            <field name="short_name">Al Ansari</field>
+            <field name="bank_type">exchange</field>
+        </record>
+        
+        <record id="bank_uae_exchange" model="tazweed.wps.bank">
+            <field name="name">UAE Exchange</field>
+            <field name="code">UAEX</field>
+            <field name="routing_code">UAEXCHGE</field>
+            <field name="swift_code">UAEXCHGE</field>
+            <field name="short_name">UAE Exchange</field>
+            <field name="bank_type">exchange</field>
+        </record>
+        
+    </data>
+</odoo>

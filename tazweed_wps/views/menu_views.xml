@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Root Menu -->
+    <menuitem id="menu_wps_root"
+              name="WPS"
+              web_icon="tazweed_wps,static/description/icon.png"
+              sequence="25"/>
+    
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_wps_dashboard"
+              name="Dashboard"
+              parent="menu_wps_root"
+              action="action_wps_dashboard"
+              sequence="1"/>
+    
+    <!-- WPS Files Menu -->
+    <menuitem id="menu_wps_files"
+              name="WPS Files"
+              parent="menu_wps_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_wps_file_all"
+              name="All WPS Files"
+              parent="menu_wps_files"
+              action="action_wps_file"
+              sequence="1"/>
+    
+    <menuitem id="menu_wps_file_draft"
+              name="Draft"
+              parent="menu_wps_files"
+              action="action_wps_file"
+              sequence="2"/>
+    
+    <menuitem id="menu_wps_file_pending"
+              name="Pending Submission"
+              parent="menu_wps_files"
+              action="action_wps_file"
+              sequence="3"/>
+    
+    <!-- Compliance Menu -->
+    <menuitem id="menu_wps_compliance"
+              name="Compliance"
+              parent="menu_wps_root"
+              sequence="20"/>
+    
+    <menuitem id="menu_wps_compliance_reports"
+              name="Compliance Reports"
+              parent="menu_wps_compliance"
+              action="action_wps_compliance"
+              sequence="1"/>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_wps_config"
+              name="Configuration"
+              parent="menu_wps_root"
+              groups="group_wps_manager"
+              sequence="100"/>
+    
+    <menuitem id="menu_wps_banks"
+              name="UAE Banks"
+              parent="menu_wps_config"
+              action="action_wps_bank"
+              sequence="1"/>
+    
+</odoo>

@@ -49,6 +49,7 @@ Features:
         'hr',
         'hr_contract',
         'mail',
+        'tazweed_wps',
     ],
     'data': [
         # Security

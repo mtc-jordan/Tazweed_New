@@ -45,6 +45,7 @@ Website: https://tazweedjobs.ae
     'license': 'LGPL-3',
     'depends': [
         'tazweed_core',
+        'tazweed_wps',
         'hr_contract',
     ],
     'data': [

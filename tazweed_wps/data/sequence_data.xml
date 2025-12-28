@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- WPS File Sequence -->
+        <record id="seq_wps_file" model="ir.sequence">
+            <field name="name">WPS File Sequence</field>
+            <field name="code">tazweed.wps.file</field>
+            <field name="prefix">WPS/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+    </data>
+</odoo>

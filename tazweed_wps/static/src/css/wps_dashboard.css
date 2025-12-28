@@ -1,0 +1,55 @@
+.wps-dashboard {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.wps-dashboard .card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wps-dashboard .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.wps-dashboard .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.25rem;
+}
+
+.wps-dashboard .card-body {
+    padding: 1.25rem;
+}
+
+.wps-dashboard .table th {
+    border-top: none;
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.wps-dashboard .table td {
+    vertical-align: middle;
+}
+
+.wps-dashboard .badge {
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    text-transform: capitalize;
+}
+
+.wps-dashboard h2 {
+    font-weight: 600;
+    color: #212529;
+}
+
+.wps-dashboard .btn-outline-primary:hover,
+.wps-dashboard .btn-outline-success:hover,
+.wps-dashboard .btn-outline-secondary:hover {
+    transform: translateY(-1px);
+}

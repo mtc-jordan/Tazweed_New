@@ -1,161 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- WPS File Form View -->
-    <record id="view_wps_file_form" model="ir.ui.view">
-        <field name="name">tazweed.wps.file.form</field>
-        <field name="model">tazweed.wps.file</field>
-        <field name="arch" type="xml">
-            <form string="WPS File">
-                <header>
-                    <button name="action_generate_lines" string="Generate Lines" type="object" class="btn-secondary" states="draft"/>
-                    <button name="action_generate_sif" string="Generate SIF" type="object" class="btn-primary" states="draft"/>
-                    <button name="action_submit" string="Submit" type="object" class="btn-primary" states="generated"/>
-                    <button name="action_process" string="Mark Processed" type="object" class="btn-success" states="submitted"/>
-                    <button name="action_reject" string="Reject" type="object" class="btn-danger" states="submitted"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,submitted,processed"/>
-                </header>
-                <sheet>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
-                    </div>
-                    <group>
-                        <group string="Period">
-                            <field name="period_month"/>
-                            <field name="period_year"/>
-                            <field name="salary_date"/>
-                        </group>
-                        <group string="Employer Details">
-                            <field name="employer_eid"/>
-                            <field name="employer_bank_code"/>
-                            <field name="employer_bank_account"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Summary">
-                            <field name="total_employees"/>
-                            <field name="total_salary"/>
-                        </group>
-                        <group string="Submission">
-                            <field name="submission_date"/>
-                            <field name="processing_date"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Employee Lines" name="lines">
-                            <field name="line_ids">
-                                <tree editable="bottom">
-                                    <field name="employee_id"/>
-                                    <field name="labour_card_no"/>
-                                    <field name="bank_code"/>
-                                    <field name="bank_account"/>
-                                    <field name="basic_salary"/>
-                                    <field name="housing_allowance"/>
-                                    <field name="transport_allowance"/>
-                                    <field name="other_allowances"/>
-                                    <field name="deductions"/>
-                                    <field name="net_salary"/>
-                                    <field name="is_valid"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="SIF File" name="sif_file" attrs="{'invisible': [('sif_file', '=', False)]}">
-                            <group>
-                                <field name="sif_file" filename="sif_filename"/>
-                                <field name="sif_filename" invisible="1"/>
-                            </group>
-                        </page>
-                        <page string="Rejection" name="rejection" attrs="{'invisible': [('state', '!=', 'rejected')]}">
-                            <field name="rejection_reason"/>
-                        </page>
-                        <page string="Notes" name="notes">
-                            <field name="notes"/>
-                        </page>
-                    </notebook>
-                </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
-            </form>
-        </field>
-    </record>
-
-    <!-- WPS File Tree View -->
-    <record id="view_wps_file_tree" model="ir.ui.view">
-        <field name="name">tazweed.wps.file.tree</field>
-        <field name="model">tazweed.wps.file</field>
-        <field name="arch" type="xml">
-            <tree string="WPS Files" decoration-success="state == 'processed'" decoration-danger="state == 'rejected'">
-                <field name="name"/>
-                <field name="period_month"/>
-                <field name="period_year"/>
-                <field name="salary_date"/>
-                <field name="total_employees"/>
-                <field name="total_salary" sum="Total"/>
-                <field name="state"/>
-            </tree>
-        </field>
-    </record>
-
-    <!-- WPS File Search View -->
-    <record id="view_wps_file_search" model="ir.ui.view">
-        <field name="name">tazweed.wps.file.search</field>
-        <field name="model">tazweed.wps.file</field>
-        <field name="arch" type="xml">
-            <search string="Search WPS Files">
-                <field name="name"/>
-                <field name="period_year"/>
-                <separator/>
-                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
-                <filter name="generated" string="Generated" domain="[('state', '=', 'generated')]"/>
-                <filter name="submitted" string="Submitted" domain="[('state', '=', 'submitted')]"/>
-                <filter name="processed" string="Processed" domain="[('state', '=', 'processed')]"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_month" string="Month" context="{'group_by': 'period_month'}"/>
-                    <filter name="group_year" string="Year" context="{'group_by': 'period_year'}"/>
-                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <!-- WPS File Action -->
-    <record id="action_wps_file" model="ir.actions.act_window">
-        <field name="name">WPS Files</field>
-        <field name="res_model">tazweed.wps.file</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_wps_file_search"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first WPS file
-            </p>
-        </field>
-    </record>
-
-    <!-- WPS Compliance Report Views -->
-    <record id="view_wps_compliance_tree" model="ir.ui.view">
-        <field name="name">tazweed.wps.compliance.tree</field>
-        <field name="model">tazweed.wps.compliance</field>
-        <field name="arch" type="xml">
-            <tree string="WPS Compliance" decoration-success="is_compliant == True" decoration-danger="is_compliant == False">
-                <field name="name"/>
-                <field name="period_month"/>
-                <field name="period_year"/>
-                <field name="total_employees"/>
-                <field name="employees_paid_wps"/>
-                <field name="compliance_rate"/>
-                <field name="is_compliant"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="action_wps_compliance" model="ir.actions.act_window">
+    
+    <!-- WPS Compliance Action for Compliance Module Menu -->
+    <record id="action_wps_compliance_uae" model="ir.actions.act_window">
         <field name="name">WPS Compliance</field>
         <field name="res_model">tazweed.wps.compliance</field>
         <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No WPS compliance reports yet
+            </p>
+            <p>
+                Track WPS compliance and MOHRE reporting status.
+            </p>
+        </field>
     </record>
+    
+    <!-- WPS Files Action for Compliance Module Menu -->
+    <record id="action_wps_files_compliance" model="ir.actions.act_window">
+        <field name="name">WPS Files</field>
+        <field name="res_model">tazweed.wps.file</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_current_year': 1}</field>
+    </record>
+    
 </odoo>

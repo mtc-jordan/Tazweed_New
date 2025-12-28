@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- WPS Compliance Form View -->
+    <record id="view_wps_compliance_form" model="ir.ui.view">
+        <field name="name">tazweed.wps.compliance.form</field>
+        <field name="model">tazweed.wps.compliance</field>
+        <field name="arch" type="xml">
+            <form string="WPS Compliance Report">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Period">
+                            <field name="period_month"/>
+                            <field name="period_year"/>
+                            <field name="submission_deadline"/>
+                            <field name="is_overdue" invisible="1"/>
+                            <field name="wps_file_id"/>
+                        </group>
+                        <group string="Compliance Status">
+                            <field name="compliance_rate" widget="progressbar"/>
+                            <field name="compliance_status" widget="badge"
+                                   decoration-success="compliance_status=='compliant'"
+                                   decoration-warning="compliance_status=='partial'"
+                                   decoration-danger="compliance_status=='non_compliant'"/>
+                            <field name="is_compliant"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Employee Metrics">
+                            <field name="total_employees"/>
+                            <field name="employees_paid_wps"/>
+                            <field name="employees_not_paid"/>
+                            <field name="employees_exempt"/>
+                        </group>
+                        <group string="Salary Metrics">
+                            <field name="total_salary_due"/>
+                            <field name="total_salary_paid"/>
+                            <field name="salary_variance"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Add notes..."/>
+                        </page>
+                        <page string="Action Items" name="actions">
+                            <field name="action_items" placeholder="Add action items..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <!-- WPS Compliance Tree View -->
+    <record id="view_wps_compliance_tree" model="ir.ui.view">
+        <field name="name">tazweed.wps.compliance.tree</field>
+        <field name="model">tazweed.wps.compliance</field>
+        <field name="arch" type="xml">
+            <tree string="WPS Compliance Reports" 
+                  decoration-success="compliance_status=='compliant'"
+                  decoration-warning="compliance_status=='partial'"
+                  decoration-danger="compliance_status=='non_compliant'">
+                <field name="name"/>
+                <field name="period_month"/>
+                <field name="period_year"/>
+                <field name="total_employees"/>
+                <field name="employees_paid_wps"/>
+                <field name="compliance_rate" widget="progressbar"/>
+                <field name="compliance_status" widget="badge"
+                       decoration-success="compliance_status=='compliant'"
+                       decoration-warning="compliance_status=='partial'"
+                       decoration-danger="compliance_status=='non_compliant'"/>
+                <field name="submission_deadline"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- WPS Compliance Search View -->
+    <record id="view_wps_compliance_search" model="ir.ui.view">
+        <field name="name">tazweed.wps.compliance.search</field>
+        <field name="model">tazweed.wps.compliance</field>
+        <field name="arch" type="xml">
+            <search string="Search WPS Compliance">
+                <field name="name"/>
+                <field name="period_year"/>
+                <separator/>
+                <filter string="Compliant" name="compliant" domain="[('compliance_status', '=', 'compliant')]"/>
+                <filter string="Partial" name="partial" domain="[('compliance_status', '=', 'partial')]"/>
+                <filter string="Non-Compliant" name="non_compliant" domain="[('compliance_status', '=', 'non_compliant')]"/>
+                <separator/>
+                <filter string="Overdue" name="overdue" domain="[('is_overdue', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Year" name="group_year" context="{'group_by': 'period_year'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'compliance_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- WPS Compliance Action -->
+    <record id="action_wps_compliance" model="ir.actions.act_window">
+        <field name="name">WPS Compliance Reports</field>
+        <field name="res_model">tazweed.wps.compliance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No compliance reports yet
+            </p>
+            <p>
+                Compliance reports are automatically generated when WPS files are processed.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

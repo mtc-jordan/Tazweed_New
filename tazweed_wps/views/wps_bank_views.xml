@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- WPS Bank Form View -->
+    <record id="view_wps_bank_form" model="ir.ui.view">
+        <field name="name">tazweed.wps.bank.form</field>
+        <field name="model">tazweed.wps.bank</field>
+        <field name="arch" type="xml">
+            <form string="WPS Bank">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Bank Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Bank Codes">
+                            <field name="code"/>
+                            <field name="routing_code"/>
+                            <field name="swift_code"/>
+                            <field name="short_name"/>
+                        </group>
+                        <group string="Details">
+                            <field name="bank_type"/>
+                            <field name="is_wps_enabled"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Contact">
+                        <field name="website" widget="url"/>
+                        <field name="phone"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- WPS Bank Tree View -->
+    <record id="view_wps_bank_tree" model="ir.ui.view">
+        <field name="name">tazweed.wps.bank.tree</field>
+        <field name="model">tazweed.wps.bank</field>
+        <field name="arch" type="xml">
+            <tree string="WPS Banks">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="routing_code"/>
+                <field name="swift_code"/>
+                <field name="bank_type"/>
+                <field name="is_wps_enabled"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- WPS Bank Search View -->
+    <record id="view_wps_bank_search" model="ir.ui.view">
+        <field name="name">tazweed.wps.bank.search</field>
+        <field name="model">tazweed.wps.bank</field>
+        <field name="arch" type="xml">
+            <search string="Search Banks">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="routing_code"/>
+                <field name="swift_code"/>
+                <separator/>
+                <filter string="WPS Enabled" name="wps_enabled" domain="[('is_wps_enabled', '=', True)]"/>
+                <filter string="Local Banks" name="local" domain="[('bank_type', '=', 'local')]"/>
+                <filter string="Islamic Banks" name="islamic" domain="[('bank_type', '=', 'islamic')]"/>
+                <filter string="Foreign Banks" name="foreign" domain="[('bank_type', '=', 'foreign')]"/>
+                <filter string="Exchange Houses" name="exchange" domain="[('bank_type', '=', 'exchange')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Bank Type" name="group_type" context="{'group_by': 'bank_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- WPS Bank Action -->
+    <record id="action_wps_bank" model="ir.actions.act_window">
+        <field name="name">UAE Banks</field>
+        <field name="res_model">tazweed.wps.bank</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_wps_enabled': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new UAE bank
+            </p>
+            <p>
+                Configure UAE banks for WPS file generation.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

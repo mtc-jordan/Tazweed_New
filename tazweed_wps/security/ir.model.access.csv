@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wps_bank_user,tazweed.wps.bank.user,model_tazweed_wps_bank,group_wps_user,1,0,0,0
+access_wps_bank_officer,tazweed.wps.bank.officer,model_tazweed_wps_bank,group_wps_officer,1,1,1,0
+access_wps_bank_manager,tazweed.wps.bank.manager,model_tazweed_wps_bank,group_wps_manager,1,1,1,1
+access_wps_file_user,tazweed.wps.file.user,model_tazweed_wps_file,group_wps_user,1,0,0,0
+access_wps_file_officer,tazweed.wps.file.officer,model_tazweed_wps_file,group_wps_officer,1,1,1,0
+access_wps_file_manager,tazweed.wps.file.manager,model_tazweed_wps_file,group_wps_manager,1,1,1,1
+access_wps_file_line_user,tazweed.wps.file.line.user,model_tazweed_wps_file_line,group_wps_user,1,0,0,0
+access_wps_file_line_officer,tazweed.wps.file.line.officer,model_tazweed_wps_file_line,group_wps_officer,1,1,1,0
+access_wps_file_line_manager,tazweed.wps.file.line.manager,model_tazweed_wps_file_line,group_wps_manager,1,1,1,1
+access_wps_compliance_user,tazweed.wps.compliance.user,model_tazweed_wps_compliance,group_wps_user,1,0,0,0
+access_wps_compliance_officer,tazweed.wps.compliance.officer,model_tazweed_wps_compliance,group_wps_officer,1,1,1,0
+access_wps_compliance_manager,tazweed.wps.compliance.manager,model_tazweed_wps_compliance,group_wps_manager,1,1,1,1

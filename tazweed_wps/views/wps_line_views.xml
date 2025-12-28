@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- WPS File Line Form View -->
+    <record id="view_wps_file_line_form" model="ir.ui.view">
+        <field name="name">tazweed.wps.file.line.form</field>
+        <field name="model">tazweed.wps.file.line</field>
+        <field name="arch" type="xml">
+            <form string="WPS Line">
+                <sheet>
+                    <group>
+                        <group string="Employee">
+                            <field name="wps_file_id"/>
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                            <field name="employee_eid"/>
+                            <field name="labour_card_no"/>
+                            <field name="mol_id"/>
+                        </group>
+                        <group string="Bank Details">
+                            <field name="bank_id"/>
+                            <field name="bank_code"/>
+                            <field name="account_number"/>
+                            <field name="iban"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Earnings">
+                            <field name="basic_salary"/>
+                            <field name="housing_allowance"/>
+                            <field name="transport_allowance"/>
+                            <field name="other_allowance"/>
+                            <field name="overtime"/>
+                            <field name="leave_salary"/>
+                            <field name="gross_salary"/>
+                        </group>
+                        <group string="Deductions &amp; Net">
+                            <field name="deductions"/>
+                            <field name="net_salary"/>
+                            <field name="days_worked"/>
+                            <field name="payment_status"/>
+                        </group>
+                    </group>
+                    <group string="Validation">
+                        <field name="is_valid"/>
+                        <field name="validation_message" attrs="{'invisible': [('is_valid', '=', True)]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- WPS File Line Tree View -->
+    <record id="view_wps_file_line_tree" model="ir.ui.view">
+        <field name="name">tazweed.wps.file.line.tree</field>
+        <field name="model">tazweed.wps.file.line</field>
+        <field name="arch" type="xml">
+            <tree string="WPS Lines" decoration-danger="not is_valid">
+                <field name="wps_file_id"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="bank_code"/>
+                <field name="account_number"/>
+                <field name="basic_salary" sum="Total"/>
+                <field name="gross_salary" sum="Total"/>
+                <field name="deductions" sum="Total"/>
+                <field name="net_salary" sum="Total"/>
+                <field name="is_valid"/>
+                <field name="payment_status" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- WPS File Line Action -->
+    <record id="action_wps_file_lines" model="ir.actions.act_window">
+        <field name="name">WPS Employee Lines</field>
+        <field name="res_model">tazweed.wps.file.line</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- WPS Dashboard Action -->
+    <record id="action_wps_dashboard" model="ir.actions.client">
+        <field name="name">WPS Dashboard</field>
+        <field name="tag">wps_dashboard</field>
+    </record>
+    
+</odoo>
