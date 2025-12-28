@@ -9,8 +9,8 @@
                 <form string="Workflow Instance">
                     <header>
                         <button name="action_start" string="Start Workflow" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-                        <button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
-                        <button name="action_reject" string="Reject" type="object" attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                        <button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['pending', 'in_progress'])]}"/>
+                        <button name="action_reject" string="Reject" type="object" attrs="{'invisible': [('state', 'not in', ['pending', 'in_progress'])]}"/>
                         <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', 'in', ['approved', 'rejected', 'cancelled'])]}"/>
                         <field name="state" widget="statusbar"/>
                     </header>
@@ -26,73 +26,101 @@
                         <group>
                             <group>
                                 <field name="workflow_id"/>
-                                <field name="reference_model"/>
+                                <field name="workflow_type" readonly="1"/>
+                                <field name="employee_id"/>
                             </group>
                             <group>
-                                <field name="reference_id"/>
-                                <field name="current_step" readonly="1"/>
+                                <field name="res_model"/>
+                                <field name="res_id"/>
+                                <field name="priority"/>
                             </group>
                         </group>
                         
                         <!-- Timeline -->
-                        <separator string="Timeline" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="initiated_by" readonly="1"/>
-                                <field name="initiated_date" readonly="1"/>
-                            </group>
-                            <group>
-                                <field name="started_date" readonly="1"/>
-                                <field name="completed_date" readonly="1"/>
-                            </group>
-                        </group>
-                        
-                        <!-- Approvers -->
-                        <separator string="Approvers" class="oe_inline"/>
-                        <field name="approver_ids" widget="many2many_tags"/>
-                        
-                        <!-- Approvals -->
-                        <separator string="Approvals" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="total_approvals" readonly="1"/>
-                                <field name="completed_approvals" readonly="1"/>
-                            </group>
-                            <group>
-                                <field name="pending_approvals" readonly="1"/>
-                                <field name="execution_time" readonly="1" widget="float_time"/>
-                            </group>
-                        </group>
-                        
-                        <field name="approval_ids" nolabel="1">
-                            <tree editable="bottom">
-                                <field name="approver_id"/>
-                                <field name="state"/>
-                                <field name="comments"/>
-                                <field name="approved_date"/>
-                            </tree>
-                        </field>
+                        <notebook>
+                            <page string="Timeline">
+                                <group>
+                                    <group>
+                                        <field name="requester_id" readonly="1"/>
+                                        <field name="start_date" readonly="1"/>
+                                        <field name="due_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="completion_date" readonly="1"/>
+                                        <field name="current_step_id" readonly="1"/>
+                                        <field name="current_approval_level" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Approvals">
+                                <group>
+                                    <group>
+                                        <field name="total_approvals" readonly="1"/>
+                                        <field name="completed_approvals" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="pending_approval_count" readonly="1"/>
+                                    </group>
+                                </group>
+                                
+                                <field name="approval_ids" nolabel="1">
+                                    <tree>
+                                        <field name="approver_id"/>
+                                        <field name="level"/>
+                                        <field name="state"/>
+                                        <field name="comment"/>
+                                        <field name="action_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="SLA">
+                                <group>
+                                    <group>
+                                        <field name="sla_status" readonly="1"/>
+                                        <field name="response_time_hours" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="resolution_time_hours" readonly="1"/>
+                                        <field name="first_response_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Escalation" attrs="{'invisible': [('is_escalated', '=', False)]}">
+                                <group>
+                                    <group>
+                                        <field name="is_escalated"/>
+                                        <field name="escalation_level"/>
+                                    </group>
+                                    <group>
+                                        <field name="escalation_date"/>
+                                        <field name="escalated_to_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Logs">
+                                <field name="log_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="action"/>
+                                        <field name="description"/>
+                                        <field name="executed_by"/>
+                                        <field name="executed_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                         
                         <!-- Comments & Reason -->
-                        <separator string="Additional Information" class="oe_inline"/>
                         <group>
-                            <field name="comments" nolabel="1" placeholder="Comments"/>
+                            <field name="description" nolabel="1" placeholder="Description"/>
                         </group>
                         
                         <group attrs="{'invisible': [('state', '!=', 'rejected')]}">
                             <field name="rejection_reason" nolabel="1" placeholder="Rejection Reason"/>
                         </group>
-                        
-                        <!-- Execution Logs -->
-                        <separator string="Execution Logs" class="oe_inline"/>
-                        <field name="execution_logs" nolabel="1" readonly="1">
-                            <tree>
-                                <field name="action"/>
-                                <field name="description"/>
-                                <field name="executed_by"/>
-                                <field name="create_date"/>
-                            </tree>
-                        </field>
                     </sheet>
                     
                     <div class="oe_chatter">
@@ -111,11 +139,13 @@
                 <tree string="Workflow Instances">
                     <field name="name"/>
                     <field name="workflow_id"/>
+                    <field name="employee_id"/>
                     <field name="state"/>
-                    <field name="initiated_by"/>
-                    <field name="initiated_date"/>
-                    <field name="completed_date"/>
-                    <field name="pending_approvals"/>
+                    <field name="sla_status"/>
+                    <field name="requester_id"/>
+                    <field name="start_date"/>
+                    <field name="completion_date"/>
+                    <field name="priority"/>
                 </tree>
             </field>
         </record>
@@ -128,12 +158,22 @@
                 <search string="Workflow Instances">
                     <field name="name"/>
                     <field name="workflow_id"/>
+                    <field name="employee_id"/>
                     <separator/>
                     <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
                     <filter name="filter_pending" string="Pending" domain="[('state', '=', 'pending')]"/>
                     <filter name="filter_in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
                     <filter name="filter_approved" string="Approved" domain="[('state', '=', 'approved')]"/>
                     <filter name="filter_rejected" string="Rejected" domain="[('state', '=', 'rejected')]"/>
+                    <separator/>
+                    <filter name="filter_escalated" string="Escalated" domain="[('is_escalated', '=', True)]"/>
+                    <filter name="filter_sla_breached" string="SLA Breached" domain="[('sla_status', '=', 'breached')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_workflow" string="Workflow" context="{'group_by': 'workflow_id'}"/>
+                        <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                        <filter name="group_priority" string="Priority" context="{'group_by': 'priority'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -146,6 +186,9 @@
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No Workflow Instances found
+                </p>
+                <p>
+                    Workflow instances are created when workflows are triggered.
                 </p>
             </field>
         </record>

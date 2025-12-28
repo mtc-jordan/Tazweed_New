@@ -183,26 +183,55 @@ class ApprovalLevel(models.Model):
     _description = 'Approval Level'
     _order = 'sequence'
     
+    name = fields.Char('Level Name', required=True)
+    sequence = fields.Integer('Sequence', default=10)
+    
+    # Support both workflow types
     workflow_id = fields.Many2one(
+        'tazweed.workflow.definition',
+        string='Workflow Definition',
+        ondelete='cascade'
+    )
+    approval_workflow_id = fields.Many2one(
         'tazweed.approval.workflow',
-        string='Workflow',
-        required=True,
+        string='Approval Workflow',
         ondelete='cascade'
     )
     
-    name = fields.Char('Level Name', required=True)
-    sequence = fields.Integer('Sequence', default=10)
+    approver_type = fields.Selection([
+        ('user', 'Specific Users'),
+        ('role', 'Role/Group'),
+        ('manager', 'Direct Manager'),
+        ('department_manager', 'Department Manager'),
+        ('hr_manager', 'HR Manager'),
+        ('ceo', 'CEO/MD'),
+        ('any', 'Any Approver'),
+        ('all', 'All Approvers'),
+        ('majority', 'Majority'),
+    ], string='Approver Type', default='user', required=True)
     
     approver_ids = fields.Many2many(
         'res.users',
         string='Approvers'
     )
+    group_ids = fields.Many2many(
+        'res.groups',
+        string='Groups',
+        help='Users in these groups can approve'
+    )
     
-    approval_type = fields.Selection([
-        ('any', 'Any Approver'),
-        ('all', 'All Approvers'),
-        ('majority', 'Majority')
-    ], string='Approval Type', default='any')
+    min_approvers = fields.Integer(
+        string='Minimum Approvers',
+        default=1,
+        help='Minimum number of approvals required'
+    )
+    
+    can_delegate = fields.Boolean(string='Can Delegate', default=True)
+    timeout_hours = fields.Float(
+        string='Timeout (Hours)',
+        default=48,
+        help='Auto-escalate after hours (0 = no timeout)'
+    )
     
     description = fields.Text('Description')
 

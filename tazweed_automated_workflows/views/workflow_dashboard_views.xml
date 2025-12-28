@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Workflow Dashboard Action -->
+    <record id="action_workflow_dashboard" model="ir.actions.act_window">
+        <field name="name">Workflow Dashboard</field>
+        <field name="res_model">tazweed.workflow.instance</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph</field>
+        <field name="context">{
+            'search_default_filter_pending': 1,
+            'search_default_group_by_workflow': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No workflow instances yet
+            </p>
+            <p>
+                Start a new workflow or wait for automated triggers to create instances.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Workflow Instance Kanban View -->
+    <record id="view_workflow_instance_kanban" model="ir.ui.view">
+        <field name="name">tazweed.workflow.instance.kanban</field>
+        <field name="model">tazweed.workflow.instance</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="workflow_id"/>
+                <field name="employee_id"/>
+                <field name="requester_id"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="sla_status"/>
+                <field name="due_date"/>
+                <field name="is_escalated"/>
+                <progressbar field="state" colors='{"draft": "muted", "pending": "warning", "in_progress": "info", "approved": "success", "rejected": "danger", "cancelled": "muted", "escalated": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click #{record.is_escalated.raw_value ? 'border-danger' : ''}">
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_record_top_right">
+                                        <field name="priority" widget="priority"/>
+                                    </div>
+                                </div>
+                                <div class="mb-1">
+                                    <strong><field name="workflow_id"/></strong>
+                                </div>
+                                <div class="text-muted mb-1" t-if="record.employee_id.value">
+                                    <i class="fa fa-user"/> <field name="employee_id"/>
+                                </div>
+                                <div class="text-muted mb-1">
+                                    <i class="fa fa-clock-o"/> <field name="due_date"/>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="sla_status" widget="badge" 
+                                               decoration-success="sla_status == 'compliant'"
+                                               decoration-warning="sla_status == 'at_risk'"
+                                               decoration-danger="sla_status == 'breached'"
+                                               decoration-muted="sla_status == 'not_applicable'"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="requester_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Workflow Instance Pivot View -->
+    <record id="view_workflow_instance_pivot" model="ir.ui.view">
+        <field name="name">tazweed.workflow.instance.pivot</field>
+        <field name="model">tazweed.workflow.instance</field>
+        <field name="arch" type="xml">
+            <pivot string="Workflow Analysis">
+                <field name="workflow_type" type="row"/>
+                <field name="state" type="col"/>
+                <field name="id" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Workflow Instance Graph View -->
+    <record id="view_workflow_instance_graph" model="ir.ui.view">
+        <field name="name">tazweed.workflow.instance.graph</field>
+        <field name="model">tazweed.workflow.instance</field>
+        <field name="arch" type="xml">
+            <graph string="Workflow Statistics" type="bar">
+                <field name="workflow_type"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Enhanced Workflow Instance Search View -->
+    <record id="view_workflow_instance_search" model="ir.ui.view">
+        <field name="name">tazweed.workflow.instance.search</field>
+        <field name="model">tazweed.workflow.instance</field>
+        <field name="arch" type="xml">
+            <search string="Search Workflows">
+                <field name="name"/>
+                <field name="workflow_id"/>
+                <field name="employee_id"/>
+                <field name="requester_id"/>
+                <field name="department_id"/>
+                <separator/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                <filter name="filter_in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="filter_approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="filter_rejected" string="Rejected" domain="[('state', '=', 'rejected')]"/>
+                <separator/>
+                <filter name="filter_my_approvals" string="My Approvals" 
+                        domain="[('current_approver_ids', 'in', uid)]"/>
+                <filter name="filter_my_requests" string="My Requests" 
+                        domain="[('requester_id', '=', uid)]"/>
+                <separator/>
+                <filter name="filter_escalated" string="Escalated" domain="[('is_escalated', '=', True)]"/>
+                <filter name="filter_sla_breached" string="SLA Breached" domain="[('sla_status', '=', 'breached')]"/>
+                <filter name="filter_sla_at_risk" string="SLA At Risk" domain="[('sla_status', '=', 'at_risk')]"/>
+                <separator/>
+                <filter name="filter_urgent" string="Urgent" domain="[('priority', '=', '3')]"/>
+                <filter name="filter_high" string="High Priority" domain="[('priority', '=', '2')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_workflow" string="Workflow" context="{'group_by': 'workflow_id'}"/>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_by_sla" string="SLA Status" context="{'group_by': 'sla_status'}"/>
+                    <filter name="group_by_priority" string="Priority" context="{'group_by': 'priority'}"/>
+                    <filter name="group_by_create_date" string="Created Date" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- My Pending Approvals Action -->
+    <record id="action_my_pending_approvals" model="ir.actions.act_window">
+        <field name="name">My Pending Approvals</field>
+        <field name="res_model">tazweed.workflow.instance</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('current_approver_ids', 'in', uid), ('state', '=', 'pending')]</field>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No pending approvals
+            </p>
+            <p>
+                You have no workflow instances waiting for your approval.
+            </p>
+        </field>
+    </record>
+    
+    <!-- SLA Breached Workflows Action -->
+    <record id="action_sla_breached" model="ir.actions.act_window">
+        <field name="name">SLA Breached</field>
+        <field name="res_model">tazweed.workflow.instance</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('sla_status', '=', 'breached'), ('state', 'in', ['pending', 'in_progress'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No SLA breaches
+            </p>
+            <p>
+                All workflows are within their SLA targets.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Escalated Workflows Action -->
+    <record id="action_escalated_workflows" model="ir.actions.act_window">
+        <field name="name">Escalated Workflows</field>
+        <field name="res_model">tazweed.workflow.instance</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('is_escalated', '=', True), ('state', 'not in', ['approved', 'rejected', 'cancelled'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No escalated workflows
+            </p>
+            <p>
+                All workflows are being processed within normal timeframes.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

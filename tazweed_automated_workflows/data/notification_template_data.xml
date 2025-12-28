@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Workflow Started Notification -->
+        <record id="notification_workflow_started" model="tazweed.notification.template">
+            <field name="name">Workflow Started</field>
+            <field name="code">NOTIF-WF-START</field>
+            <field name="trigger_event">workflow_start</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Workflow Started: ${workflow_name}</field>
+            <field name="email_body"><![CDATA[
+<p>Hello,</p>
+<p>A new workflow has been initiated:</p>
+<ul>
+    <li><strong>Reference:</strong> ${reference}</li>
+    <li><strong>Workflow:</strong> ${workflow_name}</li>
+    <li><strong>Requested By:</strong> ${requester_name}</li>
+</ul>
+<p>Please review and take appropriate action.</p>
+            ]]></field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Approval Required Notification -->
+        <record id="notification_approval_required" model="tazweed.notification.template">
+            <field name="name">Approval Required</field>
+            <field name="code">NOTIF-WF-APPROVE</field>
+            <field name="trigger_event">approval_request</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Action Required: Approval Pending for ${workflow_name}</field>
+            <field name="email_body"><![CDATA[
+<p>Hello,</p>
+<p>Your approval is required for the following workflow:</p>
+<ul>
+    <li><strong>Reference:</strong> ${reference}</li>
+    <li><strong>Workflow:</strong> ${workflow_name}</li>
+    <li><strong>Requested By:</strong> ${requester_name}</li>
+    <li><strong>Due Date:</strong> ${due_date}</li>
+</ul>
+<p>Please review and approve or reject this request.</p>
+            ]]></field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Workflow Approved Notification -->
+        <record id="notification_workflow_approved" model="tazweed.notification.template">
+            <field name="name">Workflow Approved</field>
+            <field name="code">NOTIF-WF-APPROVED</field>
+            <field name="trigger_event">approval_approved</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Approved: ${workflow_name} - ${reference}</field>
+            <field name="email_body"><![CDATA[
+<p>Hello,</p>
+<p>Great news! Your workflow request has been approved:</p>
+<ul>
+    <li><strong>Reference:</strong> ${reference}</li>
+    <li><strong>Workflow:</strong> ${workflow_name}</li>
+    <li><strong>Approved By:</strong> ${approver_name}</li>
+</ul>
+            ]]></field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Workflow Rejected Notification -->
+        <record id="notification_workflow_rejected" model="tazweed.notification.template">
+            <field name="name">Workflow Rejected</field>
+            <field name="code">NOTIF-WF-REJECTED</field>
+            <field name="trigger_event">approval_rejected</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Rejected: ${workflow_name} - ${reference}</field>
+            <field name="email_body"><![CDATA[
+<p>Hello,</p>
+<p>Unfortunately, your workflow request has been rejected:</p>
+<ul>
+    <li><strong>Reference:</strong> ${reference}</li>
+    <li><strong>Workflow:</strong> ${workflow_name}</li>
+    <li><strong>Reason:</strong> ${rejection_reason}</li>
+</ul>
+<p>If you have questions, please contact your manager or HR department.</p>
+            ]]></field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Workflow Completion Notification -->
+        <record id="notification_workflow_completed" model="tazweed.notification.template">
+            <field name="name">Workflow Completed</field>
+            <field name="code">NOTIF-WF-COMPLETE</field>
+            <field name="trigger_event">workflow_completion</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Completed: ${workflow_name} - ${reference}</field>
+            <field name="email_body"><![CDATA[
+<p>Hello,</p>
+<p>The following workflow has been completed:</p>
+<ul>
+    <li><strong>Reference:</strong> ${reference}</li>
+    <li><strong>Workflow:</strong> ${workflow_name}</li>
+    <li><strong>Completion Date:</strong> ${completion_date}</li>
+</ul>
+            ]]></field>
+            <field name="is_active">True</field>
+        </record>
+        
+        <!-- Task Failure Notification -->
+        <record id="notification_task_failure" model="tazweed.notification.template">
+            <field name="name">Task Failure Alert</field>
+            <field name="code">NOTIF-TASK-FAIL</field>
+            <field name="trigger_event">task_failure</field>
+            <field name="notification_type">email</field>
+            <field name="email_subject">Task Failure: ${task_name}</field>
+            <field name="email_body"><![CDATA[
+<p>Hello,</p>
+<p><strong>Alert:</strong> A task has failed:</p>
+<ul>
+    <li><strong>Task:</strong> ${task_name}</li>
+    <li><strong>Error:</strong> ${error_message}</li>
+</ul>
+<p>Please investigate and take corrective action.</p>
+            ]]></field>
+            <field name="is_active">True</field>
+        </record>
+        
+    </data>
+</odoo>

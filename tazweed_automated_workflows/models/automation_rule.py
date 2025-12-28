@@ -259,6 +259,20 @@ class AutomationRule(models.Model):
             })
             
             return False
+    
+    @api.model
+    def cron_process_automation_rules(self):
+        """Cron job to process scheduled automation rules"""
+        rules = self.search([
+            ('is_active', '=', True),
+            ('state', '=', 'active'),
+            ('trigger_type', '=', 'schedule'),
+        ])
+        for rule in rules:
+            try:
+                rule.execute_rule()
+            except Exception as e:
+                _logger.error(f'Error executing rule {rule.name}: {e}')
 
 
 class AutomationExecutionLog(models.Model):

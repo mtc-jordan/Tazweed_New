@@ -281,6 +281,21 @@ class ScheduledTask(models.Model):
             'view_mode': 'tree,form',
             'domain': [('task_id', '=', self.id)],
         }
+    
+    @api.model
+    def cron_process_scheduled_tasks(self):
+        """Cron job to process due scheduled tasks"""
+        from datetime import datetime
+        tasks = self.search([
+            ('is_active', '=', True),
+            ('state', '=', 'scheduled'),
+            ('next_run', '<=', datetime.now()),
+        ])
+        for task in tasks:
+            try:
+                task.action_execute()
+            except Exception as e:
+                _logger.error(f'Error executing task {task.name}: {e}')
 
 
 class TaskExecutionLog(models.Model):

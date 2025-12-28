@@ -1,36 +1,119 @@
+# -*- coding: utf-8 -*-
 {
-    'name': 'Tazweed Automated Workflows & Scheduling',
-    'version': '16.0.1.0.0',
+    'name': 'Tazweed Automated Workflows',
+    'version': '16.0.2.0.0',
     'category': 'Human Resources/Automation',
-    'summary': 'Automated workflows, scheduling, and task automation for HR and Payroll',
+    'summary': 'Smart HR Workflow Automation with AI-Powered Triggers & SLA Management',
     'description': '''
-Tazweed Automated Workflows & Scheduling Module
-================================================
+Tazweed Automated Workflows - Enterprise Edition
+=================================================
 
-Comprehensive automation and scheduling solution for HR and Payroll processes.
+World-class workflow automation platform for UAE HR operations with smart triggers,
+SLA management, and comprehensive analytics.
 
-Features:
----------
-* Workflow Automation
-* Task Scheduling
-* Approval Workflows
-* Notifications & Alerts
-* Automation Rules
-* Scheduled Reports
+🚀 KEY FEATURES
+===============
+
+📋 WORKFLOW ENGINE
+------------------
+• Visual workflow designer with drag-and-drop
+• State machine with configurable transitions
+• Parallel and sequential approval paths
+• Dynamic routing based on conditions
+• Version control for workflow definitions
+
+⚡ SMART TRIGGERS
+-----------------
+• Event-based triggers (create, update, delete)
+• Time-based triggers (scheduled, recurring)
+• Condition-based triggers (field changes, thresholds)
+• API triggers for external integrations
+• Webhook support for real-time events
+
+👥 APPROVAL MANAGEMENT
+----------------------
+• Multi-level approval chains
+• Role-based and user-based approvers
+• Delegation and substitution rules
+• Auto-approval after timeout
+• Bulk approval capabilities
+
+⏰ SLA MANAGEMENT
+-----------------
+• Response time tracking
+• Resolution time monitoring
+• Escalation rules with multiple levels
+• SLA breach notifications
+• Performance analytics
+
+📊 PRE-BUILT HR TEMPLATES
+-------------------------
+• Employee Onboarding Workflow
+• Employee Offboarding Workflow
+• Leave Request Approval
+• Expense Claim Processing
+• Salary Adjustment Request
+• Promotion Workflow
+• Transfer Request
+• Probation Review
+• Contract Renewal
+• Performance Review Cycle
+• Training Request
+• Document Approval
+
+🔔 NOTIFICATIONS
+----------------
+• Email notifications with templates
+• In-app notifications
+• SMS integration ready
+• WhatsApp integration ready
+• Customizable notification rules
+
+📈 DASHBOARD & ANALYTICS
+------------------------
+• Real-time workflow monitoring
+• Bottleneck identification
+• Processing time analytics
+• Approval rate statistics
+• SLA compliance reports
+
+🔗 INTEGRATIONS
+---------------
+• Tazweed Core integration
+• Tazweed Payroll integration
+• Tazweed Leave integration
+• Tazweed Performance integration
+• External API support
+
+🛡️ SECURITY & COMPLIANCE
+-------------------------
+• Role-based access control
+• Audit trail for all actions
+• Data encryption support
+• GDPR compliance ready
+• UAE labor law compliance
+
     ''',
-    'author': 'Tazweed HR Team',
-    'website': 'https://tazweedjobs.ae/',
+    'author': 'Tazweed',
+    'website': 'https://tazweedjobs.ae',
     'depends': [
         'base',
         'hr',
         'mail',
+        'hr_contract',
+        'tazweed_core',
     ],
     'data': [
         # Security
         'security/workflow_security.xml',
         'security/ir.model.access.csv',
-        # Data
-        'data/workflow_data.xml',
+        # Data - Sequences
+        'data/workflow_sequence.xml',
+        # Data - Templates
+        'data/notification_template_data.xml',
+        'data/workflow_template_data.xml',
+        # Data - Cron Jobs
+        'data/workflow_cron.xml',
         # Views
         'views/workflow_definition_views.xml',
         'views/workflow_instance_views.xml',
@@ -39,12 +122,18 @@ Features:
         'views/approval_workflow_views.xml',
         'views/notification_template_views.xml',
         'views/workflow_trigger_views.xml',
+        'views/workflow_dashboard_views.xml',
+        'views/sla_configuration_views.xml',
+        'views/escalation_rule_views.xml',
+        'views/workflow_execution_log_views.xml',
+        # Menu
         'views/menu.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'tazweed_automated_workflows/static/src/css/workflow_dashboard.css',
             'tazweed_automated_workflows/static/src/js/workflow_dashboard.js',
+            'tazweed_automated_workflows/static/src/xml/workflow_dashboard.xml',
         ],
     },
     'installable': True,

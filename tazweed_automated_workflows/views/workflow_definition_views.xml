@@ -10,8 +10,7 @@
                     <header>
                         <button name="action_activate" string="Activate" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                         <button name="action_deactivate" string="Deactivate" type="object" attrs="{'invisible': [('state', '!=', 'active')]}"/>
-                        <button name="action_duplicate" string="Duplicate" type="object"/>
-                        <button name="action_export_workflow" string="Export" type="object"/>
+                        <button name="action_duplicate_as_template" string="Duplicate" type="object"/>
                         <button name="action_view_instances" string="View Instances" type="object"/>
                         <field name="state" widget="statusbar"/>
                     </header>
@@ -28,114 +27,133 @@
                             <group>
                                 <field name="code"/>
                                 <field name="workflow_type"/>
+                                <field name="category"/>
                             </group>
                             <group>
                                 <field name="is_active"/>
                                 <field name="version" readonly="1"/>
+                                <field name="is_template"/>
                             </group>
                         </group>
                         
                         <field name="description" placeholder="Workflow Description"/>
                         
                         <!-- Workflow Configuration -->
-                        <separator string="Workflow Configuration" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="start_state"/>
-                                <field name="end_states"/>
-                            </group>
-                            <group>
-                                <field name="require_approval"/>
-                                <field name="approval_levels" attrs="{'invisible': [('require_approval', '=', False)]}"/>
-                            </group>
-                        </group>
-                        
-                        <group>
-                            <group>
-                                <field name="parallel_approval" attrs="{'invisible': [('require_approval', '=', False)]}"/>
-                                <field name="sequential_approval" attrs="{'invisible': [('require_approval', '=', False)]}"/>
-                            </group>
-                        </group>
-                        
-                        <!-- Notifications -->
-                        <separator string="Notifications" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="notify_on_start"/>
-                                <field name="notify_on_approval"/>
-                            </group>
-                            <group>
-                                <field name="notify_on_rejection"/>
-                                <field name="notify_on_completion"/>
-                            </group>
-                        </group>
-                        
-                        <field name="notification_template_ids" widget="many2many_tags"/>
-                        
-                        <!-- Triggers & Conditions -->
-                        <separator string="Triggers and Conditions" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="auto_trigger"/>
-                                <field name="trigger_condition" attrs="{'invisible': [('auto_trigger', '=', False)]}" nolabel="1" placeholder="Trigger Condition"/>
-                            </group>
-                        </group>
-                        
-                        <!-- Actions -->
-                        <separator string="Actions" class="oe_inline"/>
-                        <group>
-                            <field name="on_start_action" placeholder="Python code to execute on workflow start" nolabel="1"/>
-                        </group>
-                        
-                        <group>
-                            <field name="on_approval_action" placeholder="Python code to execute on approval" nolabel="1"/>
-                        </group>
-                        
-                        <group>
-                            <field name="on_rejection_action" placeholder="Python code to execute on rejection" nolabel="1"/>
-                        </group>
-                        
-                        <group>
-                            <field name="on_completion_action" placeholder="Python code to execute on completion" nolabel="1"/>
-                        </group>
-                        
-                        <!-- Configuration -->
-                        <separator string="Configuration" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="timeout_days"/>
-                                <field name="auto_approve_after_days"/>
-                            </group>
-                            <group>
-                                <field name="allow_rejection"/>
-                                <field name="allow_cancellation"/>
-                            </group>
-                        </group>
-                        
-                        <!-- Workflow Steps -->
-                        <separator string="Workflow Steps" class="oe_inline"/>
-                        <field name="workflow_steps" nolabel="1">
-                            <tree editable="bottom">
-                                <field name="sequence"/>
-                                <field name="name"/>
-                                <field name="state"/>
-                                <field name="step_type"/>
-                                <field name="description"/>
-                            </tree>
-                        </field>
-                        
-                        <!-- Statistics -->
-                        <separator string="Statistics" class="oe_inline"/>
-                        <group>
-                            <group>
-                                <field name="total_instances" readonly="1"/>
-                                <field name="active_instances" readonly="1"/>
-                            </group>
-                            <group>
-                                <field name="completed_instances" readonly="1"/>
-                                <field name="rejected_instances" readonly="1"/>
-                            </group>
-                        </group>
+                        <notebook>
+                            <page string="Configuration">
+                                <group>
+                                    <group>
+                                        <field name="model_id"/>
+                                        <field name="start_state"/>
+                                        <field name="end_states"/>
+                                    </group>
+                                    <group>
+                                        <field name="require_approval"/>
+                                        <field name="approval_type" attrs="{'invisible': [('require_approval', '=', False)]}"/>
+                                    </group>
+                                </group>
+                                
+                                <group>
+                                    <group>
+                                        <field name="timeout_days"/>
+                                        <field name="auto_approve_days"/>
+                                    </group>
+                                    <group>
+                                        <field name="allow_rejection"/>
+                                        <field name="allow_cancellation"/>
+                                        <field name="allow_delegation"/>
+                                        <field name="require_comments"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Steps">
+                                <field name="step_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="step_type"/>
+                                        <field name="description"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Approval Levels" attrs="{'invisible': [('require_approval', '=', False)]}">
+                                <field name="approval_level_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="approver_type"/>
+                                        <field name="min_approvers"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Notifications">
+                                <group>
+                                    <group>
+                                        <field name="notify_on_start"/>
+                                        <field name="notify_on_approval"/>
+                                        <field name="notify_on_rejection"/>
+                                    </group>
+                                    <group>
+                                        <field name="notify_on_completion"/>
+                                        <field name="notify_on_escalation"/>
+                                        <field name="notify_on_sla_breach"/>
+                                    </group>
+                                </group>
+                                <field name="notification_template_ids" widget="many2many_tags"/>
+                            </page>
+                            
+                            <page string="SLA &amp; Escalation">
+                                <group>
+                                    <group>
+                                        <field name="sla_enabled"/>
+                                        <field name="response_time_hours" attrs="{'invisible': [('sla_enabled', '=', False)]}"/>
+                                        <field name="resolution_time_hours" attrs="{'invisible': [('sla_enabled', '=', False)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="escalation_enabled"/>
+                                    </group>
+                                </group>
+                                <field name="escalation_rule_ids" attrs="{'invisible': [('escalation_enabled', '=', False)]}" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="level"/>
+                                        <field name="trigger_type"/>
+                                        <field name="hours_after_creation"/>
+                                        <field name="escalate_to_type"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Triggers">
+                                <group>
+                                    <field name="auto_trigger"/>
+                                </group>
+                                <field name="trigger_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="trigger_type"/>
+                                        <field name="is_active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Statistics">
+                                <group>
+                                    <group>
+                                        <field name="instance_count" readonly="1"/>
+                                        <field name="active_instance_count" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="completed_instance_count" readonly="1"/>
+                                        <field name="rejected_instance_count" readonly="1"/>
+                                        <field name="avg_completion_hours" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
                     
                     <div class="oe_chatter">
@@ -152,14 +170,15 @@
             <field name="model">tazweed.workflow.definition</field>
             <field name="arch" type="xml">
                 <tree string="Workflow Definitions">
+                    <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="code"/>
                     <field name="workflow_type"/>
+                    <field name="category"/>
                     <field name="state"/>
                     <field name="is_active"/>
-                    <field name="total_instances"/>
-                    <field name="active_instances"/>
-                    <field name="created_date"/>
+                    <field name="instance_count"/>
+                    <field name="active_instance_count"/>
                 </tree>
             </field>
         </record>
@@ -178,9 +197,11 @@
                     <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
                     <filter name="filter_inactive" string="Inactive" domain="[('state', '=', 'inactive')]"/>
                     <separator/>
-                    <filter name="filter_leave" string="Leave Workflows" domain="[('workflow_type', '=', 'leave_request')]"/>
-                    <filter name="filter_payroll" string="Payroll Workflows" domain="[('workflow_type', '=', 'payroll')]"/>
-                    <filter name="filter_compliance" string="Compliance Workflows" domain="[('workflow_type', '=', 'compliance')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_type" string="Type" context="{'group_by': 'workflow_type'}"/>
+                        <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                        <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -193,6 +214,9 @@
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Create your first Workflow Definition
+                </p>
+                <p>
+                    Define automated workflows for HR processes like onboarding, leave requests, and approvals.
                 </p>
             </field>
         </record>

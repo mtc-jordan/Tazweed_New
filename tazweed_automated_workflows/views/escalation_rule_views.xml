@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Escalation Rule Tree View -->
+    <record id="view_escalation_rule_tree" model="ir.ui.view">
+        <field name="name">tazweed.escalation.rule.tree</field>
+        <field name="model">tazweed.escalation.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Escalation Rules">
+                <field name="name"/>
+                <field name="workflow_id"/>
+                <field name="level"/>
+                <field name="trigger_type"/>
+                <field name="escalate_to_type"/>
+                <field name="is_active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Escalation Rule Form View -->
+    <record id="view_escalation_rule_form" model="ir.ui.view">
+        <field name="name">tazweed.escalation.rule.form</field>
+        <field name="model">tazweed.escalation.rule</field>
+        <field name="arch" type="xml">
+            <form string="Escalation Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Rule Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="workflow_id"/>
+                            <field name="level"/>
+                            <field name="sequence"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group string="Trigger">
+                            <field name="trigger_type"/>
+                            <field name="hours_after_creation" 
+                                   attrs="{'invisible': [('trigger_type', 'not in', ['time', 'no_response'])]}"/>
+                            <field name="hours_after_last_action" 
+                                   attrs="{'invisible': [('trigger_type', '!=', 'no_response')]}"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Escalate To">
+                            <field name="escalate_to_type"/>
+                            <field name="escalate_to_ids" widget="many2many_tags"
+                                   attrs="{'invisible': [('escalate_to_type', '!=', 'users')]}"/>
+                            <field name="escalate_to_group_id"
+                                   attrs="{'invisible': [('escalate_to_type', '!=', 'group')]}"/>
+                        </group>
+                        <group string="Notifications">
+                            <field name="notify_requester"/>
+                            <field name="notify_current_approvers"/>
+                            <field name="notification_template_id"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Additional Action">
+                        <field name="action_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Escalation Rule Action -->
+    <record id="action_escalation_rule" model="ir.actions.act_window">
+        <field name="name">Escalation Rules</field>
+        <field name="res_model">tazweed.escalation.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Escalation Rule
+            </p>
+            <p>
+                Define escalation rules to automatically escalate workflows
+                when they exceed time limits or breach SLAs.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

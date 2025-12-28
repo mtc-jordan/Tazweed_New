@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- SLA Configuration Tree View -->
+    <record id="view_sla_configuration_tree" model="ir.ui.view">
+        <field name="name">tazweed.sla.configuration.tree</field>
+        <field name="model">tazweed.sla.configuration</field>
+        <field name="arch" type="xml">
+            <tree string="SLA Configurations">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="workflow_type"/>
+                <field name="response_time_hours"/>
+                <field name="resolution_time_hours"/>
+                <field name="use_business_hours"/>
+                <field name="priority"/>
+                <field name="is_active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- SLA Configuration Form View -->
+    <record id="view_sla_configuration_form" model="ir.ui.view">
+        <field name="name">tazweed.sla.configuration.form</field>
+        <field name="model">tazweed.sla.configuration</field>
+        <field name="arch" type="xml">
+            <form string="SLA Configuration">
+                <header>
+                    <field name="is_active" widget="boolean_toggle"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="SLA Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="code"/>
+                            <field name="description"/>
+                            <field name="priority"/>
+                        </group>
+                        <group string="Target">
+                            <field name="workflow_type"/>
+                            <field name="workflow_ids" widget="many2many_tags" 
+                                   attrs="{'invisible': [('workflow_type', '=', 'all')]}"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="SLA Times" name="sla_times">
+                            <group>
+                                <group string="Default SLA">
+                                    <field name="response_time_hours"/>
+                                    <field name="resolution_time_hours"/>
+                                </group>
+                                <group string="Priority Based">
+                                    <field name="priority_based"/>
+                                </group>
+                            </group>
+                            
+                            <group attrs="{'invisible': [('priority_based', '=', False)]}">
+                                <group string="Urgent Priority">
+                                    <field name="urgent_response_hours"/>
+                                    <field name="urgent_resolution_hours"/>
+                                </group>
+                                <group string="High Priority">
+                                    <field name="high_response_hours"/>
+                                    <field name="high_resolution_hours"/>
+                                </group>
+                                <group string="Normal Priority">
+                                    <field name="normal_response_hours"/>
+                                    <field name="normal_resolution_hours"/>
+                                </group>
+                                <group string="Low Priority">
+                                    <field name="low_response_hours"/>
+                                    <field name="low_resolution_hours"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Business Hours" name="business_hours">
+                            <group>
+                                <group>
+                                    <field name="use_business_hours"/>
+                                    <field name="business_start_hour" widget="float_time"
+                                           attrs="{'invisible': [('use_business_hours', '=', False)]}"/>
+                                    <field name="business_end_hour" widget="float_time"
+                                           attrs="{'invisible': [('use_business_hours', '=', False)]}"/>
+                                </group>
+                                <group attrs="{'invisible': [('use_business_hours', '=', False)]}">
+                                    <field name="exclude_weekends"/>
+                                    <field name="exclude_holidays"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Notifications" name="notifications">
+                            <group>
+                                <group>
+                                    <field name="notify_at_risk"/>
+                                    <field name="at_risk_threshold_percent" 
+                                           attrs="{'invisible': [('notify_at_risk', '=', False)]}"/>
+                                </group>
+                                <group>
+                                    <field name="notify_on_breach"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- SLA Configuration Action -->
+    <record id="action_sla_configuration" model="ir.actions.act_window">
+        <field name="name">SLA Configurations</field>
+        <field name="res_model">tazweed.sla.configuration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first SLA Configuration
+            </p>
+            <p>
+                Define Service Level Agreements for different workflow types
+                with priority-based response and resolution times.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

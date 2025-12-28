@@ -33,3 +33,7 @@ access_approval_line_user,Approval Line User,model_tazweed_approval_line,base.gr
 access_approval_line_manager,Approval Line Manager,model_tazweed_approval_line,hr.group_hr_manager,1,1,1,1
 access_workflow_approval_user,Workflow Approval User,model_tazweed_workflow_approval,base.group_user,1,1,0,0
 access_workflow_approval_manager,Workflow Approval Manager,model_tazweed_workflow_approval,hr.group_hr_manager,1,1,1,1
+access_sla_configuration_user,SLA Configuration User,model_tazweed_sla_configuration,base.group_user,1,0,0,0
+access_sla_configuration_manager,SLA Configuration Manager,model_tazweed_sla_configuration,tazweed_automated_workflows.group_workflow_manager,1,1,1,1
+access_escalation_rule_user,Escalation Rule User,model_tazweed_escalation_rule,base.group_user,1,0,0,0
+access_escalation_rule_manager,Escalation Rule Manager,model_tazweed_escalation_rule,tazweed_automated_workflows.group_workflow_manager,1,1,1,1

@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- ============================================================ -->
+        <!-- PRE-BUILT WORKFLOW TEMPLATES                                  -->
+        <!-- ============================================================ -->
+        
+        <!-- 1. Employee Onboarding Workflow -->
+        <record id="workflow_employee_onboarding" model="tazweed.workflow.definition">
+            <field name="name">Employee Onboarding</field>
+            <field name="code">WF-ONBOARD</field>
+            <field name="description"><![CDATA[
+                <p>Comprehensive employee onboarding workflow covering:</p>
+                <ul>
+                    <li>Document collection and verification</li>
+                    <li>IT setup and access provisioning</li>
+                    <li>Department orientation</li>
+                    <li>Training schedule</li>
+                    <li>Probation setup</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">hr_onboarding</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">4</field>
+            <field name="resolution_time_hours">72</field>
+            <field name="escalation_enabled">True</field>
+            <field name="notify_on_start">True</field>
+            <field name="notify_on_approval">True</field>
+            <field name="notify_on_completion">True</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- Onboarding Steps -->
+        <record id="step_onboard_start" model="tazweed.workflow.step">
+            <field name="name">Start Onboarding</field>
+            <field name="code">START</field>
+            <field name="workflow_id" ref="workflow_employee_onboarding"/>
+            <field name="sequence">1</field>
+            <field name="step_type">start</field>
+            <field name="is_start">True</field>
+        </record>
+        
+        <record id="step_onboard_documents" model="tazweed.workflow.step">
+            <field name="name">Document Collection</field>
+            <field name="code">DOCS</field>
+            <field name="workflow_id" ref="workflow_employee_onboarding"/>
+            <field name="sequence">2</field>
+            <field name="step_type">action</field>
+            <field name="description">Collect and verify all required documents</field>
+        </record>
+        
+        <record id="step_onboard_hr_approval" model="tazweed.workflow.step">
+            <field name="name">HR Approval</field>
+            <field name="code">HR_APPROVE</field>
+            <field name="workflow_id" ref="workflow_employee_onboarding"/>
+            <field name="sequence">3</field>
+            <field name="step_type">approval</field>
+        </record>
+        
+        <record id="step_onboard_it_setup" model="tazweed.workflow.step">
+            <field name="name">IT Setup</field>
+            <field name="code">IT_SETUP</field>
+            <field name="workflow_id" ref="workflow_employee_onboarding"/>
+            <field name="sequence">4</field>
+            <field name="step_type">action</field>
+            <field name="description">Create email, system access, and equipment</field>
+        </record>
+        
+        <record id="step_onboard_complete" model="tazweed.workflow.step">
+            <field name="name">Onboarding Complete</field>
+            <field name="code">COMPLETE</field>
+            <field name="workflow_id" ref="workflow_employee_onboarding"/>
+            <field name="sequence">5</field>
+            <field name="step_type">end</field>
+            <field name="is_end">True</field>
+        </record>
+        
+        <!-- 2. Employee Offboarding Workflow -->
+        <record id="workflow_employee_offboarding" model="tazweed.workflow.definition">
+            <field name="name">Employee Offboarding</field>
+            <field name="code">WF-OFFBOARD</field>
+            <field name="description"><![CDATA[
+                <p>Complete employee exit process including:</p>
+                <ul>
+                    <li>Resignation acceptance</li>
+                    <li>Knowledge transfer</li>
+                    <li>Asset return</li>
+                    <li>Final settlement calculation</li>
+                    <li>Exit interview</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">hr_offboarding</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">8</field>
+            <field name="resolution_time_hours">168</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 3. Leave Request Workflow -->
+        <record id="workflow_leave_request" model="tazweed.workflow.definition">
+            <field name="name">Leave Request Approval</field>
+            <field name="code">WF-LEAVE</field>
+            <field name="description"><![CDATA[
+                <p>Standard leave request approval workflow:</p>
+                <ul>
+                    <li>Manager approval</li>
+                    <li>HR verification</li>
+                    <li>Balance check</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">leave_request</field>
+            <field name="category">leave</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">4</field>
+            <field name="resolution_time_hours">24</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 4. Expense Claim Workflow -->
+        <record id="workflow_expense_claim" model="tazweed.workflow.definition">
+            <field name="name">Expense Claim Approval</field>
+            <field name="code">WF-EXPENSE</field>
+            <field name="description"><![CDATA[
+                <p>Expense claim processing workflow:</p>
+                <ul>
+                    <li>Receipt verification</li>
+                    <li>Manager approval</li>
+                    <li>Finance approval (for amounts > threshold)</li>
+                    <li>Payment processing</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">expense_claim</field>
+            <field name="category">finance</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">8</field>
+            <field name="resolution_time_hours">72</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 5. Probation Review Workflow -->
+        <record id="workflow_probation_review" model="tazweed.workflow.definition">
+            <field name="name">Probation Review</field>
+            <field name="code">WF-PROBATION</field>
+            <field name="description"><![CDATA[
+                <p>Probation period review workflow:</p>
+                <ul>
+                    <li>Performance evaluation</li>
+                    <li>Manager recommendation</li>
+                    <li>HR review</li>
+                    <li>Confirmation or extension decision</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">probation_review</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">24</field>
+            <field name="resolution_time_hours">168</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 6. Contract Renewal Workflow -->
+        <record id="workflow_contract_renewal" model="tazweed.workflow.definition">
+            <field name="name">Contract Renewal</field>
+            <field name="code">WF-CONTRACT</field>
+            <field name="description"><![CDATA[
+                <p>Employment contract renewal process:</p>
+                <ul>
+                    <li>Performance review</li>
+                    <li>Salary revision proposal</li>
+                    <li>Manager approval</li>
+                    <li>HR approval</li>
+                    <li>Contract generation</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">contract_renewal</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">24</field>
+            <field name="resolution_time_hours">336</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 7. Salary Adjustment Workflow -->
+        <record id="workflow_salary_adjustment" model="tazweed.workflow.definition">
+            <field name="name">Salary Adjustment</field>
+            <field name="code">WF-SALARY</field>
+            <field name="description"><![CDATA[
+                <p>Salary adjustment approval workflow:</p>
+                <ul>
+                    <li>Justification review</li>
+                    <li>Department head approval</li>
+                    <li>HR approval</li>
+                    <li>Finance approval</li>
+                    <li>CEO approval (for significant changes)</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">salary_adjustment</field>
+            <field name="category">payroll</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">24</field>
+            <field name="resolution_time_hours">168</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 8. Promotion Workflow -->
+        <record id="workflow_promotion" model="tazweed.workflow.definition">
+            <field name="name">Promotion Request</field>
+            <field name="code">WF-PROMOTION</field>
+            <field name="description"><![CDATA[
+                <p>Employee promotion workflow:</p>
+                <ul>
+                    <li>Performance history review</li>
+                    <li>Manager recommendation</li>
+                    <li>Department head approval</li>
+                    <li>HR review</li>
+                    <li>Executive approval</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">promotion</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">48</field>
+            <field name="resolution_time_hours">336</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 9. Transfer Request Workflow -->
+        <record id="workflow_transfer" model="tazweed.workflow.definition">
+            <field name="name">Transfer Request</field>
+            <field name="code">WF-TRANSFER</field>
+            <field name="description"><![CDATA[
+                <p>Employee transfer workflow:</p>
+                <ul>
+                    <li>Current manager approval</li>
+                    <li>Receiving manager approval</li>
+                    <li>HR coordination</li>
+                    <li>Handover planning</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">transfer</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">parallel</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">24</field>
+            <field name="resolution_time_hours">168</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 10. Performance Review Workflow -->
+        <record id="workflow_performance_review" model="tazweed.workflow.definition">
+            <field name="name">Performance Review Cycle</field>
+            <field name="code">WF-PERFORMANCE</field>
+            <field name="description"><![CDATA[
+                <p>Annual/periodic performance review workflow:</p>
+                <ul>
+                    <li>Self-assessment</li>
+                    <li>Manager evaluation</li>
+                    <li>Peer feedback (optional)</li>
+                    <li>HR calibration</li>
+                    <li>Final rating</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">performance_review</field>
+            <field name="category">performance</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">48</field>
+            <field name="resolution_time_hours">336</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 11. Training Request Workflow -->
+        <record id="workflow_training_request" model="tazweed.workflow.definition">
+            <field name="name">Training Request</field>
+            <field name="code">WF-TRAINING</field>
+            <field name="description"><![CDATA[
+                <p>Training request approval workflow:</p>
+                <ul>
+                    <li>Training need justification</li>
+                    <li>Manager approval</li>
+                    <li>Budget verification</li>
+                    <li>HR/L&amp;D approval</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">training_request</field>
+            <field name="category">hr</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">24</field>
+            <field name="resolution_time_hours">120</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- 12. Document Approval Workflow -->
+        <record id="workflow_document_approval" model="tazweed.workflow.definition">
+            <field name="name">Document Approval</field>
+            <field name="code">WF-DOCUMENT</field>
+            <field name="description"><![CDATA[
+                <p>General document approval workflow:</p>
+                <ul>
+                    <li>Document review</li>
+                    <li>Stakeholder approval</li>
+                    <li>Final sign-off</li>
+                </ul>
+            ]]></field>
+            <field name="workflow_type">document_approval</field>
+            <field name="category">general</field>
+            <field name="require_approval">True</field>
+            <field name="approval_type">sequential</field>
+            <field name="sla_enabled">True</field>
+            <field name="response_time_hours">8</field>
+            <field name="resolution_time_hours">48</field>
+            <field name="state">active</field>
+            <field name="is_template">True</field>
+        </record>
+        
+        <!-- ============================================================ -->
+        <!-- DEFAULT SLA CONFIGURATIONS                                    -->
+        <!-- ============================================================ -->
+        
+        <record id="sla_default_urgent" model="tazweed.sla.configuration">
+            <field name="name">Urgent Priority SLA</field>
+            <field name="code">SLA-URGENT</field>
+            <field name="description">SLA for urgent priority workflows</field>
+            <field name="workflow_type">all</field>
+            <field name="priority_based">True</field>
+            <field name="urgent_response_hours">1</field>
+            <field name="urgent_resolution_hours">4</field>
+            <field name="high_response_hours">2</field>
+            <field name="high_resolution_hours">8</field>
+            <field name="normal_response_hours">4</field>
+            <field name="normal_resolution_hours">24</field>
+            <field name="low_response_hours">8</field>
+            <field name="low_resolution_hours">48</field>
+            <field name="use_business_hours">True</field>
+            <field name="business_start_hour">8.0</field>
+            <field name="business_end_hour">17.0</field>
+            <field name="exclude_weekends">True</field>
+            <field name="notify_at_risk">True</field>
+            <field name="at_risk_threshold_percent">75</field>
+            <field name="notify_on_breach">True</field>
+            <field name="is_active">True</field>
+            <field name="priority">100</field>
+        </record>
+        
+        <record id="sla_leave_request" model="tazweed.sla.configuration">
+            <field name="name">Leave Request SLA</field>
+            <field name="code">SLA-LEAVE</field>
+            <field name="description">SLA specifically for leave requests</field>
+            <field name="workflow_type">leave_request</field>
+            <field name="priority_based">False</field>
+            <field name="response_time_hours">4</field>
+            <field name="resolution_time_hours">24</field>
+            <field name="use_business_hours">True</field>
+            <field name="notify_at_risk">True</field>
+            <field name="notify_on_breach">True</field>
+            <field name="is_active">True</field>
+            <field name="priority">50</field>
+        </record>
+        
+    </data>
+</odoo>

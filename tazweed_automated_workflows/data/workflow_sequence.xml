@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Workflow Definition Sequence -->
+        <record id="seq_workflow_definition" model="ir.sequence">
+            <field name="name">Workflow Definition Sequence</field>
+            <field name="code">tazweed.workflow.definition</field>
+            <field name="prefix">WF-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+        <!-- Workflow Instance Sequence -->
+        <record id="seq_workflow_instance" model="ir.sequence">
+            <field name="name">Workflow Instance Sequence</field>
+            <field name="code">tazweed.workflow.instance</field>
+            <field name="prefix">WFI/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+        <!-- Automation Rule Sequence -->
+        <record id="seq_automation_rule" model="ir.sequence">
+            <field name="name">Automation Rule Sequence</field>
+            <field name="code">tazweed.automation.rule</field>
+            <field name="prefix">AR-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+        <!-- Scheduled Task Sequence -->
+        <record id="seq_scheduled_task" model="ir.sequence">
+            <field name="name">Scheduled Task Sequence</field>
+            <field name="code">tazweed.scheduled.task</field>
+            <field name="prefix">ST-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+    </data>
+</odoo>

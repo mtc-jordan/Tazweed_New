@@ -1,35 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Main Menu -->
-        <menuitem id="menu_automated_workflows" name="Automated Workflows" parent="hr.menu_hr_root" sequence="100"/>
         
-        <!-- Workflow Management -->
-        <menuitem id="menu_workflow_management" name="Workflow Management" parent="menu_automated_workflows" sequence="10"/>
+        <!-- ============================================================ -->
+        <!-- MAIN MENU                                                     -->
+        <!-- ============================================================ -->
         
-        <menuitem id="menu_workflow_definition" name="Workflow Definitions" parent="menu_workflow_management" action="action_workflow_definition" sequence="10"/>
+        <menuitem id="menu_workflow_root"
+                  name="Workflows"
+                  web_icon="tazweed_automated_workflows,static/description/icon.png"
+                  sequence="45"/>
         
-        <menuitem id="menu_workflow_instance" name="Workflow Instances" parent="menu_workflow_management" action="action_workflow_instance" sequence="20"/>
+        <!-- ============================================================ -->
+        <!-- DASHBOARD MENUS                                               -->
+        <!-- ============================================================ -->
         
-        <menuitem id="menu_workflow_trigger" name="Workflow Triggers" parent="menu_workflow_management" action="action_workflow_trigger" sequence="30"/>
+        <menuitem id="menu_workflow_dashboard"
+                  name="Dashboard"
+                  parent="menu_workflow_root"
+                  action="action_workflow_dashboard"
+                  sequence="1"/>
         
-        <!-- Automation Management -->
-        <menuitem id="menu_automation_management" name="Automation Management" parent="menu_automated_workflows" sequence="20"/>
+        <menuitem id="menu_my_approvals"
+                  name="My Pending Approvals"
+                  parent="menu_workflow_root"
+                  action="action_my_pending_approvals"
+                  sequence="2"/>
         
-        <menuitem id="menu_automation_rule" name="Automation Rules" parent="menu_automation_management" action="action_automation_rule" sequence="10"/>
+        <!-- ============================================================ -->
+        <!-- WORKFLOW INSTANCES                                            -->
+        <!-- ============================================================ -->
         
-        <menuitem id="menu_scheduled_task" name="Scheduled Tasks" parent="menu_automation_management" action="action_scheduled_task" sequence="20"/>
+        <menuitem id="menu_workflow_instances"
+                  name="Workflow Instances"
+                  parent="menu_workflow_root"
+                  sequence="10"/>
         
-        <!-- Approval Management -->
-        <menuitem id="menu_approval_management" name="Approval Management" parent="menu_automated_workflows" sequence="30"/>
+        <menuitem id="menu_all_instances"
+                  name="All Instances"
+                  parent="menu_workflow_instances"
+                  action="action_workflow_instance"
+                  sequence="1"/>
         
-        <menuitem id="menu_approval_workflow" name="Approval Workflows" parent="menu_approval_management" action="action_approval_workflow" sequence="10"/>
+        <menuitem id="menu_sla_breached"
+                  name="SLA Breached"
+                  parent="menu_workflow_instances"
+                  action="action_sla_breached"
+                  sequence="2"/>
         
-        <menuitem id="menu_approval_request" name="Approval Requests" parent="menu_approval_management" action="action_approval_request" sequence="20"/>
+        <menuitem id="menu_escalated"
+                  name="Escalated"
+                  parent="menu_workflow_instances"
+                  action="action_escalated_workflows"
+                  sequence="3"/>
         
-        <!-- Notifications -->
-        <menuitem id="menu_notifications" name="Notifications" parent="menu_automated_workflows" sequence="40"/>
+        <!-- ============================================================ -->
+        <!-- AUTOMATION                                                    -->
+        <!-- ============================================================ -->
         
-        <menuitem id="menu_notification_template" name="Notification Templates" parent="menu_notifications" action="action_notification_template" sequence="10"/>
+        <menuitem id="menu_automation"
+                  name="Automation"
+                  parent="menu_workflow_root"
+                  sequence="20"/>
+        
+        <menuitem id="menu_automation_rules"
+                  name="Automation Rules"
+                  parent="menu_automation"
+                  action="action_automation_rule"
+                  sequence="1"/>
+        
+        <menuitem id="menu_scheduled_tasks"
+                  name="Scheduled Tasks"
+                  parent="menu_automation"
+                  action="action_scheduled_task"
+                  sequence="2"/>
+        
+        <!-- ============================================================ -->
+        <!-- APPROVAL MANAGEMENT                                           -->
+        <!-- ============================================================ -->
+        
+        <menuitem id="menu_approval_management"
+                  name="Approvals"
+                  parent="menu_workflow_root"
+                  sequence="25"/>
+        
+        <menuitem id="menu_approval_workflows"
+                  name="Approval Workflows"
+                  parent="menu_approval_management"
+                  action="action_approval_workflow"
+                  sequence="1"/>
+        
+        <menuitem id="menu_approval_requests"
+                  name="Approval Requests"
+                  parent="menu_approval_management"
+                  action="action_approval_request"
+                  sequence="2"/>
+        
+        <!-- ============================================================ -->
+        <!-- REPORTS                                                       -->
+        <!-- ============================================================ -->
+        
+        <menuitem id="menu_workflow_reports"
+                  name="Reports"
+                  parent="menu_workflow_root"
+                  sequence="30"/>
+        
+        <menuitem id="menu_workflow_analysis"
+                  name="Workflow Analysis"
+                  parent="menu_workflow_reports"
+                  action="action_workflow_dashboard"
+                  sequence="1"/>
+        
+        <menuitem id="menu_execution_logs"
+                  name="Execution Logs"
+                  parent="menu_workflow_reports"
+                  action="action_workflow_execution_log"
+                  sequence="2"/>
+        
+        <!-- ============================================================ -->
+        <!-- CONFIGURATION                                                 -->
+        <!-- ============================================================ -->
+        
+        <menuitem id="menu_workflow_config"
+                  name="Configuration"
+                  parent="menu_workflow_root"
+                  groups="tazweed_automated_workflows.group_workflow_manager"
+                  sequence="100"/>
+        
+        <!-- Workflow Definitions -->
+        <menuitem id="menu_workflow_definitions"
+                  name="Workflow Definitions"
+                  parent="menu_workflow_config"
+                  action="action_workflow_definition"
+                  sequence="1"/>
+        
+        <!-- Workflow Triggers -->
+        <menuitem id="menu_workflow_triggers"
+                  name="Workflow Triggers"
+                  parent="menu_workflow_config"
+                  action="action_workflow_trigger"
+                  sequence="2"/>
+        
+        <!-- SLA Configuration -->
+        <menuitem id="menu_sla_config"
+                  name="SLA Configuration"
+                  parent="menu_workflow_config"
+                  action="action_sla_configuration"
+                  sequence="3"/>
+        
+        <!-- Escalation Rules -->
+        <menuitem id="menu_escalation_rules"
+                  name="Escalation Rules"
+                  parent="menu_workflow_config"
+                  action="action_escalation_rule"
+                  sequence="4"/>
+        
+        <!-- Notification Templates -->
+        <menuitem id="menu_notification_templates"
+                  name="Notification Templates"
+                  parent="menu_workflow_config"
+                  action="action_notification_template"
+                  sequence="5"/>
+        
     </data>
 </odoo>

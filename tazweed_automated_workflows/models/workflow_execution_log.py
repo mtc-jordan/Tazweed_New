@@ -21,7 +21,7 @@ class WorkflowExecutionLog(models.Model):
     # Basic Information
     # ============================================================
     
-    workflow_instance_id = fields.Many2one(
+    instance_id = fields.Many2one(
         'tazweed.workflow.instance',
         string='Workflow Instance',
         required=True,

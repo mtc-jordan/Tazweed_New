@@ -81,7 +81,7 @@
                                 <field name="sequence"/>
                                 <field name="name"/>
                                 <field name="approver_ids" widget="many2many_tags"/>
-                                <field name="approval_type"/>
+                                <field name="approver_type"/>
                                 <field name="description"/>
                             </tree>
                         </field>
