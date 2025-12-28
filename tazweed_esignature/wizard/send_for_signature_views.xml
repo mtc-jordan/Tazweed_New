@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Send for Signature Wizard Form View -->
+        <record id="view_send_for_signature_wizard_form" model="ir.ui.view">
+            <field name="name">send.for.signature.wizard.form</field>
+            <field name="model">send.for.signature.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Send for Signature">
+                    <group>
+                        <group string="Document">
+                            <field name="document_name"/>
+                            <field name="document_type"/>
+                            <field name="document_file" filename="document_filename"/>
+                            <field name="document_filename" invisible="1"/>
+                            <field name="template_id"/>
+                        </group>
+                        <group string="Signer">
+                            <field name="signer_name"/>
+                            <field name="signer_email"/>
+                            <field name="signer_role"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="expiry_date"/>
+                        <field name="message"/>
+                    </group>
+                    <footer>
+                        <button name="action_send" string="Send for Signature" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_send_for_signature_wizard" model="ir.actions.act_window">
+            <field name="name">Send for Signature</field>
+            <field name="res_model">send.for.signature.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

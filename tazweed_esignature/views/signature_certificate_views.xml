@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Signature Certificate Form View -->
+        <record id="view_signature_certificate_form" model="ir.ui.view">
+            <field name="name">signature.certificate.form</field>
+            <field name="model">signature.certificate</field>
+            <field name="arch" type="xml">
+                <form string="Signature Certificate">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_download_certificate" type="object" class="oe_stat_button" icon="fa-download">
+                                <span>Download</span>
+                            </button>
+                            <button name="action_verify" type="object" class="oe_stat_button" icon="fa-check-circle">
+                                <span>Verify</span>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Certificate Details">
+                                <field name="request_id"/>
+                                <field name="document_name"/>
+                                <field name="document_type"/>
+                                <field name="verification_code"/>
+                            </group>
+                            <group string="Validity">
+                                <field name="issued_date"/>
+                                <field name="valid_until"/>
+                                <field name="is_verified"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Security Hashes">
+                            <field name="document_hash"/>
+                            <field name="certificate_hash"/>
+                        </group>
+                        
+                        <group string="Signers">
+                            <field name="total_signers"/>
+                            <field name="signer_summary" nolabel="1" readonly="1"/>
+                        </group>
+                        
+                        <group string="Verification">
+                            <field name="verification_url" widget="url"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Signature Certificate Tree View -->
+        <record id="view_signature_certificate_tree" model="ir.ui.view">
+            <field name="name">signature.certificate.tree</field>
+            <field name="model">signature.certificate</field>
+            <field name="arch" type="xml">
+                <tree string="Signature Certificates">
+                    <field name="name"/>
+                    <field name="document_name"/>
+                    <field name="document_type"/>
+                    <field name="total_signers"/>
+                    <field name="issued_date"/>
+                    <field name="valid_until"/>
+                    <field name="is_verified"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Signature Certificate Search View -->
+        <record id="view_signature_certificate_search" model="ir.ui.view">
+            <field name="name">signature.certificate.search</field>
+            <field name="model">signature.certificate</field>
+            <field name="arch" type="xml">
+                <search string="Signature Certificates">
+                    <field name="name"/>
+                    <field name="document_name"/>
+                    <field name="verification_code"/>
+                    <separator/>
+                    <filter name="filter_verified" string="Verified" domain="[('is_verified', '=', True)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_type" string="Document Type" context="{'group_by': 'document_type'}"/>
+                        <filter name="group_month" string="Issue Month" context="{'group_by': 'issued_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Signature Certificate Action -->
+        <record id="action_signature_certificate" model="ir.actions.act_window">
+            <field name="name">Signature Certificates</field>
+            <field name="res_model">signature.certificate</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No signature certificates yet
+                </p>
+                <p>
+                    Certificates are automatically generated when all signatures are collected.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Document Type Views -->
+        <record id="view_signature_document_type_form" model="ir.ui.view">
+            <field name="name">signature.document.type.form</field>
+            <field name="model">signature.document.type</field>
+            <field name="arch" type="xml">
+                <form string="Document Type">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="sequence"/>
+                                <field name="category"/>
+                            </group>
+                            <group>
+                                <field name="default_expiry_days"/>
+                                <field name="default_reminder_days"/>
+                                <field name="min_signers"/>
+                                <field name="require_witness"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="default_template_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_signature_document_type_tree" model="ir.ui.view">
+            <field name="name">signature.document.type.tree</field>
+            <field name="model">signature.document.type</field>
+            <field name="arch" type="xml">
+                <tree string="Document Types">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="category"/>
+                    <field name="default_expiry_days"/>
+                    <field name="min_signers"/>
+                    <field name="require_witness"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_signature_document_type" model="ir.actions.act_window">
+            <field name="name">Document Types</field>
+            <field name="res_model">signature.document.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+    </data>
+</odoo>

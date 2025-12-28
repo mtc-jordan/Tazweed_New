@@ -7,4 +7,9 @@ access_signature_signer_user,signature.signer.user,model_signature_signer,group_
 access_signature_signer_manager,signature.signer.manager,model_signature_signer,group_esignature_manager,1,1,1,1
 access_signature_audit_log_user,signature.audit.log.user,model_signature_audit_log,group_esignature_user,1,0,0,0
 access_signature_audit_log_manager,signature.audit.log.manager,model_signature_audit_log,group_esignature_manager,1,1,1,1
+access_signature_certificate_user,signature.certificate.user,model_signature_certificate,group_esignature_user,1,0,0,0
+access_signature_certificate_manager,signature.certificate.manager,model_signature_certificate,group_esignature_manager,1,1,1,1
+access_signature_document_type_user,signature.document.type.user,model_signature_document_type,group_esignature_user,1,0,0,0
+access_signature_document_type_manager,signature.document.type.manager,model_signature_document_type,group_esignature_manager,1,1,1,1
 access_send_for_signature_wizard,send.for.signature.wizard,model_send_for_signature_wizard,group_esignature_user,1,1,1,1
+access_bulk_signature_wizard,bulk.signature.wizard,model_bulk_signature_wizard,group_esignature_user,1,1,1,1

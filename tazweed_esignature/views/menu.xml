@@ -9,9 +9,18 @@
     <!-- Signature Requests -->
     <menuitem id="menu_signature_requests" name="Signature Requests" parent="menu_esignature_root" action="action_signature_request" sequence="10"/>
     
+    <!-- Bulk Signature -->
+    <menuitem id="menu_bulk_signature" name="Bulk Signature" parent="menu_esignature_root" action="action_bulk_signature_wizard" sequence="15"/>
+    
+    <!-- Certificates -->
+    <menuitem id="menu_signature_certificates" name="Certificates" parent="menu_esignature_root" action="action_signature_certificate" sequence="20"/>
+    
     <!-- Templates -->
-    <menuitem id="menu_signature_templates" name="Templates" parent="menu_esignature_root" action="action_signature_template" sequence="20"/>
+    <menuitem id="menu_signature_templates" name="Templates" parent="menu_esignature_root" action="action_signature_template" sequence="30"/>
     
     <!-- Configuration Menu -->
     <menuitem id="menu_esignature_config" name="Configuration" parent="menu_esignature_root" sequence="100" groups="group_esignature_manager"/>
+    
+    <!-- Document Types -->
+    <menuitem id="menu_document_types" name="Document Types" parent="menu_esignature_config" action="action_signature_document_type" sequence="10"/>
 </odoo>

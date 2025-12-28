@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Bulk Signature Wizard Form View -->
+        <record id="view_bulk_signature_wizard_form" model="ir.ui.view">
+            <field name="name">bulk.signature.wizard.form</field>
+            <field name="model">bulk.signature.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Bulk Signature Request">
+                    <group>
+                        <group string="Document">
+                            <field name="document_type"/>
+                            <field name="document_type_id"/>
+                            <field name="template_id"/>
+                            <field name="document_file" filename="document_filename"/>
+                            <field name="document_filename" invisible="1"/>
+                        </group>
+                        <group string="Settings">
+                            <field name="signing_order"/>
+                            <field name="expiry_days"/>
+                            <field name="reminder_enabled"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Additional Signers">
+                        <field name="include_manager"/>
+                        <field name="include_hr"/>
+                    </group>
+                    
+                    <group string="Select Employees">
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                    
+                    <footer>
+                        <button name="action_create_requests" string="Create Requests" type="object" class="btn-secondary"/>
+                        <button name="action_create_and_send" string="Create &amp; Send" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_bulk_signature_wizard" model="ir.actions.act_window">
+            <field name="name">Bulk Signature Request</field>
+            <field name="res_model">bulk.signature.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

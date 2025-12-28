@@ -8,5 +8,13 @@
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
+        
+        <record id="seq_signature_certificate" model="ir.sequence">
+            <field name="name">Signature Certificate</field>
+            <field name="code">signature.certificate</field>
+            <field name="prefix">CERT/%(year)s/</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>

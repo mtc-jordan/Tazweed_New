@@ -1,30 +1,49 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed E-Signature',
-    'version': '16.0.2.0.0',
+    'version': '16.0.3.0.0',
     'category': 'Human Resources/Signatures',
-    'summary': 'Digital Document Signing with Modern OWL Dashboard',
+    'summary': 'Digital Document Signing with UAE Compliance',
     'description': """
 Tazweed E-Signature Module
 ==========================
 
-A comprehensive digital signature solution for Odoo 16 featuring:
+A comprehensive digital signature solution for Odoo 16 with UAE compliance features.
 
 **Key Features:**
 - Modern OWL-based dashboard with real-time analytics
 - Draw, type, or upload signatures
-- Multi-signer document workflows
-- Email notifications and reminders
+- Multi-signer document workflows with sequential/parallel signing
+- Email notifications and automated reminders
 - Audit trail and compliance tracking
 - Mobile-responsive signature pad
-- Template management
-- Integration with HR and Contracts
+- Template management with signature placement
+- Integration with HR, Contracts, and Document Center
+- UAE e-signature law compliance
+- Signature certificate generation
+- Bulk document signing
+
+**Document Types Supported:**
+- Employment Contracts
+- Offer Letters
+- Non-Disclosure Agreements
+- Policy Acknowledgments
+- Termination Letters
+- Contract Amendments
+- Visa Documents
+- Labor Cards
+- End of Service Settlements
+- Warning Letters
+- Promotion Letters
+- Salary Certificates
 
 **Technical Highlights:**
 - Built with Odoo 16 OWL framework
 - Modern UI/UX design
 - Real-time updates
-- Secure signature storage with hashing
+- Secure signature storage with SHA-256 hashing
+- IP and device tracking for audit
+- Automated expiry and reminder cron jobs
     """,
     'author': 'Tazweed',
     'website': 'https://www.tazweed.com',
@@ -35,6 +54,7 @@ A comprehensive digital signature solution for Odoo 16 featuring:
         'hr',
         'hr_contract',
         'web',
+        'tazweed_core',
     ],
     'data': [
         # Security
@@ -43,9 +63,16 @@ A comprehensive digital signature solution for Odoo 16 featuring:
         # Data
         'data/sequence_data.xml',
         'data/mail_template_data.xml',
+        'data/document_type_data.xml',
+        'data/esignature_cron.xml',
         # Views
         'views/signature_template_views.xml',
         'views/signature_request_views.xml',
+        'views/signature_certificate_views.xml',
+        # Wizards (before menu)
+        'wizard/send_for_signature_views.xml',
+        'wizard/bulk_signature_views.xml',
+        # Menu (last)
         'views/menu.xml',
     ],
     'assets': {
