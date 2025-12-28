@@ -21,6 +21,9 @@
                     <button class="btn-primary" t-on-click="onGeneratePayslips">
                         <i class="fa fa-plus"></i> Generate Payslips
                     </button>
+                    <button class="btn-refresh" t-on-click="refreshData">
+                        <i class="fa fa-refresh"></i>
+                    </button>
                 </div>
             </div>
 
@@ -128,27 +131,18 @@
                 <!-- Charts Row -->
                 <div class="charts-row">
                     <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Payroll by Department</h3>
-                        </div>
                         <div class="chart-body">
-                            <canvas id="departmentPayrollChart"></canvas>
+                            <canvas t-ref="departmentChart"></canvas>
                         </div>
                     </div>
                     <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Salary Distribution</h3>
-                        </div>
                         <div class="chart-body">
-                            <canvas id="salaryDistributionChart"></canvas>
+                            <canvas t-ref="distributionChart"></canvas>
                         </div>
                     </div>
                     <div class="chart-card chart-card-wide">
-                        <div class="chart-header">
-                            <h3>Payroll Trends</h3>
-                        </div>
                         <div class="chart-body">
-                            <canvas id="payrollTrendChart"></canvas>
+                            <canvas t-ref="trendChart"></canvas>
                         </div>
                     </div>
                 </div>

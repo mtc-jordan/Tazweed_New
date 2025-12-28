@@ -80,11 +80,7 @@
               action="action_hr_salary_rule_category"
               sequence="30"/>
 
-    <menuitem id="menu_payroll_settings"
-              name="Settings"
-              parent="menu_payroll_config"
-              action="tazweed_core.action_tazweed_config_settings"
-              sequence="100"/>
+
 
     <!-- Reports -->
     <menuitem id="menu_payroll_reports"

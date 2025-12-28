@@ -23,11 +23,6 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_accounting_entry" type="object" 
-                                class="oe_stat_button" icon="fa-book"
-                                attrs="{'invisible': [('move_id', '=', False)]}">
-                            <field name="move_id" widget="statinfo" string="Journal Entry"/>
-                        </button>
                     </div>
                     <div class="oe_title">
                         <label for="name"/>
@@ -45,7 +40,7 @@
                             <field name="number"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
-                            <field name="journal_id" options="{'no_create': True}"/>
+
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>

@@ -2,20 +2,13 @@
 
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
-import { Component, useState, onWillStart, onMounted } from "@odoo/owl";
+import { Component, useState, onWillStart, onMounted, useRef } from "@odoo/owl";
 
 export class PayrollDashboard extends Component {
-    static template = "tazweed_payroll.PayrollDashboard";
-    static props = {
-        action: { type: Object, optional: true },
-        actionId: { type: Number, optional: true },
-        className: { type: String, optional: true },
-        globalState: { type: Object, optional: true },
-    };
-
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
+        
         this.state = useState({
             loading: true,
             selectedPeriod: "current",
@@ -36,6 +29,12 @@ export class PayrollDashboard extends Component {
             pendingLoans: [],
             alerts: [],
         });
+        
+        this.departmentChartRef = useRef("departmentChart");
+        this.distributionChartRef = useRef("distributionChart");
+        this.trendChartRef = useRef("trendChart");
+        
+        this.charts = {};
 
         onWillStart(async () => {
             await this.loadDashboardData();
@@ -75,25 +74,30 @@ export class PayrollDashboard extends Component {
     }
 
     renderDepartmentChart() {
-        const canvas = document.getElementById("departmentPayrollChart");
+        const canvas = this.departmentChartRef.el;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d");
         const data = this.state.payrollByDepartment;
+        
+        if (this.charts.department) {
+            this.charts.department.destroy();
+        }
         
         if (data.length === 0) {
             this.drawNoDataMessage(ctx, canvas);
             return;
         }
 
-        new Chart(ctx, {
+        this.charts.department = new Chart(ctx, {
             type: "bar",
             data: {
                 labels: data.map(d => d.name),
                 datasets: [{
                     label: "Payroll Amount",
                     data: data.map(d => d.amount),
-                    backgroundColor: "#3B82F6",
+                    backgroundColor: "rgba(59, 130, 246, 0.8)",
+                    borderColor: "rgb(59, 130, 246)",
                     borderRadius: 6,
                     barThickness: 35,
                 }]
@@ -102,7 +106,13 @@ export class PayrollDashboard extends Component {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Payroll by Department",
+                        font: { size: 16, weight: "bold" },
+                        color: "#374151",
+                    }
                 },
                 scales: {
                     x: {
@@ -123,11 +133,15 @@ export class PayrollDashboard extends Component {
     }
 
     renderDistributionChart() {
-        const canvas = document.getElementById("salaryDistributionChart");
+        const canvas = this.distributionChartRef.el;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d");
         const data = this.state.salaryDistribution;
+        
+        if (this.charts.distribution) {
+            this.charts.distribution.destroy();
+        }
         
         if (data.length === 0) {
             this.drawNoDataMessage(ctx, canvas);
@@ -135,18 +149,24 @@ export class PayrollDashboard extends Component {
         }
 
         const colors = [
-            "#10B981", "#3B82F6", "#F59E0B", "#EF4444", 
-            "#8B5CF6", "#EC4899", "#06B6D4"
+            "rgba(16, 185, 129, 0.8)", 
+            "rgba(59, 130, 246, 0.8)", 
+            "rgba(245, 158, 11, 0.8)", 
+            "rgba(239, 68, 68, 0.8)", 
+            "rgba(139, 92, 246, 0.8)", 
+            "rgba(236, 72, 153, 0.8)", 
+            "rgba(6, 182, 212, 0.8)"
         ];
 
-        new Chart(ctx, {
+        this.charts.distribution = new Chart(ctx, {
             type: "doughnut",
             data: {
                 labels: data.map(d => d.range),
                 datasets: [{
                     data: data.map(d => d.count),
                     backgroundColor: colors.slice(0, data.length),
-                    borderWidth: 0,
+                    borderWidth: 2,
+                    borderColor: "#fff",
                     hoverOffset: 4,
                 }]
             },
@@ -156,12 +176,18 @@ export class PayrollDashboard extends Component {
                 cutout: "65%",
                 plugins: {
                     legend: {
-                        position: "bottom",
+                        position: "right",
                         labels: {
                             padding: 15,
                             usePointStyle: true,
                             font: { size: 11 }
                         }
+                    },
+                    title: {
+                        display: true,
+                        text: "Salary Distribution",
+                        font: { size: 16, weight: "bold" },
+                        color: "#374151",
                     }
                 }
             }
@@ -169,17 +195,21 @@ export class PayrollDashboard extends Component {
     }
 
     renderTrendChart() {
-        const canvas = document.getElementById("payrollTrendChart");
+        const canvas = this.trendChartRef.el;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d");
+        
+        if (this.charts.trend) {
+            this.charts.trend.destroy();
+        }
         
         // Generate sample trend data
         const labels = this.getLast6Months();
         const payrollData = [450000, 465000, 480000, 475000, 490000, 510000];
         const employeesData = [45, 47, 48, 48, 50, 52];
 
-        new Chart(ctx, {
+        this.charts.trend = new Chart(ctx, {
             type: "line",
             data: {
                 labels: labels,
@@ -187,19 +217,27 @@ export class PayrollDashboard extends Component {
                     {
                         label: "Total Payroll (AED)",
                         data: payrollData,
-                        borderColor: "#3B82F6",
+                        borderColor: "rgb(59, 130, 246)",
                         backgroundColor: "rgba(59, 130, 246, 0.1)",
                         fill: true,
                         tension: 0.4,
+                        pointBackgroundColor: "rgb(59, 130, 246)",
+                        pointBorderColor: "#fff",
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
                         yAxisID: 'y',
                     },
                     {
                         label: "Employees",
                         data: employeesData,
-                        borderColor: "#10B981",
+                        borderColor: "rgb(16, 185, 129)",
                         backgroundColor: "transparent",
                         borderDash: [5, 5],
                         tension: 0.4,
+                        pointBackgroundColor: "rgb(16, 185, 129)",
+                        pointBorderColor: "#fff",
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
                         yAxisID: 'y1',
                     }
                 ]
@@ -218,6 +256,12 @@ export class PayrollDashboard extends Component {
                             usePointStyle: true,
                             font: { size: 11 }
                         }
+                    },
+                    title: {
+                        display: true,
+                        text: "Payroll Trend (Last 6 Months)",
+                        font: { size: 16, weight: "bold" },
+                        color: "#374151",
                     }
                 },
                 scales: {
@@ -354,6 +398,14 @@ export class PayrollDashboard extends Component {
         };
         return labels[state] || state;
     }
+    
+    async refreshData() {
+        this.state.loading = true;
+        await this.loadDashboardData();
+        this.renderCharts();
+    }
 }
+
+PayrollDashboard.template = "tazweed_payroll.PayrollDashboard";
 
 registry.category("actions").add("payroll_dashboard", PayrollDashboard);

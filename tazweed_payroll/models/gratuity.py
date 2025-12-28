@@ -48,8 +48,9 @@ class EmployeeGratuity(models.Model):
     # Service Details
     join_date = fields.Date(
         string='Join Date',
-        related='employee_id.joining_date',
-        store=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+        help='Employee joining date',
     )
     termination_date = fields.Date(
         string='Termination Date',

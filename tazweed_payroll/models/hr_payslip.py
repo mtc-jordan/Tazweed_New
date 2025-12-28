@@ -132,8 +132,16 @@ class HrPayslip(models.Model):
     def _compute_bank_account(self):
         """Get employee's primary bank account"""
         for payslip in self:
-            bank = payslip.employee_id.bank_account_ids.filtered(lambda b: b.is_primary and b.is_wps_enabled)[:1]
-            payslip.bank_account_id = bank if bank else False
+            if payslip.employee_id and hasattr(payslip.employee_id, 'bank_account_ids'):
+                # Try to get WPS-enabled primary account first, fallback to any primary
+                bank = payslip.employee_id.bank_account_ids.filtered(
+                    lambda b: b.is_primary and getattr(b, 'is_wps_enabled', True)
+                )[:1]
+                if not bank:
+                    bank = payslip.employee_id.bank_account_ids.filtered(lambda b: b.is_primary)[:1]
+                payslip.bank_account_id = bank if bank else False
+            else:
+                payslip.bank_account_id = False
 
     @api.onchange('employee_id', 'date_from', 'date_to')
     def _onchange_employee(self):
