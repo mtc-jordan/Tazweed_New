@@ -53,19 +53,23 @@ class TazweedAnalyticsDashboard extends Component {
     }
     
     renderCharts() {
-        if (!this.state.charts || !window.Chart) return;
+        if (!this.state.charts || !this.state.charts.length || !window.Chart) return;
         
         this.state.charts.forEach(chart => {
+            if (!chart || !chart.id) return;
+            
             const canvas = document.getElementById(`chart-${chart.id}`);
             if (!canvas) return;
             
             const ctx = canvas.getContext('2d');
+            const datasets = chart.datasets || [];
+            const labels = chart.labels || [];
             
             new Chart(ctx, {
-                type: chart.type === 'horizontalBar' ? 'bar' : chart.type,
+                type: chart.type === 'horizontalBar' ? 'bar' : (chart.type || 'bar'),
                 data: {
-                    labels: chart.labels,
-                    datasets: chart.datasets,
+                    labels: labels,
+                    datasets: datasets,
                 },
                 options: {
                     responsive: true,
@@ -73,7 +77,7 @@ class TazweedAnalyticsDashboard extends Component {
                     indexAxis: chart.type === 'horizontalBar' ? 'y' : 'x',
                     plugins: {
                         legend: {
-                            display: chart.datasets.length > 1,
+                            display: datasets.length > 1,
                             position: 'bottom',
                         },
                     },

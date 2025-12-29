@@ -98,4 +98,49 @@
         <field name="perm_create" eval="True"/>
         <field name="perm_unlink" eval="False"/>
     </record>
+
+    <!-- Administrator Rules - Full Access -->
+    <record id="rule_performance_review_admin" model="ir.rule">
+        <field name="name">Performance Review: Admin full access</field>
+        <field name="model_id" ref="model_tazweed_performance_review"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_performance_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="rule_performance_goal_admin" model="ir.rule">
+        <field name="name">Performance Goal: Admin full access</field>
+        <field name="model_id" ref="model_tazweed_performance_goal"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_performance_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="rule_development_plan_admin" model="ir.rule">
+        <field name="name">Development Plan: Admin full access</field>
+        <field name="model_id" ref="model_tazweed_development_plan"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_performance_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="rule_feedback_admin" model="ir.rule">
+        <field name="name">Feedback: Admin full access</field>
+        <field name="model_id" ref="model_tazweed_performance_feedback"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_performance_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
 </odoo>
