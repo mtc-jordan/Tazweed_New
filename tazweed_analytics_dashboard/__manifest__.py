@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Analytics Dashboard',
-    'version': '16.0.1.0.0',
+    'version': '16.0.2.0.0',
     'category': 'Human Resources/Staffing',
     'summary': 'Advanced HR & Staffing Analytics with Interactive Dashboards',
     'description': """
@@ -21,6 +21,7 @@ Key Features:
 * Predictive Analytics & Trends
 * Custom Report Builder
 * Export to Excel/PDF
+* Scheduled Email Reports
 
 Dashboard Types:
 ----------------
@@ -30,6 +31,7 @@ Dashboard Types:
 * Recruitment Pipeline Dashboard
 * Client Performance Dashboard
 * Compliance Dashboard
+* Employee Cost Center Dashboard
 * Employee Lifecycle Dashboard
 
 KPIs Tracked:
@@ -44,6 +46,7 @@ KPIs Tracked:
 * Leave Utilization Rate
 * Training Hours per Employee
 * Contract Renewal Rate
+* Document Compliance Rate
 
 Best Practices:
 ---------------
@@ -70,7 +73,13 @@ Best Practices:
         'views/kpi_views.xml',
         'views/report_views.xml',
         'views/cost_center_views.xml',
+        'views/recruitment_dashboard_views.xml',
+        'views/compliance_dashboard_views.xml',
+        'views/payroll_dashboard_views.xml',
+        'views/scheduled_report_views.xml',
+        'views/graph_views.xml',
         'views/menu.xml',
+        'data/scheduled_report_cron.xml',
     ],
     'assets': {
         'web.assets_backend': [

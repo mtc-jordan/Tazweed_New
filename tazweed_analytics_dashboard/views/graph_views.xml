@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ==================== Employee Cost Center Graph Views ==================== -->
+    
+    <!-- Cost Center Pivot View -->
+    <record id="view_employee_cost_center_pivot" model="ir.ui.view">
+        <field name="name">employee.cost.center.pivot</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <pivot string="Cost Center Analysis">
+                <field name="department_id" type="row"/>
+                <field name="client_id" type="col"/>
+                <field name="total_cost" type="measure"/>
+                <field name="revenue" type="measure"/>
+                <field name="gross_margin" type="measure"/>
+                <field name="total_salary_cost" type="measure"/>
+                <field name="total_benefits_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Cost Center Graph View - Bar Chart -->
+    <record id="view_employee_cost_center_graph_bar" model="ir.ui.view">
+        <field name="name">employee.cost.center.graph.bar</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <graph string="Cost by Department" type="bar">
+                <field name="department_id"/>
+                <field name="total_cost" type="measure"/>
+                <field name="revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Cost Center Graph View - Line Chart (Trend) -->
+    <record id="view_employee_cost_center_graph_line" model="ir.ui.view">
+        <field name="name">employee.cost.center.graph.line</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <graph string="Cost Trend" type="line">
+                <field name="date" interval="month"/>
+                <field name="total_cost" type="measure"/>
+                <field name="revenue" type="measure"/>
+                <field name="gross_margin" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Cost Center Graph View - Pie Chart -->
+    <record id="view_employee_cost_center_graph_pie" model="ir.ui.view">
+        <field name="name">employee.cost.center.graph.pie</field>
+        <field name="model">employee.cost.center</field>
+        <field name="arch" type="xml">
+            <graph string="Cost Distribution" type="pie">
+                <field name="department_id"/>
+                <field name="total_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Cost Breakdown Pivot -->
+    <record id="view_cost_breakdown_pivot" model="ir.ui.view">
+        <field name="name">employee.cost.center.breakdown.pivot</field>
+        <field name="model">employee.cost.center</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <pivot string="Cost Breakdown Analysis">
+                <field name="employee_id" type="row"/>
+                <field name="total_salary_cost" type="measure"/>
+                <field name="total_benefits_cost" type="measure"/>
+                <field name="total_compliance_cost" type="measure"/>
+                <field name="total_overhead_cost" type="measure"/>
+                <field name="total_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- ==================== Profitability Graph Views ==================== -->
+    
+    <!-- Profitability by Client Graph -->
+    <record id="view_profitability_client_graph" model="ir.ui.view">
+        <field name="name">employee.cost.center.profitability.client</field>
+        <field name="model">employee.cost.center</field>
+        <field name="priority">25</field>
+        <field name="arch" type="xml">
+            <graph string="Profitability by Client" type="bar">
+                <field name="client_id"/>
+                <field name="revenue" type="measure"/>
+                <field name="total_cost" type="measure"/>
+                <field name="gross_margin" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Margin Percentage Graph -->
+    <record id="view_margin_percent_graph" model="ir.ui.view">
+        <field name="name">employee.cost.center.margin.percent</field>
+        <field name="model">employee.cost.center</field>
+        <field name="priority">26</field>
+        <field name="arch" type="xml">
+            <graph string="Margin % by Client" type="bar">
+                <field name="client_id"/>
+                <field name="gross_margin_percent" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- ==================== Actions for Graph Views ==================== -->
+    
+    <!-- Cost Trend Action -->
+    <record id="action_cost_trend_graph" model="ir.actions.act_window">
+        <field name="name">Cost Trend Analysis</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_employee_cost_center_graph_line"/>
+        <field name="context">{'graph_mode': 'line'}</field>
+    </record>
+    
+    <!-- Cost by Department Action -->
+    <record id="action_cost_by_department_graph" model="ir.actions.act_window">
+        <field name="name">Cost by Department</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_employee_cost_center_graph_bar"/>
+        <field name="context">{'graph_groupbys': ['department_id']}</field>
+    </record>
+    
+    <!-- Cost Distribution Action -->
+    <record id="action_cost_distribution_graph" model="ir.actions.act_window">
+        <field name="name">Cost Distribution</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_employee_cost_center_graph_pie"/>
+        <field name="context">{'graph_mode': 'pie'}</field>
+    </record>
+    
+    <!-- Profitability Analysis Action -->
+    <record id="action_profitability_graph" model="ir.actions.act_window">
+        <field name="name">Profitability Analysis</field>
+        <field name="res_model">employee.cost.center</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_profitability_client_graph"/>
+    </record>
+    
+</odoo>

@@ -6,13 +6,44 @@
               web_icon="tazweed_analytics_dashboard,static/description/icon.png"
               sequence="90"/>
 
+    <!-- ==================== Dashboards Section ==================== -->
+    
     <!-- Dashboards Menu -->
     <menuitem id="menu_analytics_dashboards"
               name="Dashboards"
               parent="menu_analytics_root"
-              action="action_analytics_dashboard"
               sequence="10"/>
+    
+    <!-- Main Analytics Dashboard -->
+    <menuitem id="menu_main_dashboard"
+              name="Analytics Overview"
+              parent="menu_analytics_dashboards"
+              action="action_analytics_dashboard"
+              sequence="1"/>
+    
+    <!-- Recruitment Dashboard -->
+    <menuitem id="menu_recruitment_dashboard"
+              name="Recruitment Dashboard"
+              parent="menu_analytics_dashboards"
+              action="action_recruitment_dashboard"
+              sequence="10"/>
+    
+    <!-- Compliance Dashboard -->
+    <menuitem id="menu_compliance_dashboard"
+              name="Compliance Dashboard"
+              parent="menu_analytics_dashboards"
+              action="action_compliance_dashboard"
+              sequence="20"/>
+    
+    <!-- Payroll Dashboard -->
+    <menuitem id="menu_payroll_dashboard"
+              name="Payroll Dashboard"
+              parent="menu_analytics_dashboards"
+              action="action_payroll_dashboard"
+              sequence="30"/>
 
+    <!-- ==================== Cost Center Section ==================== -->
+    
     <!-- Cost Center Menu -->
     <menuitem id="menu_cost_center"
               name="Cost Center"
@@ -68,6 +99,8 @@
               action="action_cost_trend"
               sequence="50"/>
 
+    <!-- ==================== Reports Section ==================== -->
+    
     <!-- Reports Menu -->
     <menuitem id="menu_analytics_reports"
               name="Reports"
@@ -75,6 +108,8 @@
               action="action_analytics_report"
               sequence="20"/>
 
+    <!-- ==================== Configuration Section ==================== -->
+    
     <!-- Configuration Menu -->
     <menuitem id="menu_analytics_config"
               name="Configuration"
@@ -87,4 +122,11 @@
               parent="menu_analytics_config"
               action="action_analytics_kpi"
               sequence="10"/>
+    
+    <!-- Scheduled Reports Configuration -->
+    <menuitem id="menu_scheduled_reports"
+              name="Scheduled Reports"
+              parent="menu_analytics_config"
+              action="action_scheduled_report"
+              sequence="20"/>
 </odoo>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ==================== Payroll Dashboard Views ==================== -->
+    
+    <!-- Dashboard Tree View -->
+    <record id="view_payroll_dashboard_tree" model="ir.ui.view">
+        <field name="name">payroll.analytics.dashboard.tree</field>
+        <field name="model">payroll.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <tree string="Payroll Dashboards">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="total_payslips"/>
+                <field name="total_gross_salary" widget="monetary"/>
+                <field name="total_net_salary" widget="monetary"/>
+                <field name="total_deductions" widget="monetary"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Dashboard Form View -->
+    <record id="view_payroll_dashboard_form" model="ir.ui.view">
+        <field name="name">payroll.analytics.dashboard.form</field>
+        <field name="model">payroll.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Dashboard">
+                <header>
+                    <button name="action_refresh" string="Refresh Data" type="object" class="btn-primary" icon="fa-refresh"/>
+                    <button name="action_view_payslips" string="View Payslips" type="object" class="btn-secondary" icon="fa-file-text"/>
+                    <button name="action_view_draft_payslips" string="Draft Payslips" type="object" class="btn-warning" icon="fa-edit"/>
+                    <button name="action_view_loans" string="Active Loans" type="object" class="btn-secondary" icon="fa-money"/>
+                    <button name="action_generate_wps" string="Generate WPS" type="object" class="btn-secondary" icon="fa-bank"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Dashboard Name"/>
+                        </h1>
+                    </div>
+                    
+                    <!-- Filters Section -->
+                    <group string="Dashboard Filters" col="4">
+                        <field name="date_from" widget="date"/>
+                        <field name="date_to" widget="date"/>
+                        <field name="view_type"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    
+                    <group string="Filter by" col="2">
+                        <field name="department_ids" widget="many2many_tags"/>
+                        <field name="structure_ids" widget="many2many_tags"/>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Dashboard Overview" name="overview">
+                            <div class="container-fluid">
+                                <h3 class="text-center mt-3 mb-4">
+                                    <i class="fa fa-money"/> Payroll Summary
+                                </h3>
+                                
+                                <!-- Main Payroll KPIs -->
+                                <group col="4" class="mb-4">
+                                    <div style="background: linear-gradient(135deg, #2196F3, #1976D2); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h4 style="color: white;"><i class="fa fa-file-text"/> Total Payslips</h4>
+                                        <h2 style="color: white; font-weight: bold;"><field name="total_payslips"/></h2>
+                                    </div>
+                                    <div style="background: linear-gradient(135deg, #4CAF50, #388E3C); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h4 style="color: white;"><i class="fa fa-money"/> Gross Salary</h4>
+                                        <h2 style="color: white; font-weight: bold;"><field name="total_gross_salary" widget="monetary"/></h2>
+                                    </div>
+                                    <div style="background: linear-gradient(135deg, #FF9800, #F57C00); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h4 style="color: white;"><i class="fa fa-credit-card"/> Net Salary</h4>
+                                        <h2 style="color: white; font-weight: bold;"><field name="total_net_salary" widget="monetary"/></h2>
+                                    </div>
+                                    <div style="background: linear-gradient(135deg, #9C27B0, #7B1FA2); color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h4 style="color: white;"><i class="fa fa-calculator"/> Avg Salary</h4>
+                                        <h2 style="color: white; font-weight: bold;"><field name="avg_salary" widget="monetary"/></h2>
+                                    </div>
+                                </group>
+                                
+                                <!-- Payslip Status -->
+                                <h3 class="text-center mt-4 mb-3">
+                                    <i class="fa fa-tasks"/> Payslip Status
+                                </h3>
+                                
+                                <group col="3" class="mb-4">
+                                    <div style="background: #FFF3E0; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #FF9800; margin: 5px;">
+                                        <h5><i class="fa fa-edit text-warning"/> Draft</h5>
+                                        <h3 class="text-warning"><field name="draft_payslips"/></h3>
+                                    </div>
+                                    <div style="background: #E3F2FD; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #2196F3; margin: 5px;">
+                                        <h5><i class="fa fa-check text-primary"/> Confirmed</h5>
+                                        <h3 class="text-primary"><field name="confirmed_payslips"/></h3>
+                                    </div>
+                                    <div style="background: #E8F5E9; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #4CAF50; margin: 5px;">
+                                        <h5><i class="fa fa-check-circle text-success"/> Paid</h5>
+                                        <h3 class="text-success"><field name="paid_payslips"/></h3>
+                                    </div>
+                                </group>
+                                
+                                <!-- Deductions Breakdown -->
+                                <h3 class="text-center mt-4 mb-3">
+                                    <i class="fa fa-minus-circle"/> Deductions Breakdown
+                                </h3>
+                                
+                                <group col="5" class="mb-4">
+                                    <div style="background: #FFEBEE; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h6>Total Deductions</h6>
+                                        <h4 class="text-danger"><field name="total_deductions" widget="monetary"/></h4>
+                                    </div>
+                                    <div style="background: #FCE4EC; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Pension</h6>
+                                        <h5><field name="total_pension" widget="monetary"/></h5>
+                                    </div>
+                                    <div style="background: #F3E5F5; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Loans</h6>
+                                        <h5><field name="total_loans" widget="monetary"/></h5>
+                                    </div>
+                                    <div style="background: #EDE7F6; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Absences</h6>
+                                        <h5><field name="total_absences" widget="monetary"/></h5>
+                                    </div>
+                                    <div style="background: #E8EAF6; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Other</h6>
+                                        <h5><field name="total_other_deductions" widget="monetary"/></h5>
+                                    </div>
+                                </group>
+                                
+                                <!-- Allowances Breakdown -->
+                                <h3 class="text-center mt-4 mb-3">
+                                    <i class="fa fa-plus-circle"/> Allowances Breakdown
+                                </h3>
+                                
+                                <group col="5" class="mb-4">
+                                    <div style="background: #E8F5E9; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h6>Total Allowances</h6>
+                                        <h4 class="text-success"><field name="total_allowances" widget="monetary"/></h4>
+                                    </div>
+                                    <div style="background: #C8E6C9; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Housing</h6>
+                                        <h5><field name="total_housing" widget="monetary"/></h5>
+                                    </div>
+                                    <div style="background: #A5D6A7; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Transport</h6>
+                                        <h5><field name="total_transport" widget="monetary"/></h5>
+                                    </div>
+                                    <div style="background: #81C784; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Food</h6>
+                                        <h5><field name="total_food" widget="monetary"/></h5>
+                                    </div>
+                                    <div style="background: #66BB6A; padding: 10px; border-radius: 5px; text-align: center; margin: 3px;">
+                                        <h6>Other</h6>
+                                        <h5><field name="total_other_allowances" widget="monetary"/></h5>
+                                    </div>
+                                </group>
+                                
+                                <!-- WPS and Loans -->
+                                <h3 class="text-center mt-4 mb-3">
+                                    <i class="fa fa-bank"/> WPS &amp; Loans
+                                </h3>
+                                
+                                <group col="4" class="mb-4">
+                                    <div style="background: #E3F2FD; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h5>WPS Files</h5>
+                                        <h3 class="text-primary"><field name="wps_files_count"/></h3>
+                                    </div>
+                                    <div style="background: #E8F5E9; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h5>WPS Total</h5>
+                                        <h3 class="text-success"><field name="wps_total_amount" widget="monetary"/></h3>
+                                    </div>
+                                    <div style="background: #FFF3E0; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h5>Active Loans</h5>
+                                        <h3 class="text-warning"><field name="active_loans"/></h3>
+                                    </div>
+                                    <div style="background: #FFEBEE; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h5>Loan Balance</h5>
+                                        <h3 class="text-danger"><field name="total_loan_balance" widget="monetary"/></h3>
+                                    </div>
+                                </group>
+                                
+                                <!-- Gratuity -->
+                                <group col="1" class="mb-4">
+                                    <div style="background: #F3E5F5; padding: 15px; border-radius: 8px; text-align: center; margin: 5px;">
+                                        <h5><i class="fa fa-gift"/> Total Gratuity Provision</h5>
+                                        <h3 style="color: #9C27B0;"><field name="total_gratuity_provision" widget="monetary"/></h3>
+                                    </div>
+                                </group>
+                            </div>
+                        </page>
+                        
+                        <page string="Detailed Data" name="data">
+                            <group string="Dashboard JSON Data">
+                                <field name="dashboard_data" widget="text" readonly="1" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Dashboard Action -->
+    <record id="action_payroll_dashboard" model="ir.actions.act_window">
+        <field name="name">Payroll Dashboard</field>
+        <field name="res_model">payroll.analytics.dashboard</field>
+        <field name="view_mode">form,tree</field>
+        <field name="context">{'default_name': 'Payroll Analytics'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Payroll Dashboard
+            </p>
+            <p>
+                Track payroll metrics, deductions, allowances, WPS, and loans.
+            </p>
+        </field>
+    </record>
+    
+</odoo>
