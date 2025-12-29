@@ -1,0 +1,6 @@
+/* Fix for navbar systray display */
+.o_main_navbar .o_menu_systray.d-flex {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+}

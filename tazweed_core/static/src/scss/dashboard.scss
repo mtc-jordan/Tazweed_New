@@ -1,5 +1,12 @@
 /* Tazweed HR Dashboard - Modern UI/UX Styles */
 
+/* Critical: Fix for navbar systray display - ensures proper flex layout */
+.o_main_navbar .o_menu_systray.d-flex {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+}
+
 /* Base Dashboard Styles */
 .tazweed-dashboard {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

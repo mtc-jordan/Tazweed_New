@@ -1,5 +1,11 @@
 /* Tazweed Analytics Dashboard Styles */
 
+/* Fix for navbar systray display issue */
+.o_main_navbar .o_menu_systray {
+    display: flex !important;
+    align-items: center !important;
+}
+
 /* Dashboard Container */
 .tazweed-dashboard {
     padding: 20px;
