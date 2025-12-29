@@ -40,7 +40,7 @@ class ProDashboard(models.Model):
         
         # Total Requests
         total_requests = Request.search_count([])
-        active_requests = Request.search_count([('state', 'in', ['draft', 'submitted', 'approved', 'in_progress'])])
+        active_requests = Request.search_count([('state', 'in', ['draft', 'submitted', 'documents_pending', 'in_progress', 'on_hold'])])
         completed_this_month = Request.search_count([
             ('state', '=', 'completed'),
             ('completion_date', '>=', first_day_month)
@@ -73,14 +73,14 @@ class ProDashboard(models.Model):
         # Calculate average processing time
         completed_reqs = Request.search([
             ('state', '=', 'completed'),
-            ('submission_date', '!=', False),
+            ('request_date', '!=', False),
             ('completion_date', '!=', False)
         ])
         if completed_reqs:
             total_days = sum([
-                (r.completion_date - r.submission_date).days 
+                (r.completion_date - r.request_date).days 
                 for r in completed_reqs 
-                if r.completion_date and r.submission_date
+                if r.completion_date and r.request_date
             ])
             avg_processing_days = total_days / len(completed_reqs)
         else:
@@ -104,14 +104,15 @@ class ProDashboard(models.Model):
     def _get_request_stats(self):
         """Get request statistics by state"""
         Request = self.env['pro.service.request']
-        states = ['draft', 'submitted', 'approved', 'in_progress', 'completed', 'cancelled']
+        states = ['draft', 'submitted', 'documents_pending', 'in_progress', 'on_hold', 'completed', 'cancelled']
         
         stats = []
         colors = {
             'draft': '#95a5a6',
             'submitted': '#3498db',
-            'approved': '#9b59b6',
+            'documents_pending': '#9b59b6',
             'in_progress': '#f39c12',
+            'on_hold': '#e67e22',
             'completed': '#27ae60',
             'cancelled': '#e74c3c',
         }

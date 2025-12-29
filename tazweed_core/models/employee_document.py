@@ -8,6 +8,7 @@ class EmployeeDocument(models.Model):
     """Employee Document Management"""
     _name = 'tazweed.employee.document'
     _description = 'Employee Document'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'expiry_date asc, id desc'
     _rec_name = 'display_name'
 
@@ -32,6 +33,11 @@ class EmployeeDocument(models.Model):
     
     attachment = fields.Binary(string='Attachment')
     attachment_name = fields.Char(string='Attachment Name')
+    attachment_filename = fields.Char(
+        string='Attachment Filename',
+        related='attachment_name',
+        store=True,
+    )
     
     state = fields.Selection([
         ('valid', 'Valid'),
@@ -46,6 +52,22 @@ class EmployeeDocument(models.Model):
     )
     
     notes = fields.Text(string='Notes')
+    is_renewable = fields.Boolean(
+        string='Is Renewable',
+        related='document_type_id.is_renewable',
+        store=True,
+        readonly=True,
+    )
+    renewal_reminder_days = fields.Integer(
+        string='Renewal Reminder Days',
+        default=30,
+        help='Number of days before expiry to send renewal reminder',
+    )
+    renewed_document_id = fields.Many2one(
+        'tazweed.employee.document',
+        string='Renewed Document',
+        help='Reference to the new document that replaced this one',
+    )
     active = fields.Boolean(string='Active', default=True)
     company_id = fields.Many2one(
         'res.company',

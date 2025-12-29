@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Client Portal',
-    'version': '16.0.2.0.0',
+    'version': '16.0.3.0.0',
     'category': 'Human Resources/Staffing',
-    'summary': 'Self-service client portal for staffing agency clients with request management',
+    'summary': 'Enhanced self-service client portal for staffing agency clients with comprehensive features',
     'description': """
-Tazweed Client Portal
-=====================
+Tazweed Client Portal - Enhanced Edition
+========================================
 
 A modern, feature-rich self-service portal for staffing agency clients.
 
@@ -22,17 +22,48 @@ Key Features:
 * Mobile-responsive design
 * White-label branding support
 
+NEW - Enhanced Dashboard:
+-------------------------
+* Interactive charts with Chart.js
+* Real-time data refresh
+* Customizable widgets
+* Financial summary section
+* Pending actions overview
+* Recent activity timeline
+
+NEW - Employee Management:
+--------------------------
+* View all assigned employees
+* Employee attendance tracking
+* Performance metrics
+* Document expiry alerts
+* Compliance status monitoring
+
 NEW - Client Request System:
 ----------------------------
 * 35+ pre-configured request types
-* Invoice requests (copies, corrections, credit notes, payment plans)
-* Worker requests (additional, replacement, termination, issues)
-* Document requests (contracts, compliance, worker documents)
-* Service requests (site visits, rate negotiation, training)
-* Support requests (inquiries, complaints, emergencies)
+* Quick action buttons for common requests
+* Request tracking timeline
+* Bulk request actions
 * SLA tracking and escalation management
 * Email notifications for all request stages
 * Client satisfaction rating and feedback
+
+NEW - Reporting & Analytics:
+----------------------------
+* Downloadable reports (PDF/Excel)
+* Custom date range filters
+* Trend analysis
+* Workforce summary reports
+* Financial summary reports
+
+NEW - UI/UX Improvements:
+-------------------------
+* Modern card-based design
+* Dark mode support
+* Mobile-responsive improvements
+* Notification center
+* Loading states and animations
 
 Best Practices Implemented:
 ---------------------------
@@ -69,13 +100,16 @@ Best Practices Implemented:
         'views/portal_invoice.xml',
         'views/portal_document.xml',
         'views/portal_message.xml',
+        'views/portal_enhanced_templates.xml',
         'views/menu.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             'tazweed_client_portal/static/src/css/portal.css',
+            'tazweed_client_portal/static/src/css/portal_enhanced.css',
             'tazweed_client_portal/static/src/js/portal.js',
             'tazweed_client_portal/static/src/js/charts.js',
+            'tazweed_client_portal/static/src/js/portal_dashboard.js',
         ],
     },
     'installable': True,

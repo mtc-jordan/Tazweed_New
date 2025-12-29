@@ -14,6 +14,7 @@ class DocumentType(models.Model):
     active = fields.Boolean(string='Active', default=True)
     
     is_mandatory = fields.Boolean(string='Mandatory', default=False)
+    is_renewable = fields.Boolean(string='Is Renewable', default=True)
     has_expiry = fields.Boolean(string='Has Expiry Date', default=True)
     alert_days = fields.Integer(string='Alert Days Before Expiry', default=30)
     

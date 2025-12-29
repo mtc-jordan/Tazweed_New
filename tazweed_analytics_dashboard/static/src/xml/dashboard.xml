@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tazweed_analytics_dashboard.Dashboard" owl="1">
+        <div class="o_tazweed_dashboard">
+            <div t-if="state.loading" class="o_dashboard_loading">
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                <p>Loading dashboard...</p>
+            </div>
+            
+            <div t-else="" class="o_dashboard_content">
+                <!-- Dashboard Header -->
+                <div class="o_dashboard_header">
+                    <h2 t-if="state.dashboard" t-esc="state.dashboard.name"/>
+                    <div class="o_dashboard_actions">
+                        <button class="btn btn-primary" t-on-click="refreshDashboard">
+                            <i class="fa fa-refresh"/> Refresh
+                        </button>
+                        <button class="btn btn-secondary" t-on-click="exportToPDF">
+                            <i class="fa fa-file-pdf-o"/> Export PDF
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- KPI Cards -->
+                <div class="o_dashboard_kpis row">
+                    <t t-foreach="state.kpis" t-as="kpi" t-key="kpi.id">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="o_kpi_card">
+                                <div class="o_kpi_icon">
+                                    <i t-attf-class="fa #{kpi.icon}"/>
+                                </div>
+                                <div class="o_kpi_content">
+                                    <h4 t-esc="kpi.name"/>
+                                    <div class="o_kpi_value" t-esc="kpi.value"/>
+                                    <div t-if="kpi.trend !== undefined" 
+                                         t-attf-class="o_kpi_trend #{getTrendClass(kpi.trend)}">
+                                        <i t-attf-class="fa #{getTrendIcon(kpi.trend)}"/>
+                                        <span t-esc="formatTrend(kpi.trend)"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                
+                <!-- Charts Section -->
+                <div class="o_dashboard_charts row mt-4">
+                    <t t-foreach="state.charts" t-as="chart" t-key="chart.id">
+                        <div class="col-md-6">
+                            <div class="o_chart_card">
+                                <h5 t-esc="chart.title"/>
+                                <div class="o_chart_container">
+                                    <canvas t-attf-id="chart-#{chart.id}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                
+                <!-- Summary Section -->
+                <div t-if="state.summary" class="o_dashboard_summary mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <t t-foreach="Object.entries(state.summary)" t-as="item" t-key="item[0]">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span t-esc="item[0]"/>
+                                    <strong t-esc="item[1]"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

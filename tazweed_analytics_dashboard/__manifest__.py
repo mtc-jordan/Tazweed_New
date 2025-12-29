@@ -89,6 +89,7 @@ Best Practices:
     'assets': {
         'web.assets_backend': [
             'tazweed_analytics_dashboard/static/src/css/dashboard.css',
+            'tazweed_analytics_dashboard/static/src/xml/dashboard.xml',
             'tazweed_analytics_dashboard/static/src/js/dashboard.js',
             'tazweed_analytics_dashboard/static/lib/chart.min.js',
         ],

@@ -25,3 +25,17 @@ access_client_worker_request_user,client.worker.request.user,model_client_worker
 access_client_worker_request_portal,client.worker.request.portal,model_client_worker_request,base.group_portal,1,1,1,0
 access_client_portal_dashboard_user,client.portal.dashboard.user,model_client_portal_dashboard,base.group_user,1,1,1,1
 access_client_request_reject_wizard_user,client.request.reject.wizard.user,model_client_request_reject_wizard,base.group_user,1,1,1,1
+access_portal_dashboard_enhanced_user,client.portal.dashboard.enhanced.user,model_client_portal_dashboard_enhanced,base.group_user,1,1,1,1
+access_portal_dashboard_enhanced_portal,client.portal.dashboard.enhanced.portal,model_client_portal_dashboard_enhanced,base.group_portal,1,0,0,0
+access_portal_employee_user,client.portal.employee.user,model_client_portal_employee,base.group_user,1,1,1,1
+access_portal_employee_portal,client.portal.employee.portal,model_client_portal_employee,base.group_portal,1,0,0,0
+access_portal_document_enhanced_user,client.portal.document.enhanced.user,model_client_portal_document_enhanced,base.group_user,1,1,1,1
+access_portal_document_enhanced_portal,client.portal.document.enhanced.portal,model_client_portal_document_enhanced,base.group_portal,1,0,0,0
+access_portal_document_category_user,client.portal.document.category.user,model_client_portal_document_category,base.group_user,1,1,1,1
+access_portal_document_category_portal,client.portal.document.category.portal,model_client_portal_document_category,base.group_portal,1,0,0,0
+access_portal_report_user,client.portal.report.user,model_client_portal_report,base.group_user,1,1,1,1
+access_portal_report_portal,client.portal.report.portal,model_client_portal_report,base.group_portal,1,0,0,0
+access_request_quick_action_user,client.request.quick.action.user,model_client_request_quick_action,base.group_user,1,1,1,1
+access_request_quick_action_portal,client.request.quick.action.portal,model_client_request_quick_action,base.group_portal,1,0,0,0
+access_notification_preference_user,client.portal.notification.preference.user,model_client_portal_notification_preference,base.group_user,1,1,1,1
+access_notification_preference_portal,client.portal.notification.preference.portal,model_client_portal_notification_preference,base.group_portal,1,1,1,0
