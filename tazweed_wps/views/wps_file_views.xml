@@ -126,7 +126,7 @@
             <tree string="WPS Files" decoration-success="state=='processed'" 
                   decoration-warning="state=='submitted'" decoration-danger="state=='rejected'">
                 <field name="name"/>
-                <field name="period_display"/>
+                <field name="period_display" string="Period"/>
                 <field name="salary_date"/>
                 <field name="employee_count"/>
                 <field name="total_net" sum="Total"/>
