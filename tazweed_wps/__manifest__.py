@@ -51,6 +51,9 @@ UAE Compliance:
         'views/wps_compliance_views.xml',
         'views/wps_bank_views.xml',
         'views/wps_dashboard_views.xml',
+        'views/wps_bank_api_views.xml',
+        'views/wps_validation_views.xml',
+        'views/wps_reconciliation_views.xml',
         'views/menu_views.xml',
     ],
     'assets': {

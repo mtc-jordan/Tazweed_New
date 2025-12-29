@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Timeline Event Views -->
+    <record id="view_timeline_event_tree" model="ir.ui.view">
+        <field name="name">employee.timeline.event.tree</field>
+        <field name="model">employee.timeline.event</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="is_positive == True"
+                  decoration-warning="event_type == 'warning'"
+                  decoration-muted="event_type in ('termination', 'resignation')">
+                <field name="event_date"/>
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="event_type" widget="badge"/>
+                <field name="category"/>
+                <field name="is_positive" invisible="1"/>
+                <field name="is_featured"/>
+                <field name="is_public"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_timeline_event_form" model="ir.ui.view">
+        <field name="name">employee.timeline.event.form</field>
+        <field name="model">employee.timeline.event</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Event Title"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="event_type"/>
+                            <field name="event_date"/>
+                            <field name="category" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="is_public"/>
+                            <field name="is_featured"/>
+                            <field name="is_positive" readonly="1"/>
+                            <field name="created_by_id" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Transfer Details -->
+                    <group attrs="{'invisible': [('event_type', '!=', 'transfer')]}" string="Transfer Details">
+                        <group>
+                            <field name="from_department_id"/>
+                            <field name="from_job_id"/>
+                        </group>
+                        <group>
+                            <field name="to_department_id"/>
+                            <field name="to_job_id"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Promotion Details -->
+                    <group attrs="{'invisible': [('event_type', '!=', 'promotion')]}" string="Promotion Details">
+                        <group>
+                            <field name="from_job_id"/>
+                        </group>
+                        <group>
+                            <field name="to_job_id"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Salary Change Details -->
+                    <group attrs="{'invisible': [('event_type', '!=', 'salary_change')]}" string="Salary Change">
+                        <group>
+                            <field name="previous_salary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="new_salary"/>
+                            <field name="salary_change_percentage" widget="percentage"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Achievement/Award Details -->
+                    <group attrs="{'invisible': [('event_type', 'not in', ['achievement', 'award'])]}" string="Achievement Details">
+                        <group>
+                            <field name="achievement_type"/>
+                            <field name="award_name"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Certification/Training Details -->
+                    <group attrs="{'invisible': [('event_type', 'not in', ['certification', 'training'])]}" string="Certification/Training">
+                        <group>
+                            <field name="certification_name"/>
+                            <field name="certification_provider"/>
+                        </group>
+                        <group>
+                            <field name="certification_expiry"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_timeline_event_kanban" model="ir.ui.view">
+        <field name="name">employee.timeline.event.kanban</field>
+        <field name="model">employee.timeline.event</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" default_group_by="category">
+                <field name="name"/>
+                <field name="event_type"/>
+                <field name="event_date"/>
+                <field name="icon"/>
+                <field name="color"/>
+                <field name="is_featured"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <i t-attf-class="fa #{record.icon.raw_value}" 
+                                               t-attf-style="color: #{record.color.raw_value}"/>
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <span t-if="record.is_featured.raw_value" class="badge badge-warning">
+                                        <i class="fa fa-star"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="event_date"/>
+                                    <br/>
+                                    <field name="employee_id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_timeline_event_search" model="ir.ui.view">
+        <field name="name">employee.timeline.event.search</field>
+        <field name="model">employee.timeline.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="event_type"/>
+                <filter name="featured" string="Featured" domain="[('is_featured', '=', True)]"/>
+                <filter name="positive" string="Positive Events" domain="[('is_positive', '=', True)]"/>
+                <separator/>
+                <filter name="career" string="Career" domain="[('category', '=', 'career')]"/>
+                <filter name="compensation" string="Compensation" domain="[('category', '=', 'compensation')]"/>
+                <filter name="development" string="Development" domain="[('category', '=', 'development')]"/>
+                <filter name="recognition" string="Recognition" domain="[('category', '=', 'recognition')]"/>
+                <separator/>
+                <filter name="this_year" string="This Year" 
+                        domain="[('event_date', '>=', (context_today() - relativedelta(years=1)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_by_type" string="Event Type" context="{'group_by': 'event_type'}"/>
+                    <filter name="group_by_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_by_date" string="Date" context="{'group_by': 'event_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Timeline Template Views -->
+    <record id="view_timeline_template_tree" model="ir.ui.view">
+        <field name="name">employee.timeline.template.tree</field>
+        <field name="model">employee.timeline.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="trigger_type"/>
+                <field name="event_type"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_timeline_template_form" model="ir.ui.view">
+        <field name="name">employee.timeline.template.form</field>
+        <field name="model">employee.timeline.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Template Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="trigger_type"/>
+                            <field name="anniversary_years" 
+                                   attrs="{'invisible': [('trigger_type', '!=', 'anniversary')]}"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="event_type"/>
+                            <field name="is_public"/>
+                            <field name="is_featured"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="event_title_template" placeholder="e.g., {employee_name} - {years} Year Anniversary"/>
+                    </group>
+                    <field name="event_description_template" placeholder="Event description template..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Extend Employee Form for Timeline -->
+    <record id="view_employee_form_timeline" model="ir.ui.view">
+        <field name="name">hr.employee.form.timeline</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_timeline" type="object"
+                        class="oe_stat_button" icon="fa-history">
+                    <field name="timeline_event_count" widget="statinfo" string="Timeline"/>
+                </button>
+            </div>
+            <xpath expr="//group[@name='identification_group']" position="after">
+                <group string="Service Information" name="service_info">
+                    <field name="hire_date"/>
+                    <field name="years_of_service" widget="float_time"/>
+                    <field name="next_anniversary"/>
+                </group>
+                <group string="Career Statistics" name="career_stats">
+                    <field name="promotion_count"/>
+                    <field name="transfer_count"/>
+                    <field name="achievement_count"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_timeline_event" model="ir.actions.act_window">
+        <field name="name">Timeline Events</field>
+        <field name="res_model">employee.timeline.event</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_timeline_event_search"/>
+        <field name="context">{'search_default_this_year': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a timeline event
+            </p>
+            <p>
+                Track employee milestones, promotions, achievements, and other career events.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_timeline_template" model="ir.actions.act_window">
+        <field name="name">Timeline Templates</field>
+        <field name="res_model">employee.timeline.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a timeline template
+            </p>
+        </field>
+    </record>
+
+    <!-- Cron Job for Anniversaries -->
+    <record id="ir_cron_check_anniversaries" model="ir.cron">
+        <field name="name">Check Employee Anniversaries</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_check_anniversaries()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

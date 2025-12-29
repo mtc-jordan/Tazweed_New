@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_linkedin_integration_form" model="ir.ui.view">
+        <field name="name">linkedin.integration.form</field>
+        <field name="model">linkedin.integration</field>
+        <field name="arch" type="xml">
+            <form string="LinkedIn Integration">
+                <header>
+                    <button name="action_connect" string="Connect to LinkedIn" type="object"
+                            class="btn-primary" states="draft,expired,error"/>
+                    <button name="action_sync_now" string="Sync Now" type="object" states="connected"/>
+                    <button name="action_disconnect" string="Disconnect" type="object" states="connected"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,connected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Integration Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="API Credentials">
+                            <field name="client_id"/>
+                            <field name="client_secret" password="True"/>
+                            <field name="organization_id"/>
+                        </group>
+                        <group string="Configuration">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="auto_post"/>
+                            <field name="sync_interval"/>
+                            <field name="last_sync" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_linkedin_integration_tree" model="ir.ui.view">
+        <field name="name">linkedin.integration.tree</field>
+        <field name="model">linkedin.integration</field>
+        <field name="arch" type="xml">
+            <tree string="LinkedIn Integrations">
+                <field name="name"/>
+                <field name="organization_name"/>
+                <field name="state" widget="badge"/>
+                <field name="total_jobs_posted"/>
+                <field name="last_sync"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_linkedin_job_posting_form" model="ir.ui.view">
+        <field name="name">linkedin.job.posting.form</field>
+        <field name="model">linkedin.job.posting</field>
+        <field name="arch" type="xml">
+            <form string="LinkedIn Job Posting">
+                <header>
+                    <button name="action_post_to_linkedin" string="Post to LinkedIn" type="object"
+                            class="btn-primary" states="draft"/>
+                    <button name="action_pause" string="Pause" type="object" states="active"/>
+                    <button name="action_close" string="Close" type="object" states="active,paused"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Job Title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="integration_id"/>
+                            <field name="location"/>
+                            <field name="employment_type"/>
+                        </group>
+                        <group>
+                            <field name="linkedin_job_id" readonly="1"/>
+                            <field name="linkedin_url" widget="url" readonly="1"/>
+                            <field name="posted_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Salary">
+                            <group>
+                                <field name="salary_min"/>
+                                <field name="salary_max"/>
+                                <field name="salary_currency"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_linkedin_job_posting_tree" model="ir.ui.view">
+        <field name="name">linkedin.job.posting.tree</field>
+        <field name="model">linkedin.job.posting</field>
+        <field name="arch" type="xml">
+            <tree string="LinkedIn Job Postings">
+                <field name="name"/>
+                <field name="location"/>
+                <field name="views"/>
+                <field name="applications"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_linkedin_application_tree" model="ir.ui.view">
+        <field name="name">linkedin.application.tree</field>
+        <field name="model">linkedin.application</field>
+        <field name="arch" type="xml">
+            <tree string="LinkedIn Applications">
+                <field name="name"/>
+                <field name="posting_id"/>
+                <field name="email"/>
+                <field name="ai_score" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_linkedin_integration" model="ir.actions.act_window">
+        <field name="name">LinkedIn Integration</field>
+        <field name="res_model">linkedin.integration</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_linkedin_job_posting" model="ir.actions.act_window">
+        <field name="name">LinkedIn Job Postings</field>
+        <field name="res_model">linkedin.job.posting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_linkedin_application" model="ir.actions.act_window">
+        <field name="name">LinkedIn Applications</field>
+        <field name="res_model">linkedin.application</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_linkedin_root" name="LinkedIn" parent="tazweed_job_board.menu_job_board_root" sequence="50"/>
+    <menuitem id="menu_linkedin_integration" name="Integration" parent="menu_linkedin_root" action="action_linkedin_integration" sequence="10"/>
+    <menuitem id="menu_linkedin_postings" name="Job Postings" parent="menu_linkedin_root" action="action_linkedin_job_posting" sequence="20"/>
+    <menuitem id="menu_linkedin_applications" name="Applications" parent="menu_linkedin_root" action="action_linkedin_application" sequence="30"/>
+</odoo>

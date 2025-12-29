@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Skill Category Views -->
+    <record id="view_skill_category_tree" model="ir.ui.view">
+        <field name="name">employee.skill.category.tree</field>
+        <field name="model">employee.skill.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="parent_id"/>
+                <field name="skill_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_skill_category_form" model="ir.ui.view">
+        <field name="name">employee.skill.category.form</field>
+        <field name="model">employee.skill.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Category Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="parent_id"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..."/>
+                    <notebook>
+                        <page string="Skills" name="skills">
+                            <field name="skill_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="skill_type"/>
+                                    <field name="employee_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Sub-categories" name="subcategories">
+                            <field name="child_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="skill_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Skill Views -->
+    <record id="view_skill_tree" model="ir.ui.view">
+        <field name="name">employee.skill.tree</field>
+        <field name="model">employee.skill</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="skill_type"/>
+                <field name="is_certifiable"/>
+                <field name="employee_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_skill_form" model="ir.ui.view">
+        <field name="name">employee.skill.form</field>
+        <field name="model">employee.skill</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-users" type="object"
+                                name="action_view_employees" string="Employees">
+                            <field name="employee_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Skill Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="skill_type"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="is_certifiable"/>
+                            <field name="certification_validity_months"
+                                   attrs="{'invisible': [('is_certifiable', '=', False)]}"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..."/>
+                    <notebook>
+                        <page string="Proficiency Levels" name="levels">
+                            <field name="proficiency_level_ids">
+                                <tree editable="bottom">
+                                    <field name="level"/>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="color" widget="color_picker"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Required for Jobs" name="jobs">
+                            <field name="job_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_skill_search" model="ir.ui.view">
+        <field name="name">employee.skill.search</field>
+        <field name="model">employee.skill</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category_id"/>
+                <filter name="technical" string="Technical" domain="[('skill_type', '=', 'technical')]"/>
+                <filter name="soft" string="Soft Skills" domain="[('skill_type', '=', 'soft')]"/>
+                <filter name="certification" string="Certifications" domain="[('skill_type', '=', 'certification')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_category" string="Category" context="{'group_by': 'category_id'}"/>
+                    <filter name="group_by_type" string="Type" context="{'group_by': 'skill_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Employee Skill Line Views -->
+    <record id="view_employee_skill_line_tree" model="ir.ui.view">
+        <field name="name">employee.skill.line.tree</field>
+        <field name="model">employee.skill.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="employee_id"/>
+                <field name="skill_id"/>
+                <field name="category_id"/>
+                <field name="skill_type"/>
+                <field name="proficiency_level_id"/>
+                <field name="proficiency_percentage" widget="progressbar"/>
+                <field name="is_verified"/>
+                <field name="endorsement_count"/>
+                <field name="years_of_experience"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_skill_line_form" model="ir.ui.view">
+        <field name="name">employee.skill.line.form</field>
+        <field name="model">employee.skill.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="skill_id"/>
+                            <field name="category_id"/>
+                            <field name="skill_type"/>
+                        </group>
+                        <group>
+                            <field name="proficiency_level_id"/>
+                            <field name="proficiency_percentage" widget="progressbar"/>
+                            <field name="years_of_experience"/>
+                            <field name="last_used_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_self_assessed"/>
+                            <field name="is_verified"/>
+                            <field name="verified_by" attrs="{'invisible': [('is_verified', '=', False)]}"/>
+                            <field name="verified_date" attrs="{'invisible': [('is_verified', '=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="certification_id"/>
+                            <field name="certification_expiry"/>
+                            <field name="is_certification_valid"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Endorsements" name="endorsements">
+                            <field name="endorsement_ids">
+                                <tree>
+                                    <field name="endorser_id"/>
+                                    <field name="relationship"/>
+                                    <field name="rating"/>
+                                    <field name="comment"/>
+                                    <field name="create_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_employee_skill_line_kanban" model="ir.ui.view">
+        <field name="name">employee.skill.line.kanban</field>
+        <field name="model">employee.skill.line</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="skill_id"/>
+                <field name="proficiency_percentage"/>
+                <field name="is_verified"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="skill_id"/></strong>
+                                <div class="mt-2">
+                                    <field name="proficiency_percentage" widget="progressbar"/>
+                                </div>
+                                <div class="mt-2">
+                                    <span t-if="record.is_verified.raw_value" class="badge badge-success">
+                                        <i class="fa fa-check"/> Verified
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_employee_skill_line_pivot" model="ir.ui.view">
+        <field name="name">employee.skill.line.pivot</field>
+        <field name="model">employee.skill.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="employee_id" type="row"/>
+                <field name="skill_id" type="col"/>
+                <field name="proficiency_level" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Skill Gap Analysis Views -->
+    <record id="view_skill_gap_analysis_tree" model="ir.ui.view">
+        <field name="name">employee.skill.gap.analysis.tree</field>
+        <field name="model">employee.skill.gap.analysis</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="analysis_type"/>
+                <field name="total_skills"/>
+                <field name="skills_met"/>
+                <field name="skills_gap"/>
+                <field name="gap_percentage" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+                <field name="analysis_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_skill_gap_analysis_form" model="ir.ui.view">
+        <field name="name">employee.skill.gap.analysis.form</field>
+        <field name="model">employee.skill.gap.analysis</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_analyze" type="object" string="Run Analysis"
+                            class="btn-primary"
+                            attrs="{'invisible': [('state', '=', 'completed')]}"/>
+                    <button name="action_create_training_plan" type="object" string="Create Training Plan"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Analysis Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="analysis_type"/>
+                            <field name="employee_id" attrs="{'invisible': [('analysis_type', '!=', 'employee')], 'required': [('analysis_type', '=', 'employee')]}"/>
+                            <field name="department_id" attrs="{'invisible': [('analysis_type', '!=', 'department')], 'required': [('analysis_type', '=', 'department')]}"/>
+                            <field name="job_id" attrs="{'invisible': [('analysis_type', '!=', 'job')], 'required': [('analysis_type', '=', 'job')]}"/>
+                            <field name="employee_ids" widget="many2many_tags" attrs="{'invisible': [('analysis_type', '!=', 'team')]}"/>
+                        </group>
+                        <group>
+                            <field name="analysis_date"/>
+                            <field name="total_skills"/>
+                            <field name="skills_met"/>
+                            <field name="skills_gap"/>
+                            <field name="gap_percentage" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Required Skills" name="requirements">
+                            <field name="required_skill_ids">
+                                <tree editable="bottom">
+                                    <field name="skill_id"/>
+                                    <field name="required_level"/>
+                                    <field name="is_mandatory"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Gap Analysis Results" name="results">
+                            <field name="gap_line_ids">
+                                <tree decoration-danger="gap_status == 'gap'"
+                                      decoration-success="gap_status == 'met'"
+                                      decoration-info="gap_status == 'exceeded'">
+                                    <field name="employee_id"/>
+                                    <field name="skill_id"/>
+                                    <field name="required_level"/>
+                                    <field name="current_level"/>
+                                    <field name="gap"/>
+                                    <field name="gap_status" widget="badge"/>
+                                    <field name="priority" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_skill_category" model="ir.actions.act_window">
+        <field name="name">Skill Categories</field>
+        <field name="res_model">employee.skill.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a skill category
+            </p>
+        </field>
+    </record>
+
+    <record id="action_skill" model="ir.actions.act_window">
+        <field name="name">Skills</field>
+        <field name="res_model">employee.skill</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_skill_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a skill
+            </p>
+            <p>
+                Define skills that can be assigned to employees with proficiency levels.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_employee_skill_line" model="ir.actions.act_window">
+        <field name="name">Employee Skills</field>
+        <field name="res_model">employee.skill.line</field>
+        <field name="view_mode">tree,kanban,form,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add skills to employees
+            </p>
+        </field>
+    </record>
+
+    <record id="action_skill_gap_analysis" model="ir.actions.act_window">
+        <field name="name">Skill Gap Analysis</field>
+        <field name="res_model">employee.skill.gap.analysis</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a skill gap analysis
+            </p>
+            <p>
+                Analyze skill gaps for employees, departments, or teams.
+            </p>
+        </field>
+    </record>
+
+</odoo>

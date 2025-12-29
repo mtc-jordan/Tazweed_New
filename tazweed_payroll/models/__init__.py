@@ -9,3 +9,4 @@ from . import wps_file
 from . import gratuity
 from . import res_config_settings
 from . import payroll_accounting
+from . import payroll_simulation

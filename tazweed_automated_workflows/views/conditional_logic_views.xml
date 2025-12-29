@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Condition Group Tree View -->
+    <record id="view_workflow_condition_group_tree" model="ir.ui.view">
+        <field name="name">workflow.condition.group.tree</field>
+        <field name="model">workflow.condition.group</field>
+        <field name="arch" type="xml">
+            <tree string="Condition Groups">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="logic_operator"/>
+                <field name="workflow_id"/>
+                <field name="parent_group_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Condition Group Form View -->
+    <record id="view_workflow_condition_group_form" model="ir.ui.view">
+        <field name="name">workflow.condition.group.form</field>
+        <field name="model">workflow.condition.group</field>
+        <field name="arch" type="xml">
+            <form string="Condition Group">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="logic_operator"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="workflow_id"/>
+                            <field name="node_id"/>
+                            <field name="parent_group_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Conditions" name="conditions">
+                            <field name="condition_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="condition_type"/>
+                                    <field name="field_name"/>
+                                    <field name="operator"/>
+                                    <field name="value_type"/>
+                                    <field name="value_static"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Nested Groups" name="nested">
+                            <field name="child_group_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="logic_operator"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Enter description..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Condition Form View -->
+    <record id="view_workflow_condition_form" model="ir.ui.view">
+        <field name="name">workflow.condition.form</field>
+        <field name="model">workflow.condition</field>
+        <field name="arch" type="xml">
+            <form string="Workflow Condition">
+                <sheet>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="name"/>
+                            <field name="condition_type"/>
+                            <field name="sequence"/>
+                            <field name="group_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Field Comparison -->
+                    <group attrs="{'invisible': [('condition_type', '!=', 'field')]}" string="Field Comparison">
+                        <group>
+                            <field name="model_id"/>
+                            <field name="field_id" domain="[('model_id', '=', model_id)]"/>
+                            <field name="operator"/>
+                        </group>
+                        <group>
+                            <field name="value_type"/>
+                            <field name="value_static" attrs="{'invisible': [('value_type', '!=', 'static')]}"/>
+                            <field name="value_field_id" attrs="{'invisible': [('value_type', '!=', 'field')]}"/>
+                            <field name="value_expression" attrs="{'invisible': [('value_type', '!=', 'expression')]}"/>
+                            <field name="value_context_key" attrs="{'invisible': [('value_type', '!=', 'context')]}"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Date Condition -->
+                    <group attrs="{'invisible': [('condition_type', '!=', 'date')]}" string="Date Condition">
+                        <group>
+                            <field name="date_operator"/>
+                            <field name="date_value" attrs="{'invisible': [('date_operator', 'not in', ['before', 'after', 'between'])]}"/>
+                            <field name="date_value_end" attrs="{'invisible': [('date_operator', '!=', 'between')]}"/>
+                            <field name="date_days" attrs="{'invisible': [('date_operator', 'not in', ['past_days', 'next_days'])]}"/>
+                        </group>
+                    </group>
+                    
+                    <!-- User Condition -->
+                    <group attrs="{'invisible': [('condition_type', '!=', 'user')]}" string="User Condition">
+                        <group>
+                            <field name="user_operator"/>
+                            <field name="user_id" attrs="{'invisible': [('user_operator', 'not in', ['is_manager'])]}"/>
+                            <field name="group_id_check" attrs="{'invisible': [('user_operator', '!=', 'in_group')]}"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Record Condition -->
+                    <group attrs="{'invisible': [('condition_type', '!=', 'record')]}" string="Record Condition">
+                        <group>
+                            <field name="record_operator"/>
+                            <field name="record_domain"/>
+                            <field name="record_count" attrs="{'invisible': [('record_operator', 'not in', ['count_gt', 'count_lt', 'count_eq'])]}"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Python Expression -->
+                    <group attrs="{'invisible': [('condition_type', '!=', 'expression')]}" string="Python Expression">
+                        <field name="python_expression" widget="ace" options="{'mode': 'python'}"/>
+                    </group>
+                    
+                    <!-- Custom Function -->
+                    <group attrs="{'invisible': [('condition_type', '!=', 'custom')]}" string="Custom Function">
+                        <group>
+                            <field name="custom_function"/>
+                            <field name="custom_params"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <field name="description" placeholder="Condition description..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Decision Table Tree View -->
+    <record id="view_workflow_decision_table_tree" model="ir.ui.view">
+        <field name="name">workflow.decision.table.tree</field>
+        <field name="model">workflow.decision.table</field>
+        <field name="arch" type="xml">
+            <tree string="Decision Tables">
+                <field name="name"/>
+                <field name="hit_policy"/>
+                <field name="workflow_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Decision Table Form View -->
+    <record id="view_workflow_decision_table_form" model="ir.ui.view">
+        <field name="name">workflow.decision.table.form</field>
+        <field name="model">workflow.decision.table</field>
+        <field name="arch" type="xml">
+            <form string="Decision Table">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="hit_policy"/>
+                        </group>
+                        <group>
+                            <field name="workflow_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Input Columns" name="inputs">
+                            <field name="input_column_ids" context="{'default_column_type': 'input'}">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="data_type"/>
+                                    <field name="field_id"/>
+                                    <field name="column_type" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Output Columns" name="outputs">
+                            <field name="output_column_ids" context="{'default_column_type': 'output'}">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="data_type"/>
+                                    <field name="field_id"/>
+                                    <field name="column_type" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Rules" name="rules">
+                            <field name="rule_ids">
+                                <tree editable="bottom">
+                                    <field name="priority"/>
+                                    <field name="name"/>
+                                    <field name="conditions_json"/>
+                                    <field name="outputs_json"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Enter description..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_workflow_condition_group" model="ir.actions.act_window">
+        <field name="name">Condition Groups</field>
+        <field name="res_model">workflow.condition.group</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first condition group
+            </p>
+            <p>
+                Condition groups allow you to combine multiple conditions with AND/OR logic.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_workflow_condition" model="ir.actions.act_window">
+        <field name="name">Conditions</field>
+        <field name="res_model">workflow.condition</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_workflow_decision_table" model="ir.actions.act_window">
+        <field name="name">Decision Tables</field>
+        <field name="res_model">workflow.decision.table</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first decision table
+            </p>
+            <p>
+                Decision tables provide a matrix-based approach to complex conditional logic.
+            </p>
+        </field>
+    </record>
+</odoo>

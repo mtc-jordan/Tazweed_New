@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Automated Workflows',
-    'version': '16.0.2.0.0',
+    'version': '16.0.3.0.0',
     'category': 'Human Resources/Automation',
     'summary': 'Smart HR Workflow Automation with AI-Powered Triggers & SLA Management',
     'description': '''
@@ -93,6 +93,42 @@ SLA management, and comprehensive analytics.
 • GDPR compliance ready
 • UAE labor law compliance
 
+NEW FEATURES (v3.0.0)
+=====================
+
+🎨 VISUAL WORKFLOW DESIGNER
+---------------------------
+• Drag-and-drop workflow builder
+• Node palette with multiple node types
+• Connection management
+• Canvas settings and zoom controls
+• Design validation and publishing
+
+🔀 CONDITIONAL LOGIC
+--------------------
+• Condition groups with AND/OR/NOT/XOR logic
+• Field comparisons with multiple operators
+• Date-based conditions
+• User-based conditions
+• Record-based conditions
+• Decision tables for complex logic
+
+📧 EMAIL TEMPLATES
+------------------
+• Dynamic email templates
+• Personalization blocks
+• A/B testing support
+• Email tracking (opens, clicks)
+• Conditional sending
+
+🔗 WEBHOOK INTEGRATION
+----------------------
+• Outgoing webhooks with retry logic
+• Incoming webhooks with security
+• Multiple authentication methods
+• HMAC signature verification
+• Response processing
+
     ''',
     'author': 'Tazweed',
     'website': 'https://tazweedjobs.ae',
@@ -126,6 +162,11 @@ SLA management, and comprehensive analytics.
         'views/sla_configuration_views.xml',
         'views/escalation_rule_views.xml',
         'views/workflow_execution_log_views.xml',
+        # New Feature Views
+        'views/visual_workflow_designer_views.xml',
+        'views/conditional_logic_views.xml',
+        'views/email_templates_views.xml',
+        'views/webhook_integration_views.xml',
         # Menu
         'views/menu.xml',
     ],

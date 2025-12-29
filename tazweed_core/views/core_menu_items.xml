@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main HR Menu Extension -->
+    
+    <!-- Onboarding Menu -->
+    <menuitem id="menu_onboarding_root"
+              name="Onboarding"
+              parent="hr.menu_hr_root"
+              sequence="15"/>
+    
+    <menuitem id="menu_employee_onboarding"
+              name="Onboarding"
+              parent="menu_onboarding_root"
+              action="action_employee_onboarding"
+              sequence="10"/>
+    
+    <menuitem id="menu_onboarding_templates"
+              name="Templates"
+              parent="menu_onboarding_root"
+              action="action_onboarding_template"
+              sequence="20"
+              groups="hr.group_hr_manager"/>
+
+    <!-- Skills Menu -->
+    <menuitem id="menu_skills_root"
+              name="Skills Matrix"
+              parent="hr.menu_hr_root"
+              sequence="20"/>
+    
+    <menuitem id="menu_employee_skills"
+              name="Employee Skills"
+              parent="menu_skills_root"
+              action="action_employee_skill_line"
+              sequence="10"/>
+    
+    <menuitem id="menu_skill_gap_analysis"
+              name="Gap Analysis"
+              parent="menu_skills_root"
+              action="action_skill_gap_analysis"
+              sequence="20"/>
+    
+    <menuitem id="menu_skills_config"
+              name="Configuration"
+              parent="menu_skills_root"
+              sequence="50"
+              groups="hr.group_hr_manager"/>
+    
+    <menuitem id="menu_skill_categories"
+              name="Skill Categories"
+              parent="menu_skills_config"
+              action="action_skill_category"
+              sequence="10"/>
+    
+    <menuitem id="menu_skills"
+              name="Skills"
+              parent="menu_skills_config"
+              action="action_skill"
+              sequence="20"/>
+
+    <!-- Organization Chart Menu -->
+    <menuitem id="menu_org_chart_root"
+              name="Organization"
+              parent="hr.menu_hr_root"
+              sequence="25"/>
+    
+    <menuitem id="menu_org_chart_view"
+              name="Organization Chart"
+              parent="menu_org_chart_root"
+              action="action_organization_chart_view"
+              sequence="10"/>
+    
+    <menuitem id="menu_org_chart_config"
+              name="Chart Configuration"
+              parent="menu_org_chart_root"
+              action="action_organization_chart"
+              sequence="20"
+              groups="hr.group_hr_manager"/>
+
+    <!-- Timeline Menu -->
+    <menuitem id="menu_timeline_root"
+              name="Timeline"
+              parent="hr.menu_hr_root"
+              sequence="30"/>
+    
+    <menuitem id="menu_timeline_events"
+              name="All Events"
+              parent="menu_timeline_root"
+              action="action_timeline_event"
+              sequence="10"/>
+    
+    <menuitem id="menu_timeline_templates"
+              name="Templates"
+              parent="menu_timeline_root"
+              action="action_timeline_template"
+              sequence="20"
+              groups="hr.group_hr_manager"/>
+
+</odoo>

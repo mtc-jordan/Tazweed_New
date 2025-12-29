@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed E-Signature',
-    'version': '16.0.3.0.0',
+    'version': '16.0.4.0.0',
     'category': 'Human Resources/Signatures',
     'summary': 'Digital Document Signing with UAE Compliance',
     'description': """
@@ -44,6 +44,30 @@ A comprehensive digital signature solution for Odoo 16 with UAE compliance featu
 - Secure signature storage with SHA-256 hashing
 - IP and device tracking for audit
 - Automated expiry and reminder cron jobs
+
+NEW FEATURES (v4.0.0)
+=====================
+
+**Bulk Signing:**
+- Send same document to multiple signers
+- Process different documents in bulk
+- Template-based document generation
+- CSV import for signers
+- Progress tracking and statistics
+
+**Signing Order Workflows:**
+- Sequential and parallel signing
+- Hybrid workflows with groups
+- Conditional signing based on rules
+- Signer delegation support
+- Escalation rules
+
+**Signature Verification:**
+- Document integrity verification
+- Signature authenticity check
+- Certificate validation
+- QR code generation
+- Verification reports
     """,
     'author': 'Tazweed',
     'website': 'https://www.tazweed.com',
@@ -69,6 +93,10 @@ A comprehensive digital signature solution for Odoo 16 with UAE compliance featu
         'views/signature_template_views.xml',
         'views/signature_request_views.xml',
         'views/signature_certificate_views.xml',
+        # New Feature Views
+        'views/bulk_signing_views.xml',
+        'views/signing_order_views.xml',
+        'views/signature_verification_views.xml',
         # Wizards (before menu)
         'wizard/send_for_signature_views.xml',
         'wizard/bulk_signature_views.xml',

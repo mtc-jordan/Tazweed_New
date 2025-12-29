@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payroll Simulation Form View -->
+    <record id="view_payroll_simulation_form" model="ir.ui.view">
+        <field name="name">payroll.simulation.form</field>
+        <field name="model">payroll.simulation</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Simulation">
+                <header>
+                    <button name="action_run_simulation" string="Run Simulation" type="object" 
+                            class="btn-primary" states="draft"/>
+                    <button name="action_compare_previous" string="Compare Previous" type="object"
+                            states="completed"/>
+                    <button name="action_create_payslips" string="Create Payslips" type="object"
+                            class="btn-success" states="completed,compared"/>
+                    <button name="action_export_report" string="Export Report" type="object"
+                            states="completed,compared"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            states="draft,completed"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            states="cancelled"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,simulating,completed,compared"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_simulation_lines" type="object"
+                                class="oe_stat_button" icon="fa-users">
+                            <field name="total_employees" widget="statinfo" string="Employees"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Simulation Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Period">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Scenario">
+                            <field name="simulation_type"/>
+                            <field name="structure_id"/>
+                        </group>
+                    </group>
+                    <group string="Selection Criteria">
+                        <group>
+                            <field name="department_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Scenario Parameters" attrs="{'invisible': [('simulation_type', '=', 'standard')]}">
+                        <group attrs="{'invisible': [('simulation_type', '!=', 'salary_increase')]}">
+                            <field name="increase_percentage"/>
+                        </group>
+                        <group attrs="{'invisible': [('simulation_type', '!=', 'bonus')]}">
+                            <field name="bonus_amount"/>
+                            <field name="bonus_percentage"/>
+                        </group>
+                        <group attrs="{'invisible': [('simulation_type', '!=', 'overtime')]}">
+                            <field name="overtime_hours"/>
+                        </group>
+                        <group attrs="{'invisible': [('simulation_type', '!=', 'deduction')]}">
+                            <field name="deduction_type"/>
+                            <field name="additional_deduction"/>
+                        </group>
+                        <group attrs="{'invisible': [('simulation_type', '!=', 'custom')]}">
+                            <field name="custom_adjustments"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Summary" name="summary">
+                            <group>
+                                <group string="Totals">
+                                    <field name="total_gross" widget="monetary"/>
+                                    <field name="total_deductions" widget="monetary"/>
+                                    <field name="total_net" widget="monetary"/>
+                                    <field name="total_employer_cost" widget="monetary"/>
+                                </group>
+                                <group string="Comparison" attrs="{'invisible': [('state', 'not in', ['compared'])]}">
+                                    <field name="previous_total_net" widget="monetary"/>
+                                    <field name="net_difference" widget="monetary"/>
+                                    <field name="net_difference_percent" widget="percentage"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Employee Details" name="details">
+                            <field name="simulation_line_ids">
+                                <tree editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="department_id"/>
+                                    <field name="basic_salary" sum="Total"/>
+                                    <field name="housing_allowance" sum="Total"/>
+                                    <field name="transport_allowance" sum="Total"/>
+                                    <field name="other_allowances" sum="Total"/>
+                                    <field name="bonus" sum="Total" optional="show"/>
+                                    <field name="overtime_pay" sum="Total" optional="show"/>
+                                    <field name="gross_salary" sum="Total"/>
+                                    <field name="total_deductions" sum="Total"/>
+                                    <field name="net_salary" sum="Total"/>
+                                    <field name="employer_cost" sum="Total" optional="hide"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Add notes about this simulation..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payroll Simulation Tree View -->
+    <record id="view_payroll_simulation_tree" model="ir.ui.view">
+        <field name="name">payroll.simulation.tree</field>
+        <field name="model">payroll.simulation</field>
+        <field name="arch" type="xml">
+            <tree string="Payroll Simulations" decoration-info="state=='draft'" 
+                  decoration-success="state in ['completed','compared']"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="simulation_type"/>
+                <field name="total_employees"/>
+                <field name="total_gross" sum="Total"/>
+                <field name="total_net" sum="Total"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Payroll Simulation Search View -->
+    <record id="view_payroll_simulation_search" model="ir.ui.view">
+        <field name="name">payroll.simulation.search</field>
+        <field name="model">payroll.simulation</field>
+        <field name="arch" type="xml">
+            <search string="Search Simulations">
+                <field name="name"/>
+                <field name="simulation_type"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+                <filter name="filter_compared" string="Compared" domain="[('state', '=', 'compared')]"/>
+                <separator/>
+                <filter name="filter_this_month" string="This Month" 
+                        domain="[('date_from', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_type" string="Type" context="{'group_by': 'simulation_type'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_month" string="Month" context="{'group_by': 'date_from:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Payroll Simulation Line Tree View -->
+    <record id="view_payroll_simulation_line_tree" model="ir.ui.view">
+        <field name="name">payroll.simulation.line.tree</field>
+        <field name="model">payroll.simulation.line</field>
+        <field name="arch" type="xml">
+            <tree string="Simulation Lines" editable="bottom">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="basic_salary" sum="Total"/>
+                <field name="housing_allowance" sum="Total"/>
+                <field name="transport_allowance" sum="Total"/>
+                <field name="other_allowances" sum="Total"/>
+                <field name="bonus" sum="Total"/>
+                <field name="overtime_pay" sum="Total"/>
+                <field name="gross_salary" sum="Total"/>
+                <field name="social_insurance" sum="Total"/>
+                <field name="loan_deduction" sum="Total"/>
+                <field name="other_deductions" sum="Total"/>
+                <field name="total_deductions" sum="Total"/>
+                <field name="net_salary" sum="Total"/>
+                <field name="employer_contribution" sum="Total"/>
+                <field name="employer_cost" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Payroll Simulation Wizard Form -->
+    <record id="view_payroll_simulation_wizard_form" model="ir.ui.view">
+        <field name="name">payroll.simulation.wizard.form</field>
+        <field name="model">payroll.simulation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Quick Payroll Simulation">
+                <group>
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="simulation_type"/>
+                </group>
+                <group attrs="{'invisible': [('simulation_type', '=', 'standard')]}">
+                    <field name="increase_percentage" attrs="{'invisible': [('simulation_type', '!=', 'salary_increase')]}"/>
+                    <field name="bonus_percentage" attrs="{'invisible': [('simulation_type', '!=', 'bonus')]}"/>
+                    <field name="overtime_hours" attrs="{'invisible': [('simulation_type', '!=', 'overtime')]}"/>
+                </group>
+                <footer>
+                    <button name="action_create_simulation" string="Create &amp; Run Simulation" 
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_payroll_simulation" model="ir.actions.act_window">
+        <field name="name">Payroll Simulations</field>
+        <field name="res_model">payroll.simulation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_payroll_simulation_search"/>
+        <field name="context">{'search_default_filter_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first payroll simulation
+            </p>
+            <p>
+                Preview payroll costs before processing. Run what-if scenarios
+                for salary increases, bonuses, and overtime projections.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_payroll_simulation_line_tree" model="ir.actions.act_window">
+        <field name="name">Simulation Details</field>
+        <field name="res_model">payroll.simulation.line</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('simulation_id', '=', active_id)]</field>
+    </record>
+
+    <record id="action_payroll_simulation_wizard" model="ir.actions.act_window">
+        <field name="name">Quick Simulation</field>
+        <field name="res_model">payroll.simulation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_payroll_simulation_root"
+              name="Simulation"
+              parent="tazweed_payroll.menu_tazweed_payroll_root"
+              sequence="25"/>
+    
+    <menuitem id="menu_payroll_simulation"
+              name="Payroll Simulations"
+              parent="menu_payroll_simulation_root"
+              action="action_payroll_simulation"
+              sequence="10"/>
+    
+    <menuitem id="menu_payroll_simulation_wizard"
+              name="Quick Simulation"
+              parent="menu_payroll_simulation_root"
+              action="action_payroll_simulation_wizard"
+              sequence="20"/>
+
+</odoo>

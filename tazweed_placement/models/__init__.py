@@ -15,3 +15,9 @@ from . import invoice
 
 # Dashboard (abstract model)
 from . import dashboard
+
+# New Features - AI Matching, Video Interview, Offer Letter, Forecasting
+from . import ai_candidate_matching
+from . import video_interview
+from . import offer_letter
+from . import placement_forecasting

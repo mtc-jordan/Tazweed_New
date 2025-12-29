@@ -27,6 +27,14 @@ class EmployeeBank(models.Model):
     
     is_primary = fields.Boolean(string='Primary Account', default=False)
     is_salary_account = fields.Boolean(string='Salary Account', default=True)
+    is_wps_enabled = fields.Boolean(string='WPS Enabled', default=True)
+    is_verified = fields.Boolean(string='Verified', default=False)
+    
+    account_type = fields.Selection([
+        ('savings', 'Savings'),
+        ('current', 'Current'),
+        ('salary', 'Salary'),
+    ], string='Account Type', default='salary')
     
     currency_id = fields.Many2one(
         'res.currency',

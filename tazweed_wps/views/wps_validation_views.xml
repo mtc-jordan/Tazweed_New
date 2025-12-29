@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Validation Rule Views -->
+    <record id="view_wps_validation_rule_tree" model="ir.ui.view">
+        <field name="name">wps.validation.rule.tree</field>
+        <field name="model">wps.validation.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Validation Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="rule_type"/>
+                <field name="applies_to"/>
+                <field name="severity" widget="badge" decoration-danger="severity == 'error'"
+                       decoration-warning="severity == 'warning'" decoration-info="severity == 'info'"/>
+                <field name="active"/>
+                <field name="total_checks"/>
+                <field name="failed_checks"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wps_validation_rule_form" model="ir.ui.view">
+        <field name="name">wps.validation.rule.form</field>
+        <field name="model">wps.validation.rule</field>
+        <field name="arch" type="xml">
+            <form string="Validation Rule">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Rule Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Rule Configuration">
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="rule_type"/>
+                            <field name="applies_to"/>
+                            <field name="field_name"/>
+                        </group>
+                        <group string="Severity">
+                            <field name="severity"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Validation Parameters" name="params">
+                            <group>
+                                <group string="Format Validation" attrs="{'invisible': [('rule_type', '!=', 'format')]}">
+                                    <field name="regex_pattern"/>
+                                </group>
+                                <group string="Range Validation" attrs="{'invisible': [('rule_type', '!=', 'range')]}">
+                                    <field name="min_value"/>
+                                    <field name="max_value"/>
+                                </group>
+                                <group string="Allowed Values" attrs="{'invisible': [('rule_type', 'not in', ['format', 'business'])]}">
+                                    <field name="allowed_values"/>
+                                </group>
+                                <group string="Reference Validation" attrs="{'invisible': [('rule_type', '!=', 'reference')]}">
+                                    <field name="reference_model"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Error Handling" name="errors">
+                            <group>
+                                <field name="error_message"/>
+                                <field name="help_text"/>
+                            </group>
+                        </page>
+                        <page string="Statistics" name="stats">
+                            <group>
+                                <field name="total_checks"/>
+                                <field name="failed_checks"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Validation Result Views -->
+    <record id="view_wps_validation_result_tree" model="ir.ui.view">
+        <field name="name">wps.validation.result.tree</field>
+        <field name="model">wps.validation.result</field>
+        <field name="arch" type="xml">
+            <tree string="Validation Results">
+                <field name="name"/>
+                <field name="wps_file_id"/>
+                <field name="validation_date"/>
+                <field name="validated_by"/>
+                <field name="total_rules"/>
+                <field name="passed_rules"/>
+                <field name="failed_rules"/>
+                <field name="warnings"/>
+                <field name="state" widget="badge" decoration-success="state == 'valid'"
+                       decoration-warning="state == 'warning'" decoration-danger="state == 'invalid'"/>
+                <field name="can_submit"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wps_validation_result_form" model="ir.ui.view">
+        <field name="name">wps.validation.result.form</field>
+        <field name="model">wps.validation.result</field>
+        <field name="arch" type="xml">
+            <form string="Validation Result">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Validation Info">
+                            <field name="wps_file_id"/>
+                            <field name="validation_date"/>
+                            <field name="validated_by"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="total_rules"/>
+                            <field name="passed_rules"/>
+                            <field name="failed_rules"/>
+                            <field name="warnings"/>
+                            <field name="can_submit"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Validation Details" name="details">
+                            <field name="result_line_ids">
+                                <tree decoration-danger="not passed and severity == 'error'"
+                                      decoration-warning="not passed and severity == 'warning'"
+                                      decoration-info="not passed and severity == 'info'">
+                                    <field name="rule_code"/>
+                                    <field name="rule_name"/>
+                                    <field name="field_name"/>
+                                    <field name="record_name"/>
+                                    <field name="passed"/>
+                                    <field name="severity" widget="badge"/>
+                                    <field name="message"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_wps_validation_rule" model="ir.actions.act_window">
+        <field name="name">Validation Rules</field>
+        <field name="res_model">wps.validation.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define WPS Validation Rules
+            </p>
+            <p>Create rules to validate WPS files before submission to ensure compliance.</p>
+        </field>
+    </record>
+
+    <record id="action_wps_validation_result" model="ir.actions.act_window">
+        <field name="name">Validation Results</field>
+        <field name="res_model">wps.validation.result</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No validation results yet
+            </p>
+            <p>Validate WPS files to see results here.</p>
+        </field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_wps_validation" name="Validation" parent="tazweed_wps.menu_wps_root" sequence="40"/>
+    <menuitem id="menu_wps_validation_rules" name="Validation Rules" parent="menu_wps_validation" 
+              action="action_wps_validation_rule" sequence="10"/>
+    <menuitem id="menu_wps_validation_results" name="Validation Results" parent="menu_wps_validation" 
+              action="action_wps_validation_result" sequence="20"/>
+</odoo>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Reconciliation Views -->
+    <record id="view_wps_reconciliation_tree" model="ir.ui.view">
+        <field name="name">wps.reconciliation.tree</field>
+        <field name="model">wps.reconciliation</field>
+        <field name="arch" type="xml">
+            <tree string="WPS Reconciliations">
+                <field name="name"/>
+                <field name="reconciliation_date"/>
+                <field name="period_from"/>
+                <field name="period_to"/>
+                <field name="total_wps_amount" sum="Total WPS"/>
+                <field name="total_bank_amount" sum="Total Bank"/>
+                <field name="difference" sum="Difference"/>
+                <field name="match_percentage" widget="progressbar"/>
+                <field name="state" widget="badge" decoration-success="state == 'reconciled'"
+                       decoration-warning="state == 'partial'" decoration-danger="state == 'discrepancy'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wps_reconciliation_form" model="ir.ui.view">
+        <field name="name">wps.reconciliation.form</field>
+        <field name="model">wps.reconciliation</field>
+        <field name="arch" type="xml">
+            <form string="WPS Reconciliation">
+                <header>
+                    <button name="action_start_reconciliation" string="Start Reconciliation" type="object" 
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_complete_reconciliation" string="Complete" type="object" 
+                            class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['partial', 'in_progress'])]}"/>
+                    <button name="action_export_report" string="Export Report" type="object"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,reconciled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Period">
+                            <field name="reconciliation_date"/>
+                            <field name="period_from"/>
+                            <field name="period_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="total_wps_amount"/>
+                            <field name="total_bank_amount"/>
+                            <field name="difference"/>
+                            <field name="match_percentage" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Employee Matching">
+                            <field name="total_employees"/>
+                            <field name="matched_employees"/>
+                            <field name="unmatched_employees"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Source Documents" name="sources">
+                            <group>
+                                <group string="WPS Files">
+                                    <field name="wps_file_ids" widget="many2many_tags"/>
+                                </group>
+                                <group string="Bank Statements">
+                                    <field name="bank_statement_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Reconciliation Lines" name="lines">
+                            <field name="line_ids">
+                                <tree decoration-success="state == 'matched'" 
+                                      decoration-warning="state == 'partial'"
+                                      decoration-danger="state in ('unmatched', 'discrepancy')">
+                                    <field name="employee_id"/>
+                                    <field name="employee_number"/>
+                                    <field name="wps_amount"/>
+                                    <field name="bank_amount"/>
+                                    <field name="difference"/>
+                                    <field name="bank_reference"/>
+                                    <field name="bank_date"/>
+                                    <field name="state" widget="badge"/>
+                                    <button name="action_manual_match" string="Match" type="object" icon="fa-check"
+                                            attrs="{'invisible': [('state', '!=', 'unmatched')]}"/>
+                                    <button name="action_mark_discrepancy" string="Discrepancy" type="object" icon="fa-exclamation"
+                                            attrs="{'invisible': [('state', 'in', ['matched', 'discrepancy'])]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Reconciliation Line Form -->
+    <record id="view_wps_reconciliation_line_form" model="ir.ui.view">
+        <field name="name">wps.reconciliation.line.form</field>
+        <field name="model">wps.reconciliation.line</field>
+        <field name="arch" type="xml">
+            <form string="Reconciliation Line">
+                <sheet>
+                    <group>
+                        <group string="Employee">
+                            <field name="employee_id"/>
+                            <field name="employee_number"/>
+                            <field name="bank_account"/>
+                        </group>
+                        <group string="Amounts">
+                            <field name="wps_amount"/>
+                            <field name="bank_amount"/>
+                            <field name="difference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Bank Transaction">
+                            <field name="bank_statement_line_id"/>
+                            <field name="bank_reference"/>
+                            <field name="bank_date"/>
+                        </group>
+                        <group string="Status">
+                            <field name="state"/>
+                            <field name="difference_reason"/>
+                            <field name="manually_matched"/>
+                            <field name="matched_by"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="match_notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Reconciliation Wizard -->
+    <record id="view_wps_reconciliation_wizard_form" model="ir.ui.view">
+        <field name="name">wps.reconciliation.wizard.form</field>
+        <field name="model">wps.reconciliation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Reconciliation">
+                <group>
+                    <group string="Period">
+                        <field name="period_from"/>
+                        <field name="period_to"/>
+                    </group>
+                    <group string="Options">
+                        <field name="auto_match"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="wps_file_ids" widget="many2many_tags"/>
+                    <field name="bank_statement_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_create_reconciliation" string="Create Reconciliation" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_wps_reconciliation" model="ir.actions.act_window">
+        <field name="name">WPS Reconciliations</field>
+        <field name="res_model">wps.reconciliation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create WPS Reconciliation
+            </p>
+            <p>Reconcile WPS payments with bank statements to ensure all salaries were paid correctly.</p>
+        </field>
+    </record>
+
+    <record id="action_wps_reconciliation_wizard" model="ir.actions.act_window">
+        <field name="name">New Reconciliation</field>
+        <field name="res_model">wps.reconciliation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_wps_reconciliation" name="Reconciliation" parent="tazweed_wps.menu_wps_root" sequence="50"/>
+    <menuitem id="menu_wps_reconciliation_list" name="All Reconciliations" parent="menu_wps_reconciliation" 
+              action="action_wps_reconciliation" sequence="10"/>
+    <menuitem id="menu_wps_reconciliation_new" name="New Reconciliation" parent="menu_wps_reconciliation" 
+              action="action_wps_reconciliation_wizard" sequence="20"/>
+</odoo>

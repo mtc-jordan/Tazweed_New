@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Signature Verification Tree View -->
+    <record id="view_signature_verification_tree" model="ir.ui.view">
+        <field name="name">signature.verification.tree</field>
+        <field name="model">signature.verification</field>
+        <field name="arch" type="xml">
+            <tree string="Signature Verifications" decoration-success="verification_result=='valid'" decoration-danger="verification_result=='invalid'" decoration-warning="verification_result=='partial'">
+                <field name="name"/>
+                <field name="document_filename"/>
+                <field name="verification_type"/>
+                <field name="verification_result" widget="badge" decoration-success="verification_result=='valid'" decoration-danger="verification_result=='invalid'" decoration-warning="verification_result in ('partial','error')"/>
+                <field name="signer_name"/>
+                <field name="verification_date"/>
+                <field name="verified_by"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Signature Verification Form View -->
+    <record id="view_signature_verification_form" model="ir.ui.view">
+        <field name="name">signature.verification.form</field>
+        <field name="model">signature.verification</field>
+        <field name="arch" type="xml">
+            <form string="Signature Verification">
+                <header>
+                    <button name="action_verify" type="object" string="Verify" class="btn-primary" attrs="{'invisible': [('verification_result', '!=', 'pending')]}"/>
+                    <field name="verification_result" widget="statusbar" statusbar_visible="pending,valid,invalid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Document">
+                            <field name="document_file" filename="document_filename"/>
+                            <field name="document_filename" invisible="1"/>
+                            <field name="document_hash"/>
+                            <field name="verification_type"/>
+                        </group>
+                        <group string="Reference">
+                            <field name="signature_request_id"/>
+                            <field name="certificate_id"/>
+                        </group>
+                    </group>
+                    <group string="Verification Results">
+                        <group>
+                            <field name="document_integrity" widget="badge" decoration-success="document_integrity=='valid'" decoration-danger="document_integrity=='invalid'"/>
+                            <field name="signature_validity" widget="badge" decoration-success="signature_validity=='valid'" decoration-danger="signature_validity in ('invalid','revoked')"/>
+                            <field name="certificate_validity" widget="badge" decoration-success="certificate_validity=='valid'" decoration-danger="certificate_validity in ('expired','revoked')"/>
+                        </group>
+                        <group>
+                            <field name="verification_date"/>
+                            <field name="verified_by"/>
+                        </group>
+                    </group>
+                    <group string="Signer Information" attrs="{'invisible': [('signer_name', '=', False)]}">
+                        <group>
+                            <field name="signer_name"/>
+                            <field name="signer_email"/>
+                        </group>
+                        <group>
+                            <field name="signing_date"/>
+                            <field name="signing_ip"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Verification Details" name="details">
+                            <field name="verification_details" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+                        <page string="Verification Log" name="log">
+                            <field name="verification_log" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Signature Verification Search View -->
+    <record id="view_signature_verification_search" model="ir.ui.view">
+        <field name="name">signature.verification.search</field>
+        <field name="model">signature.verification</field>
+        <field name="arch" type="xml">
+            <search string="Signature Verifications">
+                <field name="name"/>
+                <field name="document_filename"/>
+                <field name="signer_name"/>
+                <field name="verification_result"/>
+                <filter string="Valid" name="valid" domain="[('verification_result', '=', 'valid')]"/>
+                <filter string="Invalid" name="invalid" domain="[('verification_result', '=', 'invalid')]"/>
+                <filter string="Pending" name="pending" domain="[('verification_result', '=', 'pending')]"/>
+                <separator/>
+                <filter string="My Verifications" name="my_verifications" domain="[('verified_by', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Result" name="group_result" context="{'group_by': 'verification_result'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'verification_type'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'verification_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Signature Verification Action -->
+    <record id="action_signature_verification" model="ir.actions.act_window">
+        <field name="name">Verify Signatures</field>
+        <field name="res_model">signature.verification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_verification_type': 'full'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Verify a signed document
+            </p>
+            <p>
+                Upload a document to verify its signature authenticity and integrity.
+            </p>
+        </field>
+    </record>
+
+    <!-- Signature Verification Report Tree View -->
+    <record id="view_signature_verification_report_tree" model="ir.ui.view">
+        <field name="name">signature.verification.report.tree</field>
+        <field name="model">signature.verification.report</field>
+        <field name="arch" type="xml">
+            <tree string="Verification Reports">
+                <field name="name"/>
+                <field name="verification_id"/>
+                <field name="report_type"/>
+                <field name="generated_date"/>
+                <field name="generated_by"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Signature Verification Report Form View -->
+    <record id="view_signature_verification_report_form" model="ir.ui.view">
+        <field name="name">signature.verification.report.form</field>
+        <field name="model">signature.verification.report</field>
+        <field name="arch" type="xml">
+            <form string="Verification Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="verification_id"/>
+                            <field name="report_type"/>
+                        </group>
+                        <group>
+                            <field name="generated_date"/>
+                            <field name="generated_by"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Report Content" name="content">
+                            <field name="report_content" widget="html" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Signature Verification Report Action -->
+    <record id="action_signature_verification_report" model="ir.actions.act_window">
+        <field name="name">Verification Reports</field>
+        <field name="res_model">signature.verification.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Signature QR Code Tree View -->
+    <record id="view_signature_qr_code_tree" model="ir.ui.view">
+        <field name="name">signature.qr.code.tree</field>
+        <field name="model">signature.qr.code</field>
+        <field name="arch" type="xml">
+            <tree string="QR Codes">
+                <field name="name"/>
+                <field name="signature_request_id"/>
+                <field name="verification_url" widget="url"/>
+                <field name="generated_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Signature QR Code Form View -->
+    <record id="view_signature_qr_code_form" model="ir.ui.view">
+        <field name="name">signature.qr.code.form</field>
+        <field name="model">signature.qr.code</field>
+        <field name="arch" type="xml">
+            <form string="Signature QR Code">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="signature_request_id"/>
+                        </group>
+                        <group>
+                            <field name="verification_url" widget="url"/>
+                            <field name="generated_date"/>
+                        </group>
+                    </group>
+                    <group string="QR Code">
+                        <field name="qr_code_image" widget="image" class="oe_avatar"/>
+                    </group>
+                    <group string="QR Code Data">
+                        <field name="qr_code_data" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Signature QR Code Action -->
+    <record id="action_signature_qr_code" model="ir.actions.act_window">
+        <field name="name">QR Codes</field>
+        <field name="res_model">signature.qr.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

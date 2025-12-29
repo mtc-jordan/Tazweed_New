@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Job Board Integration',
-    'version': '16.0.1.1.0',
+    'version': '16.0.2.0.0',
     'category': 'Human Resources/Recruitment',
     'summary': 'Multi-channel job posting and candidate sourcing from major job boards',
     'description': """
@@ -16,6 +16,24 @@ Key Features:
     - Post to LinkedIn, Indeed, Bayt, GulfTalent, Naukrigulf
     - One-click syndication to multiple boards
     - Automatic sync of job updates
+    
+* LinkedIn Integration (NEW)
+    - Direct LinkedIn API integration
+    - Post jobs directly to LinkedIn
+    - Import candidate applications
+    - Track engagement metrics
+    
+* Indeed/Bayt Integration (NEW)
+    - Multi-platform job posting
+    - Sponsored job support
+    - Budget management
+    - Performance analytics
+    
+* AI Resume Scoring (NEW)
+    - Automatic resume scoring
+    - Skills matching
+    - Experience analysis
+    - Recommendation engine
     
 * Candidate Sourcing
     - Import candidates from job boards
@@ -76,6 +94,10 @@ Supported Job Boards:
         'views/wizard_views.xml',
         'views/dashboard_views.xml',
         'views/menu.xml',
+        # New Feature Views
+        'views/linkedin_integration_views.xml',
+        'views/indeed_bayt_integration_views.xml',
+        'views/ai_resume_scoring_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

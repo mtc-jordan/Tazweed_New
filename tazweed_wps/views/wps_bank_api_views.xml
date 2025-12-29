@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bank API Connection Views -->
+    <record id="view_wps_bank_api_connection_tree" model="ir.ui.view">
+        <field name="name">wps.bank.api.connection.tree</field>
+        <field name="model">wps.bank.api.connection</field>
+        <field name="arch" type="xml">
+            <tree string="Bank API Connections">
+                <field name="name"/>
+                <field name="bank_id"/>
+                <field name="api_type"/>
+                <field name="auth_method"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" 
+                       decoration-warning="state == 'testing'" decoration-muted="state == 'draft'"
+                       decoration-danger="state == 'suspended'"/>
+                <field name="last_connection_test"/>
+                <field name="last_test_result" widget="badge" decoration-success="last_test_result == 'success'"
+                       decoration-danger="last_test_result == 'failed'"/>
+                <field name="total_submissions"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wps_bank_api_connection_form" model="ir.ui.view">
+        <field name="name">wps.bank.api.connection.form</field>
+        <field name="model">wps.bank.api.connection</field>
+        <field name="arch" type="xml">
+            <form string="Bank API Connection">
+                <header>
+                    <button name="action_test_connection" string="Test Connection" type="object" class="oe_highlight"/>
+                    <button name="action_activate" string="Activate" type="object" 
+                            attrs="{'invisible': [('state', '=', 'active')]}"/>
+                    <button name="action_suspend" string="Suspend" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,testing,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Connection Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Bank Information">
+                            <field name="bank_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="employer_id"/>
+                            <field name="routing_code"/>
+                        </group>
+                        <group string="API Configuration">
+                            <field name="api_type"/>
+                            <field name="api_url" attrs="{'invisible': [('api_type', 'in', ['sftp', 'direct'])]}"/>
+                            <field name="api_version" attrs="{'invisible': [('api_type', 'in', ['sftp', 'direct'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Authentication" name="auth">
+                            <group>
+                                <group string="Authentication Method">
+                                    <field name="auth_method"/>
+                                </group>
+                            </group>
+                            <group attrs="{'invisible': [('auth_method', '!=', 'api_key')]}">
+                                <group string="API Key Authentication">
+                                    <field name="api_key" password="True"/>
+                                    <field name="api_secret" password="True"/>
+                                </group>
+                            </group>
+                            <group attrs="{'invisible': [('auth_method', '!=', 'oauth2')]}">
+                                <group string="OAuth 2.0 Authentication">
+                                    <field name="client_id"/>
+                                    <field name="client_secret" password="True"/>
+                                </group>
+                            </group>
+                            <group attrs="{'invisible': [('auth_method', '!=', 'certificate')]}">
+                                <group string="Certificate Authentication">
+                                    <field name="certificate" filename="certificate_file"/>
+                                    <field name="certificate_password" password="True"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="SFTP Configuration" name="sftp" attrs="{'invisible': [('api_type', '!=', 'sftp')]}">
+                            <group>
+                                <group string="Connection">
+                                    <field name="sftp_host"/>
+                                    <field name="sftp_port"/>
+                                    <field name="sftp_username"/>
+                                    <field name="sftp_password" password="True"/>
+                                </group>
+                                <group string="Paths">
+                                    <field name="sftp_upload_path"/>
+                                    <field name="sftp_download_path"/>
+                                    <field name="sftp_key" filename="sftp_key_file"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Statistics" name="stats">
+                            <group>
+                                <group string="Connection Tests">
+                                    <field name="last_connection_test"/>
+                                    <field name="last_test_result"/>
+                                    <field name="last_test_message"/>
+                                </group>
+                                <group string="Submissions">
+                                    <field name="total_submissions"/>
+                                    <field name="successful_submissions"/>
+                                    <field name="failed_submissions"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Submissions" name="submissions">
+                            <field name="submission_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="wps_file_id"/>
+                                    <field name="submission_date"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="bank_reference"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- API Submission Views -->
+    <record id="view_wps_api_submission_tree" model="ir.ui.view">
+        <field name="name">wps.api.submission.tree</field>
+        <field name="model">wps.api.submission</field>
+        <field name="arch" type="xml">
+            <tree string="API Submissions">
+                <field name="name"/>
+                <field name="connection_id"/>
+                <field name="wps_file_id"/>
+                <field name="submission_date"/>
+                <field name="submission_type"/>
+                <field name="state" widget="badge" decoration-success="state == 'success'"
+                       decoration-warning="state in ('submitted', 'processing')"
+                       decoration-danger="state == 'failed'"/>
+                <field name="bank_reference"/>
+                <field name="retry_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wps_api_submission_form" model="ir.ui.view">
+        <field name="name">wps.api.submission.form</field>
+        <field name="model">wps.api.submission</field>
+        <field name="arch" type="xml">
+            <form string="API Submission">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+                    <button name="action_check_status" string="Check Status" type="object"
+                            attrs="{'invisible': [('state', '!=', 'processing')]}"/>
+                    <button name="action_retry" string="Retry" type="object"
+                            attrs="{'invisible': [('state', '!=', 'failed')]}"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            attrs="{'invisible': [('state', 'in', ['success', 'cancelled'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,processing,success"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Submission Details">
+                            <field name="connection_id"/>
+                            <field name="wps_file_id"/>
+                            <field name="submission_type"/>
+                            <field name="submission_date"/>
+                            <field name="submitted_by"/>
+                        </group>
+                        <group string="File Information">
+                            <field name="file_name"/>
+                            <field name="file_size"/>
+                            <field name="file_hash"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Bank Response">
+                            <field name="bank_reference"/>
+                            <field name="bank_response_code"/>
+                            <field name="bank_response_message"/>
+                        </group>
+                        <group string="Processing">
+                            <field name="processing_start"/>
+                            <field name="processing_end"/>
+                            <field name="processing_duration"/>
+                            <field name="retry_count"/>
+                            <field name="max_retries"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('last_error', '=', False)]}">
+                        <field name="last_error"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_wps_bank_api_connection" model="ir.actions.act_window">
+        <field name="name">Bank API Connections</field>
+        <field name="res_model">wps.bank.api.connection</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure Bank API Connections
+            </p>
+            <p>Set up direct connections to UAE banks for automated WPS file submission.</p>
+        </field>
+    </record>
+
+    <record id="action_wps_api_submission" model="ir.actions.act_window">
+        <field name="name">API Submissions</field>
+        <field name="res_model">wps.api.submission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No API submissions yet
+            </p>
+            <p>Submit WPS files directly to banks through configured API connections.</p>
+        </field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_wps_bank_api" name="Bank API" parent="tazweed_wps.menu_wps_root" sequence="30"/>
+    <menuitem id="menu_wps_bank_api_connections" name="API Connections" parent="menu_wps_bank_api" 
+              action="action_wps_bank_api_connection" sequence="10"/>
+    <menuitem id="menu_wps_api_submissions" name="API Submissions" parent="menu_wps_bank_api" 
+              action="action_wps_api_submission" sequence="20"/>
+</odoo>

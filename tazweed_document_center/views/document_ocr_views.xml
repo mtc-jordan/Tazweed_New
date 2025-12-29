@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- OCR Result Tree View -->
+    <record id="view_document_ocr_result_tree" model="ir.ui.view">
+        <field name="name">document.ocr.result.tree</field>
+        <field name="model">document.ocr.result</field>
+        <field name="arch" type="xml">
+            <tree string="OCR Results" decoration-success="state=='completed'" decoration-warning="state=='processing'" decoration-danger="state=='failed'">
+                <field name="name"/>
+                <field name="source_filename"/>
+                <field name="template_id"/>
+                <field name="confidence_score" widget="progressbar"/>
+                <field name="state"/>
+                <field name="processing_time"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- OCR Result Form View -->
+    <record id="view_document_ocr_result_form" model="ir.ui.view">
+        <field name="name">document.ocr.result.form</field>
+        <field name="model">document.ocr.result</field>
+        <field name="arch" type="xml">
+            <form string="OCR Result">
+                <header>
+                    <button name="action_process" string="Process OCR" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_reprocess" string="Reprocess" type="object" states="completed,failed"/>
+                    <button name="action_create_document" string="Create Document" type="object" class="btn-success" states="completed"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="OCR Result Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Source Document">
+                            <field name="source_document_id"/>
+                            <field name="source_file" filename="source_filename"/>
+                            <field name="source_filename"/>
+                        </group>
+                        <group string="OCR Settings">
+                            <field name="engine_id"/>
+                            <field name="language"/>
+                            <field name="enhance_image"/>
+                            <field name="detect_orientation"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Detection Results">
+                            <field name="template_id"/>
+                            <field name="confidence_score" widget="progressbar"/>
+                            <field name="processing_time"/>
+                        </group>
+                        <group string="Created Document">
+                            <field name="created_document_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Raw OCR Text">
+                            <field name="raw_text"/>
+                        </page>
+                        <page string="Extracted Data">
+                            <field name="extracted_data"/>
+                        </page>
+                        <page string="Field Results">
+                            <field name="field_result_ids">
+                                <tree editable="bottom">
+                                    <field name="field_name"/>
+                                    <field name="extracted_value"/>
+                                    <field name="confidence"/>
+                                    <field name="verified"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Error Log" attrs="{'invisible': [('state', '!=', 'failed')]}">
+                            <field name="error_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- OCR Template Tree View -->
+    <record id="view_ocr_template_tree" model="ir.ui.view">
+        <field name="name">document.ocr.template.tree</field>
+        <field name="model">document.ocr.template</field>
+        <field name="arch" type="xml">
+            <tree string="OCR Templates">
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="usage_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- OCR Template Form View -->
+    <record id="view_ocr_template_form" model="ir.ui.view">
+        <field name="name">document.ocr.template.form</field>
+        <field name="model">document.ocr.template</field>
+        <field name="arch" type="xml">
+            <form string="OCR Template">
+                <sheet>
+                    <group>
+                        <group string="Basic Settings">
+                            <field name="name"/>
+                            <field name="document_type"/>
+                            <field name="description"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="usage_count"/>
+                            <field name="success_rate"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Extraction Fields">
+                            <field name="field_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="field_type"/>
+                                    <field name="extraction_method"/>
+                                    <field name="required"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Sample Image">
+                            <field name="sample_image" widget="image"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- OCR Result Action -->
+    <record id="action_document_ocr_result" model="ir.actions.act_window">
+        <field name="name">OCR Results</field>
+        <field name="res_model">document.ocr.result</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No OCR results yet
+            </p>
+            <p>
+                Upload documents and process them with OCR to extract text and data automatically.
+            </p>
+        </field>
+    </record>
+
+    <!-- OCR Template Action -->
+    <record id="action_ocr_template" model="ir.actions.act_window">
+        <field name="name">OCR Templates</field>
+        <field name="res_model">document.ocr.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- OCR Engine Action -->
+    <record id="action_ocr_engine" model="ir.actions.act_window">
+        <field name="name">OCR Engines</field>
+        <field name="res_model">document.ocr.engine</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_document_ocr" name="OCR Processing" parent="tazweed_document_center.menu_document_center_root" sequence="30"/>
+    <menuitem id="menu_document_ocr_results" name="OCR Results" parent="menu_document_ocr" action="action_document_ocr_result" sequence="10"/>
+    <menuitem id="menu_ocr_templates" name="OCR Templates" parent="menu_document_ocr" action="action_ocr_template" sequence="20"/>
+    <menuitem id="menu_ocr_engines" name="OCR Engines" parent="menu_document_ocr" action="action_ocr_engine" sequence="30"/>
+</odoo>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bulk Upload Tree View -->
+    <record id="view_document_bulk_upload_tree" model="ir.ui.view">
+        <field name="name">document.bulk.upload.tree</field>
+        <field name="model">document.bulk.upload</field>
+        <field name="arch" type="xml">
+            <tree string="Bulk Uploads" decoration-success="state=='completed'" decoration-warning="state in ['processing','partial']" decoration-danger="state=='failed'">
+                <field name="name"/>
+                <field name="upload_type"/>
+                <field name="total_files"/>
+                <field name="processed_files"/>
+                <field name="failed_files"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Bulk Upload Form View -->
+    <record id="view_document_bulk_upload_form" model="ir.ui.view">
+        <field name="name">document.bulk.upload.form</field>
+        <field name="model">document.bulk.upload</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Document Upload">
+                <header>
+                    <button name="action_validate" string="Validate Files" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_process" string="Process Upload" type="object" class="btn-success" states="ready,partial"/>
+                    <button name="action_reset" string="Reset" type="object" states="completed,partial,failed"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,validating,ready,processing,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-file" attrs="{'invisible': [('document_count', '=', 0)]}">
+                            <field name="document_count" widget="statinfo" string="Documents"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Upload Configuration">
+                            <field name="upload_type"/>
+                            <field name="source_type"/>
+                            <field name="document_type_id"/>
+                            <field name="auto_detect_type"/>
+                        </group>
+                        <group string="Target">
+                            <field name="employee_id" attrs="{'invisible': [('upload_type', 'not in', ['employee', 'mixed'])]}"/>
+                            <field name="client_id" attrs="{'invisible': [('upload_type', 'not in', ['client', 'mixed'])]}"/>
+                            <field name="department_id"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('source_type', '!=', 'zip')]}">
+                        <field name="zip_file" filename="zip_filename"/>
+                        <field name="zip_filename" invisible="1"/>
+                    </group>
+                    <group>
+                        <group string="Options">
+                            <field name="skip_duplicates"/>
+                            <field name="overwrite_existing"/>
+                            <field name="send_notifications"/>
+                            <field name="run_ocr"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="total_files"/>
+                            <field name="pending_files"/>
+                            <field name="processed_files"/>
+                            <field name="failed_files"/>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Files">
+                            <field name="upload_line_ids">
+                                <tree editable="bottom" decoration-success="state=='completed'" decoration-warning="state=='validated'" decoration-danger="state=='failed'" decoration-muted="state=='skipped'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="filename"/>
+                                    <field name="file_size"/>
+                                    <field name="document_type_id"/>
+                                    <field name="employee_id"/>
+                                    <field name="expiry_date"/>
+                                    <field name="state"/>
+                                    <field name="error_message" optional="hide"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Error Log" attrs="{'invisible': [('error_log', '=', False)]}">
+                            <field name="error_log" readonly="1"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Add any notes about this upload session..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Bulk Upload Action -->
+    <record id="action_document_bulk_upload" model="ir.actions.act_window">
+        <field name="name">Bulk Uploads</field>
+        <field name="res_model">document.bulk.upload</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start a new bulk upload
+            </p>
+            <p>
+                Upload multiple documents at once using individual files or a ZIP archive.
+            </p>
+        </field>
+    </record>
+
+    <!-- Bulk Upload Wizard Action -->
+    <record id="action_document_bulk_upload_wizard" model="ir.actions.act_window">
+        <field name="name">Quick Bulk Upload</field>
+        <field name="res_model">document.bulk.upload.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_document_bulk_upload" name="Bulk Upload" parent="tazweed_document_center.menu_document_center_root" sequence="50"/>
+    <menuitem id="menu_bulk_upload_sessions" name="Upload Sessions" parent="menu_document_bulk_upload" action="action_document_bulk_upload" sequence="10"/>
+    <menuitem id="menu_quick_bulk_upload" name="Quick Upload" parent="menu_document_bulk_upload" action="action_document_bulk_upload_wizard" sequence="20"/>
+</odoo>

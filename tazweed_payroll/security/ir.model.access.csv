@@ -33,3 +33,9 @@ access_gratuity_officer,tazweed.employee.gratuity.officer,model_tazweed_employee
 access_gratuity_manager,tazweed.employee.gratuity.manager,model_tazweed_employee_gratuity,group_payroll_manager,1,1,1,1
 access_payslip_gen_wizard,tazweed.payslip.generation.wizard,model_tazweed_payslip_generation_wizard,group_payroll_officer,1,1,1,1
 access_wps_gen_wizard,tazweed.wps.generation.wizard,model_tazweed_wps_generation_wizard,group_payroll_officer,1,1,1,1
+access_payroll_simulation_user,payroll.simulation.user,model_payroll_simulation,group_payroll_user,1,0,0,0
+access_payroll_simulation_officer,payroll.simulation.officer,model_payroll_simulation,group_payroll_officer,1,1,1,0
+access_payroll_simulation_manager,payroll.simulation.manager,model_payroll_simulation,group_payroll_manager,1,1,1,1
+access_payroll_simulation_line_user,payroll.simulation.line.user,model_payroll_simulation_line,group_payroll_user,1,0,0,0
+access_payroll_simulation_line_officer,payroll.simulation.line.officer,model_payroll_simulation_line,group_payroll_officer,1,1,1,1
+access_payroll_simulation_wizard_officer,payroll.simulation.wizard.officer,model_payroll_simulation_wizard,group_payroll_officer,1,1,1,1

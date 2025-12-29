@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Core HR',
-    'version': '16.0.2.1.0',
+    'version': '16.0.3.0.0',
     'category': 'Human Resources',
     'summary': 'Core HR Management for UAE Manpower Companies',
     'description': """
@@ -18,6 +18,13 @@ Features:
 * Sponsor/Company management with visa quota
 * Contract extensions with allowances
 * Beautiful, responsive UI/UX design
+
+New Features (v3.0):
+--------------------
+* Employee Self-Onboarding - Digital onboarding workflow with document upload
+* Skills Matrix - Track employee skills, certifications, and competencies
+* Organization Chart - Interactive visual org chart with drag-drop
+* Employee Timeline - Visual history of employee events and milestones
     """,
     'author': 'Tazweed',
     'website': 'https://www.tazweed.com',
@@ -42,6 +49,12 @@ Features:
         'views/employee_category_views.xml',
         'views/document_type_views.xml',
         'views/dashboard_views.xml',
+        # New feature views
+        'views/employee_onboarding_views.xml',
+        'views/employee_skills_views.xml',
+        'views/organization_chart_views.xml',
+        'views/employee_timeline_views.xml',
+        'views/core_menu_items.xml',
         'views/menu.xml',
         'wizard/document_wizard_views.xml',
     ],

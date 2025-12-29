@@ -55,6 +55,27 @@
                   sequence="3"/>
         
         <!-- ============================================================ -->
+        <!-- VISUAL WORKFLOW DESIGNER                                      -->
+        <!-- ============================================================ -->
+        
+        <menuitem id="menu_visual_designer"
+                  name="Visual Designer"
+                  parent="menu_workflow_root"
+                  sequence="15"/>
+        
+        <menuitem id="menu_workflow_designers"
+                  name="Workflow Designers"
+                  parent="menu_visual_designer"
+                  action="action_visual_workflow_designer"
+                  sequence="1"/>
+        
+        <menuitem id="menu_workflow_nodes"
+                  name="Workflow Nodes"
+                  parent="menu_visual_designer"
+                  action="action_visual_workflow_node"
+                  sequence="2"/>
+        
+        <!-- ============================================================ -->
         <!-- AUTOMATION                                                    -->
         <!-- ============================================================ -->
         
@@ -74,6 +95,18 @@
                   parent="menu_automation"
                   action="action_scheduled_task"
                   sequence="2"/>
+        
+        <menuitem id="menu_condition_groups"
+                  name="Condition Groups"
+                  parent="menu_automation"
+                  action="action_workflow_condition_group"
+                  sequence="3"/>
+        
+        <menuitem id="menu_decision_tables"
+                  name="Decision Tables"
+                  parent="menu_automation"
+                  action="action_workflow_decision_table"
+                  sequence="4"/>
         
         <!-- ============================================================ -->
         <!-- APPROVAL MANAGEMENT                                           -->
@@ -95,6 +128,54 @@
                   parent="menu_approval_management"
                   action="action_approval_request"
                   sequence="2"/>
+        
+        <!-- ============================================================ -->
+        <!-- EMAIL TEMPLATES                                               -->
+        <!-- ============================================================ -->
+        
+        <menuitem id="menu_email_templates"
+                  name="Email Templates"
+                  parent="menu_workflow_root"
+                  sequence="27"/>
+        
+        <menuitem id="menu_workflow_email_templates"
+                  name="Email Templates"
+                  parent="menu_email_templates"
+                  action="action_workflow_email_template"
+                  sequence="1"/>
+        
+        <menuitem id="menu_email_logs"
+                  name="Email Logs"
+                  parent="menu_email_templates"
+                  action="action_workflow_email_log"
+                  sequence="2"/>
+        
+        <!-- ============================================================ -->
+        <!-- WEBHOOKS                                                      -->
+        <!-- ============================================================ -->
+        
+        <menuitem id="menu_webhooks"
+                  name="Webhooks"
+                  parent="menu_workflow_root"
+                  sequence="28"/>
+        
+        <menuitem id="menu_outgoing_webhooks"
+                  name="Outgoing Webhooks"
+                  parent="menu_webhooks"
+                  action="action_workflow_webhook"
+                  sequence="1"/>
+        
+        <menuitem id="menu_incoming_webhooks"
+                  name="Incoming Webhooks"
+                  parent="menu_webhooks"
+                  action="action_workflow_incoming_webhook"
+                  sequence="2"/>
+        
+        <menuitem id="menu_webhook_logs"
+                  name="Webhook Logs"
+                  parent="menu_webhooks"
+                  action="action_workflow_webhook_log"
+                  sequence="3"/>
         
         <!-- ============================================================ -->
         <!-- REPORTS                                                       -->

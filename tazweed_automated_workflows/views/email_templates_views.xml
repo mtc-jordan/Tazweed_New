@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Workflow Email Template Tree View -->
+    <record id="view_workflow_email_template_tree" model="ir.ui.view">
+        <field name="name">workflow.email.template.tree</field>
+        <field name="model">workflow.email.template</field>
+        <field name="arch" type="xml">
+            <tree string="Email Templates" decoration-info="state=='draft'" decoration-success="state=='active'" decoration-muted="state=='archived'">
+                <field name="name"/>
+                <field name="template_type"/>
+                <field name="subject"/>
+                <field name="model_id"/>
+                <field name="sent_count"/>
+                <field name="open_rate" widget="progressbar"/>
+                <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='active'" decoration-warning="state=='paused'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Workflow Email Template Form View -->
+    <record id="view_workflow_email_template_form" model="ir.ui.view">
+        <field name="name">workflow.email.template.form</field>
+        <field name="model">workflow.email.template</field>
+        <field name="arch" type="xml">
+            <form string="Email Template">
+                <header>
+                    <button name="action_activate" string="Activate" type="object" class="btn-primary" states="draft,paused"/>
+                    <button name="action_pause" string="Pause" type="object" states="active"/>
+                    <button name="action_preview" string="Preview" type="object" class="btn-secondary"/>
+                    <button name="action_send_test" string="Send Test" type="object" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-envelope-o" type="object" name="action_view_logs">
+                            <field name="sent_count" widget="statinfo" string="Sent"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-eye" type="object" name="action_view_opens">
+                            <field name="open_count" widget="statinfo" string="Opens"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-mouse-pointer" type="object" name="action_view_clicks">
+                            <field name="click_count" widget="statinfo" string="Clicks"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Template Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="template_type"/>
+                            <field name="model_id"/>
+                            <field name="use_dynamic_content"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="track_opens"/>
+                            <field name="track_clicks"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content" name="content">
+                            <group>
+                                <field name="subject" placeholder="Email Subject"/>
+                            </group>
+                            <separator string="Email Body (HTML)"/>
+                            <field name="body_html" widget="html"/>
+                            <separator string="Plain Text Version"/>
+                            <field name="body_text" placeholder="Plain text version of the email..."/>
+                        </page>
+                        <page string="Recipients" name="recipients">
+                            <group>
+                                <group string="Sender">
+                                    <field name="email_from"/>
+                                    <field name="reply_to"/>
+                                </group>
+                                <group string="Recipients">
+                                    <field name="recipient_type"/>
+                                    <field name="recipient_email" attrs="{'invisible': [('recipient_type', '!=', 'static')]}"/>
+                                    <field name="recipient_field" attrs="{'invisible': [('recipient_type', '!=', 'field')]}"/>
+                                    <field name="recipient_expression" attrs="{'invisible': [('recipient_type', '!=', 'expression')]}"/>
+                                    <field name="recipient_group_id" attrs="{'invisible': [('recipient_type', '!=', 'group')]}"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="CC/BCC">
+                                    <field name="cc_emails"/>
+                                    <field name="bcc_emails"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <group>
+                                <group>
+                                    <field name="attachment_ids" widget="many2many_binary"/>
+                                    <field name="dynamic_attachment_field"/>
+                                </group>
+                                <group>
+                                    <field name="include_report"/>
+                                    <field name="report_template_id" attrs="{'invisible': [('include_report', '=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Scheduling" name="scheduling">
+                            <group>
+                                <group>
+                                    <field name="send_immediately"/>
+                                    <field name="delay_type" attrs="{'invisible': [('send_immediately', '=', True)]}"/>
+                                    <field name="delay_value" attrs="{'invisible': [('send_immediately', '=', True)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Conditions" name="conditions">
+                            <field name="condition_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="field_name"/>
+                                    <field name="operator"/>
+                                    <field name="value"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Personalization" name="personalization">
+                            <field name="personalization_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="placeholder"/>
+                                    <field name="content_type"/>
+                                    <field name="default_content"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="A/B Testing" name="ab_testing">
+                            <group>
+                                <field name="enable_ab_testing"/>
+                            </group>
+                            <field name="variant_ids" attrs="{'invisible': [('enable_ab_testing', '=', False)]}">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="subject"/>
+                                    <field name="weight"/>
+                                    <field name="sent_count"/>
+                                    <field name="open_count"/>
+                                    <field name="click_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Dynamic Fields" name="dynamic_fields">
+                            <field name="dynamic_fields" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Template description..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Workflow Email Template Kanban View -->
+    <record id="view_workflow_email_template_kanban" model="ir.ui.view">
+        <field name="name">workflow.email.template.kanban</field>
+        <field name="model">workflow.email.template</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="template_type">
+                <field name="name"/>
+                <field name="template_type"/>
+                <field name="state"/>
+                <field name="sent_count"/>
+                <field name="open_rate"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'info', 'active': 'success', 'paused': 'warning', 'archived': 'secondary'}}"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><i class="fa fa-tag"/> <field name="template_type"/></div>
+                                    <div><i class="fa fa-envelope"/> <field name="sent_count"/> sent</div>
+                                    <div><i class="fa fa-eye"/> <field name="open_rate"/>% open rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Workflow Email Template Search View -->
+    <record id="view_workflow_email_template_search" model="ir.ui.view">
+        <field name="name">workflow.email.template.search</field>
+        <field name="model">workflow.email.template</field>
+        <field name="arch" type="xml">
+            <search string="Search Email Templates">
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="template_type"/>
+                <field name="model_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Active" name="active_state" domain="[('state', '=', 'active')]"/>
+                <filter string="Paused" name="paused" domain="[('state', '=', 'paused')]"/>
+                <separator/>
+                <filter string="Notifications" name="notification" domain="[('template_type', '=', 'notification')]"/>
+                <filter string="Approvals" name="approval" domain="[('template_type', '=', 'approval_request')]"/>
+                <filter string="Reminders" name="reminder" domain="[('template_type', '=', 'reminder')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'template_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Model" name="group_model" context="{'group_by': 'model_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Email Log Tree View -->
+    <record id="view_workflow_email_log_tree" model="ir.ui.view">
+        <field name="name">workflow.email.log.tree</field>
+        <field name="model">workflow.email.log</field>
+        <field name="arch" type="xml">
+            <tree string="Email Logs" decoration-success="state=='opened'" decoration-info="state=='sent'" decoration-danger="state in ('bounced','failed')">
+                <field name="sent_date"/>
+                <field name="template_id"/>
+                <field name="email_to"/>
+                <field name="subject"/>
+                <field name="state" widget="badge"/>
+                <field name="opened_date"/>
+                <field name="clicked_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_workflow_email_template" model="ir.actions.act_window">
+        <field name="name">Email Templates</field>
+        <field name="res_model">workflow.email.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_workflow_email_template_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first email template
+            </p>
+            <p>
+                Design beautiful, dynamic email templates for your workflows with personalization and A/B testing.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_workflow_email_log" model="ir.actions.act_window">
+        <field name="name">Email Logs</field>
+        <field name="res_model">workflow.email.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

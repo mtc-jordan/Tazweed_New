@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_resume_scorer_form" model="ir.ui.view">
+        <field name="name">ai.resume.scorer.form</field>
+        <field name="model">ai.resume.scorer</field>
+        <field name="arch" type="xml">
+            <form string="AI Resume Scorer">
+                <header>
+                    <button name="action_configure" string="Configure" type="object" class="btn-secondary" states="draft"/>
+                    <button name="action_add_candidates" string="Add Candidates" type="object" states="draft,configured"/>
+                    <button name="action_start_scoring" string="Start Scoring" type="object" class="btn-primary" states="configured"/>
+                    <button name="action_view_results" string="View Results" type="object" states="completed"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,configured,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Scoring Session Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="job_posting_id"/>
+                            <field name="scoring_model"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="total_resumes" readonly="1"/>
+                            <field name="scored_resumes" readonly="1"/>
+                            <field name="avg_score" readonly="1"/>
+                            <field name="top_candidates" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Scoring Weights">
+                            <group>
+                                <group>
+                                    <field name="skills_weight"/>
+                                    <field name="experience_weight"/>
+                                    <field name="education_weight"/>
+                                </group>
+                                <group>
+                                    <field name="certifications_weight"/>
+                                    <field name="keywords_weight"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Requirements">
+                            <group>
+                                <group>
+                                    <field name="required_skills" placeholder="Python, JavaScript, SQL"/>
+                                    <field name="preferred_skills" placeholder="AWS, Docker, Kubernetes"/>
+                                    <field name="required_certifications"/>
+                                </group>
+                                <group>
+                                    <field name="min_experience"/>
+                                    <field name="max_experience"/>
+                                    <field name="required_education"/>
+                                    <field name="keywords"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Results">
+                            <field name="score_ids">
+                                <tree>
+                                    <field name="rank"/>
+                                    <field name="candidate_name"/>
+                                    <field name="total_score" widget="progressbar"/>
+                                    <field name="skills_score"/>
+                                    <field name="experience_score"/>
+                                    <field name="recommendation" widget="badge"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_resume_scorer_tree" model="ir.ui.view">
+        <field name="name">ai.resume.scorer.tree</field>
+        <field name="model">ai.resume.scorer</field>
+        <field name="arch" type="xml">
+            <tree string="AI Resume Scorers">
+                <field name="name"/>
+                <field name="job_posting_id"/>
+                <field name="scoring_model"/>
+                <field name="total_resumes"/>
+                <field name="avg_score"/>
+                <field name="top_candidates"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ai_resume_score_form" model="ir.ui.view">
+        <field name="name">ai.resume.score.form</field>
+        <field name="model">ai.resume.score</field>
+        <field name="arch" type="xml">
+            <form string="Resume Score">
+                <sheet>
+                    <group>
+                        <group string="Candidate Info">
+                            <field name="candidate_name"/>
+                            <field name="email"/>
+                            <field name="candidate_id"/>
+                            <field name="resume" filename="resume_filename"/>
+                            <field name="resume_filename" invisible="1"/>
+                        </group>
+                        <group string="Overall Score">
+                            <field name="total_score" widget="progressbar"/>
+                            <field name="recommendation" widget="badge"/>
+                            <field name="rank"/>
+                            <field name="state" widget="badge"/>
+                        </group>
+                    </group>
+                    <group string="Individual Scores">
+                        <group>
+                            <field name="skills_score" widget="progressbar"/>
+                            <field name="experience_score" widget="progressbar"/>
+                            <field name="education_score" widget="progressbar"/>
+                        </group>
+                        <group>
+                            <field name="certifications_score" widget="progressbar"/>
+                            <field name="keywords_score" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Analysis Details">
+                            <group>
+                                <group>
+                                    <field name="matched_skills"/>
+                                    <field name="missing_skills"/>
+                                    <field name="matched_certifications"/>
+                                </group>
+                                <group>
+                                    <field name="experience_years"/>
+                                    <field name="education_level"/>
+                                    <field name="matched_keywords"/>
+                                </group>
+                            </group>
+                            <field name="recommendation_reason"/>
+                        </page>
+                        <page string="Resume Text">
+                            <field name="resume_text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_resume_score_tree" model="ir.ui.view">
+        <field name="name">ai.resume.score.tree</field>
+        <field name="model">ai.resume.score</field>
+        <field name="arch" type="xml">
+            <tree string="Resume Scores">
+                <field name="rank"/>
+                <field name="candidate_name"/>
+                <field name="total_score" widget="progressbar"/>
+                <field name="skills_score"/>
+                <field name="experience_score"/>
+                <field name="education_score"/>
+                <field name="recommendation" widget="badge"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_ai_resume_scorer" model="ir.actions.act_window">
+        <field name="name">AI Resume Scoring</field>
+        <field name="res_model">ai.resume.scorer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_ai_resume_score" model="ir.actions.act_window">
+        <field name="name">Resume Scores</field>
+        <field name="res_model">ai.resume.score</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_ai_scoring_root" name="AI Scoring" parent="tazweed_job_board.menu_job_board_root" sequence="70"/>
+    <menuitem id="menu_ai_resume_scorer" name="Scoring Sessions" parent="menu_ai_scoring_root" action="action_ai_resume_scorer" sequence="10"/>
+    <menuitem id="menu_ai_resume_scores" name="All Scores" parent="menu_ai_scoring_root" action="action_ai_resume_score" sequence="20"/>
+</odoo>

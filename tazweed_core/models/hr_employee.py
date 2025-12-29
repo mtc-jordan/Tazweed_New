@@ -71,8 +71,21 @@ class HrEmployee(models.Model):
         string='Categories',
     )
     
+    # ==================== RELATED RECORDS ====================
+    bank_account_ids = fields.One2many(
+        'tazweed.employee.bank',
+        'employee_id',
+        string='Bank Accounts'
+    )
+    document_ids = fields.One2many(
+        'tazweed.employee.document',
+        'employee_id',
+        string='Documents'
+    )
+    
     # ==================== COMPUTED COUNTS ====================
     document_count = fields.Integer(string='Documents', compute='_compute_document_count')
+    expiring_document_count = fields.Integer(string='Expiring Documents', compute='_compute_document_count')
     bank_account_count = fields.Integer(string='Bank Accounts', compute='_compute_bank_account_count')
     
     # ==================== STATUS FLAGS ====================
@@ -99,6 +112,10 @@ class HrEmployee(models.Model):
         for employee in self:
             employee.document_count = self.env['tazweed.employee.document'].search_count([
                 ('employee_id', '=', employee.id)
+            ])
+            employee.expiring_document_count = self.env['tazweed.employee.document'].search_count([
+                ('employee_id', '=', employee.id),
+                ('state', '=', 'expiring')
             ])
 
     def _compute_bank_account_count(self):

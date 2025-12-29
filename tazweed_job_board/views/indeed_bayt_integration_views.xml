@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_job_board_platform_form" model="ir.ui.view">
+        <field name="name">job.board.platform.form</field>
+        <field name="model">job.board.platform</field>
+        <field name="arch" type="xml">
+            <form string="Job Board Platform">
+                <header>
+                    <button name="action_test_connection" string="Test Connection" type="object" class="btn-primary" states="draft,testing,error"/>
+                    <button name="action_sync_now" string="Sync Now" type="object" states="active"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Platform Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Platform Info">
+                            <field name="code"/>
+                            <field name="platform_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="API Configuration">
+                            <field name="api_url"/>
+                            <field name="api_key" password="True"/>
+                            <field name="employer_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Settings">
+                            <field name="auto_post"/>
+                            <field name="auto_sync"/>
+                            <field name="sync_interval"/>
+                            <field name="default_sponsored"/>
+                            <field name="default_budget"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="total_postings" readonly="1"/>
+                            <field name="active_postings" readonly="1"/>
+                            <field name="total_applications" readonly="1"/>
+                            <field name="last_sync" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_job_board_platform_tree" model="ir.ui.view">
+        <field name="name">job.board.platform.tree</field>
+        <field name="model">job.board.platform</field>
+        <field name="arch" type="xml">
+            <tree string="Job Board Platforms">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="platform_type"/>
+                <field name="total_postings"/>
+                <field name="active_postings"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_platform_job_posting_form" model="ir.ui.view">
+        <field name="name">platform.job.posting.form</field>
+        <field name="model">platform.job.posting</field>
+        <field name="arch" type="xml">
+            <form string="Platform Job Posting">
+                <header>
+                    <button name="action_post" string="Post Job" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_pause" string="Pause" type="object" states="active"/>
+                    <button name="action_resume" string="Resume" type="object" states="paused"/>
+                    <button name="action_close" string="Close" type="object" states="active,paused"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Job Title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="platform_id"/>
+                            <field name="job_posting_id"/>
+                            <field name="location_city"/>
+                            <field name="location_country"/>
+                            <field name="employment_type"/>
+                        </group>
+                        <group>
+                            <field name="external_job_id" readonly="1"/>
+                            <field name="external_url" widget="url" readonly="1"/>
+                            <field name="is_sponsored"/>
+                            <field name="daily_budget" attrs="{'invisible': [('is_sponsored', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group string="Performance">
+                        <group>
+                            <field name="impressions"/>
+                            <field name="clicks"/>
+                            <field name="application_count"/>
+                        </group>
+                        <group>
+                            <field name="click_rate"/>
+                            <field name="apply_rate"/>
+                            <field name="total_spend"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Salary">
+                            <group>
+                                <field name="salary_min"/>
+                                <field name="salary_max"/>
+                                <field name="salary_currency"/>
+                                <field name="salary_period"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_platform_job_posting_tree" model="ir.ui.view">
+        <field name="name">platform.job.posting.tree</field>
+        <field name="model">platform.job.posting</field>
+        <field name="arch" type="xml">
+            <tree string="Platform Job Postings">
+                <field name="name"/>
+                <field name="platform_id"/>
+                <field name="impressions"/>
+                <field name="clicks"/>
+                <field name="application_count"/>
+                <field name="total_spend" sum="Total Spend"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_platform_application_tree" model="ir.ui.view">
+        <field name="name">platform.application.tree</field>
+        <field name="model">platform.application</field>
+        <field name="arch" type="xml">
+            <tree string="Platform Applications">
+                <field name="name"/>
+                <field name="platform_id"/>
+                <field name="posting_id"/>
+                <field name="email"/>
+                <field name="ai_score" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_job_board_platform" model="ir.actions.act_window">
+        <field name="name">Job Board Platforms</field>
+        <field name="res_model">job.board.platform</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_platform_job_posting" model="ir.actions.act_window">
+        <field name="name">Platform Job Postings</field>
+        <field name="res_model">platform.job.posting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_platform_application" model="ir.actions.act_window">
+        <field name="name">Platform Applications</field>
+        <field name="res_model">platform.application</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_platforms_root" name="Platforms" parent="tazweed_job_board.menu_job_board_root" sequence="60"/>
+    <menuitem id="menu_job_board_platforms" name="Configure Platforms" parent="menu_platforms_root" action="action_job_board_platform" sequence="10"/>
+    <menuitem id="menu_platform_postings" name="Platform Postings" parent="menu_platforms_root" action="action_platform_job_posting" sequence="20"/>
+    <menuitem id="menu_platform_applications" name="Applications" parent="menu_platforms_root" action="action_platform_application" sequence="30"/>
+</odoo>

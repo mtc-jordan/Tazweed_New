@@ -66,6 +66,7 @@ Website: https://tazweedjobs.ae
         'views/wps_file_views.xml',
         'views/dashboard_views.xml',
         'views/menu.xml',
+        'views/payroll_simulation_views.xml',
         # Wizards
         'wizard/wizard_views.xml',
     ],

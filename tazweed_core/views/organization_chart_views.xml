@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Organization Chart Views -->
+    <record id="view_organization_chart_tree" model="ir.ui.view">
+        <field name="name">organization.chart.tree</field>
+        <field name="model">organization.chart</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="chart_type"/>
+                <field name="root_department_id"/>
+                <field name="employee_count"/>
+                <field name="department_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_organization_chart_form" model="ir.ui.view">
+        <field name="name">organization.chart.form</field>
+        <field name="model">organization.chart</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_chart" type="object"
+                                class="oe_stat_button" icon="fa-sitemap">
+                            <span>View Chart</span>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Chart Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="chart_type"/>
+                            <field name="root_employee_id"/>
+                            <field name="root_department_id"/>
+                            <field name="sequence"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Display Options">
+                            <field name="show_photos"/>
+                            <field name="show_job_title"/>
+                            <field name="show_department"/>
+                            <field name="show_email"/>
+                            <field name="show_phone"/>
+                            <field name="show_vacant_positions"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Styling">
+                            <field name="node_color" widget="color"/>
+                            <field name="connector_color" widget="color"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="employee_count"/>
+                            <field name="department_count"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Organization Chart Client Action -->
+    <record id="action_organization_chart_view" model="ir.actions.client">
+        <field name="name">Organization Chart</field>
+        <field name="tag">organization_chart</field>
+    </record>
+
+    <record id="action_organization_chart" model="ir.actions.act_window">
+        <field name="name">Organization Charts</field>
+        <field name="res_model">organization.chart</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create an organization chart
+            </p>
+            <p>
+                Define interactive organization charts with customizable display options.
+            </p>
+        </field>
+    </record>
+
+    <!-- Extend Employee Form for Org Chart -->
+    <record id="view_employee_form_org_chart" model="ir.ui.view">
+        <field name="name">hr.employee.form.org.chart</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_org_chart" type="object"
+                        class="oe_stat_button" icon="fa-sitemap">
+                    <span>Org Chart</span>
+                </button>
+                <button name="action_view_direct_reports" type="object"
+                        class="oe_stat_button" icon="fa-users"
+                        attrs="{'invisible': [('direct_reports_count', '=', 0)]}">
+                    <field name="direct_reports_count" widget="statinfo" string="Direct Reports"/>
+                </button>
+            </div>
+            <field name="parent_id" position="after">
+                <field name="reporting_line_ids" widget="many2many_tags"
+                       string="Additional Reporting Lines"/>
+                <field name="total_reports_count" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Extend Department Form for Org Chart -->
+    <record id="view_department_form_org_chart" model="ir.ui.view">
+        <field name="name">hr.department.form.org.chart</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="full_path" readonly="1"/>
+            </field>
+            <field name="parent_id" position="after">
+                <field name="level" readonly="1"/>
+                <field name="org_chart_color" widget="color"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

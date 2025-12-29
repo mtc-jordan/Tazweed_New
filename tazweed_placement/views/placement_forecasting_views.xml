@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Placement Forecast Tree View -->
+    <record id="view_placement_forecast_tree" model="ir.ui.view">
+        <field name="name">placement.forecast.tree</field>
+        <field name="model">placement.forecast</field>
+        <field name="arch" type="xml">
+            <tree string="Placement Forecasts" decoration-success="state=='approved'" decoration-info="state=='calculated'">
+                <field name="name"/>
+                <field name="forecast_date"/>
+                <field name="forecast_period"/>
+                <field name="client_id"/>
+                <field name="predicted_placements"/>
+                <field name="predicted_terminations"/>
+                <field name="predicted_net_change"/>
+                <field name="confidence_level" widget="progressbar"/>
+                <field name="placement_trend" widget="badge"/>
+                <field name="risk_level" widget="badge" decoration-success="risk_level=='low'" decoration-warning="risk_level=='medium'" decoration-danger="risk_level=='high'"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Placement Forecast Form View -->
+    <record id="view_placement_forecast_form" model="ir.ui.view">
+        <field name="name">placement.forecast.form</field>
+        <field name="model">placement.forecast</field>
+        <field name="arch" type="xml">
+            <form string="Placement Forecast">
+                <header>
+                    <button name="action_calculate_forecast" string="Calculate Forecast" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" states="calculated"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" states="calculated,approved"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,calculated,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Forecast Parameters">
+                            <field name="forecast_date"/>
+                            <field name="forecast_period"/>
+                            <field name="historical_months"/>
+                        </group>
+                        <group string="Scope">
+                            <field name="client_id"/>
+                            <field name="department_id"/>
+                            <field name="job_category"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Forecast Results" name="results" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <group>
+                                <group string="Predictions">
+                                    <field name="predicted_placements"/>
+                                    <field name="predicted_terminations"/>
+                                    <field name="predicted_net_change"/>
+                                    <field name="confidence_level" widget="progressbar"/>
+                                </group>
+                                <group string="Trend Analysis">
+                                    <field name="placement_trend" widget="badge"/>
+                                    <field name="trend_percentage"/>
+                                    <field name="seasonality_factor"/>
+                                    <field name="peak_months"/>
+                                </group>
+                            </group>
+                            <group string="Risk Assessment">
+                                <field name="risk_level" widget="badge"/>
+                                <field name="risk_factors"/>
+                            </group>
+                        </page>
+                        <page string="Monthly Breakdown" name="monthly" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="monthly_forecast_ids">
+                                <tree editable="bottom">
+                                    <field name="month_name"/>
+                                    <field name="predicted_placements"/>
+                                    <field name="predicted_terminations"/>
+                                    <field name="predicted_net"/>
+                                    <field name="actual_placements"/>
+                                    <field name="actual_terminations"/>
+                                    <field name="accuracy" widget="progressbar"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Recommendations" name="recommendations" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="recommendations" readonly="1"/>
+                        </page>
+                        <page string="Analysis Data" name="analysis" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="analysis_data" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+                        <page string="Audit" name="audit">
+                            <group>
+                                <group>
+                                    <field name="calculated_date"/>
+                                    <field name="calculated_by"/>
+                                </group>
+                                <group>
+                                    <field name="approved_date"/>
+                                    <field name="approved_by"/>
+                                </group>
+                            </group>
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Placement Forecast Kanban View -->
+    <record id="view_placement_forecast_kanban" model="ir.ui.view">
+        <field name="name">placement.forecast.kanban</field>
+        <field name="model">placement.forecast</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="forecast_date"/>
+                <field name="predicted_placements"/>
+                <field name="predicted_net_change"/>
+                <field name="confidence_level"/>
+                <field name="placement_trend"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_title">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="o_kanban_record_subtitle">
+                                    <field name="forecast_date"/>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-6">
+                                        <span class="text-muted">Placements:</span>
+                                        <strong><field name="predicted_placements"/></strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="text-muted">Net Change:</span>
+                                        <strong><field name="predicted_net_change"/></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="placement_trend" widget="badge"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Placement Forecast Graph View -->
+    <record id="view_placement_forecast_graph" model="ir.ui.view">
+        <field name="name">placement.forecast.graph</field>
+        <field name="model">placement.forecast</field>
+        <field name="arch" type="xml">
+            <graph string="Placement Forecasts" type="bar">
+                <field name="forecast_date" type="col"/>
+                <field name="predicted_placements" type="measure"/>
+                <field name="predicted_terminations" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_placement_forecast" model="ir.actions.act_window">
+        <field name="name">Placement Forecasts</field>
+        <field name="res_model">placement.forecast</field>
+        <field name="view_mode">tree,kanban,form,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first placement forecast
+            </p>
+            <p>
+                Use AI-powered forecasting to predict placement needs based on historical trends.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_placement_forecasting" name="Forecasting" parent="tazweed_placement.menu_tazweed_placement_root" sequence="40"/>
+    <menuitem id="menu_placement_forecast_list" name="Forecasts" parent="menu_placement_forecasting" action="action_placement_forecast" sequence="10"/>
+</odoo>

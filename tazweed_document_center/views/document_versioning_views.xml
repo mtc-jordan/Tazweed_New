@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Version Tree View -->
+    <record id="view_document_version_tree" model="ir.ui.view">
+        <field name="name">document.version.tree</field>
+        <field name="model">document.version</field>
+        <field name="arch" type="xml">
+            <tree string="Document Versions" decoration-success="is_current==True" decoration-muted="state=='archived'">
+                <field name="name"/>
+                <field name="document_id"/>
+                <field name="version_number"/>
+                <field name="version_label"/>
+                <field name="is_current"/>
+                <field name="is_major"/>
+                <field name="file_size"/>
+                <field name="change_type"/>
+                <field name="created_by"/>
+                <field name="create_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Version Form View -->
+    <record id="view_document_version_form" model="ir.ui.view">
+        <field name="name">document.version.form</field>
+        <field name="model">document.version</field>
+        <field name="arch" type="xml">
+            <form string="Document Version">
+                <header>
+                    <button name="action_set_current" string="Set as Current" type="object" class="btn-primary" attrs="{'invisible': [('is_current', '=', True)]}"/>
+                    <button name="action_download" string="Download" type="object" class="btn-secondary"/>
+                    <button name="action_compare_with_previous" string="Compare with Previous" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,archived"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_download" type="object" class="oe_stat_button" icon="fa-download">
+                            <span>Download</span>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Current" bg_color="bg-success" attrs="{'invisible': [('is_current', '!=', True)]}"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Version Info">
+                            <field name="document_id"/>
+                            <field name="version_number"/>
+                            <field name="version_label"/>
+                            <field name="is_current"/>
+                            <field name="is_major"/>
+                        </group>
+                        <group string="File Info">
+                            <field name="file_content" filename="file_name"/>
+                            <field name="file_name"/>
+                            <field name="file_size"/>
+                            <field name="file_hash"/>
+                            <field name="mime_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Change Info">
+                            <field name="change_type"/>
+                            <field name="change_summary"/>
+                        </group>
+                        <group string="Metadata">
+                            <field name="created_by"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                    <group string="Changes from Previous Version">
+                        <field name="changes_from_previous" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Version Action -->
+    <record id="action_document_version" model="ir.actions.act_window">
+        <field name="name">Document Versions</field>
+        <field name="res_model">document.version</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No document versions yet
+            </p>
+            <p>
+                Document versions are automatically created when documents are updated.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_document_versioning" name="Version Control" parent="tazweed_document_center.menu_document_center_root" sequence="40"/>
+    <menuitem id="menu_document_versions" name="All Versions" parent="menu_document_versioning" action="action_document_version" sequence="10"/>
+</odoo>

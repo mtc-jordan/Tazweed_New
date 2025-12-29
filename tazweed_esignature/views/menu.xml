@@ -9,8 +9,11 @@
     <!-- Signature Requests -->
     <menuitem id="menu_signature_requests" name="Signature Requests" parent="menu_esignature_root" action="action_signature_request" sequence="10"/>
     
-    <!-- Bulk Signature -->
-    <menuitem id="menu_bulk_signature" name="Bulk Signature" parent="menu_esignature_root" action="action_bulk_signature_wizard" sequence="15"/>
+    <!-- Bulk Signing -->
+    <menuitem id="menu_bulk_signing" name="Bulk Signing" parent="menu_esignature_root" action="action_bulk_signing_batch" sequence="15"/>
+    
+    <!-- Verification -->
+    <menuitem id="menu_signature_verification" name="Verify Signatures" parent="menu_esignature_root" action="action_signature_verification" sequence="18"/>
     
     <!-- Certificates -->
     <menuitem id="menu_signature_certificates" name="Certificates" parent="menu_esignature_root" action="action_signature_certificate" sequence="20"/>
@@ -18,9 +21,21 @@
     <!-- Templates -->
     <menuitem id="menu_signature_templates" name="Templates" parent="menu_esignature_root" action="action_signature_template" sequence="30"/>
     
+    <!-- Signing Workflows -->
+    <menuitem id="menu_signing_workflows" name="Signing Workflows" parent="menu_esignature_root" action="action_signing_order_workflow" sequence="35"/>
+    
     <!-- Configuration Menu -->
     <menuitem id="menu_esignature_config" name="Configuration" parent="menu_esignature_root" sequence="100" groups="group_esignature_manager"/>
     
     <!-- Document Types -->
     <menuitem id="menu_document_types" name="Document Types" parent="menu_esignature_config" action="action_signature_document_type" sequence="10"/>
+    
+    <!-- Delegations -->
+    <menuitem id="menu_signer_delegations" name="Delegations" parent="menu_esignature_config" action="action_signer_delegation" sequence="20"/>
+    
+    <!-- Verification Reports -->
+    <menuitem id="menu_verification_reports" name="Verification Reports" parent="menu_esignature_config" action="action_signature_verification_report" sequence="30"/>
+    
+    <!-- QR Codes -->
+    <menuitem id="menu_signature_qr_codes" name="QR Codes" parent="menu_esignature_config" action="action_signature_qr_code" sequence="40"/>
 </odoo>

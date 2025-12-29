@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- AI Candidate Match Tree View -->
+    <record id="view_ai_candidate_match_tree" model="ir.ui.view">
+        <field name="name">ai.candidate.match.tree</field>
+        <field name="model">ai.candidate.match</field>
+        <field name="arch" type="xml">
+            <tree string="AI Candidate Matches" decoration-success="recommendation=='highly_recommended'" decoration-info="recommendation=='recommended'" decoration-warning="recommendation=='consider'" decoration-danger="recommendation=='not_recommended'">
+                <field name="candidate_name"/>
+                <field name="job_title"/>
+                <field name="client_id"/>
+                <field name="match_score" widget="progressbar"/>
+                <field name="skill_match_score"/>
+                <field name="experience_match_score"/>
+                <field name="recommendation" widget="badge" decoration-success="recommendation=='highly_recommended'" decoration-info="recommendation=='recommended'" decoration-warning="recommendation=='consider'" decoration-danger="recommendation=='not_recommended'"/>
+                <field name="state" widget="badge" decoration-success="state=='hired'" decoration-info="state in ['shortlisted','interview_scheduled']" decoration-warning="state=='contacted'" decoration-danger="state=='rejected'"/>
+                <field name="matched_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- AI Candidate Match Form View -->
+    <record id="view_ai_candidate_match_form" model="ir.ui.view">
+        <field name="name">ai.candidate.match.form</field>
+        <field name="model">ai.candidate.match</field>
+        <field name="arch" type="xml">
+            <form string="AI Candidate Match">
+                <header>
+                    <button name="action_shortlist" string="Shortlist" type="object" class="btn-primary" states="pending"/>
+                    <button name="action_schedule_interview" string="Schedule Interview" type="object" class="btn-primary" states="shortlisted,contacted"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-secondary" states="pending,shortlisted,contacted"/>
+                    <button name="action_view_candidate" string="View Candidate" type="object" class="btn-link"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,shortlisted,interview_scheduled,hired"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Match Details">
+                            <field name="candidate_id"/>
+                            <field name="job_order_id"/>
+                            <field name="client_id"/>
+                            <field name="job_title"/>
+                        </group>
+                        <group string="Overall Score">
+                            <field name="match_score" widget="progressbar"/>
+                            <field name="recommendation" widget="badge"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Score Breakdown" name="scores">
+                            <group>
+                                <group string="Individual Scores">
+                                    <field name="skill_match_score" widget="progressbar"/>
+                                    <field name="experience_match_score" widget="progressbar"/>
+                                    <field name="education_match_score" widget="progressbar"/>
+                                    <field name="location_match_score" widget="progressbar"/>
+                                    <field name="salary_match_score" widget="progressbar"/>
+                                    <field name="availability_match_score" widget="progressbar"/>
+                                </group>
+                                <group string="AI Recommendation">
+                                    <field name="recommendation_reason" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Skills Analysis" name="skills">
+                            <group>
+                                <field name="matching_skills" widget="text"/>
+                                <field name="missing_skills" widget="text"/>
+                                <field name="match_details" widget="text"/>
+                            </group>
+                        </page>
+                        <page string="Review" name="review">
+                            <group>
+                                <group>
+                                    <field name="reviewed_by"/>
+                                    <field name="reviewed_date"/>
+                                </group>
+                                <group>
+                                    <field name="matched_date"/>
+                                </group>
+                            </group>
+                            <field name="notes" placeholder="Add notes about this candidate match..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- AI Candidate Match Kanban View -->
+    <record id="view_ai_candidate_match_kanban" model="ir.ui.view">
+        <field name="name">ai.candidate.match.kanban</field>
+        <field name="model">ai.candidate.match</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="recommendation" class="o_kanban_mobile">
+                <field name="candidate_name"/>
+                <field name="job_title"/>
+                <field name="match_score"/>
+                <field name="recommendation"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_title">
+                                    <strong><field name="candidate_name"/></strong>
+                                </div>
+                                <div class="o_kanban_record_subtitle">
+                                    <field name="job_title"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span class="badge badge-pill">
+                                            <field name="match_score"/>%
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection" options="{'classes': {'pending': 'secondary', 'shortlisted': 'info', 'hired': 'success', 'rejected': 'danger'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- AI Matching Engine Tree View -->
+    <record id="view_ai_matching_engine_tree" model="ir.ui.view">
+        <field name="name">ai.matching.engine.tree</field>
+        <field name="model">ai.matching.engine</field>
+        <field name="arch" type="xml">
+            <tree string="AI Matching Runs">
+                <field name="name"/>
+                <field name="job_order_id"/>
+                <field name="minimum_score"/>
+                <field name="jobs_processed"/>
+                <field name="candidates_evaluated"/>
+                <field name="matches_created"/>
+                <field name="execution_time"/>
+                <field name="state" widget="badge" decoration-success="state=='completed'" decoration-info="state=='running'" decoration-danger="state=='failed'"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- AI Matching Engine Form View -->
+    <record id="view_ai_matching_engine_form" model="ir.ui.view">
+        <field name="name">ai.matching.engine.form</field>
+        <field name="model">ai.matching.engine</field>
+        <field name="arch" type="xml">
+            <form string="AI Matching Engine">
+                <header>
+                    <button name="action_run_matching" string="Run Matching" type="object" class="btn-primary" states="draft"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="job_order_id"/>
+                            <field name="minimum_score"/>
+                            <field name="max_matches_per_job"/>
+                            <field name="include_inactive_candidates"/>
+                        </group>
+                        <group string="Results">
+                            <field name="jobs_processed"/>
+                            <field name="candidates_evaluated"/>
+                            <field name="matches_created"/>
+                            <field name="execution_time"/>
+                        </group>
+                    </group>
+                    <field name="error_message" attrs="{'invisible': [('state', '!=', 'failed')]}"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_ai_candidate_match" model="ir.actions.act_window">
+        <field name="name">AI Candidate Matches</field>
+        <field name="res_model">ai.candidate.match</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No AI matches found
+            </p>
+            <p>
+                Run the AI Matching Engine to automatically match candidates to job orders.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_ai_matching_engine" model="ir.actions.act_window">
+        <field name="name">AI Matching Engine</field>
+        <field name="res_model">ai.matching.engine</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new matching run
+            </p>
+            <p>
+                The AI Matching Engine automatically evaluates candidates against job requirements.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_ai_matching" name="AI Matching" parent="tazweed_placement.menu_tazweed_placement_root" sequence="25"/>
+    <menuitem id="menu_ai_candidate_matches" name="Candidate Matches" parent="menu_ai_matching" action="action_ai_candidate_match" sequence="10"/>
+    <menuitem id="menu_ai_matching_engine" name="Run Matching" parent="menu_ai_matching" action="action_ai_matching_engine" sequence="20"/>
+</odoo>

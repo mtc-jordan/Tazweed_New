@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Signing Order Workflow Tree View -->
+    <record id="view_signing_order_workflow_tree" model="ir.ui.view">
+        <field name="name">signing.order.workflow.tree</field>
+        <field name="model">signing.order.workflow</field>
+        <field name="arch" type="xml">
+            <tree string="Signing Workflows">
+                <field name="name"/>
+                <field name="workflow_type"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Signing Order Workflow Form View -->
+    <record id="view_signing_order_workflow_form" model="ir.ui.view">
+        <field name="name">signing.order.workflow.form</field>
+        <field name="model">signing.order.workflow</field>
+        <field name="arch" type="xml">
+            <form string="Signing Workflow">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Workflow Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="workflow_type"/>
+                            <field name="is_default"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="document_type_ids" widget="many2many_tags"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Describe this workflow..."/>
+                    <notebook>
+                        <page string="Workflow Steps" name="steps">
+                            <field name="step_ids">
+                                <tree string="Steps" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="step_type"/>
+                                    <field name="signer_source"/>
+                                    <field name="user_id" attrs="{'invisible': [('signer_source', '!=', 'fixed_user')]}"/>
+                                    <field name="group_id" attrs="{'invisible': [('signer_source', '!=', 'fixed_role')]}"/>
+                                    <field name="signer_role"/>
+                                    <field name="is_required"/>
+                                    <field name="deadline_days"/>
+                                </tree>
+                                <form string="Workflow Step">
+                                    <group>
+                                        <group string="Step Information">
+                                            <field name="sequence"/>
+                                            <field name="name"/>
+                                            <field name="step_type"/>
+                                        </group>
+                                        <group string="Signer Configuration">
+                                            <field name="signer_source"/>
+                                            <field name="user_id" attrs="{'invisible': [('signer_source', '!=', 'fixed_user')], 'required': [('signer_source', '=', 'fixed_user')]}"/>
+                                            <field name="group_id" attrs="{'invisible': [('signer_source', '!=', 'fixed_role')], 'required': [('signer_source', '=', 'fixed_role')]}"/>
+                                            <field name="custom_field_name" attrs="{'invisible': [('signer_source', '!=', 'custom_field')]}"/>
+                                            <field name="signer_role"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group string="Requirements">
+                                            <field name="is_required"/>
+                                            <field name="can_delegate"/>
+                                            <field name="deadline_days"/>
+                                            <field name="reminder_days"/>
+                                        </group>
+                                        <group string="Escalation">
+                                            <field name="escalation_enabled"/>
+                                            <field name="escalation_after_days" attrs="{'invisible': [('escalation_enabled', '=', False)]}"/>
+                                            <field name="escalation_to" attrs="{'invisible': [('escalation_enabled', '=', False)]}"/>
+                                            <field name="escalation_user_id" attrs="{'invisible': ['|', ('escalation_enabled', '=', False), ('escalation_to', '!=', 'custom')]}"/>
+                                        </group>
+                                    </group>
+                                    <group string="Conditional Logic">
+                                        <group>
+                                            <field name="condition_type"/>
+                                            <field name="condition_field" attrs="{'invisible': [('condition_type', 'not in', ('field_value', 'amount'))]}"/>
+                                        </group>
+                                        <group>
+                                            <field name="condition_operator" attrs="{'invisible': [('condition_type', '=', 'always')]}"/>
+                                            <field name="condition_value" attrs="{'invisible': [('condition_type', '=', 'always')]}"/>
+                                        </group>
+                                    </group>
+                                    <group string="Notifications">
+                                        <field name="notify_on_assign"/>
+                                        <field name="notify_on_complete"/>
+                                    </group>
+                                    <field name="custom_message" placeholder="Custom message for this step..."/>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Signing Order Workflow Search View -->
+    <record id="view_signing_order_workflow_search" model="ir.ui.view">
+        <field name="name">signing.order.workflow.search</field>
+        <field name="model">signing.order.workflow</field>
+        <field name="arch" type="xml">
+            <search string="Signing Workflows">
+                <field name="name"/>
+                <field name="workflow_type"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Default" name="default" domain="[('is_default', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'workflow_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Signing Order Workflow Action -->
+    <record id="action_signing_order_workflow" model="ir.actions.act_window">
+        <field name="name">Signing Workflows</field>
+        <field name="res_model">signing.order.workflow</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_active': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a signing workflow
+            </p>
+            <p>
+                Define the order and conditions for document signatures.
+            </p>
+        </field>
+    </record>
+
+    <!-- Signing Order Group Tree View -->
+    <record id="view_signing_order_group_tree" model="ir.ui.view">
+        <field name="name">signing.order.group.tree</field>
+        <field name="model">signing.order.group</field>
+        <field name="arch" type="xml">
+            <tree string="Signing Groups">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="group_type"/>
+                <field name="total_signers"/>
+                <field name="signed_count"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Signing Order Group Form View -->
+    <record id="view_signing_order_group_form" model="ir.ui.view">
+        <field name="name">signing.order.group.form</field>
+        <field name="model">signing.order.group</field>
+        <field name="arch" type="xml">
+            <form string="Signing Group">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="group_type"/>
+                        </group>
+                        <group>
+                            <field name="threshold_count" attrs="{'invisible': [('group_type', '!=', 'threshold')]}"/>
+                            <field name="total_signers"/>
+                            <field name="signed_count"/>
+                            <field name="is_complete"/>
+                        </group>
+                    </group>
+                    <field name="signer_ids">
+                        <tree string="Signers">
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="role"/>
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Signer Delegation Tree View -->
+    <record id="view_signer_delegation_tree" model="ir.ui.view">
+        <field name="name">signer.delegation.tree</field>
+        <field name="model">signer.delegation</field>
+        <field name="arch" type="xml">
+            <tree string="Delegations" decoration-success="state=='active'" decoration-muted="state in ('used','expired','revoked')">
+                <field name="original_signer_id"/>
+                <field name="delegated_to_name"/>
+                <field name="delegated_to_email"/>
+                <field name="valid_from"/>
+                <field name="valid_until"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Signer Delegation Form View -->
+    <record id="view_signer_delegation_form" model="ir.ui.view">
+        <field name="name">signer.delegation.form</field>
+        <field name="model">signer.delegation</field>
+        <field name="arch" type="xml">
+            <form string="Signer Delegation">
+                <header>
+                    <button name="action_revoke" type="object" string="Revoke" class="btn-danger" attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Original Signer">
+                            <field name="original_signer_id"/>
+                            <field name="created_by"/>
+                        </group>
+                        <group string="Delegated To">
+                            <field name="delegated_to_name"/>
+                            <field name="delegated_to_email"/>
+                            <field name="delegated_to_user_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Validity">
+                            <field name="valid_from"/>
+                            <field name="valid_until"/>
+                        </group>
+                        <group string="Usage">
+                            <field name="used_date"/>
+                        </group>
+                    </group>
+                    <field name="reason" placeholder="Reason for delegation..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Signer Delegation Action -->
+    <record id="action_signer_delegation" model="ir.actions.act_window">
+        <field name="name">Delegations</field>
+        <field name="res_model">signer.delegation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No delegations found
+            </p>
+            <p>
+                Delegations allow signers to authorize others to sign on their behalf.
+            </p>
+        </field>
+    </record>
+</odoo>

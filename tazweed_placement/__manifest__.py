@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Placement & Recruitment',
-    'version': '16.0.2.0.0',
+    'version': '16.0.3.0.0',
     'category': 'Human Resources/Recruitment',
-    'summary': 'Complete Recruitment and Placement Management for Staffing Business',
+    'summary': 'Complete Recruitment and Placement Management with AI Matching & Forecasting',
     'description': """
-Tazweed Placement and Recruitment Module v2.0
+Tazweed Placement and Recruitment Module v3.0
 ==============================================
 
 Comprehensive recruitment and placement management for staffing/manpower business.
@@ -22,15 +22,14 @@ Key Features:
 * **Client Invoicing** - Invoice generation with VAT support
 * **OWL Dashboard** - Modern dashboard with KPIs and analytics
 
-What's New in v2.0:
+What's New in v3.0:
 -------------------
-* Modern OWL dashboard with Chart.js
-* Recruitment pipeline with kanban view
-* Interview scheduling and management
-* Candidate-job matching algorithm
-* Enhanced UI/UX with modern styling
-* Calendar integration for interviews
-* Improved reporting and analytics
+* **AI Candidate Matching** - Auto-match candidates to job requirements using AI-powered scoring
+* **Video Interview Integration** - Schedule and conduct video interviews with Zoom, Teams, Meet
+* **Offer Letter Generator** - Automated offer letter generation with e-signature integration
+* **Placement Forecasting** - Predict placement needs based on historical trends and data analysis
+* Enhanced interview templates with question banks
+* Improved analytics and reporting
     """,
     'author': 'Tazweed HR Team',
     'website': 'https://tazweedjobs.ae',
@@ -47,7 +46,7 @@ What's New in v2.0:
         # Data
         'data/sequence_data.xml',
         'data/recruitment_stage_data.xml',
-        # Views
+        # Views - Core
         'views/candidate_views.xml',
         'views/client_views.xml',
         'views/job_order_views.xml',
@@ -56,6 +55,12 @@ What's New in v2.0:
         'views/placement_views.xml',
         'views/wizard_views.xml',
         'views/dashboard_views.xml',
+        # Views - New Features
+        'views/ai_candidate_matching_views.xml',
+        'views/video_interview_views.xml',
+        'views/offer_letter_views.xml',
+        'views/placement_forecasting_views.xml',
+        # Menu
         'views/menu_views.xml',
     ],
     'assets': {

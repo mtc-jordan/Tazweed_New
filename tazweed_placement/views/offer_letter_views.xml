@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Offer Letter Tree View -->
+    <record id="view_offer_letter_tree" model="ir.ui.view">
+        <field name="name">offer.letter.tree</field>
+        <field name="model">offer.letter</field>
+        <field name="arch" type="xml">
+            <tree string="Offer Letters" decoration-success="state=='accepted'" decoration-info="state in ['generated','sent','viewed']" decoration-warning="state=='negotiating'" decoration-danger="state in ['declined','expired','withdrawn']">
+                <field name="name"/>
+                <field name="candidate_name"/>
+                <field name="job_title"/>
+                <field name="client_id"/>
+                <field name="total_package" sum="Total"/>
+                <field name="offer_date"/>
+                <field name="validity_date"/>
+                <field name="proposed_start_date"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Offer Letter Form View -->
+    <record id="view_offer_letter_form" model="ir.ui.view">
+        <field name="name">offer.letter.form</field>
+        <field name="model">offer.letter</field>
+        <field name="arch" type="xml">
+            <form string="Offer Letter">
+                <header>
+                    <button name="action_generate_offer" string="Generate Offer" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_send_offer" string="Send to Candidate" type="object" class="btn-primary" states="generated,negotiating"/>
+                    <button name="action_request_esignature" string="Request E-Signature" type="object" states="sent,viewed"/>
+                    <button name="action_accept" string="Mark Accepted" type="object" class="btn-success" states="sent,viewed"/>
+                    <button name="action_decline" string="Mark Declined" type="object" class="btn-danger" states="sent,viewed"/>
+                    <button name="action_negotiate" string="Negotiate" type="object" states="sent,viewed"/>
+                    <button name="action_withdraw" string="Withdraw" type="object" states="draft,generated,sent,viewed,negotiating"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,sent,accepted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_video_interview)d" type="action" class="oe_stat_button" icon="fa-video-camera">
+                            <span>Interviews</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Candidate &amp; Job">
+                            <field name="candidate_id"/>
+                            <field name="candidate_email"/>
+                            <field name="job_order_id"/>
+                            <field name="client_id"/>
+                            <field name="template_id"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="offer_date"/>
+                            <field name="validity_date"/>
+                            <field name="proposed_start_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Job Details" name="job_details">
+                            <group>
+                                <group>
+                                    <field name="job_title"/>
+                                    <field name="department"/>
+                                    <field name="reporting_to"/>
+                                    <field name="work_location"/>
+                                    <field name="employment_type"/>
+                                </group>
+                                <group>
+                                    <field name="probation_period"/>
+                                    <field name="notice_period"/>
+                                    <field name="annual_leave"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Compensation" name="compensation">
+                            <group>
+                                <group string="Salary">
+                                    <field name="currency_id"/>
+                                    <field name="salary_frequency"/>
+                                    <field name="basic_salary"/>
+                                    <field name="housing_allowance"/>
+                                    <field name="transport_allowance"/>
+                                    <field name="other_allowances"/>
+                                    <field name="total_package" class="oe_subtotal_footer_separator"/>
+                                </group>
+                                <group string="Benefits">
+                                    <field name="medical_insurance"/>
+                                    <field name="visa_sponsorship"/>
+                                    <field name="air_ticket"/>
+                                    <field name="other_benefits"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Terms &amp; Conditions" name="terms">
+                            <group>
+                                <group>
+                                    <field name="confidentiality_clause"/>
+                                    <field name="non_compete_clause"/>
+                                    <field name="non_compete_duration" attrs="{'invisible': [('non_compete_clause', '=', False)]}"/>
+                                </group>
+                            </group>
+                            <field name="special_conditions" placeholder="Special conditions or terms..."/>
+                        </page>
+                        <page string="Document" name="document">
+                            <group>
+                                <group>
+                                    <field name="offer_document" filename="offer_document_name"/>
+                                    <field name="offer_document_name" invisible="1"/>
+                                </group>
+                                <group string="E-Signature">
+                                    <field name="esignature_request_id"/>
+                                    <field name="candidate_signature" widget="image" class="oe_avatar"/>
+                                    <field name="candidate_signed_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Negotiation" name="negotiation" attrs="{'invisible': [('state', '!=', 'negotiating')]}">
+                            <group>
+                                <field name="counter_offer_salary"/>
+                                <field name="negotiation_notes"/>
+                            </group>
+                        </page>
+                        <page string="Tracking" name="tracking">
+                            <group>
+                                <group>
+                                    <field name="sent_date"/>
+                                    <field name="viewed_date"/>
+                                    <field name="response_date"/>
+                                </group>
+                                <group>
+                                    <field name="company_signed_by"/>
+                                    <field name="company_signed_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Offer Letter Template Tree View -->
+    <record id="view_offer_letter_template_tree" model="ir.ui.view">
+        <field name="name">offer.letter.template.tree</field>
+        <field name="model">offer.letter.template</field>
+        <field name="arch" type="xml">
+            <tree string="Offer Letter Templates">
+                <field name="name"/>
+                <field name="employment_type"/>
+                <field name="default_probation"/>
+                <field name="default_notice"/>
+                <field name="default_leave"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Offer Letter Template Form View -->
+    <record id="view_offer_letter_template_form" model="ir.ui.view">
+        <field name="name">offer.letter.template.form</field>
+        <field name="model">offer.letter.template</field>
+        <field name="arch" type="xml">
+            <form string="Offer Letter Template">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employment_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Default Values">
+                            <field name="default_probation"/>
+                            <field name="default_notice"/>
+                            <field name="default_leave"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Template description..."/>
+                    <separator string="Template Content"/>
+                    <field name="content" placeholder="Use placeholders like {{candidate_name}}, {{job_title}}, {{basic_salary}}..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_offer_letter" model="ir.actions.act_window">
+        <field name="name">Offer Letters</field>
+        <field name="res_model">offer.letter</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first offer letter
+            </p>
+            <p>
+                Generate professional offer letters with e-signature integration.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_offer_letter_template" model="ir.actions.act_window">
+        <field name="name">Offer Templates</field>
+        <field name="res_model">offer.letter.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create offer letter templates
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_offer_letters" name="Offer Letters" parent="tazweed_placement.menu_tazweed_placement_root" sequence="35"/>
+    <menuitem id="menu_offer_letter_list" name="All Offers" parent="menu_offer_letters" action="action_offer_letter" sequence="10"/>
+    <menuitem id="menu_offer_letter_templates" name="Templates" parent="menu_offer_letters" action="action_offer_letter_template" sequence="20"/>
+
+    <!-- Sequence -->
+    <record id="seq_offer_letter" model="ir.sequence">
+        <field name="name">Offer Letter</field>
+        <field name="code">offer.letter</field>
+        <field name="prefix">OL-</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

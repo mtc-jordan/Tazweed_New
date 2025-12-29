@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Visual Workflow Designer Tree View -->
+    <record id="view_visual_workflow_designer_tree" model="ir.ui.view">
+        <field name="name">visual.workflow.designer.tree</field>
+        <field name="model">visual.workflow.designer</field>
+        <field name="arch" type="xml">
+            <tree string="Visual Workflow Designers" decoration-info="state=='draft'" decoration-success="state=='published'" decoration-warning="state=='designing'">
+                <field name="name"/>
+                <field name="workflow_definition_id"/>
+                <field name="node_count"/>
+                <field name="connection_count"/>
+                <field name="version"/>
+                <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='published'" decoration-warning="state in ('designing','validated')"/>
+                <field name="last_modified"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Visual Workflow Designer Form View -->
+    <record id="view_visual_workflow_designer_form" model="ir.ui.view">
+        <field name="name">visual.workflow.designer.form</field>
+        <field name="model">visual.workflow.designer</field>
+        <field name="arch" type="xml">
+            <form string="Visual Workflow Designer">
+                <header>
+                    <button name="action_start_designing" string="Start Designing" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_validate_design" string="Validate" type="object" class="btn-primary" states="designing"/>
+                    <button name="action_publish" string="Publish" type="object" class="btn-success" states="validated"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,designing,validated,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_visual_workflow_node)d" type="action" class="oe_stat_button" icon="fa-sitemap">
+                            <field name="node_count" widget="statinfo" string="Nodes"/>
+                        </button>
+                        <button name="%(action_visual_workflow_connection)d" type="action" class="oe_stat_button" icon="fa-link">
+                            <field name="connection_count" widget="statinfo" string="Connections"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Designer Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="workflow_definition_id"/>
+                            <field name="version"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="last_modified"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Canvas Settings" name="canvas">
+                            <group>
+                                <group string="Dimensions">
+                                    <field name="canvas_width"/>
+                                    <field name="canvas_height"/>
+                                    <field name="grid_size"/>
+                                </group>
+                                <group string="Display Options">
+                                    <field name="snap_to_grid"/>
+                                    <field name="show_grid"/>
+                                    <field name="zoom_level"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Nodes" name="nodes">
+                            <field name="node_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="node_type"/>
+                                    <field name="position_x"/>
+                                    <field name="position_y"/>
+                                    <field name="color" widget="color"/>
+                                    <field name="shape"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Connections" name="connections">
+                            <field name="connection_ids">
+                                <tree editable="bottom">
+                                    <field name="source_node_id"/>
+                                    <field name="target_node_id"/>
+                                    <field name="connection_type"/>
+                                    <field name="condition"/>
+                                    <field name="label"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Enter description..."/>
+                        </page>
+                        <page string="Design Data" name="design_data">
+                            <group>
+                                <field name="design_data" widget="ace" options="{'mode': 'json'}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Visual Workflow Designer Kanban View -->
+    <record id="view_visual_workflow_designer_kanban" model="ir.ui.view">
+        <field name="name">visual.workflow.designer.kanban</field>
+        <field name="model">visual.workflow.designer</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="state">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="node_count"/>
+                <field name="connection_count"/>
+                <field name="version"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'info', 'designing': 'warning', 'validated': 'primary', 'published': 'success'}}"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><i class="fa fa-sitemap"/> <field name="node_count"/> Nodes</div>
+                                    <div><i class="fa fa-link"/> <field name="connection_count"/> Connections</div>
+                                    <div><i class="fa fa-code-branch"/> Version <field name="version"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Visual Workflow Designer Search View -->
+    <record id="view_visual_workflow_designer_search" model="ir.ui.view">
+        <field name="name">visual.workflow.designer.search</field>
+        <field name="model">visual.workflow.designer</field>
+        <field name="arch" type="xml">
+            <search string="Search Designers">
+                <field name="name"/>
+                <field name="workflow_definition_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Designing" name="designing" domain="[('state', '=', 'designing')]"/>
+                <filter string="Validated" name="validated" domain="[('state', '=', 'validated')]"/>
+                <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Workflow" name="group_workflow" context="{'group_by': 'workflow_definition_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Visual Workflow Node Form View -->
+    <record id="view_visual_workflow_node_form" model="ir.ui.view">
+        <field name="name">visual.workflow.node.form</field>
+        <field name="model">visual.workflow.node</field>
+        <field name="arch" type="xml">
+            <form string="Workflow Node">
+                <sheet>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="name"/>
+                            <field name="node_type"/>
+                            <field name="sequence"/>
+                            <field name="designer_id"/>
+                        </group>
+                        <group string="Position">
+                            <field name="position_x"/>
+                            <field name="position_y"/>
+                            <field name="width"/>
+                            <field name="height"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Visual Properties">
+                            <field name="color" widget="color"/>
+                            <field name="icon"/>
+                            <field name="shape"/>
+                        </group>
+                        <group string="Action Configuration" attrs="{'invisible': [('node_type', 'not in', ['action', 'script'])]}">
+                            <field name="action_type"/>
+                            <field name="target_model"/>
+                            <field name="target_method"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('node_type', '!=', 'approval')]}">
+                        <group string="Approval Configuration">
+                            <field name="approver_type"/>
+                            <field name="approver_user_id" attrs="{'invisible': [('approver_type', '!=', 'user')]}"/>
+                            <field name="approver_group_id" attrs="{'invisible': [('approver_type', '!=', 'group')]}"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('node_type', '!=', 'delay')]}">
+                        <group string="Delay Configuration">
+                            <field name="delay_type"/>
+                            <field name="delay_value"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Node description..."/>
+                    </group>
+                    <group string="Configuration JSON">
+                        <field name="config_json" widget="ace" options="{'mode': 'json'}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Visual Workflow Node Tree View -->
+    <record id="view_visual_workflow_node_tree" model="ir.ui.view">
+        <field name="name">visual.workflow.node.tree</field>
+        <field name="model">visual.workflow.node</field>
+        <field name="arch" type="xml">
+            <tree string="Workflow Nodes">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="node_type"/>
+                <field name="position_x"/>
+                <field name="position_y"/>
+                <field name="shape"/>
+                <field name="designer_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_visual_workflow_designer" model="ir.actions.act_window">
+        <field name="name">Visual Workflow Designer</field>
+        <field name="res_model">visual.workflow.designer</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_visual_workflow_designer_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first visual workflow design
+            </p>
+            <p>
+                Use the drag-and-drop designer to create complex workflows visually.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_visual_workflow_node" model="ir.actions.act_window">
+        <field name="name">Workflow Nodes</field>
+        <field name="res_model">visual.workflow.node</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_visual_workflow_connection" model="ir.actions.act_window">
+        <field name="name">Workflow Connections</field>
+        <field name="res_model">visual.workflow.connection</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

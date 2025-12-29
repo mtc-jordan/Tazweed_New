@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Tazweed Document Management Center',
-    'version': '16.0.2.0.0',
+    'version': '16.0.3.0.0',
     'category': 'Human Resources/Staffing',
-    'summary': 'Central Document Hub with Cross-Module Integration & Expiry Tracking',
+    'summary': 'Central Document Hub with OCR, Versioning, Bulk Upload & Templates',
     'description': """
 Tazweed Document Management Center
 ==================================
@@ -25,6 +25,13 @@ Key Features:
 * **Version Control** - Track document versions
 * **Verification Workflow** - Document verification status
 * **Mobile-friendly Interface**
+
+NEW Features (v3.0):
+--------------------
+* **OCR Document Scanning** - Auto-extract text and data from documents
+* **Document Versioning** - Full version history with comparison
+* **Bulk Document Upload** - Upload multiple documents via ZIP or individual files
+* **Document Templates** - Pre-defined templates for quick document generation
 
 Document Categories:
 --------------------
@@ -88,6 +95,11 @@ Compliance Features:
         'views/wizard_views.xml',
         'views/hr_employee_views.xml',
         'views/menu.xml',
+        # New Feature Views
+        'views/document_ocr_views.xml',
+        'views/document_versioning_views.xml',
+        'views/document_bulk_upload_views.xml',
+        'views/document_templates_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
