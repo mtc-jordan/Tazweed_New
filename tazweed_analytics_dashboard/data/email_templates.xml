@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Cost Center Report Email Template -->
+        <record id="email_template_cost_center_report" model="mail.template">
+            <field name="name">Analytics: Cost Center Report</field>
+            <field name="model_id" ref="model_analytics_scheduled_report"/>
+            <field name="subject">Cost Center Analytics Report - {{ object.name }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div style="background: #667eea; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0;">Cost Center Analytics Report</h1>
+    </div>
+    <div style="background: white; padding: 20px; border: 1px solid #ddd;">
+        <h2>Report Summary</h2>
+        <p>This is your scheduled cost center analytics report.</p>
+        <p>Please log in to view the full dashboard.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Recruitment Report Email Template -->
+        <record id="email_template_recruitment_report" model="mail.template">
+            <field name="name">Analytics: Recruitment Report</field>
+            <field name="model_id" ref="model_analytics_scheduled_report"/>
+            <field name="subject">Recruitment Analytics Report - {{ object.name }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div style="background: #11998e; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0;">Recruitment Analytics Report</h1>
+    </div>
+    <div style="background: white; padding: 20px; border: 1px solid #ddd;">
+        <h2>Report Summary</h2>
+        <p>This is your scheduled recruitment analytics report.</p>
+        <p>Please log in to view the full dashboard.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Compliance Report Email Template -->
+        <record id="email_template_compliance_report" model="mail.template">
+            <field name="name">Analytics: Compliance Report</field>
+            <field name="model_id" ref="model_analytics_scheduled_report"/>
+            <field name="subject">Compliance Analytics Report - {{ object.name }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div style="background: #f5576c; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0;">Compliance Analytics Report</h1>
+    </div>
+    <div style="background: white; padding: 20px; border: 1px solid #ddd;">
+        <h2>Report Summary</h2>
+        <p>This is your scheduled compliance analytics report.</p>
+        <p>Please log in to view the full dashboard.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Payroll Report Email Template -->
+        <record id="email_template_payroll_report" model="mail.template">
+            <field name="name">Analytics: Payroll Report</field>
+            <field name="model_id" ref="model_analytics_scheduled_report"/>
+            <field name="subject">Payroll Analytics Report - {{ object.name }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div style="background: #4facfe; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0;">Payroll Analytics Report</h1>
+    </div>
+    <div style="background: white; padding: 20px; border: 1px solid #ddd;">
+        <h2>Report Summary</h2>
+        <p>This is your scheduled payroll analytics report.</p>
+        <p>Please log in to view the full dashboard.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Executive Report Email Template -->
+        <record id="email_template_executive_report" model="mail.template">
+            <field name="name">Analytics: Executive Report</field>
+            <field name="model_id" ref="model_analytics_scheduled_report"/>
+            <field name="subject">Executive Analytics Report - {{ object.name }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div style="background: #764ba2; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0;">Executive Analytics Report</h1>
+    </div>
+    <div style="background: white; padding: 20px; border: 1px solid #ddd;">
+        <h2>Report Summary</h2>
+        <p>This is your scheduled executive analytics report.</p>
+        <p>Please log in to view the full dashboard.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+    </data>
+</odoo>

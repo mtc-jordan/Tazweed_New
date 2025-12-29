@@ -8,3 +8,6 @@ from . import compliance_dashboard
 from . import payroll_dashboard
 from . import scheduled_report
 from . import module_integrations
+from . import report_export
+from . import dashboard_widgets
+from . import notification_alerts

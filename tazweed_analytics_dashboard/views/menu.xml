@@ -129,4 +129,25 @@
               parent="menu_analytics_config"
               action="action_scheduled_report"
               sequence="20"/>
+    
+    <!-- Dashboard Widgets Configuration -->
+    <menuitem id="menu_dashboard_widgets"
+              name="Dashboard Widgets"
+              parent="menu_analytics_config"
+              action="action_analytics_dashboard_widget"
+              sequence="30"/>
+    
+    <!-- Alert Rules Configuration -->
+    <menuitem id="menu_alert_rules"
+              name="Alert Rules"
+              parent="menu_analytics_config"
+              action="action_notification_alert_rule"
+              sequence="40"/>
+    
+    <!-- Notifications -->
+    <menuitem id="menu_notifications"
+              name="Notifications"
+              parent="menu_analytics_root"
+              action="action_analytics_dashboard_notification"
+              sequence="90"/>
 </odoo>

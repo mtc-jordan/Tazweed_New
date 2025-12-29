@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Cron Job for Running Alert Checks -->
+    <record id="ir_cron_run_analytics_alerts" model="ir.cron">
+        <field name="name">Analytics: Run Alert Checks</field>
+        <field name="model_id" ref="model_notification_alert_rule"/>
+        <field name="state">code</field>
+        <field name="code">model.run_all_alerts()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+    
+    <!-- Default Alert Rules -->
+    <record id="alert_rule_document_expiry_30" model="notification.alert.rule">
+        <field name="name">Document Expiry - 30 Days Warning</field>
+        <field name="alert_type">document_expiry</field>
+        <field name="document_type">all</field>
+        <field name="days_before_expiry">30</field>
+        <field name="notification_type">warning</field>
+        <field name="check_frequency">daily</field>
+        <field name="send_email">True</field>
+        <field name="active">True</field>
+    </record>
+    
+    <record id="alert_rule_document_expiry_7" model="notification.alert.rule">
+        <field name="name">Document Expiry - 7 Days Critical</field>
+        <field name="alert_type">document_expiry</field>
+        <field name="document_type">all</field>
+        <field name="days_before_expiry">7</field>
+        <field name="notification_type">danger</field>
+        <field name="check_frequency">daily</field>
+        <field name="send_email">True</field>
+        <field name="active">True</field>
+    </record>
+    
+    <record id="alert_rule_compliance_threshold" model="notification.alert.rule">
+        <field name="name">Compliance Rate Below 90%</field>
+        <field name="alert_type">compliance_threshold</field>
+        <field name="compliance_threshold">90.0</field>
+        <field name="notification_type">warning</field>
+        <field name="check_frequency">daily</field>
+        <field name="send_email">True</field>
+        <field name="active">True</field>
+    </record>
+    
+    <record id="alert_rule_payroll_anomaly" model="notification.alert.rule">
+        <field name="name">Payroll Anomaly Detection</field>
+        <field name="alert_type">payroll_anomaly</field>
+        <field name="salary_variance_threshold">20.0</field>
+        <field name="notification_type">info</field>
+        <field name="check_frequency">weekly</field>
+        <field name="send_email">False</field>
+        <field name="active">True</field>
+    </record>
+    
+    <record id="alert_rule_cost_threshold" model="notification.alert.rule">
+        <field name="name">Cost Threshold Alert</field>
+        <field name="alert_type">cost_threshold</field>
+        <field name="cost_threshold">500000.0</field>
+        <field name="cost_increase_threshold">15.0</field>
+        <field name="notification_type">warning</field>
+        <field name="check_frequency">monthly</field>
+        <field name="send_email">True</field>
+        <field name="active">True</field>
+    </record>
+    
+</odoo>

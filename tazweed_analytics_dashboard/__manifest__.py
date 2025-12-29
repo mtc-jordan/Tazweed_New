@@ -63,6 +63,7 @@ Best Practices:
         'base',
         'web',
         'hr',
+        'mail',
     ],
     'data': [
         'security/analytics_security.xml',
@@ -78,8 +79,12 @@ Best Practices:
         'views/payroll_dashboard_views.xml',
         'views/scheduled_report_views.xml',
         'views/graph_views.xml',
+        'views/dashboard_widgets_views.xml',
+        'views/notification_alerts_views.xml',
         'views/menu.xml',
         'data/scheduled_report_cron.xml',
+        'data/email_templates.xml',
+        'data/notification_alerts_cron.xml',
     ],
     'assets': {
         'web.assets_backend': [

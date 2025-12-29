@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ==================== Notification Alert Rule Views ==================== -->
+    
+    <!-- Alert Rule Tree View -->
+    <record id="view_notification_alert_rule_tree" model="ir.ui.view">
+        <field name="name">notification.alert.rule.tree</field>
+        <field name="model">notification.alert.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Alert Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="alert_type"/>
+                <field name="notification_type" widget="badge" 
+                       decoration-info="notification_type == 'info'"
+                       decoration-warning="notification_type == 'warning'"
+                       decoration-danger="notification_type == 'danger'"/>
+                <field name="check_frequency"/>
+                <field name="last_check_date"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Alert Rule Form View -->
+    <record id="view_notification_alert_rule_form" model="ir.ui.view">
+        <field name="name">notification.alert.rule.form</field>
+        <field name="model">notification.alert.rule</field>
+        <field name="arch" type="xml">
+            <form string="Alert Rule">
+                <header>
+                    <button name="run_alert_check" type="object" string="Run Check Now" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Alert Rule Name"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Alert Configuration">
+                            <field name="alert_type"/>
+                            <field name="notification_type"/>
+                            <field name="check_frequency"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Status">
+                            <field name="last_check_date" readonly="1"/>
+                            <field name="send_email"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Document Expiry Settings -->
+                    <group string="Document Expiry Settings" 
+                           attrs="{'invisible': [('alert_type', '!=', 'document_expiry')]}">
+                        <group>
+                            <field name="document_type"/>
+                            <field name="days_before_expiry"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Compliance Threshold Settings -->
+                    <group string="Compliance Threshold Settings" 
+                           attrs="{'invisible': [('alert_type', '!=', 'compliance_threshold')]}">
+                        <group>
+                            <field name="compliance_threshold"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Payroll Anomaly Settings -->
+                    <group string="Payroll Anomaly Settings" 
+                           attrs="{'invisible': [('alert_type', '!=', 'payroll_anomaly')]}">
+                        <group>
+                            <field name="salary_variance_threshold"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Cost Threshold Settings -->
+                    <group string="Cost Threshold Settings" 
+                           attrs="{'invisible': [('alert_type', '!=', 'cost_threshold')]}">
+                        <group>
+                            <field name="cost_threshold"/>
+                            <field name="cost_increase_threshold"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Recipients">
+                        <field name="recipient_ids" widget="many2many_tags" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Alert Rule Action -->
+    <record id="action_notification_alert_rule" model="ir.actions.act_window">
+        <field name="name">Alert Rules</field>
+        <field name="res_model">notification.alert.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first alert rule
+            </p>
+            <p>
+                Alert rules automatically monitor your data and notify you when thresholds are exceeded.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

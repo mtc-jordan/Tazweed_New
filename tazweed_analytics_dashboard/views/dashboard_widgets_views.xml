@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ==================== Dashboard Widget Views ==================== -->
+    
+    <!-- Widget Tree View -->
+    <record id="view_analytics_dashboard_widget_tree" model="ir.ui.view">
+        <field name="name">analytics.dashboard.widget.tree</field>
+        <field name="model">analytics.dashboard.widget</field>
+        <field name="arch" type="xml">
+            <tree string="Dashboard Widgets">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="widget_type"/>
+                <field name="kpi_value"/>
+                <field name="kpi_label"/>
+                <field name="color"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Widget Form View -->
+    <record id="view_analytics_dashboard_widget_form" model="ir.ui.view">
+        <field name="name">analytics.dashboard.widget.form</field>
+        <field name="model">analytics.dashboard.widget</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard Widget">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Widget Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Widget Settings">
+                            <field name="widget_type"/>
+                            <field name="sequence"/>
+                            <field name="color"/>
+                            <field name="icon"/>
+                            <field name="show_trend"/>
+                        </group>
+                        <group string="Current Values">
+                            <field name="kpi_value" readonly="1"/>
+                            <field name="kpi_label" readonly="1"/>
+                            <field name="kpi_trend" readonly="1"/>
+                            <field name="kpi_trend_direction" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Visibility">
+                        <field name="user_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Widget Action -->
+    <record id="action_analytics_dashboard_widget" model="ir.actions.act_window">
+        <field name="name">Dashboard Widgets</field>
+        <field name="res_model">analytics.dashboard.widget</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first dashboard widget
+            </p>
+            <p>
+                Dashboard widgets provide quick KPI views on your main dashboard.
+            </p>
+        </field>
+    </record>
+    
+    <!-- ==================== Dashboard Notification Views ==================== -->
+    
+    <!-- Notification Tree View -->
+    <record id="view_analytics_dashboard_notification_tree" model="ir.ui.view">
+        <field name="name">analytics.dashboard.notification.tree</field>
+        <field name="model">analytics.dashboard.notification</field>
+        <field name="arch" type="xml">
+            <tree string="Notifications" decoration-warning="notification_type == 'warning'" 
+                  decoration-danger="notification_type == 'danger'" decoration-success="notification_type == 'success'"
+                  decoration-muted="is_read == True">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="notification_type"/>
+                <field name="is_read"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Notification Form View -->
+    <record id="view_analytics_dashboard_notification_form" model="ir.ui.view">
+        <field name="name">analytics.dashboard.notification.form</field>
+        <field name="model">analytics.dashboard.notification</field>
+        <field name="arch" type="xml">
+            <form string="Notification">
+                <header>
+                    <button name="action_mark_read" type="object" string="Mark as Read" 
+                            class="btn-primary" attrs="{'invisible': [('is_read', '=', True)]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="notification_type"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="is_read"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                    <group string="Message">
+                        <field name="message" nolabel="1"/>
+                    </group>
+                    <group string="Related Record" attrs="{'invisible': [('res_model', '=', False)]}">
+                        <field name="res_model"/>
+                        <field name="res_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Notification Action -->
+    <record id="action_analytics_dashboard_notification" model="ir.actions.act_window">
+        <field name="name">Notifications</field>
+        <field name="res_model">analytics.dashboard.notification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{'search_default_unread': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No notifications yet
+            </p>
+            <p>
+                Notifications will appear here when important events occur.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Notification Search View -->
+    <record id="view_analytics_dashboard_notification_search" model="ir.ui.view">
+        <field name="name">analytics.dashboard.notification.search</field>
+        <field name="model">analytics.dashboard.notification</field>
+        <field name="arch" type="xml">
+            <search string="Search Notifications">
+                <field name="name"/>
+                <field name="category"/>
+                <filter name="unread" string="Unread" domain="[('is_read', '=', False)]"/>
+                <filter name="warnings" string="Warnings" domain="[('notification_type', '=', 'warning')]"/>
+                <filter name="alerts" string="Alerts" domain="[('notification_type', '=', 'danger')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_type" string="Type" context="{'group_by': 'notification_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+</odoo>
